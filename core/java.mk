@@ -134,8 +134,9 @@ ALL_MODULES.$(LOCAL_MODULE).STUBS := $(full_classes_stubs_jar)
 # This intentionally depends on java_sources, not all_java_sources.
 # Deps for generated source files must be handled separately,
 # via deps on the target that generates the sources.
-$(full_classes_compiled_jar): $(java_sources) $(full_java_lib_deps)
+$(full_classes_compiled_jar): $(java_sources) $(full_java_lib_deps) | $(OVERRIDECHECK)
 	$(transform-java-to-classes.jar)
+
 
 # All of the rules after full_classes_compiled_jar are very unlikely
 # to fail except for bugs in their respective tools.  If you would

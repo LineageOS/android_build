@@ -1,0 +1,22 @@
+More information and the latest changes can be found at the author's
+website at:
+
+http://www.tomgibara.com/android/override-check
+
+
+Building
+The OverrideCheck class can be compiled under Java 1.5 or Java 1.6.
+It has a dependency on tools.jar (typically found in $JDK_HOME/lib).
+Compile like so:
+
+  javac -cp <path-to-tools.jar> -d <class-output-dir> <path-to-src-file>
+
+Output consists of a single the class file OverrideCheck.class.
+Adding the option -target 1.5 will allow the doclet to be run under Java 1.5.
+
+Usage
+  Invoke as per any Doclet:
+  javadoc -docletpath <path to doclet classes> -doclet OverrideCheck \
+    -classpath <path to binary source dependencies> \
+    -sourcepath <path to source code> \
+    <list of packages to be analyzed>

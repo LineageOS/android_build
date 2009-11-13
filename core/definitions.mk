@@ -1235,6 +1235,32 @@ define unzip-jar-files
   done
 endef
 
+# If we are building using javac 1.6, run .java through a doclet to
+# ensure that there are no interface method @Overrides that might
+# break a build on 1.5. Skip the check on 1.5 to speed build time,
+# since the compiler itself will error out on the annotation.
+ifeq (true,$(RUN_JAVAOVERRIDE_CHECK))
+define java-interface-override-check
+@echo "overridecheck: $(PRIVATE_MODULE) ($(PRIVATE_CLASS_INTERMEDIATES_DIR))"
+$(hide) if [ "$(PRIVATE_MODULE)" != "overridecheck" ] ; then \
+javadoc -doclet OverrideCheck \
+    -docletpath $(OVERRIDECHECK) \
+    -J-Xmx768m \
+    -source 1.5 \
+    -private \
+    -quiet \
+    -encoding ascii $(PRIVATE_BOOTCLASSPATH) \
+    $(addprefix -classpath ,$(strip \
+        $(call normalize-path-list,$(PRIVATE_ALL_JAVA_LIBRARIES)))) \
+    -extdirs "" \
+    \@$(dir $(PRIVATE_CLASS_INTERMEDIATES_DIR))/java-source-list-uniq ; \
+fi
+endef
+else
+define java-interface-override-check
+endef
+endif
+
 # below we write the list of java files to java-source-list to avoid argument
 # list length problems with Cygwin we filter out duplicate java file names
 # because eclipse's compiler doesn't like them.
@@ -1251,10 +1277,12 @@ $(hide) if [ -d "$(PRIVATE_SOURCE_INTERMEDIATES_DIR)" ]; then \
 fi
 $(hide) tr ' ' '\n' < $(dir $(PRIVATE_CLASS_INTERMEDIATES_DIR))/java-source-list \
     | sort -u > $(dir $(PRIVATE_CLASS_INTERMEDIATES_DIR))/java-source-list-uniq
+$(java-interface-override-check)
 $(hide) $(TARGET_JAVAC) -encoding ascii $(PRIVATE_BOOTCLASSPATH) \
     $(addprefix -classpath ,$(strip \
         $(call normalize-path-list,$(PRIVATE_ALL_JAVA_LIBRARIES)))) \
     $(strip $(PRIVATE_JAVAC_DEBUG_FLAGS)) $(xlint_unchecked) \
+    -source 1.5 \
     -extdirs "" -d $(PRIVATE_CLASS_INTERMEDIATES_DIR) \
     \@$(dir $(PRIVATE_CLASS_INTERMEDIATES_DIR))/java-source-list-uniq \
     || ( rm -rf $(PRIVATE_CLASS_INTERMEDIATES_DIR) ; exit 41 )
@@ -1391,6 +1419,7 @@ $(call unzip-jar-files,$(PRIVATE_STATIC_JAVA_LIBRARIES), \
 $(call dump-words-to-file,$(sort\
 	$(PRIVATE_JAVA_SOURCES)),\
 	$(PRIVATE_INTERMEDIATES_DIR)/java-source-list-uniq)
+$(java-interface-override-check)
 $(hide) $(HOST_JAVAC) -encoding ascii -g \
 	$(xlint_unchecked) \
 	$(addprefix -classpath ,$(strip \

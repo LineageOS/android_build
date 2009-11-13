@@ -1,4 +1,3 @@
-#
 # Copyright (C) 2008 The Android Open Source Project
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,25 +11,18 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-#
 
-#
-# Standard rules for building a host java library.
-#
+LOCAL_PATH := $(call my-dir)
 
-LOCAL_MODULE_CLASS := JAVA_LIBRARIES
-LOCAL_MODULE_SUFFIX := $(COMMON_JAVA_PACKAGE_SUFFIX)
-LOCAL_IS_HOST_MODULE := true
-LOCAL_BUILT_MODULE_STEM := javalib.jar
+# overridecheck java doclet class library
+# ============================================================
+include $(CLEAR_VARS)
 
-include $(BUILD_SYSTEM)/base_rules.mk
+LOCAL_SRC_FILES := OverrideCheck.java
 
-# Make sure overridecheck is built before any other java.
-ifeq ($(LOCAL_MODULE),overridecheck)
-overridecheck_dependency :=
-else
-overridecheck_dependency := $(OVERRIDECHECK)
-endif
+LOCAL_MODULE:= overridecheck
 
-$(LOCAL_BUILT_MODULE): $(java_sources) $(java_resource_sources) $(full_java_lib_deps) | $(overridecheck_dependency)
-	$(transform-host-java-to-package)
+LOCAL_CLASSPATH := \
+        $(HOST_JDK_TOOLS_JAR)
+
+include $(BUILD_HOST_JAVA_LIBRARY)
