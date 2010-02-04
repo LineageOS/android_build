@@ -49,7 +49,7 @@ $(combo_target)LD := $($(combo_target)TOOLS_PREFIX)ld$(HOST_EXECUTABLE_SUFFIX)
 
 $(combo_target)NO_UNDEFINED_LDFLAGS := -Wl,--no-undefined
 
-TARGET_arm_CFLAGS :=    -O2 \
+TARGET_arm_CFLAGS +=    -O2 \
                         -fomit-frame-pointer \
                         -fstrict-aliasing    \
                         -funswitch-loops     \
@@ -60,7 +60,7 @@ TARGET_arm_CFLAGS :=    -O2 \
 # as a 'hint'. If thumb is not enabled, these files are just
 # compiled as ARM.
 ifeq ($(ARCH_ARM_HAVE_THUMB_SUPPORT),true)
-TARGET_thumb_CFLAGS :=  -mthumb \
+TARGET_thumb_CFLAGS +=  -mthumb \
                         -Os \
                         -fomit-frame-pointer \
                         -fno-strict-aliasing \
