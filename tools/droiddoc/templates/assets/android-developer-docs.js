@@ -64,7 +64,7 @@ addLoadEvent( function() {
 } );
 
 addLoadEvent( function() {
-  $("pre").addClass("prettyprint");
+  $("pre:not(.no-pretty-print)").addClass("prettyprint");
   prettyPrint();
 } );
 
@@ -136,12 +136,13 @@ function init() {
   sidenav = $("#side-nav");
   devdocNav = $("#devdoc-nav");
 
+  var cookiePath = "";
   if (location.href.indexOf("/reference/") != -1) {
-    var cookiePath = "reference_";
+    cookiePath = "reference_";
   } else if (location.href.indexOf("/guide/") != -1) {
-    var cookiePath = "guide_";
+    cookiePath = "guide_";
   } else if (location.href.indexOf("/resources/") != -1) {
-    var cookiePath = "resources_";
+    cookiePath = "resources_";
   }
 
   if (!isMobile) {
@@ -219,10 +220,12 @@ function resizePackagesHeight() {
 /* Resize the height of the side-nav and doc-content divs,
  * which creates the frame effect */
 function resizeHeight() {
+  var docContent = $("#doc-content");
+
   // Get the window height and always resize the doc-content and side-nav divs
   var windowHeight = ($(window).height() - HEADER_HEIGHT);
-  content.css({height:windowHeight + "px"});
-  sidenav.css({height:windowHeight + "px"});
+  docContent.css({height:windowHeight + "px"});
+  $("#side-nav").css({height:windowHeight + "px"});
 
   var href = location.href;
   // If in the reference docs, also resize the "swapper", "classes-nav", and "nav-tree"  divs
@@ -237,6 +240,13 @@ function resizeHeight() {
     $("#devdoc-nav").css({height:sidenav.css("height")});
   } else if (href.indexOf("/resources/") != -1) {
     $("#devdoc-nav").css({height:sidenav.css("height")});
+  }
+
+  // Hide the "Go to top" link if there's no vertical scroll
+  if ( parseInt($("#jd-content").css("height")) <= parseInt(docContent.css("height")) ) {
+    $("a[href='#top']").css({'display':'none'});
+  } else {
+    $("a[href='#top']").css({'display':'inline'});
   }
 }
 
@@ -259,9 +269,11 @@ function resizeWidth() {
   classesNav.css({width:sidenavWidth});
   $("#packages-nav").css({width:sidenavWidth});
 
-  var basePath = getBaseUri(location.pathname);
-  var section = basePath.substring(1,basePath.indexOf("/",1));
-  writeCookie("width", sidenavWidth, section, null);
+  if ($(".side-nav-resizable").length) { // Must check if the nav is resizable because IE6 calls resizeWidth() from resizeAll() for all pages
+    var basePath = getBaseUri(location.pathname);
+    var section = basePath.substring(1,basePath.indexOf("/",1));
+    writeCookie("width", sidenavWidth, section, null);
+  }
 }
 
 /* For IE6 only,
