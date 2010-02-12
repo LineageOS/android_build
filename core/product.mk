@@ -50,6 +50,7 @@ endef
 #
 
 _product_var_list := \
+    PRODUCT_BUILD_FINGERPRINT_OVERRIDE \
     PRODUCT_NAME \
     PRODUCT_MODEL \
     PRODUCT_LOCALES \
