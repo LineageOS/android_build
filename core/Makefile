@@ -521,6 +521,7 @@ recovery_resources_private := $(strip $(wildcard $(TARGET_DEVICE_DIR)/recovery/r
 recovery_resource_deps := $(shell find $(recovery_resources_common) \
   $(recovery_resources_private) -type f)
 recovery_busybox_binary := $(call intermediates-dir-for,EXECUTABLES,recoverybusybox)/busybox
+recovery_flash_image_binary := $(call intermediates-dir-for,EXECUTABLES,recovery_flash_image)/flash_image
         
 ifeq ($(recovery_resources_private),)
   $(info No private recovery resources for TARGET_DEVICE $(TARGET_DEVICE))
@@ -576,6 +577,7 @@ $(INSTALLED_RECOVERYIMAGE_TARGET): $(MKBOOTFS) $(MKBOOTIMG) $(MINIGZIP) \
 	echo Modifying ramdisk contents...
 	cp -f $(recovery_initrc) $(TARGET_RECOVERY_ROOT_OUT)/
 	cp -f $(recovery_binary) $(TARGET_RECOVERY_ROOT_OUT)/sbin/
+	cp -f $(recovery_flash_image_binary) $(TARGET_RECOVERY_ROOT_OUT)/sbin/
 	cp -f $(recovery_busybox_binary) $(TARGET_RECOVERY_ROOT_OUT)/sbin/
 	mkdir -p $(TARGET_RECOVERY_ROOT_OUT)/system/bin
 	ln -s ../../sbin/busybox $(TARGET_RECOVERY_ROOT_OUT)/system/bin/sh
