@@ -519,6 +519,7 @@ recovery_resource_deps := $(shell find $(recovery_resources_common) \
   $(recovery_resources_private) -type f)
 recovery_busybox_binary := $(call intermediates-dir-for,EXECUTABLES,recoverybusybox)/busybox
 recovery_flash_image_binary := $(call intermediates-dir-for,EXECUTABLES,recovery_flash_image)/flash_image
+recovery_dump_image_binary := $(call intermediates-dir-for,EXECUTABLES,recovery_dump_image)/dump_image
         
 ifeq ($(recovery_resources_private),)
   $(info No private recovery resources for TARGET_DEVICE $(TARGET_DEVICE))
@@ -560,6 +561,7 @@ $(INSTALLED_RECOVERYIMAGE_TARGET): $(MKBOOTFS) $(MKBOOTIMG) $(MINIGZIP) \
 		$(recovery_binary) \
 		$(recovery_busybox_binary) \
 		$(recovery_flash_image_binary) \
+		$(recovery_dump_image_binary) \
 		$(recovery_initrc) $(recovery_kernel) \
 		$(INSTALLED_2NDBOOTLOADER_TARGET) \
 		$(recovery_build_prop) $(recovery_resource_deps) \
