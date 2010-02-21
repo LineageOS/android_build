@@ -49,7 +49,7 @@ $(combo_target)LD := $($(combo_target)TOOLS_PREFIX)ld$(HOST_EXECUTABLE_SUFFIX)
 
 $(combo_target)NO_UNDEFINED_LDFLAGS := -Wl,--no-undefined
 
-TARGET_arm_CFLAGS +=    -O2 \
+TARGET_arm_CFLAGS +=    -O3 \
                         -fomit-frame-pointer \
                         -fstrict-aliasing    \
                         -funswitch-loops     \
