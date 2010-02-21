@@ -517,10 +517,10 @@ recovery_resources_common := $(call include-path-for, recovery)/res
 recovery_resources_private := $(strip $(wildcard $(TARGET_DEVICE_DIR)/recovery/res))
 recovery_resource_deps := $(shell find $(recovery_resources_common) \
   $(recovery_resources_private) -type f)
-recovery_busybox_binary := $(call intermediates-dir-for,EXECUTABLES,recoverybusybox)/busybox
-recovery_flash_image_binary := $(call intermediates-dir-for,EXECUTABLES,recovery_flash_image)/flash_image
-recovery_dump_image_binary := $(call intermediates-dir-for,EXECUTABLES,recovery_dump_image)/dump_image
-        
+recovery_additional_executables := \
+    $(foreach _executable,$(ADDITIONAL_RECOVERY_EXECUTABLES), \
+        $(ALL_MODULES.$(_executable).BUILT))
+
 ifeq ($(recovery_resources_private),)
   $(info No private recovery resources for TARGET_DEVICE $(TARGET_DEVICE))
 endif
@@ -559,9 +559,7 @@ $(INSTALLED_RECOVERYIMAGE_TARGET): $(MKBOOTFS) $(MKBOOTIMG) $(MINIGZIP) \
 		$(INSTALLED_RAMDISK_TARGET) \
 		$(INSTALLED_BOOTIMAGE_TARGET) \
 		$(recovery_binary) \
-		$(recovery_busybox_binary) \
-		$(recovery_flash_image_binary) \
-		$(recovery_dump_image_binary) \
+		$(recovery_additional_executables) \
 		$(recovery_initrc) $(recovery_kernel) \
 		$(INSTALLED_2NDBOOTLOADER_TARGET) \
 		$(recovery_build_prop) $(recovery_resource_deps) \
@@ -577,9 +575,9 @@ $(INSTALLED_RECOVERYIMAGE_TARGET): $(MKBOOTFS) $(MKBOOTIMG) $(MINIGZIP) \
 	echo Modifying ramdisk contents...
 	cp -f $(recovery_initrc) $(TARGET_RECOVERY_ROOT_OUT)/
 	cp -f $(recovery_binary) $(TARGET_RECOVERY_ROOT_OUT)/sbin/
-	cp -f $(recovery_flash_image_binary) $(TARGET_RECOVERY_ROOT_OUT)/sbin/
-	cp -f $(recovery_busybox_binary) $(TARGET_RECOVERY_ROOT_OUT)/sbin/
 	mkdir -p $(TARGET_RECOVERY_ROOT_OUT)/system/bin
+	$(foreach _executable,$(recovery_additional_executables), \
+	    cp $(_executable) $(TARGET_RECOVERY_ROOT_OUT)/sbin/;)
 	ln -s ../../sbin/busybox $(TARGET_RECOVERY_ROOT_OUT)/system/bin/sh
 	$(hide) $(foreach busyboxlink,$(notdir $(BUSYBOX_LINKS)), \
 	  ln -s busybox $(TARGET_RECOVERY_ROOT_OUT)/sbin/$(busyboxlink);)
