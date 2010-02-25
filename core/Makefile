@@ -578,7 +578,6 @@ $(INSTALLED_RECOVERYIMAGE_TARGET): $(MKBOOTFS) $(MKBOOTIMG) $(MINIGZIP) \
 	mkdir -p $(TARGET_RECOVERY_ROOT_OUT)/system/bin
 	$(foreach _executable,$(recovery_additional_executables), \
 	    cp $(_executable) $(TARGET_RECOVERY_ROOT_OUT)/sbin/;)
-	ln -s ../../sbin/busybox $(TARGET_RECOVERY_ROOT_OUT)/system/bin/sh
 	$(hide) $(foreach busyboxlink,$(notdir $(BUSYBOX_LINKS)), \
 	  ln -s busybox $(TARGET_RECOVERY_ROOT_OUT)/sbin/$(busyboxlink);)
 	$(foreach recovery_tools_link,flash_image dump_image mkyaffs2image unyaffs, \
