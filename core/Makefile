@@ -263,6 +263,7 @@ BUILT_RAMDISK_TARGET := $(PRODUCT_OUT)/ramdisk.img
 INSTALLED_RAMDISK_TARGET := $(BUILT_RAMDISK_TARGET)
 $(INSTALLED_RAMDISK_TARGET): $(MKBOOTFS) $(INTERNAL_RAMDISK_FILES) | $(MINIGZIP)
 	$(call pretty,"Target ram disk: $@")
+	$(hide) ln -sf /system/xbin/busybox $(TARGET_ROOT_OUT_SBIN)/sh
 	$(hide) $(MKBOOTFS) $(TARGET_ROOT_OUT) | $(MINIGZIP) > $@
 
 
