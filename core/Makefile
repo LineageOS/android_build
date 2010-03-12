@@ -858,7 +858,7 @@ $(BUILT_TARGET_FILES_PACKAGE): \
 	$(hide) $(call package_files-copy-root, \
 		$(TARGET_RECOVERY_ROOT_OUT),$(zip_root)/RECOVERY/RAMDISK)
 ifdef INSTALLED_RECOVERY_KERNEL_TARGET
-	$(hide) $(ACP) $(INSTALLED_RECOVERY_KERNEL_TARGET) $(zip_root)/RECOVERY/recovery_kernel
+	$(hide) $(ACP) $(INSTALLED_RECOVERY_KERNEL_TARGET) $(zip_root)/RECOVERY/kernel
 endif
 ifdef INSTALLED_2NDBOOTLOADER_TARGET
 	$(hide) $(ACP) \
