@@ -508,8 +508,12 @@ ifeq (,$(filter true, $(TARGET_NO_KERNEL) $(TARGET_NO_RECOVERY) $(BUILD_TINY_AND
 
 INSTALLED_RECOVERYIMAGE_TARGET := $(PRODUCT_OUT)/recovery.img
 
+ifndef INSTALLED_RECOVERY_KERNEL_TARGET
+INSTALLED_RECOVERY_KERNEL_TARGET := $(INSTALLED_KERNEL_TARGET)
+endif
+
 recovery_initrc := $(call include-path-for, recovery)/etc/init.rc
-recovery_kernel := $(INSTALLED_KERNEL_TARGET) # same as a non-recovery system
+recovery_kernel := $(INSTALLED_RECOVERY_KERNEL_TARGET)
 recovery_ramdisk := $(PRODUCT_OUT)/ramdisk-recovery.img
 recovery_build_prop := $(INSTALLED_BUILD_PROP_TARGET)
 recovery_binary := $(call intermediates-dir-for,EXECUTABLES,recovery)/recovery
@@ -853,8 +857,8 @@ $(BUILT_TARGET_FILES_PACKAGE): \
 	$(hide) mkdir -p $(zip_root)/RECOVERY
 	$(hide) $(call package_files-copy-root, \
 		$(TARGET_RECOVERY_ROOT_OUT),$(zip_root)/RECOVERY/RAMDISK)
-ifdef INSTALLED_KERNEL_TARGET
-	$(hide) $(ACP) $(INSTALLED_KERNEL_TARGET) $(zip_root)/RECOVERY/kernel
+ifdef INSTALLED_RECOVERY_KERNEL_TARGET
+	$(hide) $(ACP) $(INSTALLED_RECOVERY_KERNEL_TARGET) $(zip_root)/RECOVERY/recovery_kernel
 endif
 ifdef INSTALLED_2NDBOOTLOADER_TARGET
 	$(hide) $(ACP) \

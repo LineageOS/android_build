@@ -20,6 +20,12 @@ else
   INSTALLED_KERNEL_TARGET :=
 endif
 
+ifneq ($(strip $(TARGET_NO_RECOVERY_KERNEL)),true)
+  INSTALLED_RECOVERY_KERNEL_TARGET := $(PRODUCT_OUT)/recovery_kernel
+else
+  INSTALLED_RECOVERY_KERNEL_TARGET :=
+endif
+
 # Use the add-radio-file function to add values to this variable.
 INSTALLED_RADIOIMAGE_TARGET :=
 
