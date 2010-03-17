@@ -39,6 +39,7 @@ class BothGenerator(object):
   def AssertOlderBuild(self, *a): self._DoBoth("AssertOlderBuild", *a)
   def AssertDevice(self, *a): self._DoBoth("AssertDevice", *a)
   def AssertSomeBootloader(self, *a): self._DoBoth("AssertSomeBootloader", *a)
+  def RunBackup(self, *a): self._DoBoth("RunBackup", *a)
   def ShowProgress(self, *a): self._DoBoth("ShowProgress", *a)
   def PatchCheck(self, *a): self._DoBoth("PatchCheck", *a)
   def FileCheck(self, filename, *sha1): self._DoBoth("FileCheck", *a)
