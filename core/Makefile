@@ -825,7 +825,8 @@ built_ota_tools := \
 	$(call intermediates-dir-for,EXECUTABLES,applypatch)/applypatch \
 	$(call intermediates-dir-for,EXECUTABLES,applypatch_static)/applypatch_static \
 	$(call intermediates-dir-for,EXECUTABLES,check_prereq)/check_prereq \
-	$(call intermediates-dir-for,EXECUTABLES,updater)/updater
+	$(call intermediates-dir-for,EXECUTABLES,updater)/updater 
+
 $(BUILT_TARGET_FILES_PACKAGE): PRIVATE_OTA_TOOLS := $(built_ota_tools)
 
 $(BUILT_TARGET_FILES_PACKAGE): PRIVATE_RECOVERY_API_VERSION := $(RECOVERY_API_VERSION)
@@ -941,6 +942,13 @@ else
 $(INTERNAL_OTA_PACKAGE_TARGET): scriptmode := $(TARGET_OTA_SCRIPT_MODE)
 endif
 
+ifeq ($(TARGET_OTA_BACKUPTOOL),)
+# default to "false"
+$(INTERNAL_OTA_PACKAGE_TARGET): backuptool := false
+else
+$(INTERNAL_OTA_PACKAGE_TARGET): backuptool := $(TARGET_OTA_BACKUPTOOL)
+endif
+
 $(INTERNAL_OTA_PACKAGE_TARGET): $(BUILT_TARGET_FILES_PACKAGE) otatools
 	@echo "Package OTA: $@"
 	$(hide) ./build/tools/releasetools/ota_from_target_files \
@@ -948,6 +956,7 @@ $(INTERNAL_OTA_PACKAGE_TARGET): $(BUILT_TARGET_FILES_PACKAGE) otatools
 	   -m $(scriptmode) \
 	   -p $(HOST_OUT) \
            -k $(KEY_CERT_PAIR) \
+           --backup=$(backuptool) \
            $(BUILT_TARGET_FILES_PACKAGE) $@
 
 .PHONY: otapackage
