@@ -351,6 +351,7 @@ def WriteFullOTAPackage(input_zip, output_zip):
   AppendAssertions(script, input_zip)
   device_specific.FullOTA_Assertions()
 
+  script.FormatPartition("cache")
   script.RunBackup("backup")
 
   script.ShowProgress(0.5, 0)
