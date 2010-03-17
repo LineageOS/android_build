@@ -990,6 +990,13 @@ else
 $(INTERNAL_OTA_PACKAGE_TARGET): backuptool := $(TARGET_OTA_BACKUPTOOL)
 endif
 
+ifeq ($(TARGET_NO_RECOVERY),)
+# default to "false"
+$(INTERNAL_OTA_PACKAGE_TARGET): recoveryex := false
+else
+$(INTERNAL_OTA_PACKAGE_TARGET): recoveryex := $(TARGET_NO_RECOVERY)
+endif
+
 ifeq ($(TARGET_OTA_ASSERT_DEVICE),)
 $(INTERNAL_OTA_PACKAGE_TARGET): override_device := auto
 else
@@ -1004,6 +1011,7 @@ $(INTERNAL_OTA_PACKAGE_TARGET): $(BUILT_TARGET_FILES_PACKAGE) $(OTATOOLS)
 	   -p $(HOST_OUT) \
            -k $(KEY_CERT_PAIR) \
            --backup=$(backuptool) \
+           --recovery=$(recoveryex) \
 	   --override_device=$(override_device) \
            $(BUILT_TARGET_FILES_PACKAGE) $@
 
