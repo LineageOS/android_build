@@ -351,6 +351,8 @@ def WriteFullOTAPackage(input_zip, output_zip):
   AppendAssertions(script, input_zip)
   device_specific.FullOTA_Assertions()
 
+  script.RunBackup("backup")
+
   script.ShowProgress(0.5, 0)
 
   if OPTIONS.wipe_user_data:
@@ -383,6 +385,9 @@ def WriteFullOTAPackage(input_zip, output_zip):
   common.CheckSize(boot_img.data, "boot.img")
   common.ZipWriteStr(output_zip, "boot.img", boot_img.data)
   script.ShowProgress(0.2, 0)
+
+  script.ShowProgress(0.2, 10)
+  script.RunBackup("restore")
 
   script.ShowProgress(0.2, 10)
   script.WriteRawImage("boot", "boot.img")
