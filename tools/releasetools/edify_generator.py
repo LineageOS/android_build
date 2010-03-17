@@ -99,7 +99,8 @@ class EdifyGenerator(object):
     self.script.append(self._WordWrap(cmd))
 
   def RunBackup(self, command):
-    self.script.append("run_program PACKAGE:backuptool.sh %s" % (command))
+    # Edify doesn't seem to support run_program
+    pass
 
   def ShowProgress(self, frac, dur):
     """Update the progress bar, advancing it over 'frac' over the next
