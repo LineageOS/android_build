@@ -939,6 +939,13 @@ else
 $(INTERNAL_OTA_PACKAGE_TARGET): scriptmode := $(TARGET_OTA_SCRIPT_MODE)
 endif
 
+ifeq ($(TARGET_OTA_BACKUPTOOL),)
+# default to "false"
+$(INTERNAL_OTA_PACKAGE_TARGET): backuptool := false
+else
+$(INTERNAL_OTA_PACKAGE_TARGET): backuptool := $(TARGET_OTA_BACKUPTOOL)
+endif
+
 $(INTERNAL_OTA_PACKAGE_TARGET): $(BUILT_TARGET_FILES_PACKAGE) otatools
 	@echo "Package OTA: $@"
 	$(hide) ./build/tools/releasetools/ota_from_target_files \
@@ -946,6 +953,7 @@ $(INTERNAL_OTA_PACKAGE_TARGET): $(BUILT_TARGET_FILES_PACKAGE) otatools
 	   -m $(scriptmode) \
 	   -p $(HOST_OUT) \
            -k $(KEY_CERT_PAIR) \
+           --backup $(backuptool) \
            $(BUILT_TARGET_FILES_PACKAGE) $@
 
 .PHONY: otapackage
