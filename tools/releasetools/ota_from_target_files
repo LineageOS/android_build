@@ -348,6 +348,8 @@ def WriteFullOTAPackage(input_zip, output_zip):
     ts = GetBuildProp("ro.build.date.utc", input_zip)
     script.AssertOlderBuild(ts)
 
+  script.RunBackup("backup")
+
   AppendAssertions(script, input_zip)
   device_specific.FullOTA_Assertions()
 
@@ -383,6 +385,9 @@ def WriteFullOTAPackage(input_zip, output_zip):
   common.CheckSize(boot_img.data, "boot.img")
   common.ZipWriteStr(output_zip, "boot.img", boot_img.data)
   script.ShowProgress(0.2, 0)
+
+  script.ShowProgress(0.2, 10)
+  script.RunBackup("restore")
 
   script.ShowProgress(0.2, 10)
   script.WriteRawImage("boot", "boot.img")

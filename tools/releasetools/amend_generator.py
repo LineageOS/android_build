@@ -82,6 +82,10 @@ class AmendGenerator(object):
                   " || ".join(['getprop("ro.bootloader") == "%s"' % (b,)
                                for b in bootloaders]))
 
+  def RunBackup(self, command):
+    self.script.append("run_program PACKAGE:backuptool.sh %s" % (command))
+    self.included_files.add("backuptool.sh")
+
   def ShowProgress(self, frac, dur):
     """Update the progress bar, advancing it over 'frac' over the next
     'dur' seconds."""
