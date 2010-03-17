@@ -211,7 +211,7 @@ class AmendGenerator(object):
         targetfn = i
       try:
         if input_path is None:
-          data = input_zip.read(os.path.join("OTA/bin", sourcefn))
+          data = input_zip.read(os.path.join("SYSTEM/bin", sourcefn))
         else:
           data = open(os.path.join(input_path, sourcefn)).read()
         common.ZipWriteStr(output_zip, targetfn, data, perms=0755)
