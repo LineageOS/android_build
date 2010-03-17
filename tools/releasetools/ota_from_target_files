@@ -356,8 +356,9 @@ def WriteFullOTAPackage(input_zip, output_zip):
   AppendAssertions(script, input_zip)
   device_specific.FullOTA_Assertions()
 
-  script.FormatPartition("cache")
-  script.RunBackup("backup")
+  if OPTIONS.backuptool:
+    script.FormatPartition("cache")
+    script.RunBackup("backup")
 
   script.ShowProgress(0.5, 0)
 
@@ -842,7 +843,7 @@ def main(argv):
     elif o in ("--worker_threads"):
       OPTIONS.worker_threads = int(a)
     elif o in ("--backup"):
-      OPTIONS.backuptool = bool(a is 'true')
+      OPTIONS.backuptool = bool(a.lower() is 'true')
     else:
       return False
     return True
@@ -856,7 +857,8 @@ def main(argv):
                                               "no_prereq",
                                               "extra_script=",
                                               "script_mode=",
-                                              "worker_threads="],
+                                              "worker_threads=",
+                                              "backup="],
                              extra_option_handler=option_handler)
 
   if len(args) != 2:
