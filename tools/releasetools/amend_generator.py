@@ -209,11 +209,19 @@ class AmendGenerator(object):
       else:
         sourcefn = i
         targetfn = i
-      try:
-        if input_path is None:
-          data = input_zip.read(os.path.join("SYSTEM/bin", sourcefn))
+      for zippath in ["OTA","SYSTEM"]:
+        fail = False
+        try:
+           if input_path is None:
+             data = input_zip.read(os.path.join("SYSTEM/bin", sourcefn))
+           else:
+             data = open(os.path.join(input_path, sourcefn)).read()
+           common.ZipWriteStr(output_zip, targetfn, data, perms=0755)
+        except (IOError, KeyError), e:
+           fail = True
+           continue
         else:
-          data = open(os.path.join(input_path, sourcefn)).read()
-        common.ZipWriteStr(output_zip, targetfn, data, perms=0755)
-      except (IOError, KeyError), e:
-        raise ExternalError("unable to include binary %s: %s" % (i, e))
+           break
+      else:
+        if (fail):
+           raise ExternalError("unable to include binary %s: %s" % (i, e))
