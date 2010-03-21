@@ -356,7 +356,6 @@ def WriteFullOTAPackage(input_zip, output_zip):
   AppendAssertions(script, input_zip)
   device_specific.FullOTA_Assertions()
   if OPTIONS.backuptool:
-    script.FormatPartition("cache")
     script.RunBackup("backup")
 
   script.ShowProgress(0.5, 0)
@@ -394,7 +393,6 @@ def WriteFullOTAPackage(input_zip, output_zip):
 
   if OPTIONS.backuptool:
     script.ShowProgress(0.2, 10)
-    script.FormatPartition("cache")
     script.RunBackup("restore")
 
   script.ShowProgress(0.2, 10)
