@@ -21,8 +21,8 @@ endif
 
 KBUILD_OUTPUT := $(CURDIR)/$(TARGET_OUT_INTERMEDIATES)/kernel
 mk_kernel := + $(hide) $(MAKE) -C kernel O=$(KBUILD_OUTPUT) ARCH=$(TARGET_ARCH) $(if $(SHOW_COMMANDS),V=1)
-mk_kernel += INSTALL_MOD_STRIP=1
 ifneq ($(TARGET_ARCH),$(HOST_ARCH))
+mk_kernel += INSTALL_MOD_STRIP=1
 mk_kernel += CROSS_COMPILE=$(CURDIR)/$(TARGET_TOOLS_PREFIX)
 endif
 
@@ -42,20 +42,34 @@ $(KERNEL_DOTCONFIG_FILE): $(KERNEL_CONFIG_FILE) | $(ACP)
 	$(copy-file-to-new-target)
 
 BUILT_KERNEL_TARGET := $(KBUILD_OUTPUT)/arch/$(TARGET_ARCH)/boot/$(KERNEL_TARGET)
-$(INSTALLED_KERNEL_TARGET): $(KERNEL_DOTCONFIG_FILE)
+.PHONY: _zimage
+_zimage: $(KERNEL_DOTCONFIG_FILE)
+	@echo "**** BUILDING KERNEL ****"
 	$(mk_kernel) oldconfig
 	$(mk_kernel) $(KERNEL_TARGET) $(if $(MOD_ENABLED),modules)
-	$(hide) $(ACP) -fp $(BUILT_KERNEL_TARGET) $@
-ifdef TARGET_PREBUILT_MODULES
-	$(hide) $(ACP) -r $(TARGET_PREBUILT_MODULES) $(TARGET_OUT)/lib
-else
+
+.PHONY: _modules
+_modules: _zimage
+ifeq ($(TARGET_PREBUILT_MODULES),)
+	@echo "**** BUILDING MODULES ****"
 	$(hide) rm -rf $(TARGET_OUT)/lib/modules
 	$(if $(MOD_ENABLED),$(mk_kernel) INSTALL_MOD_PATH=$(CURDIR)/$(TARGET_OUT) modules_install)
 	$(hide) rm -f $(TARGET_OUT)/lib/modules/*/{build,source}
+else
+	$(hide) $(ACP) -r $(TARGET_PREBUILT_MODULES) $(TARGET_OUT)/lib	
 endif
-	@echo "Symlinking $(shell find $(CURDIR)/$(TARGET_OUT)/lib/modules/*/kernel/drivers/net/wireless/*/*.ko) -> $(CURDIR)/$(TARGET_OUT)/$(notdir $(shell find $(CURDIR)/$(TARGET_OUT)/lib/modules/*/kernel/drivers/net/wireless/*/*.ko))"
-	$(hide) cp $(shell find $(CURDIR)/$(TARGET_OUT)/lib/modules/*/kernel/drivers/net/wireless/*/*.ko) $(CURDIR)/$(TARGET_OUT)/lib/modules/$(notdir $(shell find $(CURDIR)/$(TARGET_OUT)/lib/modules/*/kernel/drivers/net/wireless/*/*.ko))
+
 	$(if $(FIRMWARE_ENABLED),$(mk_kernel) INSTALL_MOD_PATH=$(CURDIR)/$(TARGET_OUT) firmware_install)
+
+.PHONY: _wifi
+_wifi: _modules
+	@echo "**** BUILDING WIFI ****"
+	@echo "Copying $(shell ls $(CURDIR)/$(TARGET_OUT)/lib/modules/*/kernel/drivers/net/wireless/*/*.ko) -> $(CURDIR)/$(TARGET_OUT)/lib/modules/$(notdir $(shell ls $(CURDIR)/$(TARGET_OUT)/lib/modules/*/kernel/drivers/net/wireless/*/*.ko))"
+	$(hide) cp $(shell ls $(CURDIR)/$(TARGET_OUT)/lib/modules/*/kernel/drivers/net/wireless/*/*.ko) $(CURDIR)/$(TARGET_OUT)/lib/modules/$(notdir $(shell ls $(CURDIR)/$(TARGET_OUT)/lib/modules/*/kernel/drivers/net/wireless/*/*.ko))
+
+$(INSTALLED_KERNEL_TARGET): _wifi
+	@echo "**** KERNEL BUILT ****"
+	$(hide) $(ACP) -fp $(BUILT_KERNEL_TARGET) $@
 
 installclean: FILES += $(KBUILD_OUTPUT) $(INSTALLED_KERNEL_TARGET)
 
