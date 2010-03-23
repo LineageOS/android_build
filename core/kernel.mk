@@ -53,7 +53,7 @@ else
 	$(hide) rm -f $(TARGET_OUT)/lib/modules/*/{build,source}
 endif
 	@echo "Symlinking $(shell find $(CURDIR)/$(TARGET_OUT)/lib/modules/*/kernel/drivers/net/wireless/*/*.ko) -> $(CURDIR)/$(TARGET_OUT)/$(notdir $(shell find $(CURDIR)/$(TARGET_OUT)/lib/modules/*/kernel/drivers/net/wireless/*/*.ko))"
-	$(hide) ln -sf $(shell find $(CURDIR)/$(TARGET_OUT)/lib/modules/*/kernel/drivers/net/wireless/*/*.ko) $(CURDIR)/$(TARGET_OUT)/lib/modules/$(notdir $(shell find $(CURDIR)/$(TARGET_OUT)/lib/modules/*/kernel/drivers/net/wireless/*/*.ko))
+	$(hide) cp $(shell find $(CURDIR)/$(TARGET_OUT)/lib/modules/*/kernel/drivers/net/wireless/*/*.ko) $(CURDIR)/$(TARGET_OUT)/lib/modules/$(notdir $(shell find $(CURDIR)/$(TARGET_OUT)/lib/modules/*/kernel/drivers/net/wireless/*/*.ko))
 	$(if $(FIRMWARE_ENABLED),$(mk_kernel) INSTALL_MOD_PATH=$(CURDIR)/$(TARGET_OUT) firmware_install)
 
 installclean: FILES += $(KBUILD_OUTPUT) $(INSTALLED_KERNEL_TARGET)
