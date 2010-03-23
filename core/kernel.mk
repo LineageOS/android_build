@@ -21,6 +21,7 @@ endif
 
 KBUILD_OUTPUT := $(CURDIR)/$(TARGET_OUT_INTERMEDIATES)/kernel
 mk_kernel := + $(hide) $(MAKE) -C kernel O=$(KBUILD_OUTPUT) ARCH=$(TARGET_ARCH) $(if $(SHOW_COMMANDS),V=1)
+mk_kernel += INSTALL_MOD_STRIP=1
 ifneq ($(TARGET_ARCH),$(HOST_ARCH))
 mk_kernel += CROSS_COMPILE=$(CURDIR)/$(TARGET_TOOLS_PREFIX)
 endif
