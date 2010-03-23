@@ -563,9 +563,6 @@ $(RECOVERY_INSTALL_OTA_KEYS): $(OTA_PUBLIC_KEYS) $(DUMPKEY_JAR)
 	@mkdir -p $(dir $@)
 	java -jar $(DUMPKEY_JAR) $(PRIVATE_OTA_PUBLIC_KEYS) > $@
 
-#	$(foreach recovery_tools_link,amend busybox flash_image dump_image mkyaffs2image unyaffs, \
-#	  ln -s recovery $(TARGET_RECOVERY_ROOT_OUT)/sbin/$(recovery_tools_link);)
-
 
 $(INSTALLED_RECOVERYIMAGE_TARGET): $(MKBOOTFS) $(MKBOOTIMG) $(MINIGZIP) \
 		$(INSTALLED_RAMDISK_TARGET) \
