@@ -208,17 +208,14 @@ to get the components, rather than downloading a new SDK package.</p>
 
 <?cs if:android.whichdoc != "online" && sdk.preview ?>
   <p>Welcome developers! The next release of the Android platform will be
-Android <?cs var:sdk.preview.version ?> and we are pleased to announce the
-availability of an early look SDK to give you a head-start on developing
-applications for it. </p>
+  Android 1.6 and we are pleased to announce the availability of an early look SDK
+  to give you a head-start on developing applications for it. </p>
 
-  <p>The Android <?cs var:sdk.preview.version ?> platform includes a variety of
-improvements and new features for users and developers. Additionally, the SDK
-itself introduces several new capabilities that enable you to develop
-applications more efficiently. See the <a
-href="http://developer.android.com/sdk/preview/features.html">Android 
-<?cs var:sdk.preview.version ?> Highlights</a> document for a list of
-highlights.</p>
+  <p>The Android 1.6 platform includes a variety of improvements and new features
+  for users and developers. Additionally, the SDK itself introduces several new
+  capabilities that enable you to develop applications more efficiently.
+  See the <a href="http://developer.android.com/sdk/preview/features.html">
+  Android 1.6 Highlights</a> document for a list of highlights.</p>
 <?cs /if ?>
 
       <?cs call:tag_list(root.descr) ?>
