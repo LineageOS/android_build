@@ -356,15 +356,17 @@ def WriteFullOTAPackage(input_zip, output_zip):
   AppendAssertions(script, input_zip)
   device_specific.FullOTA_Assertions()
   if OPTIONS.backuptool:
+    script.Print("Backing up proprietary files...")
     script.RunBackup("backup")
-
-  script.ShowProgress(0.5, 0)
+    script.ShowProgress(0.2, 10)
 
   if OPTIONS.wipe_user_data:
     script.FormatPartition("userdata")
-
+  
+  script.Print("Installing system...")
   script.FormatPartition("system")
   script.Mount("MTD", "system", "/system")
+  script.ShowProgress(0.5, 40)
   script.UnpackPackageDir("recovery", "/system")
   script.UnpackPackageDir("system", "/system")
 
@@ -389,16 +391,18 @@ def WriteFullOTAPackage(input_zip, output_zip):
 
   common.CheckSize(boot_img.data, "boot.img")
   common.ZipWriteStr(output_zip, "boot.img", boot_img.data)
-  script.ShowProgress(0.2, 0)
+  script.ShowProgress(0.2, 10)
 
   if OPTIONS.backuptool:
-    script.ShowProgress(0.2, 10)
+    script.Print("Restoring proprietary files...")
     script.RunBackup("restore")
-
+  
+  script.Print("Writing boot image...")
   script.ShowProgress(0.2, 10)
   script.WriteRawImage("boot", "boot.img")
 
-  script.ShowProgress(0.1, 0)
+  script.ShowProgress(0.1, 10)
+  script.Print("Install complete!")
   device_specific.FullOTA_InstallEnd()
 
   if OPTIONS.extra_script is not None:
