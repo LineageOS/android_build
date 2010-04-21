@@ -25,6 +25,19 @@ $(foreach cf,$(PRODUCT_COPY_FILES), \
   $(eval ALL_DEFAULT_INSTALLED_MODULES += $(_fulldest)) \
  )
 
+define set-product-variable
+$(shell echo Define: $(1) $(2))
+ifneq ($(strip $(1),))
+$(1) := $(2)
+endif
+endef
+
+$(foreach cf,$(strip $(PRODUCT_SPECIFIC_DEFINES)), \
+  $(eval _define := $(call word-colon,1,$(cf))) \
+  $(eval _value := $(call word-colon,2,$(cf))) \
+  $(eval $(call set-product-variable,$(_define),$(_value))) \
+)
+
 # -----------------------------------------------------------------
 # docs/index.html
 gen := $(OUT_DOCS)/index.html
