@@ -147,6 +147,7 @@ $(INSTALLED_BUILD_PROP_TARGET): $(BUILDINFO_SH) $(INTERNAL_BUILD_ID_MAKEFILE)
 			TARGET_BOARD_PLATFORM="$(TARGET_BOARD_PLATFORM)" \
 			TARGET_CPU_ABI="$(TARGET_CPU_ABI)" \
 			TARGET_CPU_ABI2="$(TARGET_CPU_ABI2)" \
+			PRODUCT_INFO_PREBUILT="$(PRODUCT_INFO_PREBUILT)" \
 			$(PRODUCT_BUILD_PROP_OVERRIDES) \
 	        bash $(BUILDINFO_SH) > $@
 	$(hide) if [ -f $(TARGET_DEVICE_DIR)/system.prop ]; then \
@@ -965,6 +966,12 @@ else
 $(INTERNAL_OTA_PACKAGE_TARGET): backuptool := $(TARGET_OTA_BACKUPTOOL)
 endif
 
+ifeq ($(TARGET_OTA_ASSERT_DEVICE),)
+$(INTERNAL_OTA_PACKAGE_TARGET): override_device := auto
+else
+$(INTERNAL_OTA_PACKAGE_TARGET): override_device := $(TARGET_OTA_ASSERT_DEVICE)
+endif
+
 $(INTERNAL_OTA_PACKAGE_TARGET): $(BUILT_TARGET_FILES_PACKAGE) otatools
 	@echo "Package OTA: $@"
 	$(hide) ./build/tools/releasetools/ota_from_target_files \
@@ -973,6 +980,7 @@ $(INTERNAL_OTA_PACKAGE_TARGET): $(BUILT_TARGET_FILES_PACKAGE) otatools
 	   -p $(HOST_OUT) \
            -k $(KEY_CERT_PAIR) \
            --backup=$(backuptool) \
+	   --override_device=$(override_device) \
            $(BUILT_TARGET_FILES_PACKAGE) $@
 
 .PHONY: otapackage

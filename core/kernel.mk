@@ -20,7 +20,7 @@ TARGET_KERNEL_CONFIG ?= goldfish_defconfig
 endif
 
 KBUILD_OUTPUT := $(CURDIR)/$(TARGET_OUT_INTERMEDIATES)/kernel
-mk_kernel := + $(hide) $(MAKE) -C kernel O=$(KBUILD_OUTPUT) ARCH=$(TARGET_ARCH) $(if $(SHOW_COMMANDS),V=1)
+mk_kernel := + $(hide) $(MAKE) -C $(TARGET_KERNEL_DIR) O=$(KBUILD_OUTPUT) ARCH=$(TARGET_ARCH) $(if $(SHOW_COMMANDS),V=1)
 ifneq ($(TARGET_ARCH),$(HOST_ARCH))
 mk_kernel += INSTALL_MOD_STRIP=1
 mk_kernel += CROSS_COMPILE=$(CURDIR)/$(TARGET_TOOLS_PREFIX)
@@ -29,7 +29,7 @@ endif
 ifneq ($(wildcard $(TARGET_KERNEL_CONFIG)),)
 KERNEL_CONFIG_FILE := $(TARGET_KERNEL_CONFIG)
 else
-KERNEL_CONFIG_FILE := kernel/arch/$(TARGET_ARCH)/configs/$(TARGET_KERNEL_CONFIG)
+KERNEL_CONFIG_FILE := $(TARGET_KERNEL_DIR)/arch/$(TARGET_ARCH)/configs/$(TARGET_KERNEL_CONFIG)
 endif
 MOD_ENABLED := $(shell grep ^CONFIG_MODULES=y $(KERNEL_CONFIG_FILE))
 FIRMWARE_ENABLED := $(shell grep ^CONFIG_FIRMWARE_IN_KERNEL=y $(KERNEL_CONFIG_FILE))
@@ -63,10 +63,12 @@ endif
 
 .PHONY: _wifi
 _wifi: _modules
+ifneq ($(TARGET_NO_BUILD_WIFI),true)
 	@echo "**** BUILDING WIFI ****"
 ifneq ($(MOD_ENABLED),)
 	@echo "Copying $(shell ls $(CURDIR)/$(TARGET_OUT)/lib/modules/*/kernel/drivers/net/wireless/*/*.ko) -> $(CURDIR)/$(TARGET_OUT)/lib/modules/$(notdir $(shell ls $(CURDIR)/$(TARGET_OUT)/lib/modules/*/kernel/drivers/net/wireless/*/*.ko))"
 	$(hide) cp $(shell ls $(CURDIR)/$(TARGET_OUT)/lib/modules/*/kernel/drivers/net/wireless/*/*.ko) $(CURDIR)/$(TARGET_OUT)/lib/modules/$(notdir $(shell ls $(CURDIR)/$(TARGET_OUT)/lib/modules/*/kernel/drivers/net/wireless/*/*.ko))
+endif
 endif
 
 $(INSTALLED_KERNEL_TARGET): _wifi
