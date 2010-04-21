@@ -177,6 +177,9 @@ A/B OTA specific options
       ones. Should only be used if caller knows it's safe to do so (e.g. all the
       postinstall work is to dexopt apps and a data wipe will happen immediately
       after). Only meaningful when generating A/B OTAs.
+
+  --override_device <device>
+      Override device-specific asserts. Can be a comma-separated list.
 """
 
 from __future__ import print_function
@@ -234,6 +237,7 @@ OPTIONS.skip_postinstall = False
 OPTIONS.retrofit_dynamic_partitions = False
 OPTIONS.skip_compatibility_check = False
 OPTIONS.output_metadata_path = None
+OPTIONS.override_device = 'auto'
 
 
 METADATA_NAME = 'META-INF/com/android/metadata'
@@ -301,7 +305,10 @@ class BuildInfo(object):
       assert oem_dicts, "OEM source required for this build"
 
     # These two should be computed only after setting self._oem_props.
-    self._device = self.GetOemProperty("ro.product.device")
+    if OPTIONS.override_device == "auto":
+      self._device = self.GetOemProperty("ro.product.device")
+    else:
+      self._device = OPTIONS.override_device
     self._fingerprint = self.CalculateFingerprint()
 
   @property
@@ -2163,6 +2170,8 @@ def main(argv):
       OPTIONS.skip_compatibility_check = True
     elif o == "--output_metadata_path":
       OPTIONS.output_metadata_path = a
+    elif o in ("--override_device"):
+      OPTIONS.override_device = a
     else:
       return False
     return True
@@ -2197,6 +2206,7 @@ def main(argv):
                                  "retrofit_dynamic_partitions",
                                  "skip_compatibility_check",
                                  "output_metadata_path=",
+                                 "override_device=",
                              ], extra_option_handler=option_handler)
 
   if len(args) != 2:
@@ -2239,6 +2249,9 @@ def main(argv):
 
   # Load OEM dicts if provided.
   OPTIONS.oem_dicts = _LoadOemDicts(OPTIONS.oem_source)
+
+  if "ota_override_device" in OPTIONS.info_dict:
+    OPTIONS.override_device = OPTIONS.info_dict.get("ota_override_device")
 
   # Assume retrofitting dynamic partitions when base build does not set
   # use_dynamic_partitions but target build does.
