@@ -6043,6 +6043,9 @@ endif
 ifeq ($(BUILDING_WITH_VSDK),true)
 	$(hide) echo "building_with_vsdk=true" >> $@
 endif
+ifneq ($(TARGET_OTA_ASSERT_DEVICE),)
+	$(hide) echo "ota_override_device=$(TARGET_OTA_ASSERT_DEVICE)" >> $@
+endif
 
 $(call declare-0p-target,$(INSTALLED_FASTBOOT_INFO_TARGET))
 
