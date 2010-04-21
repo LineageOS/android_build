@@ -63,10 +63,12 @@ endif
 
 .PHONY: _wifi
 _wifi: _modules
+ifneq ($(TARGET_NO_BUILD_WIFI),true)
 	@echo "**** BUILDING WIFI ****"
 ifneq ($(MOD_ENABLED),)
 	@echo "Copying $(shell ls $(CURDIR)/$(TARGET_OUT)/lib/modules/*/kernel/drivers/net/wireless/*/*.ko) -> $(CURDIR)/$(TARGET_OUT)/lib/modules/$(notdir $(shell ls $(CURDIR)/$(TARGET_OUT)/lib/modules/*/kernel/drivers/net/wireless/*/*.ko))"
 	$(hide) cp $(shell ls $(CURDIR)/$(TARGET_OUT)/lib/modules/*/kernel/drivers/net/wireless/*/*.ko) $(CURDIR)/$(TARGET_OUT)/lib/modules/$(notdir $(shell ls $(CURDIR)/$(TARGET_OUT)/lib/modules/*/kernel/drivers/net/wireless/*/*.ko))
+endif
 endif
 
 $(INSTALLED_KERNEL_TARGET): _wifi
