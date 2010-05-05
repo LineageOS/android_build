@@ -951,8 +951,7 @@ target-files-package: $(BUILT_TARGET_FILES_PACKAGE)
 
 ifneq ($(TARGET_SIMULATOR),true)
 ifneq ($(TARGET_PRODUCT),sdk)
-ifneq ($(TARGET_PRODUCT),generic)
-ifneq ($(TARGET_PRODUCT),aosp_emulator_us)
+ifneq ($(TARGET_DEVICE),generic)
 
 name := $(TARGET_PRODUCT)
 ifeq ($(TARGET_BUILD_TYPE),debug)
