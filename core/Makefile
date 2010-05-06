@@ -1095,8 +1095,6 @@ $(APPS_ZIP): $(INSTALLED_SYSTEMIMAGE)
 	$(hide) mkdir -p $(dir $@)
 	$(hide) zip -qj $@ $(TARGET_OUT_APPS)/*
 
-endif	# TARGET_SIMULATOR != true
-
 # -----------------------------------------------------------------
 # dalvik something
 .PHONY: dalvikfiles
