@@ -706,6 +706,17 @@ function croot()
     fi
 }
 
+function cout()
+{
+    croot
+    setpaths
+    if [ "$ANDROID_PRODUCT_OUT" ]; then
+        cd $ANDROID_PRODUCT_OUT
+    else
+        echo "Couldn't locate ANDROID_PRODUCT_OUT."
+    fi
+}
+
 function cproj()
 {
     TOPFILE=build/core/envsetup.mk
