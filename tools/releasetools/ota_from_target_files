@@ -52,6 +52,10 @@ Usage:  ota_from_target_files [flags] input_target_files output_ota_package
       Enable or disable the execution of backuptool.sh.
       Disabled by default.
 
+  --recovery <boolean>
+      Enable or disable the exclusion of recovery.img or recovery/
+      Disabled by default. Enable in *.mk with TARGET_NO_RECOVERY := true
+
   --override_device <device>
       Override device-specific asserts. Can be a comma-separated list.
 
@@ -91,6 +95,7 @@ OPTIONS.extra_script = None
 OPTIONS.script_mode = 'auto'
 OPTIONS.worker_threads = 3
 OPTIONS.backuptool = False
+OPTIONS.recoveryex = False
 OPTIONS.override_device = 'auto'
 
 def MostPopularKey(d, default):
@@ -314,8 +319,9 @@ def MakeRecoveryPatch(output_zip, recovery_img, boot_img):
 
   d = Difference(recovery_img, boot_img)
   _, _, patch = d.ComputePatch()
-  common.ZipWriteStr(output_zip, "recovery/recovery-from-boot.p", patch)
-  Item.Get("system/recovery-from-boot.p", dir=False)
+  if OPTIONS.recoveryex == False:
+    common.ZipWriteStr(output_zip, "recovery/recovery-from-boot.p", patch)
+    Item.Get("system/recovery-from-boot.p", dir=False)
 
   # Images with different content will have a different first page, so
   # we check to see if this recovery has already been installed by
@@ -374,7 +380,8 @@ def WriteFullOTAPackage(input_zip, output_zip):
   script.FormatPartition("system")
   script.Mount("MTD", "system", "/system")
   script.ShowProgress(0.5, 40)
-  script.UnpackPackageDir("recovery", "/system")
+  if OPTIONS.recoveryex == False:
+    script.UnpackPackageDir("recovery", "/system")
   script.UnpackPackageDir("system", "/system")
 
   symlinks = CopySystemFiles(input_zip, output_zip)
@@ -382,18 +389,20 @@ def WriteFullOTAPackage(input_zip, output_zip):
 
   boot_img = File("boot.img", common.BuildBootableImage(
       os.path.join(OPTIONS.input_tmp, "BOOT")))
-  recovery_img = File("recovery.img", common.BuildBootableImage(
-      os.path.join(OPTIONS.input_tmp, "RECOVERY")))
-  i = MakeRecoveryPatch(output_zip, recovery_img, boot_img)
+  if OPTIONS.recoveryex == False:
+    recovery_img = File("recovery.img", common.BuildBootableImage(
+        os.path.join(OPTIONS.input_tmp, "RECOVERY")))
+    i = MakeRecoveryPatch(output_zip, recovery_img, boot_img)
 
   Item.GetMetadata()
 
   # GetMetadata uses the data in android_filesystem_config.h to assign
   # the uid/gid/mode of all files.  We want to override that for the
   # recovery patching shell script to make it executable.
-  i.uid = 0
-  i.gid = 0
-  i.mode = 0544
+  if OPTIONS.recoveryex == False:
+    i.uid = 0
+    i.gid = 0
+    i.mode = 0544
   Item.Get("system").SetPermissions(script)
 
   common.CheckSize(boot_img.data, "boot.img")
@@ -853,6 +862,8 @@ def main(argv):
       OPTIONS.worker_threads = int(a)
     elif o in ("--backup"):
       OPTIONS.backuptool = bool(a.lower() == 'true')
+    elif o in ("--recovery"):
+      OPTIONS.recoveryex = bool(a.lower() == 'true')
     elif o in ("--override_device"):
       OPTIONS.override_device = a
     else:
@@ -870,6 +881,7 @@ def main(argv):
                                               "script_mode=",
                                               "worker_threads=",
                                               "backup=",
+                                              "recovery=",
                                               "override_device="],
                              extra_option_handler=option_handler)
 
