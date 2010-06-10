@@ -6,8 +6,12 @@ Invoke ". build/envsetup.sh" from your shell to add the following functions to y
 - mm:      Builds all of the modules in the current directory.
 - mmm:     Builds all of the modules in the supplied directories.
 - cgrep:   Greps on all local C/C++ files.
+- hgrep:   Greps on all local C/C++ header files.
 - jgrep:   Greps on all local Java files.
+- mkgrep:  Greps on all local make files.
+- rcgrep:  Greps on all local .rc files.
 - resgrep: Greps on all local res/*.xml files.
+- shgrep:  Greps on all local .sh files.
 - godir:   Go to the directory containing a file.
 
 Look at the source to view more functions. The complete list is:
@@ -812,9 +816,29 @@ function jgrep()
     find . -type f -name "*\.java" -print0 | xargs -0 grep --color -n "$@"
 }
 
+function mkgrep()
+{
+    find . -type f -name "*\.mk" -print0 | xargs -0 grep --color -n "$@"
+}
+
+function rcgrep()
+{
+    find . -type f -name "*\.rc" -print0 | xargs -0 grep --color -n "$@"
+}
+
+function shgrep()
+{
+    find . -type f -name "*\.sh" -print0 | xargs -0 grep --color -n "$@"
+}
+
 function cgrep()
 {
     find . -type f \( -name '*.c' -o -name '*.cc' -o -name '*.cpp' -o -name '*.h' \) -print0 | xargs -0 grep --color -n "$@"
+}
+
+function hgrep()
+{
+    find . -type f -name "*\.h" -print0 | xargs -0 grep --color -n "$@"
 }
 
 function resgrep()
