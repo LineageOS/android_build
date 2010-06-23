@@ -26,5 +26,12 @@ LOCAL_BUILT_MODULE_STEM := javalib.jar
 include $(BUILD_SYSTEM)/base_rules.mk
 
 $(LOCAL_BUILT_MODULE): PRIVATE_JAVACFLAGS := $(LOCAL_JAVACFLAGS)
-$(LOCAL_BUILT_MODULE): $(java_sources) $(java_resource_sources) $(full_java_lib_deps)
+# Make sure overridecheck is built before any other java.
+ifeq ($(LOCAL_MODULE),overridecheck)
+overridecheck_dependency :=
+else
+overridecheck_dependency := $(OVERRIDECHECK)
+endif
+
+$(LOCAL_BUILT_MODULE): $(java_sources) $(java_resource_sources) $(full_java_lib_deps) | $(overridecheck_dependency)
 	$(transform-host-java-to-package)
