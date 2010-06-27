@@ -107,6 +107,7 @@ $(call get-product-makefiles,$(_find-android-products-files))
 endef
 
 _product_var_list :=
+_product_var_list += PRODUCT_BUILD_PROP_OVERRIDES
 _product_var_list += PRODUCT_NAME
 _product_var_list += PRODUCT_MODEL
 
