@@ -229,6 +229,7 @@ define generate-common-build-props
 	PRODUCT_MANUFACTURER="$(PRODUCT_MANUFACTURER)" \
 	PRODUCT_MODEL="$(PRODUCT_MODEL)" \
 	PRODUCT_NAME="$(TARGET_PRODUCT)" \
+	$(PRODUCT_BUILD_PROP_OVERRIDES) \
 	$(call generate-common-build-props-with-product-vars-set,$(1),$(2))
 endef
 
@@ -432,6 +433,7 @@ endif
 	        PRODUCT_MODEL="$(PRODUCT_SYSTEM_MODEL)" \
 	        PRODUCT_NAME="$(PRODUCT_SYSTEM_NAME)" \
 	        PRODUCT_DEVICE="$(PRODUCT_SYSTEM_DEVICE)" \
+	        $(PRODUCT_BUILD_PROP_OVERRIDES) \
 	        $(call generate-common-build-props-with-product-vars-set,system,$@)
 	$(hide) TARGET_BUILD_TYPE="$(TARGET_BUILD_VARIANT)" \
 	        TARGET_BUILD_FLAVOR="$(TARGET_BUILD_FLAVOR)" \
@@ -464,6 +466,7 @@ endif
 	        TARGET_CPU_ABI_LIST_64_BIT="$(TARGET_CPU_ABI_LIST_64_BIT)" \
 	        TARGET_CPU_ABI="$(TARGET_CPU_ABI)" \
 	        TARGET_CPU_ABI2="$(TARGET_CPU_ABI2)" \
+	        $(PRODUCT_BUILD_PROP_OVERRIDES) \
 	        bash $(BUILDINFO_SH) >> $@
 	$(hide) $(foreach file,$(system_prop_file), \
 	    if [ -f "$(file)" ]; then \
