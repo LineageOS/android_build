@@ -10,7 +10,10 @@ echo "ro.build.version.sdk=$PLATFORM_SDK_VERSION"
 echo "ro.build.version.codename=$PLATFORM_VERSION_CODENAME"
 echo "ro.build.version.release=$PLATFORM_VERSION"
 echo "ro.build.date=`date`"
-echo "ro.build.date.utc=`date +%s`"
+if [ -z "$BUILD_UTC_DATE" ] ; then
+    BUILD_UTC_DATE=`date +%s`
+fi
+echo "ro.build.date.utc=$BUILD_UTC_DATE"
 echo "ro.build.type=$TARGET_BUILD_TYPE"
 echo "ro.build.user=$USER"
 echo "ro.build.host=`hostname`"
