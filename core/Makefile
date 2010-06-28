@@ -25,7 +25,7 @@ $(foreach cf,$(PRODUCT_COPY_FILES), \
 define set-product-variable
 $(shell echo Define: $(1) $(2))
 ifneq ($(strip $(1),))
-$(1) := $(2)
+$(1)
 endif
 endef
 
