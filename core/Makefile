@@ -688,7 +688,7 @@ ifeq ($(TARGET_USERIMAGES_USE_EXT2),true)
 ## generate an ext2 image
 # $(1): output file
 define build-ext2-systemimage-target
-    $(call build-userimage-ext2-target,$(TARGET_OUT),$(TARGET_OUT).img.ext3,system,true,)
+    $(call build-userimage-ext2-target,$(TARGET_OUT),$(TARGET_OUT).img.ext3,system,true,,4096)
 endef
 else
 define build-ext2-systemimage-target
@@ -822,7 +822,7 @@ ifeq ($(TARGET_USERIMAGES_USE_EXT2),true)
 define build-ext2-userdataimage-target
     $(call pretty,"Target userdata fs image: $(INSTALLED_USERDATAIMAGE_TARGET)")
     @mkdir -p $(TARGET_OUT_DATA)
-    $(call build-userimage-ext2-target,$(TARGET_OUT_DATA),$(INSTALLED_USERDATAIMAGE_TARGET).ext3,userdata,true,80000)
+    $(call build-userimage-ext2-target,$(TARGET_OUT_DATA),$(INSTALLED_USERDATAIMAGE_TARGET).ext3,userdata,true,20000,4096)
     $(hide) chmod a+r $(INSTALLED_USERDATAIMAGE_TARGET)
     $(hide) $(call assert-max-image-size,$(INSTALLED_USERDATAIMAGE_TARGET),$(BOARD_USERDATAIMAGE_PARTITION_SIZE),yaffs)
 endef
