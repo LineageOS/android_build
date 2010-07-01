@@ -978,11 +978,14 @@ else
 $(INTERNAL_OTA_PACKAGE_TARGET): backuptool := $(TARGET_OTA_BACKUPTOOL)
 endif
 
-ifeq ($(TARGET_NO_RECOVERY),)
+ifeq ($(TARGET_NO_RECOVERY),true)
+    TARGET_OTA_NO_RECOVERY := true
+endif
+ifeq ($(TARGET_OTA_NO_RECOVERY),)
 # default to "false"
 $(INTERNAL_OTA_PACKAGE_TARGET): recoveryex := false
 else
-$(INTERNAL_OTA_PACKAGE_TARGET): recoveryex := $(TARGET_NO_RECOVERY)
+$(INTERNAL_OTA_PACKAGE_TARGET): recoveryex := $(TARGET_OTA_NO_RECOVERY)
 endif
 
 ifeq ($(TARGET_OTA_ASSERT_DEVICE),)
