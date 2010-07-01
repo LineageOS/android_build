@@ -21,8 +21,8 @@ PRODUCT_NAME := core
 PRODUCT_POLICY := android.policy_phone
 
 PRODUCT_PROPERTY_OVERRIDES := \
-    ro.config.notification_sound=OnTheHunt.ogg \
-    ro.config.alarm_alert=Alarm_Classic.ogg
+    ro.config.notification_sound=pixiedust.ogg \
+    ro.config.alarm_alert=Alarm_Beep_03.ogg
 
 PRODUCT_PACKAGES := \
     framework-res \
