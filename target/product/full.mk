@@ -30,10 +30,6 @@ PRODUCT_PROPERTY_OVERRIDES := \
     ro.ril.hsxpa=1 \
     ro.ril.gprsclass=10
 
-PRODUCT_COPY_FILES := \
-    development/data/etc/apns-conf.xml:system/etc/apns-conf.xml \
-    development/data/etc/vold.conf:system/etc/vold.conf
-
 # Pick up some sounds - stick with the short list to save space
 # on smaller devices.
 $(call inherit-product, frameworks/base/data/sounds/OriginalAudio.mk)
