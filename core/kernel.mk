@@ -84,7 +84,11 @@ kernel: $(TARGET_PREBUILT_KERNEL)
 
 else
 
+$(TARGET_PREBUILT_KERNEL): $(TARGET_PREBUILT_KERNEL) | $(ACP)
+	$(transform-prebuilt-to-target)
+
 $(INSTALLED_KERNEL_TARGET): $(TARGET_PREBUILT_KERNEL) | $(ACP)
-	$(copy-file-to-new-target)
+	@echo "Transforming $(INSTALLED_KERNEL_TARGET) to $(TARGET_PREBUILT_KERNEL)"
+	$(transform-prebuilt-to-target)
 
 endif # TARGET_PREBUILT_KERNEL
