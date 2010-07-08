@@ -364,6 +364,11 @@ def WriteFullOTAPackage(input_zip, output_zip):
               "post-timestamp": GetBuildProp("ro.build.date.utc", input_zip),
               }
 
+  modver = GetBuildProp("ro.modversion", input_zip)
+  if modver is not None:
+    metadata.update({"modver": modver})
+    script.Print("Welcome to %(modver)s!" % metadata)
+
   device_specific = common.DeviceSpecificParams(
       input_zip=input_zip,
       input_version=OPTIONS.info_dict["recovery_api_version"],

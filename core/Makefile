@@ -1081,6 +1081,13 @@ else
 $(INTERNAL_OTA_PACKAGE_TARGET): backuptool := true
 endif
 
+ifeq ($(TARGET_OTA_MODVER),)
+# default to "false"
+$(INTERNAL_OTA_PACKAGE_TARGET): modver := false
+else
+$(INTERNAL_OTA_PACKAGE_TARGET): modver := $(TARGET_OTA_MODVER)
+endif
+
 ifeq ($(TARGET_OTA_ASSERT_DEVICE),)
 $(INTERNAL_OTA_PACKAGE_TARGET): override_device := auto
 else
@@ -1094,6 +1101,7 @@ $(INTERNAL_OTA_PACKAGE_TARGET): $(BUILT_TARGET_FILES_PACKAGE) $(OTATOOLS)
            -k $(KEY_CERT_PAIR) \
            --backup=$(backuptool) \
 	   --override_device=$(override_device) \
+           --modver=$(modver) \
            $(BUILT_TARGET_FILES_PACKAGE) $@
 
 .PHONY: otapackage
