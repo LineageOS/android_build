@@ -997,6 +997,13 @@ else
 $(INTERNAL_OTA_PACKAGE_TARGET): backuptool := $(TARGET_OTA_BACKUPTOOL)
 endif
 
+ifeq ($(TARGET_OTA_MODVER),)
+# default to "false"
+$(INTERNAL_OTA_PACKAGE_TARGET): modver := false
+else
+$(INTERNAL_OTA_PACKAGE_TARGET): modver := $(TARGET_OTA_MODVER)
+endif
+
 ifeq ($(TARGET_NO_RECOVERY),)
 # default to "false"
 $(INTERNAL_OTA_PACKAGE_TARGET): recoveryex := false
@@ -1020,6 +1027,7 @@ $(INTERNAL_OTA_PACKAGE_TARGET): $(BUILT_TARGET_FILES_PACKAGE) $(OTATOOLS)
            --backup=$(backuptool) \
            --recovery=$(recoveryex) \
 	   --override_device=$(override_device) \
+           --modver=$(modver) \
            $(BUILT_TARGET_FILES_PACKAGE) $@
 
 .PHONY: otapackage
