@@ -1069,9 +1069,12 @@ $(INTERNAL_OTA_PACKAGE_TARGET): $(BUILT_TARGET_FILES_PACKAGE) $(OTATOOLS)
            --modver=$(modver) \
            $(BUILT_TARGET_FILES_PACKAGE) $@
 
-.PHONY: otapackage
+.PHONY: otapackage bacon
 otapackage: $(INTERNAL_OTA_PACKAGE_TARGET)
 bacon: otapackage
+	$(hide) \
+		WANT_SQUASHFS=$(WANT_SQUASHFS) \
+		./vendor/cyanogen/tools/squisher
 
 endif    # TARGET_DEVICE != generic
 endif    # TARGET_PRODUCT != sdk
