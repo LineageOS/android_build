@@ -56,6 +56,10 @@ Usage:  ota_from_target_files [flags] input_target_files output_ota_package
       Enable or disable the exclusion of recovery.img or recovery/
       Disabled by default. Enable in *.mk with TARGET_NO_RECOVERY := true
 
+  --boot <boolean>
+      Enable or disable the exclusion of recovery.img or recovery/
+      Disabled by default. Enable in *.mk with TARGET_NO_RECOVERY := true
+
   --override_device <device>
       Override device-specific asserts. Can be a comma-separated list.
 
@@ -96,6 +100,7 @@ OPTIONS.script_mode = 'auto'
 OPTIONS.worker_threads = 3
 OPTIONS.backuptool = False
 OPTIONS.recoveryex = False
+OPTIONS.bootex = False
 OPTIONS.override_device = 'auto'
 
 def MostPopularKey(d, default):
@@ -387,7 +392,8 @@ def WriteFullOTAPackage(input_zip, output_zip):
   symlinks = CopySystemFiles(input_zip, output_zip)
   script.MakeSymlinks(symlinks)
 
-  boot_img = File("boot.img", common.BuildBootableImage(
+  if OPTIONS.bootex == False:
+    boot_img = File("boot.img", common.BuildBootableImage(
       os.path.join(OPTIONS.input_tmp, "BOOT")))
   if OPTIONS.recoveryex == False:
     recovery_img = File("recovery.img", common.BuildBootableImage(
@@ -405,17 +411,19 @@ def WriteFullOTAPackage(input_zip, output_zip):
     i.mode = 0544
   Item.Get("system").SetPermissions(script)
 
-  common.CheckSize(boot_img.data, "boot.img")
-  common.ZipWriteStr(output_zip, "boot.img", boot_img.data)
+  if OPTIONS.bootex == False:
+    common.CheckSize(boot_img.data, "boot.img")
+    common.ZipWriteStr(output_zip, "boot.img", boot_img.data)
   script.ShowProgress(0.2, 10)
 
   if OPTIONS.backuptool:
     script.Print("Restoring proprietary files...")
     script.RunBackup("restore")
   
-  script.Print("Writing boot image...")
-  script.ShowProgress(0.2, 10)
-  script.WriteRawImage("boot", "boot.img")
+  if OPTIONS.bootex == False:
+    script.Print("Writing boot image...")
+    script.ShowProgress(0.2, 10)
+    script.WriteRawImage("boot", "boot.img")
 
   script.ShowProgress(0.1, 10)
   script.Print("Install complete!")
@@ -864,6 +872,8 @@ def main(argv):
       OPTIONS.backuptool = bool(a.lower() == 'true')
     elif o in ("--recovery"):
       OPTIONS.recoveryex = bool(a.lower() == 'true')
+    elif o in ("--boot"):
+      OPTIONS.bootex = bool(a.lower() == 'true')
     elif o in ("--override_device"):
       OPTIONS.override_device = a
     else:
@@ -882,6 +892,7 @@ def main(argv):
                                               "worker_threads=",
                                               "backup=",
                                               "recovery=",
+                                              "boot=",
                                               "override_device="],
                              extra_option_handler=option_handler)
 
