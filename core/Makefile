@@ -305,6 +305,10 @@ ifneq ($(BOARD_FORCE_RAMDISK_ADDRESS),)
     INTERNAL_BOOTIMAGE_ARGS += --ramdiskaddr $(BOARD_FORCE_RAMDISK_ADDRESS)
 endif
 
+ifneq ($(BOARD_PAGE_SIZE),)
+    INTERNAL_BOOTIMAGE_ARGS += --pagesize $(BOARD_PAGE_SIZE)
+endif
+
 INSTALLED_BOOTIMAGE_TARGET := $(PRODUCT_OUT)/boot.img
 
 ifeq ($(TARGET_BOOTIMAGE_USE_EXT2),true)
@@ -581,6 +585,9 @@ ifdef BOARD_KERNEL_BASE
 endif
 ifneq ($(BOARD_FORCE_RAMDISK_ADDRESS),)
     INTERNAL_RECOVERYIMAGE_ARGS += --ramdiskaddr $(BOARD_FORCE_RAMDISK_ADDRESS)
+endif
+ifneq ($(BOARD_PAGE_SIZE),)
+    INTERNAL_RECOVERYIMAGE_ARGS += --pagesize $(BOARD_PAGE_SIZE)
 endif
 
 # Keys authorized to sign OTA packages this build will accept.  The
