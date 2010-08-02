@@ -8,7 +8,7 @@ include $(BUILD_COMBOS)/arch/arm/armv5te.mk
 ARCH_ARM_HAVE_VFP               := true
 
 arch_variant_cflags := \
-    -march=armv5te \
+    -march=armv6 \
     -mtune=xscale \
     -mfloat-abi=softfp \
     -mfpu=vfp \
