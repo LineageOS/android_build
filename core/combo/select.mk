@@ -61,6 +61,10 @@ else
 $(combo_target)PRELINKER_MAP := $(BUILD_SYSTEM)/prelink-$(combo_os_arch).map
 endif
 
+ifeq ($(BOARD_USES_ECLAIR_LIBCAMERA),true)
+$(combo_target)GLOBAL_CFLAGS += -DUSE_ECLAIR_MEMORYDEALER
+endif
+
 # Now include the combo for this specific target.
 include $(BUILD_COMBOS)/$(combo_target)$(combo_os_arch).mk
 
