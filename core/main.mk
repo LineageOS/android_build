@@ -742,6 +742,10 @@ endif # TARGET_BUILD_APPS
 .PHONY: droid tests
 tests: droidcore
 
+# phony target that include any targets in $(ALL_MODULES)
+.PHONY: all_modules
+all_modules: $(ALL_MODULES)
+
 .PHONY: docs
 docs: $(ALL_DOCS)
 
