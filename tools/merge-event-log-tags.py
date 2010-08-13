@@ -26,9 +26,13 @@ and fails if they do.
 
 import cStringIO
 import getopt
-import hashlib
 import struct
 import sys
+
+if sys.version_info < (2,5):
+  import md5
+else:
+  import hashlib
 
 import event_log_tags
 
@@ -133,7 +137,10 @@ if warnings:
 # versions of python.  Using md5 is overkill here but is the same from
 # platform to platform and speed shouldn't matter in practice.
 def hashname(str):
-  d = hashlib.md5(str).digest()[:4]
+  if sys.version_info < (2,5):
+    d = md5.md5(str).digest()[:4]
+  else:
+    d = hashlib.md5(str).digest()[:4]
   return struct.unpack("!I", d)[0]
 
 # Assign a tag number to all the entries that say they want one
