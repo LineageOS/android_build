@@ -399,7 +399,7 @@ $(warning sdk-only: javac available.)
 subdirs += \
 	build/tools/signapk \
 	dalvik/dx \
-	libcore \
+	dalvik/libcore \
 	sdk/archquery \
 	sdk/androidprefs \
 	sdk/apkbuilder \
