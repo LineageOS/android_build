@@ -74,7 +74,6 @@ import copy
 import errno
 import os
 import re
-import sha
 import subprocess
 import tempfile
 import threading
@@ -85,6 +84,11 @@ import common
 import amend_generator
 import edify_generator
 import both_generator
+
+if sys.version_info < (2,5):
+  import sha
+else:
+  import hashlib
 
 OPTIONS = common.OPTIONS
 OPTIONS.package_key = "build/target/product/security/testkey"
@@ -346,7 +350,10 @@ def MakeRecoveryPatch(output_zip, recovery_img, boot_img):
   # we check to see if this recovery has already been installed by
   # testing just the first 2k.
   HEADER_SIZE = 2048
-  header_sha1 = sha.sha(recovery_img.data[:HEADER_SIZE]).hexdigest()
+  if sys.version_info < (2,5):
+    header_sha1 = sha.sha(recovery_img.data[:HEADER_SIZE]).hexdigest()
+  else:
+    header_sha1 = hashlib.sha1(recovery_img.data[:HEADER_SIZE]).hexdigest()
   sh = """#!/system/bin/sh
 if ! applypatch -c MTD:recovery:%(header_size)d:%(header_sha1)s; then
   log -t recovery "Installing new recovery image"
@@ -459,7 +466,10 @@ class File(object):
     self.name = name
     self.data = data
     self.size = len(data)
-    self.sha1 = sha.sha(data).hexdigest()
+    if sys.version_info < (2,5):
+      self.sha1 = sha.sha(data).hexdigest()
+    else:
+      self.sha1 = hashlib.sha1(data).hexdigest()
 
   def WriteToTemp(self):
     t = tempfile.NamedTemporaryFile()
@@ -688,7 +698,10 @@ def WriteIncrementalOTAPackage(target_zip, source_zip, output_zip):
       verbatim_targets.append((tf.name, tf.size))
     else:
       common.ZipWriteStr(output_zip, "patch/" + tf.name + ".p", d)
-      patch_list.append((tf.name, tf, sf, tf.size, sha.sha(d).hexdigest()))
+      if sys.version_info < (2,5):
+        patch_list.append((tf.name, tf, sf, tf.size, sha.sha(d).hexdigest()))
+      else:
+        patch_list.append((tf.name, tf, sf, tf.size, hashlib.sha1(d).hexdigest()))
       largest_source_size = max(largest_source_size, sf.size)
 
   source_fp = GetBuildProp("ro.build.fingerprint", source_zip)
@@ -996,3 +1009,4 @@ if __name__ == '__main__':
     print "   ERROR: %s" % (e,)
     print
     sys.exit(1)
+
