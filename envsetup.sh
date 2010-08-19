@@ -13,6 +13,7 @@ Invoke ". build/envsetup.sh" from your shell to add the following functions to y
 - resgrep: Greps on all local res/*.xml files.
 - shgrep:  Greps on all local .sh files.
 - godir:   Go to the directory containing a file.
+- cmgerrit: Send patch request request to CyanogenMod repos
 
 Look at the source to view more functions. The complete list is:
 EOF
@@ -1093,6 +1094,63 @@ function godir () {
         pathname=${lines[0]}
     fi
     cd $T/$pathname
+}
+
+function cmgerrit()
+{
+        ##################################################################################
+        # Gerrit tool for easiness of submitting changes to CM repos                     #
+        # Wes Garner                                                                     #
+        # Usage: cmgerrit <CM Gerrit username> <repo> <for/changes> <branch/change-id>   #
+        # Note: for = new submissions, changes = new patch set for current submission    #
+        ##################################################################################
+
+	local user=$1
+	local repo=$2
+	local mode=$3
+	local target=$4
+
+	if [ -z $user ]
+	then
+		echo -n "Type your CyanogenMod Gerrit username: "
+		read user
+		if [ -z $user ]; then
+			echo "I'm sorry you didn't enter a username for Gerrit, please try again."
+			return
+		fi
+
+		echo -n "What is the repository you are submitting to? (ex. android_vendor_cyanogen) "
+		read repo
+                if [ -z $repo ]; then
+                        echo "I'm sorry you didn't enter a repository, please try again."
+                        return
+                fi
+
+		echo -n "Is this a new change or a new patchset to a current change? (for = new, changes = patch set): "
+		read mode
+                if [ -z $mode ]; then
+                        echo "I'm sorry you didn't enter a mode, please try again."
+                        return
+                fi
+
+		echo -n "What is the branch (for a new change) OR change-id (for a current change) you are working with: "
+		read target
+		if [ -z $target ]; then
+                        echo "I'm sorry you didn't enter a target, please try again."
+                        return
+                fi
+
+	elif [ -z $repo ] || [ -z $mode ] || [ -z $target ]
+	then
+		echo "CyanogenMod Gerrit Usage: "
+		echo "		cmgerrit	- for prompted use"
+		echo "		cmgerrit <CM Gerrit username> <repo> <for/changes> <branch/change-id>"
+		echo ""
+		return
+	fi
+
+	echo "Pushing patch set to $repo, Mode: $mode, Target: $target"
+	git push ssh://$user@review.cyanogenmod.com:29418/CyanogenMod/$repo HEAD:refs/$mode/$target
 }
 
 # Force JAVA_HOME to point to java 1.6 if it isn't already set
