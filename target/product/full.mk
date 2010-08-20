@@ -20,12 +20,7 @@
 # in inherited configurations.
 
 PRODUCT_PACKAGES := \
-    OpenWnn \
-    PinyinIME \
-    VoiceDialer \
-    libWnnEngDic \
-    libWnnJpnDic \
-    libwnndict
+    VoiceDialer
 
 # Additional settings used in all AOSP builds
 PRODUCT_PROPERTY_OVERRIDES := \
