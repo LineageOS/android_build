@@ -164,29 +164,3 @@ libtrace_test.so        0x9A300000
 libsrec_jni.so          0x9A200000
 libcerttool_jni.so      0x9A100000
 
-libiprouteutil.so       0x9A000000 # [~1M] for external/iproute2
-libnetlink.so           0x99F00000 # [<64K] for external/iproute2
-libETC1.so              0x99E00000 # [<64K]
-
-libstagefright_amrnb_common.so     0x99D00000 # [~1M]
-libstagefright_avc_common.so       0x99C00000 # [~1M]
-libstagefright_color_conversion.so 0x99B00000 # [<64K]
-libstagefright_omx.so              0x99A00000 # [~1M]
-libstagefrighthw.so                0x99900000 # [~1M]
-libstagefright.so                  0x99500000 # [~4M]
-
-libpagemap.so                       0x99400000 # [<64K] for system/extras/libpagemap
-libstlport.so           0x99100000 # [~3M] for external/stlport
-libzxing.so             0x99000000 # [<64K] for goggles
-libinterstitial.so      0x98F00000 # [<64K] for goggles
-liblept.so              0x98A00000 # [~5M] for external/leptonica
-libdiskconfig.so        0x98900000 # [<64K]
-libemoji.so             0x98800000 # [<64K]
-libttspico.so           0x98700000 # [~2M] for external/svox
-libjni_latinime.so      0x98600000 # [~1M]
-libjni_pinyinime.so     0x98500000 # [~1M]
-libreference-cdma-sms.so 0x98400000 # [<64K] for hardware/ril
-libSR_AudioIn.so        0x98300000 # [~1M] for external/srec
-libskiagl.so            0x98200000 # [~1M]
-libjnigraphics.so       0x98100000 # [<64K]
-libttssynthproxy.so     0x98000000 # [~1M] for frameworks/base
