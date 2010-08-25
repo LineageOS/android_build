@@ -1023,8 +1023,8 @@ INTERNAL_OTA_PACKAGE_TARGET := $(PRODUCT_OUT)/$(name).zip
 $(INTERNAL_OTA_PACKAGE_TARGET): KEY_CERT_PAIR := $(DEFAULT_KEY_CERT_PAIR)
 
 ifeq ($(TARGET_OTA_SCRIPT_MODE),)
-# default to "auto"
-$(INTERNAL_OTA_PACKAGE_TARGET): scriptmode := auto
+# default to "edify"
+$(INTERNAL_OTA_PACKAGE_TARGET): scriptmode := edify
 else
 $(INTERNAL_OTA_PACKAGE_TARGET): scriptmode := $(TARGET_OTA_SCRIPT_MODE)
 endif
