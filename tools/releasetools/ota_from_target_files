@@ -59,9 +59,6 @@ Usage:  ota_from_target_files [flags] input_target_files output_ota_package
   --override_device <device>
       Override device-specific asserts. Can be a comma-separated list.
 
-  --modver <boolean>
-      Print "Welcome to <ro.modversion>!" during installation.
-
 """
 
 import sys
@@ -104,7 +101,6 @@ OPTIONS.worker_threads = 3
 OPTIONS.backuptool = False
 OPTIONS.recoveryex = False
 OPTIONS.override_device = 'auto'
-OPTIONS.modver = False
 
 def MostPopularKey(d, default):
   """Given a dict, return the key corresponding to the largest
@@ -387,8 +383,9 @@ def WriteFullOTAPackage(input_zip, output_zip):
               "post-timestamp": GetBuildProp("ro.build.date.utc", input_zip),
               }
 
-  if OPTIONS.modver:
-    metadata.update({"modver": GetBuildProp("ro.modversion", input_zip)})
+  modver = GetBuildProp("ro.modversion", input_zip)
+  if modver is not None
+    metadata.update({"modver": modver})
     script.Print("Welcome to %(modver)s!" % metadata)
 
   device_specific = common.DeviceSpecificParams(
@@ -914,8 +911,6 @@ def main(argv):
       OPTIONS.recoveryex = bool(a.lower() == 'true')
     elif o in ("--override_device"):
       OPTIONS.override_device = a
-    elif o in ("--modver"):
-      OPTIONS.modver = bool(a.lower() == 'true')
     else:
       return False
     return True
@@ -932,8 +927,7 @@ def main(argv):
                                               "worker_threads=",
                                               "backup=",
                                               "recovery=",
-                                              "override_device=",
-                                              "modver="],
+                                              "override_device="],
                              extra_option_handler=option_handler)
 
   if len(args) != 2:
