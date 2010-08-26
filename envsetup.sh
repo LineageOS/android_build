@@ -1068,6 +1068,29 @@ function godir () {
     cd $T/$pathname
 }
 
+function cmremote()
+{
+    git remote rm cmremote 2> /dev/null
+    if [ ! -d .git ]
+    then
+        echo .git directory not found. Please run this from the root directory of the Android repository you wish to set up.
+    fi
+    GERRIT_REMOTE=$(cat .git/config  | grep git://github.com | awk '{ print $3 }' | sed s#git://github.com/##g)
+    if [ -z "$GERRIT_REMOTE" ]
+    then
+        echo Unable to set up the git remote, are you in the root of the repo?
+        return 0
+    fi
+    CMUSER=`git config --get review.review.cyanogenmod.com.username`
+    if [ -z "$CMUSER" ]
+    then
+        git remote add cmremote ssh://review.cyanogenmod.com:29418/$GERRIT_REMOTE
+    else
+        git remote add cmremote ssh://$CMUSER@review.cyanogenmod.com:29418/$GERRIT_REMOTE
+    fi
+    echo You can now push to "cmremote".
+}
+
 # Force JAVA_HOME to point to java 1.6 if it isn't already set
 function set_java_home() {
     if [ ! "$JAVA_HOME" ]; then
