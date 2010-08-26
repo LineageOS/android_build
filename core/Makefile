@@ -1029,17 +1029,10 @@ else
 $(INTERNAL_OTA_PACKAGE_TARGET): scriptmode := $(TARGET_OTA_SCRIPT_MODE)
 endif
 
-ifndef CYANOGEN_WITH_GOOGLE
+ifdef CYANOGEN_WITH_GOOGLE
 $(INTERNAL_OTA_PACKAGE_TARGET): backuptool := false
 else
 $(INTERNAL_OTA_PACKAGE_TARGET): backuptool := true
-endif
-
-ifeq ($(TARGET_OTA_MODVER),)
-# default to "false"
-$(INTERNAL_OTA_PACKAGE_TARGET): modver := false
-else
-$(INTERNAL_OTA_PACKAGE_TARGET): modver := $(TARGET_OTA_MODVER)
 endif
 
 ifeq ($(TARGET_NO_RECOVERY),)
@@ -1065,7 +1058,6 @@ $(INTERNAL_OTA_PACKAGE_TARGET): $(BUILT_TARGET_FILES_PACKAGE) $(OTATOOLS)
            --backup=$(backuptool) \
            --recovery=$(recoveryex) \
 	   --override_device=$(override_device) \
-           --modver=$(modver) \
            $(BUILT_TARGET_FILES_PACKAGE) $@
 
 .PHONY: otapackage bacon
