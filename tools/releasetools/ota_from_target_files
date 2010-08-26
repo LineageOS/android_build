@@ -389,12 +389,12 @@ def WriteFullOTAPackage(input_zip, output_zip):
     script.Print("Welcome to %(modver)s!" % metadata)
 
   device_specific = common.DeviceSpecificParams(
-      input_zip=input_zip,
-      input_version=GetRecoveryAPIVersion(input_zip),
-      output_zip=output_zip,
-      script=script,
-      input_tmp=OPTIONS.input_tmp,
-      metadata=metadata)
+    input_zip=input_zip,
+    input_version=GetRecoveryAPIVersion(input_zip),
+    output_zip=output_zip,
+    script=script,
+    input_tmp=OPTIONS.input_tmp,
+    metadata=metadata)
 
   if not OPTIONS.omit_prereq:
     ts = GetBuildProp("ro.build.date.utc", input_zip)
