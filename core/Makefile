@@ -1029,7 +1029,7 @@ else
 $(INTERNAL_OTA_PACKAGE_TARGET): scriptmode := $(TARGET_OTA_SCRIPT_MODE)
 endif
 
-ifndef CYANOGEN_WITH_GOOGLE
+ifdef CYANOGEN_WITH_GOOGLE
 $(INTERNAL_OTA_PACKAGE_TARGET): backuptool := false
 else
 $(INTERNAL_OTA_PACKAGE_TARGET): backuptool := true
