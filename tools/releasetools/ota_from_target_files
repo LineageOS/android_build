@@ -384,7 +384,7 @@ def WriteFullOTAPackage(input_zip, output_zip):
               }
 
   modver = GetBuildProp("ro.modversion", input_zip)
-  if modver is not None
+  if modver is not None:
     metadata.update({"modver": modver})
     script.Print("Welcome to %(modver)s!" % metadata)
 
