@@ -403,14 +403,15 @@ subdirs += \
 	sdk/archquery \
 	sdk/androidprefs \
 	sdk/apkbuilder \
+	sdk/ddms \
+	sdk/hierarchyviewer2 \
 	sdk/jarutils \
 	sdk/layoutlib_api \
 	sdk/layoutlib_utils \
+	sdk/layoutopt \
 	sdk/ninepatch \
 	sdk/sdkstats \
 	sdk/sdkmanager \
-	sdk/layoutopt \
-	sdk/ddms \
 	development/apps \
 	development/tools/mkstubs \
 	frameworks/base/tools/layoutlib \
