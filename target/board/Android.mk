@@ -16,8 +16,10 @@ endif	# TARGET_NO_BOOTLOADER
 
 ifneq ($(strip $(TARGET_NO_KERNEL)),true)
   INSTALLED_KERNEL_TARGET := $(PRODUCT_OUT)/kernel
+  INSTALLED_RECOVERY_KERNEL_TARGET := $(PRODUCT_OUT)/recovery_kernel
 else
   INSTALLED_KERNEL_TARGET :=
+  INSTALLED_RECOVERY_KERNEL_TARGET :=
 endif
 
 # Use the add-radio-file function to add values to this variable.

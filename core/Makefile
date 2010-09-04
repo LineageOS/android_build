@@ -336,7 +336,13 @@ ifdef BOARD_KERNEL_BASE
   INTERNAL_BOOTIMAGE_ARGS += --base $(BOARD_KERNEL_BASE)
 endif
 
-include $(BUILD_SYSTEM)/kernel.mk
+ifneq ($(BOARD_FORCE_RAMDISK_ADDRESS),)
+    INTERNAL_BOOTIMAGE_ARGS += --ramdiskaddr $(BOARD_FORCE_RAMDISK_ADDRESS)
+endif
+
+ifneq ($(BOARD_PAGE_SIZE),)
+    INTERNAL_BOOTIMAGE_ARGS += --pagesize $(BOARD_PAGE_SIZE)
+endif
 
 INSTALLED_BOOTIMAGE_TARGET := $(PRODUCT_OUT)/boot.img
 
@@ -355,6 +361,8 @@ $(INSTALLED_BOOTIMAGE_TARGET): $(MKBOOTIMG) $(INTERNAL_BOOTIMAGE_FILES)
 	$(hide) $(MKBOOTIMG) $(INTERNAL_BOOTIMAGE_ARGS) --output $@
 	$(hide) $(call assert-max-image-size,$@,$(BOARD_BOOTIMAGE_PARTITION_SIZE),raw)
 endif # TARGET_BOOTIMAGE_USE_EXT2
+
+include $(BUILD_SYSTEM)/kernel.mk
 
 else	# TARGET_NO_KERNEL
 # HACK: The top-level targets depend on the bootimage.  Not all targets
@@ -560,7 +568,7 @@ ifeq (,$(filter true, $(TARGET_NO_KERNEL) $(TARGET_NO_RECOVERY) $(BUILD_TINY_AND
 INSTALLED_RECOVERYIMAGE_TARGET := $(PRODUCT_OUT)/recovery.img
 
 recovery_initrc := $(call include-path-for, recovery)/etc/init.rc
-recovery_kernel := $(INSTALLED_KERNEL_TARGET) # same as a non-recovery system
+recovery_kernel := $(INSTALLED_RECOVERY_KERNEL_TARGET)
 recovery_ramdisk := $(PRODUCT_OUT)/ramdisk-recovery.img
 recovery_build_prop := $(INSTALLED_BUILD_PROP_TARGET)
 recovery_binary := $(call intermediates-dir-for,EXECUTABLES,recovery)/recovery
@@ -589,6 +597,12 @@ ifdef BOARD_KERNEL_CMDLINE
 endif
 ifdef BOARD_KERNEL_BASE
   INTERNAL_RECOVERYIMAGE_ARGS += --base $(BOARD_KERNEL_BASE)
+endif
+ifneq ($(BOARD_FORCE_RAMDISK_ADDRESS),)
+    INTERNAL_RECOVERYIMAGE_ARGS += --ramdiskaddr $(BOARD_FORCE_RAMDISK_ADDRESS)
+endif
+ifneq ($(BOARD_PAGE_SIZE),)
+    INTERNAL_RECOVERYIMAGE_ARGS += --pagesize $(BOARD_PAGE_SIZE)
 endif
 
 # Keys authorized to sign OTA packages this build will accept.  The
@@ -627,6 +641,8 @@ $(INSTALLED_RECOVERYIMAGE_TARGET): $(MKBOOTFS) $(MKBOOTIMG) $(MINIGZIP) \
 	echo Modifying ramdisk contents...
 	cp -f $(recovery_initrc) $(TARGET_RECOVERY_ROOT_OUT)/
 	cp -f $(recovery_binary) $(TARGET_RECOVERY_ROOT_OUT)/sbin/
+	rm -f $(TARGET_RECOVERY_ROOT_OUT)/init.*.rc
+	mkdir -p $(TARGET_RECOVERY_ROOT_OUT)/system/bin
 	cp -rf $(recovery_resources_common) $(TARGET_RECOVERY_ROOT_OUT)/
 	$(foreach item,$(recovery_resources_private), \
 	  cp -rf $(item) $(TARGET_RECOVERY_ROOT_OUT)/)
@@ -714,7 +730,7 @@ endif
 # image size check calculation.
 ifneq ($(INSTALLED_RECOVERYIMAGE_TARGET),)
 intermediates := $(call intermediates-dir-for,PACKAGING,recovery_patch)
-RECOVERY_FROM_BOOT_PATCH := $(intermediates)/recovery_from_boot.p
+RECOVERY_FROM_BOOT_PATCH := #$(intermediates)/recovery_from_boot.p
 $(RECOVERY_FROM_BOOT_PATCH): $(INSTALLED_RECOVERYIMAGE_TARGET) \
                              $(INSTALLED_BOOTIMAGE_TARGET) \
 			     $(HOST_OUT_EXECUTABLES)/imgdiff \
@@ -1035,11 +1051,14 @@ else
 $(INTERNAL_OTA_PACKAGE_TARGET): backuptool := true
 endif
 
-ifeq ($(TARGET_NO_RECOVERY),)
+ifeq ($(TARGET_NO_RECOVERY),true)
+    TARGET_OTA_NO_RECOVERY := true
+endif
+ifeq ($(TARGET_OTA_NO_RECOVERY),)
 # default to "false"
 $(INTERNAL_OTA_PACKAGE_TARGET): recoveryex := false
 else
-$(INTERNAL_OTA_PACKAGE_TARGET): recoveryex := $(TARGET_NO_RECOVERY)
+$(INTERNAL_OTA_PACKAGE_TARGET): recoveryex := $(TARGET_OTA_NO_RECOVERY)
 endif
 
 ifeq ($(TARGET_OTA_ASSERT_DEVICE),)
