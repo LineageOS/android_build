@@ -12,8 +12,10 @@ ARCH_ARM_HAVE_FFS               := true
 # and a better solution should be found in the future.
 #
 arch_variant_cflags := \
-    -march=armv5te \
-    -mtune=xscale  \
+    -march=armv6j \
+    -mtune=arm1136jf-s \
+    -pipe \
+    -fomit-frame-pointer \
     -D__ARM_ARCH_5__ \
     -D__ARM_ARCH_5T__ \
     -D__ARM_ARCH_5E__ \
