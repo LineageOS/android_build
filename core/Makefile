@@ -1067,6 +1067,17 @@ else
 $(INTERNAL_OTA_PACKAGE_TARGET): override_device := $(TARGET_OTA_ASSERT_DEVICE)
 endif
 
+ifeq ($(TARGET_USE_REDBEND_UA),true)
+    TARGET_OTA_USE_REDBEND_UA := true
+endif
+ifeq ($(TARGET_OTA_USE_REDBEND_UA),)
+# default to "false"
+$(INTERNAL_OTA_PACKAGE_TARGET): redbend_ua := false
+else
+# Use Samsung boot image flash binary
+$(INTERNAL_OTA_PACKAGE_TARGET): redbend_ua := $(TARGET_OTA_USE_REDBEND_UA)
+endif
+
 $(INTERNAL_OTA_PACKAGE_TARGET): $(BUILT_TARGET_FILES_PACKAGE) $(OTATOOLS)
 	@echo "Package OTA: $@"
 	$(hide) ./build/tools/releasetools/ota_from_target_files \
@@ -1077,6 +1088,7 @@ $(INTERNAL_OTA_PACKAGE_TARGET): $(BUILT_TARGET_FILES_PACKAGE) $(OTATOOLS)
            --backup=$(backuptool) \
            --recovery=$(recoveryex) \
 	   --override_device=$(override_device) \
+	   --redbend_ua=$(redbend_ua) \
            $(BUILT_TARGET_FILES_PACKAGE) $@
 
 .PHONY: otapackage bacon

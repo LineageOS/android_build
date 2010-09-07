@@ -86,6 +86,10 @@ class AmendGenerator(object):
     self.script.append("run_program PACKAGE:backuptool.sh %s" % (command))
     self.included_files.add("backuptool.sh")
 
+  def RunRedbend_UA(self, filename, blockdevice):
+    self.script.append("run_program PACKAGE:redbend_ua restore %s %s" % (filename, blockdevice))
+    self.included_files.add("redbend_ua")
+
   def ShowProgress(self, frac, dur):
     """Update the progress bar, advancing it over 'frac' over the next
     'dur' seconds."""
