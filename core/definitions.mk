@@ -1677,7 +1677,7 @@ $(if $(2), \
   total=$$(( $$( echo "$$size" ) )); \
   printname=$$(echo -n "$(1)" | tr " " +); \
   echo "$$printname total size is $$total"; \
-
+\
   maxsize=$$(($(2))); \
   if [ "$$total" -gt "$$maxsize" ]; then \
     echo "error: $$printname too large ($$total > [$(2) - $$reserve])"; \
