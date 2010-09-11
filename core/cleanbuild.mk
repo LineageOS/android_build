@@ -180,6 +180,7 @@ installclean_files := \
 	./$(PRODUCT_OUT)/*.txt \
 	./$(PRODUCT_OUT)/*.xlb \
 	./$(PRODUCT_OUT)/*.zip \
+	./$(PRODUCT_OUT)/*.md5sum \
 	./$(PRODUCT_OUT)/data \
 	./$(PRODUCT_OUT)/obj/lib \
 	./$(PRODUCT_OUT)/obj/APPS \
