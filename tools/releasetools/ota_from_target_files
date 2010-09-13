@@ -920,8 +920,6 @@ def main(argv):
       OPTIONS.recoveryex = bool(a.lower() == 'true')
     elif o in ("--override_device"):
       OPTIONS.override_device = a
-    elif o in ("--redbend_ua"):
-      OPTIONS.redbend_ua = bool(a.lower() == 'true')
     else:
       return False
     return True
@@ -938,8 +936,7 @@ def main(argv):
                                               "worker_threads=",
                                               "backup=",
                                               "recovery=",
-                                              "override_device=",
-                                              "redbend_ua="],
+                                              "override_device="],
                              extra_option_handler=option_handler)
 
   if len(args) != 2:
