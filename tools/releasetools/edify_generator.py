@@ -105,11 +105,6 @@ class EdifyGenerator(object):
     self.script.append('set_perm(0, 0, 0777, "/tmp/backuptool.sh");')
     self.script.append(('run_program("/tmp/backuptool.sh", "%s");' % command))
 
-  def RunRedbend_UA(self, filename, blockdevice):
-    self.script.append('package_extract_file("system/bin/redbend_ua", "/tmp/redbend_ua");')
-    self.script.append('set_perm(0, 0, 0777, "/tmp/redbend_ua");')
-    self.script.append(('run_program("/tmp/redbend_ua", restore "%s" "%s");' % (filename, blockdevice)))
-
   def ShowProgress(self, frac, dur):
     """Update the progress bar, advancing it over 'frac' over the next
     'dur' seconds.  'dur' may be zero to advance it via SetProgress

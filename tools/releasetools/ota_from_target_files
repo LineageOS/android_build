@@ -59,10 +59,6 @@ Usage:  ota_from_target_files [flags] input_target_files output_ota_package
   --override_device <device>
       Override device-specific asserts. Can be a comma-separated list.
 
-  --redbend_ua <boolean>
-      Use Samsung boot image flash binary.
-      Disabled by default. Enable in *.mk with TARGET_USE_REDBEND_UA := true
-
 """
 
 import sys
@@ -105,7 +101,6 @@ OPTIONS.worker_threads = 3
 OPTIONS.backuptool = False
 OPTIONS.recoveryex = False
 OPTIONS.override_device = 'auto'
-OPTIONS.redbend_ua = False
 
 def MostPopularKey(d, default):
   """Given a dict, return the key corresponding to the largest
@@ -444,11 +439,7 @@ def WriteFullOTAPackage(input_zip, output_zip):
     script.RunBackup("restore")
 
   script.ShowProgress(0.2, 10)
-
-  if OPTIONS.redbend_ua:
-     script.RunRedbend_UA("boot.img","/dev/block/bm17")
-  else:
-    script.WriteRawImage("boot", "boot.img")
+  script.WriteRawImage("boot", "boot.img")
 
   script.ShowProgress(0.1, 0)
   device_specific.FullOTA_InstallEnd()
