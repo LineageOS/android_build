@@ -59,7 +59,7 @@ rm -rf $TMPDIR
 mkdir -p $TMPDIR
 cp $BOOTIMAGE $TMPDIR
 pushd $TMPDIR > /dev/null
-unpackbootimg -i $BOOTIMAGEFILE
+unpackbootimg -i $BOOTIMAGEFILE > /dev/null
 BASE=$(cat $TMPDIR/$BOOTIMAGEFILE-base)
 CMDLINE=$(cat $TMPDIR/$BOOTIMAGEFILE-cmdline)
 PAGESIZE=$(cat $TMPDIR/$BOOTIMAGEFILE-pagesize)
