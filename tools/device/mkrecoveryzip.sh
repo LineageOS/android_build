@@ -1,11 +1,5 @@
 #!/bin/bash
 
-if [ -z "$1" ]
-then
-    echo "Please provide a version number."
-    return
-fi
-
 if [ -z "$OUT" ]
 then
     echo "Android build environment not detected."
