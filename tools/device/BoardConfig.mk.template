@@ -24,6 +24,7 @@ TARGET_PREBUILT_KERNEL := device/__MANUFACTURER__/__DEVICE__/kernel
 # Below is a sample of how you can tweak the mount points using the board config.
 # This is for the Samsung Galaxy S.
 # Feel free to tweak or remove this code.
+# If you want to add/tweak a mount point, the BOARD_X_FILESYSTEM_OPTIONS are optional.
 #BOARD_DATA_DEVICE := /dev/block/mmcblk0p2
 #BOARD_DATA_FILESYSTEM := auto
 #BOARD_DATA_FILESYSTEM_OPTIONS := llw,check=no,nosuid,nodev
