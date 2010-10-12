@@ -3,7 +3,9 @@
 function usage
 {
     echo Usage:
-    echo "  $(basename $0) boot.img manufacturer device"
+    echo "  $(basename $0) manufacturer device boot.img"
+    echo "  The boot.img argument is the extracted recovery or boot image."
+    echo
     echo Example:
     echo "  $(basename $0) ~/Downloads/recovery-passion.img motorola sholes"
     exit 0
@@ -33,6 +35,7 @@ fi
 if [ -z "$UNPACKBOOTIMG" ]
 then
     echo unpackbootimg not found. Is your android build environment set up and have the host tools been built?
+    exit 0
 fi
 
 BOOTIMAGEFILE=$(basename $BOOTIMAGE)
@@ -56,7 +59,7 @@ rm -rf $TMPDIR
 mkdir -p $TMPDIR
 cp $BOOTIMAGE $TMPDIR
 pushd $TMPDIR > /dev/null
-unpackbootimg $BOOTIMAGEFILE > /dev/null
+unpackbootimg -i $BOOTIMAGEFILE
 BASE=$(cat $TMPDIR/$BOOTIMAGEFILE-base)
 CMDLINE=$(cat $TMPDIR/$BOOTIMAGEFILE-cmdline)
 PAGESIZE=$(cat $TMPDIR/$BOOTIMAGEFILE-pagesize)
@@ -71,6 +74,6 @@ do
     cat $file | sed s/__DEVICE__/$DEVICE/g | sed s/__MANUFACTURER__/$MANUFACTURER/g | sed -f $TMPDIR/sedcommand | sed s/__BASE__/$BASE/g | sed s/__PAGE_SIZE__/$PAGESIZE/g > $OUTPUT_FILE
 done
 
-mv $DEVICE_DIR/device.mk $DEVICE_DIR/$DEVICE.mk
+mv $DEVICE_DIR/device.mk $DEVICE_DIR/device_$DEVICE.mk
 
 echo Done!

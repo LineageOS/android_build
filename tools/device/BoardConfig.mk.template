@@ -20,3 +20,21 @@ BOARD_USERDATAIMAGE_PARTITION_SIZE := 0x105c0000
 BOARD_FLASH_BLOCK_SIZE := 131072
 
 TARGET_PREBUILT_KERNEL := device/__MANUFACTURER__/__DEVICE__/kernel
+
+# Below is a sample of how you can tweak the mount points using the board config.
+# This is for the Samsung Galaxy S.
+# Feel free to tweak or remove this code.
+#BOARD_DATA_DEVICE := /dev/block/mmcblk0p2
+#BOARD_DATA_FILESYSTEM := auto
+#BOARD_DATA_FILESYSTEM_OPTIONS := llw,check=no,nosuid,nodev
+#BOARD_HAS_DATADATA := true
+#BOARD_DATADATA_DEVICE := /dev/block/stl10
+#BOARD_DATADATA_FILESYSTEM := auto
+#BOARD_DATADATA_FILESYSTEM_OPTIONS := llw,check=no,nosuid,nodev
+#BOARD_SYSTEM_DEVICE := /dev/block/stl9
+#BOARD_SYSTEM_FILESYSTEM := auto
+#BOARD_SYSTEM_FILESYSTEM_OPTIONS := llw,check=no
+#BOARD_CACHE_DEVICE := /dev/block/stl11
+#BOARD_CACHE_FILESYSTEM := auto
+#BOARD_CACHE_FILESYSTEM_OPTIONS := llw,check=no,nosuid,nodev
+#BOARD_SDEXT_DEVICE := /dev/block/mmcblk1p2
