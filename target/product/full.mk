@@ -24,10 +24,7 @@ PRODUCT_PACKAGES := \
 
 # Additional settings used in all AOSP builds
 PRODUCT_PROPERTY_OVERRIDES := \
-    keyguard.no_require_sim=true \
-    ro.com.android.dateformat=MM-dd-yyyy \
-    ro.ril.hsxpa=1 \
-    ro.ril.gprsclass=10
+    keyguard.no_require_sim=true
 
 # Pick up some sounds - stick with the short list to save space
 # on smaller devices.
