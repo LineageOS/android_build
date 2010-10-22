@@ -313,7 +313,7 @@ function chooseproduct()
         if [ "$TARGET_SIMULATOR" = true ] ; then
             default_value=sim
         else
-            default_value=generic
+            default_value=full
         fi
     fi
 
@@ -431,7 +431,7 @@ function add_lunch_combo()
 }
 
 # add the default one here
-add_lunch_combo generic-eng
+add_lunch_combo full-eng
 
 # if we're on linux, add the simulator.  There is a special case
 # in lunch to deal with the simulator
@@ -466,7 +466,7 @@ function lunch()
         answer=$1
     else
         print_lunch_menu
-        echo -n "Which would you like? [generic-eng] "
+        echo -n "Which would you like? [full-eng] "
         read answer
     fi
 
@@ -474,7 +474,7 @@ function lunch()
 
     if [ -z "$answer" ]
     then
-        selection=generic-eng
+        selection=full-eng
     elif [ "$answer" = "simulator" ]
     then
         selection=simulator
@@ -562,7 +562,7 @@ function tapas()
         apps=all
     fi
 
-    export TARGET_PRODUCT=generic
+    export TARGET_PRODUCT=full
     export TARGET_BUILD_VARIANT=$variant
     export TARGET_SIMULATOR=false
     export TARGET_BUILD_TYPE=release
