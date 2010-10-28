@@ -41,9 +41,16 @@ KERNEL_DOTCONFIG_FILE := $(KBUILD_OUTPUT)/.config
 $(KERNEL_DOTCONFIG_FILE): $(KERNEL_CONFIG_FILE) | $(ACP)
 	$(copy-file-to-new-target)
 
+ifeq ($(HOST_OS),darwin)
+DARWIN_ELF_H_SOURCE := external/elfutils/libelf/elf.h
+DARWIN_ELF_H := $(KBUILD_OUTPUT)/scripts/mod/elf.h
+$(DARWIN_ELF_H): $(DARWIN_ELF_H_SOURCE) | $(ACP)
+	$(copy-file-to-new-target)
+endif
+
 BUILT_KERNEL_TARGET := $(KBUILD_OUTPUT)/arch/$(TARGET_ARCH)/boot/$(KERNEL_TARGET)
 .PHONY: _zimage
-_zimage: $(KERNEL_DOTCONFIG_FILE)
+_zimage: $(KERNEL_DOTCONFIG_FILE) $(DARWIN_ELF_H)
 	@echo "**** BUILDING KERNEL ****"
 	$(mk_kernel) oldconfig
 	$(mk_kernel) $(KERNEL_TARGET) $(if $(MOD_ENABLED),modules)

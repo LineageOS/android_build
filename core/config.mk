@@ -311,6 +311,12 @@ TARGET_GLOBAL_CPPFLAGS += $(TARGET_RELEASE_CPPFLAGS)
 
 PREBUILT_IS_PRESENT := $(if $(wildcard prebuilt/Android.mk),true)
 
+ifeq ($(HOST_OS)-$(HOST_ARCH),darwin-x86)
+HOST_GLOBAL_CFLAGS += -arch i386
+HOST_GLOBAL_CPPFLAGS += -arch i386
+HOST_GLOBAL_LDFLAGS += -arch i386
+endif
+
 # ###############################################################
 # Collect a list of the SDK versions that we could compile against
 # For use with the LOCAL_SDK_VERSION variable for include $(BUILD_PACKAGE)

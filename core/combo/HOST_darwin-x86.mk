@@ -40,6 +40,9 @@ define transform-host-o-to-shared-lib-inner
     $(HOST_CXX) \
         -dynamiclib -single_module -read_only_relocs suppress \
         $(HOST_GLOBAL_LD_DIRS) \
+        $(if $(PRIVATE_NO_DEFAULT_COMPILER_FLAGS),, \
+        $(HOST_GLOBAL_LDFLAGS) \
+        ) \
         $(PRIVATE_ALL_OBJECTS) \
         $(call normalize-target-libraries,$(PRIVATE_ALL_SHARED_LIBRARIES)) \
         $(call normalize-target-libraries,$(PRIVATE_ALL_WHOLE_STATIC_LIBRARIES)) \
@@ -56,6 +59,9 @@ $(HOST_CXX) \
         -Wl,-dynamic -headerpad_max_install_names \
         $(HOST_GLOBAL_LD_DIRS) \
         $(call normalize-target-libraries,$(PRIVATE_ALL_SHARED_LIBRARIES)) \
+        $(if $(PRIVATE_NO_DEFAULT_COMPILER_FLAGS),, \
+        $(HOST_GLOBAL_LDFLAGS) \
+        ) \
         $(PRIVATE_ALL_OBJECTS) \
         $(call normalize-target-libraries,$(PRIVATE_ALL_WHOLE_STATIC_LIBRARIES)) \
         $(call normalize-target-libraries,$(PRIVATE_ALL_STATIC_LIBRARIES)) \
