@@ -687,12 +687,13 @@ INTERNAL_SYSTEMIMAGE_FILES := $(filter $(TARGET_OUT)/%, \
 ifeq ($(TARGET_USERIMAGES_USE_EXT2),true)
 ## generate an ext2 image
 # $(1): output file
-define build-systemimage-target
-    @echo "Target system fs image: $(1)"
-    $(call build-userimage-ext2-target,$(TARGET_OUT),$(1),system,)
+define build-ext2-systemimage-target
+    $(call build-userimage-ext2-target,$(TARGET_OUT),$(TARGET_OUT).img.ext3,system,true,)
 endef
-
-else # TARGET_USERIMAGES_USE_EXT2 != true
+else
+define build-ext2-systemimage-target
+endef
+endif # TARGET_USERIMAGES_USE_EXT2
 
 ## generate a yaffs2 image
 # $(1): output file
@@ -701,10 +702,10 @@ define build-systemimage-target
     @mkdir -p $(dir $(1))
     $(hide) $(MKYAFFS2) -f $(mkyaffs2_extra_flags) $(TARGET_OUT) $(1)
 endef
-endif # TARGET_USERIMAGES_USE_EXT2
 
 $(BUILT_SYSTEMIMAGE_UNOPT): $(INTERNAL_SYSTEMIMAGE_FILES) $(INTERNAL_MKUSERFS)
 	$(call build-systemimage-target,$@)
+	$(call build-ext2-systemimage-target,$@)
 
 # The installed image, which may be optimized or unoptimized.
 #
@@ -818,14 +819,17 @@ INTERNAL_USERDATAIMAGE_FILES := \
 
 ifeq ($(TARGET_USERIMAGES_USE_EXT2),true)
 ## Generate an ext2 image
-define build-userdataimage-target
+define build-ext2-userdataimage-target
     $(call pretty,"Target userdata fs image: $(INSTALLED_USERDATAIMAGE_TARGET)")
     @mkdir -p $(TARGET_OUT_DATA)
-    $(call build-userimage-ext2-target,$(TARGET_OUT_DATA),$(INSTALLED_USERDATAIMAGE_TARGET),userdata,)
+    $(call build-userimage-ext2-target,$(TARGET_OUT_DATA),$(INSTALLED_USERDATAIMAGE_TARGET).ext3,userdata,true,80000)
+    $(hide) chmod a+r $(INSTALLED_USERDATAIMAGE_TARGET)
     $(hide) $(call assert-max-image-size,$(INSTALLED_USERDATAIMAGE_TARGET),$(BOARD_USERDATAIMAGE_PARTITION_SIZE),yaffs)
 endef
-
-else # TARGET_USERIMAGES_USE_EXT2 != true
+else
+define build-ext2-userdataimage-target
+endef
+endif # TARGET_USERIMAGES_USE_EXT2
 
 ## Generate a yaffs2 image
 define build-userdataimage-target
@@ -834,7 +838,6 @@ define build-userdataimage-target
     $(hide) $(MKYAFFS2) -f $(mkyaffs2_extra_flags) $(TARGET_OUT_DATA) $(INSTALLED_USERDATAIMAGE_TARGET)
     $(hide) $(call assert-max-image-size,$(INSTALLED_USERDATAIMAGE_TARGET),$(BOARD_USERDATAIMAGE_PARTITION_SIZE),yaffs)
 endef
-endif # TARGET_USERIMAGES_USE_EXT2
 
 BUILT_USERDATAIMAGE_TARGET := $(PRODUCT_OUT)/userdata.img
 
@@ -842,7 +845,8 @@ BUILT_USERDATAIMAGE_TARGET := $(PRODUCT_OUT)/userdata.img
 INSTALLED_USERDATAIMAGE_TARGET := $(BUILT_USERDATAIMAGE_TARGET)
 $(INSTALLED_USERDATAIMAGE_TARGET): $(INTERNAL_MKUSERFS) \
                                    $(INTERNAL_USERDATAIMAGE_FILES)
-	$(build-userdataimage-target)
+	$(call build-userdataimage-target)
+	$(call build-ext2-userdataimage-target)
 
 .PHONY: userdataimage-nodeps
 userdataimage-nodeps: $(INTERNAL_MKUSERFS)
@@ -924,7 +928,7 @@ built_ota_tools := \
 	$(call intermediates-dir-for,EXECUTABLES,applypatch)/applypatch \
 	$(call intermediates-dir-for,EXECUTABLES,applypatch_static)/applypatch_static \
 	$(call intermediates-dir-for,EXECUTABLES,check_prereq)/check_prereq \
-	$(call intermediates-dir-for,EXECUTABLES,updater)/updater 
+	$(call intermediates-dir-for,EXECUTABLES,updater)/updater
 
 $(BUILT_TARGET_FILES_PACKAGE): PRIVATE_OTA_TOOLS := $(built_ota_tools)
 
@@ -1385,3 +1389,4 @@ $(INTERNAL_FINDBUGS_HTML_TARGET): $(INTERNAL_FINDBUGS_XML_TARGET)
 # -----------------------------------------------------------------
 # These are some additional build tasks that need to be run.
 include $(sort $(wildcard $(BUILD_SYSTEM)/tasks/*.mk))
+
