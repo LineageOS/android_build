@@ -39,7 +39,7 @@ do
         rm -rf $OUT/recovery*
         rm -rf $OUT/root*
     fi
-    DEVICE_NAME=$(echo $TARGET_PRODUCT | sed s/koush_// | sed s/aosp_// | sed s/_us// | sed s/cyanogen_// | sed s/generic_//)
+    DEVICE_NAME=$(echo $TARGET_PRODUCT | sed s/koush_// | sed s/aosp_// | sed s/htc_// | sed s/_us// | sed s/cyanogen_// | sed s/generic_//)
     PRODUCT_NAME=$(basename $OUT)
     make -j16 recoveryimage out/target/product/$PRODUCT_NAME/system/bin/updater
     RESULT=$?
