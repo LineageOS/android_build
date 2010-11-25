@@ -9,6 +9,7 @@ Invoke ". build/envsetup.sh" from your shell to add the following functions to y
 - jgrep:   Greps on all local Java files.
 - resgrep: Greps on all local res/*.xml files.
 - godir:   Go to the directory containing a file.
+- mka:     Builds using SCHED_BATCH on all processors
 
 Look at the source to view more functions. The complete list is:
 EOF
@@ -1089,6 +1090,10 @@ function cmremote()
         git remote add cmremote ssh://$CMUSER@review.cyanogenmod.com:29418/$GERRIT_REMOTE
     fi
     echo You can now push to "cmremote".
+}
+
+function mka() {
+    schedtool -B -n 1 -e make -j `cat /proc/cpuinfo | grep "^processor" | wc -l` "$@"
 }
 
 # Force JAVA_HOME to point to java 1.6 if it isn't already set
