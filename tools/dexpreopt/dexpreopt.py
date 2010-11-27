@@ -110,7 +110,7 @@ def StartEmulator(exe_name='emulator', kernel=None,
   if image: args += ['-system', image]
   if userdata: args += ['-initdata', userdata, '-data', userdata]
   if system: args += ['-sysdir', system]
-  args += ['-partition-size', '128']
+  args += ['-partition-size', '256']
   args += ['-no-window', '-netfast', '-noaudio']
 
   _USE_PIPE = True
@@ -427,7 +427,7 @@ def ReadFileList(ep, dir_list, timeout=0):
   """
   ret = []
   for d in dir_list:
-    output = RunEmulatorCommand(ep, 'ls ' + d, timeout=timeout)
+    output = RunEmulatorCommand(ep, 'ls -1 ' + d, timeout=timeout)
     if not output:
       Trace('Could not ls ' + d)
       return None
@@ -880,12 +880,12 @@ def DexoptEverything(ep, dest_root):
   """
   _extra_tests = False
   if _extra_tests:
-    if not RunEmulatorCommand(ep, 'ls /system/app', timeout=5):
+    if not RunEmulatorCommand(ep, 'ls -1 /system/app', timeout=5):
       Fail('Could not ls')
 
   # We're very short on space, so remove a bunch of big stuff that we
   # don't need.
-  cmd = 'rm -r /system/sounds /system/media /system/fonts /system/xbin'
+  cmd = 'rm -r /system/sounds /system/media /system/fonts'
   if not RunEmulatorCommand(ep, cmd, timeout=40):
     Trace('"%s" failed' % cmd)
     return False
@@ -930,7 +930,7 @@ def DexoptEverything(ep, dest_root):
     return False
 
   if _extra_tests:
-    if not RunEmulatorCommand(ep, 'ls /system/app', timeout=5):
+    if not RunEmulatorCommand(ep, 'ls -1 /system/app', timeout=5):
       Fail('Could not ls')
 
   return True
