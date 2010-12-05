@@ -1074,13 +1074,23 @@ $(INTERNAL_OTA_PACKAGE_TARGET): backuptool := true
 endif
 
 ifeq ($(TARGET_NO_RECOVERY),true)
-    TARGET_OTA_NO_RECOVERY := true
+TARGET_OTA_NO_RECOVERY := true
 endif
 ifeq ($(TARGET_OTA_NO_RECOVERY),)
 # default to "false"
-$(INTERNAL_OTA_PACKAGE_TARGET): recoveryex := false
+$(INTERNAL_OTA_PACKAGE_TARGET): no_recovery := false
 else
-$(INTERNAL_OTA_PACKAGE_TARGET): recoveryex := $(TARGET_OTA_NO_RECOVERY)
+$(INTERNAL_OTA_PACKAGE_TARGET): no_recovery := $(TARGET_OTA_NO_RECOVERY)
+endif
+
+ifeq ($(TARGET_NO_KERNEL),true)
+TARGET_OTA_NO_KERNEL := true
+endif
+ifeq ($(TARGET_OTA_NO_KERNEL),)
+# default to "false"
+$(INTERNAL_OTA_PACKAGE_TARGET): no_kernel := false
+else
+$(INTERNAL_OTA_PACKAGE_TARGET): no_kernel := $(TARGET_OTA_NO_KERNEL)
 endif
 
 ifeq ($(TARGET_OTA_ASSERT_DEVICE),)
@@ -1097,7 +1107,8 @@ $(INTERNAL_OTA_PACKAGE_TARGET): $(BUILT_TARGET_FILES_PACKAGE) $(OTATOOLS)
 	   -p $(HOST_OUT) \
            -k $(KEY_CERT_PAIR) \
            --backup=$(backuptool) \
-           --recovery=$(recoveryex) \
+           --no_recovery=$(no_recovery) \
+           --no_kernel=$(no_kernel) \
 	   --override_device=$(override_device) \
            $(BUILT_TARGET_FILES_PACKAGE) $@
 
