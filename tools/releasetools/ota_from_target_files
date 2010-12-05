@@ -411,6 +411,7 @@ def WriteFullOTAPackage(input_zip, output_zip):
     script.FormatPartition("userdata")
 
   script.FormatPartition("system")
+
   script.Mount("MTD", "system", "/system")
   script.ShowProgress(0.5, 40)
   if OPTIONS.recoveryex == False:
@@ -901,7 +902,7 @@ def main(argv):
     elif o in ("-w", "--wipe_user_data"):
       OPTIONS.wipe_user_data = True
     elif o in ("-n", "--no_prereq"):
-      OPTIONS.omit_prereq = True
+      OPTIONS.omit_prereq = bool(a.lower() == 'true')
     elif o in ("-e", "--extra_script"):
       OPTIONS.extra_script = a
     elif o in ("-m", "--script_mode"):
@@ -924,7 +925,7 @@ def main(argv):
                                               "package_key=",
                                               "incremental_from=",
                                               "wipe_user_data",
-                                              "no_prereq",
+                                              "no_prereq=",
                                               "extra_script=",
                                               "script_mode=",
                                               "worker_threads=",
