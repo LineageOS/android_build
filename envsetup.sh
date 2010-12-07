@@ -10,6 +10,7 @@ Invoke ". build/envsetup.sh" from your shell to add the following functions to y
 - resgrep: Greps on all local res/*.xml files.
 - godir:   Go to the directory containing a file.
 - mka:     Builds using SCHED_BATCH on all processors
+- reposync: Parallel repo sync using ionice and SCHED_BATCH
 
 Look at the source to view more functions. The complete list is:
 EOF
@@ -1037,7 +1038,7 @@ function godir () {
         echo ""
     fi
     local lines
-    lines=($(grep "$1" $T/filelist | sed -e 's/\/[^/]*$//' | sort | uniq)) 
+    lines=($(grep "$1" $T/filelist | sed -e 's/\/[^/]*$//' | sort | uniq))
     if [[ ${#lines[@]} = 0 ]]; then
         echo "Not found"
         return
@@ -1050,7 +1051,7 @@ function godir () {
             local line
             for line in ${lines[@]}; do
                 printf "%6s %s\n" "[$index]" $line
-                index=$(($index + 1)) 
+                index=$(($index + 1))
             done
             echo
             echo -n "Select one: "
@@ -1094,6 +1095,10 @@ function cmremote()
 
 function mka() {
     schedtool -B -n 1 -e make -j `cat /proc/cpuinfo | grep "^processor" | wc -l` "$@"
+}
+
+function reposync() {
+    schedtool -B -n 1 -e ionice -n 1 repo sync -j 50 "$@"
 }
 
 # Force JAVA_HOME to point to java 1.6 if it isn't already set
