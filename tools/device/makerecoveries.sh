@@ -51,7 +51,7 @@ do
     mcpguard $OUT/recovery.img recoveries/recovery-clockwork-$DEVICE_NAME.img
     mcpguard $OUT/recovery.img recoveries/recovery-clockwork-$1-$DEVICE_NAME.img
 
-    . vendor/koush/tools/mkrecoveryzip.sh $1
+    . build/tools/device/mkrecoveryzip.sh $1
     mcpguard $OUT/utilities/update.zip recoveries/recovery-clockwork-$1-$DEVICE_NAME.zip
     mcpguard $OUT/utilities/update.zip recoveries/recovery-clockwork-$DEVICE_NAME.zip
 
