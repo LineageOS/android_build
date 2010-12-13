@@ -60,6 +60,13 @@ do
         mcpguard $OUT/utilities/update.zip recoveries/recovery-clockwork-$1-milestone.zip
         mcpguard $OUT/utilities/update.zip recoveries/recovery-clockwork-milestone.zip
     fi
+
+    if [ $DEVICE_NAME == "tab" ]
+    then
+        mcpguard $OUT/utilities/update.zip recoveries/recovery-clockwork-$1-tmobile_tab.zip
+        mcpguard $OUT/utilities/update.zip recoveries/recovery-clockwork-$1-att_tab.zip
+        mcpguard $OUT/utilities/update.zip recoveries/recovery-clockwork-$1-verizon_tab.zip
+    fi
     
     if [ $DEVICE_NAME == "galaxys" ]
     then
