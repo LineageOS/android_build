@@ -62,6 +62,7 @@ GRANDFATHERED_USER_MODULES += \
 	bootanimation \
 	brcm_patchram_plus \
 	bugreport \
+	busybox \
 	cfassembler \
 	check_stack \
 	check_trace \
@@ -184,6 +185,7 @@ GRANDFATHERED_USER_MODULES += \
 	libbluetoothd \
 	libbuiltinplugin \
 	libbundlewrapper \
+	libbusybox \
 	libbz \
 	libc \
 	libcamera_client \
@@ -193,6 +195,7 @@ GRANDFATHERED_USER_MODULES += \
 	libc_nomalloc \
 	libctest \
 	libcutils \
+	libclearsilverregex \
 	libdb \
 	libdbus \
 	libdiskconfig \
