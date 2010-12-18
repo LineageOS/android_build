@@ -123,7 +123,9 @@ GRANDFATHERED_USER_MODULES += \
 	fw_bcm4329.bin \
 	genext2fs \
 	gps.mahimahi \
+	gps.vision \
 	gralloc.default \
+	gralloc.msm7x30 \
 	gralloc.qsd8k \
 	groovy-all-1.7.0 \
 	grxmlcompile \
@@ -247,6 +249,7 @@ GRANDFATHERED_USER_MODULES += \
 	libmincrypt \
 	libminui \
 	libminzip \
+	libmm-omxcore \
 	libmtdutils \
 	libmusicbundle \
 	libneo_cgi \
@@ -254,6 +257,9 @@ GRANDFATHERED_USER_MODULES += \
 	libneo_util \
 	libnetlink \
 	libnetutils \
+	libOmxCore \
+	libOmxVdec \
+	libOmxVenc \
 	libop \
 	libOpenSLES \
 	libopensles_helper \
