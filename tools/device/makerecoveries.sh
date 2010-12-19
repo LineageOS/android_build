@@ -20,6 +20,12 @@ echo $(echo $PRODUCTS | wc -w) Products
 
 unset PUBLISHED_RECOVERIES
 
+MCP=$(which mcp)
+if [ -z $MCP ]
+then
+    NO_UPLOAD=true
+fi
+
 function mcpguard () {
     if [ -z $NO_UPLOAD ]
     then
@@ -65,7 +71,6 @@ do
     then
         mcpguard $OUT/utilities/update.zip recoveries/recovery-clockwork-$1-tmobile_tab.zip
         mcpguard $OUT/utilities/update.zip recoveries/recovery-clockwork-$1-att_tab.zip
-        mcpguard $OUT/utilities/update.zip recoveries/recovery-clockwork-$1-verizon_tab.zip
     fi
     
     if [ $DEVICE_NAME == "galaxys" ]
