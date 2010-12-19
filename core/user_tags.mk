@@ -359,6 +359,7 @@ GRANDFATHERED_USER_MODULES += \
 	libxml2 \
 	libzipfile \
 	lights.kraken \
+	lights.msm7x30 \
 	lights.qsd8k \
 	line_endings \
 	linker \
