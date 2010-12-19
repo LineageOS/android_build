@@ -77,7 +77,7 @@ $(warning ************************************************************)
 $(warning You are attempting to build on a 32-bit system.)
 $(warning Only 64-bit build environments are supported beyond froyo/2.2.)
 $(warning ************************************************************)
-$(error stop)
+BUILDING_ON_32BIT := true
 endif
 endif
 
