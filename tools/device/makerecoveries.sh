@@ -21,7 +21,7 @@ echo $(echo $PRODUCTS | wc -w) Products
 unset PUBLISHED_RECOVERIES
 
 MCP=$(which mcp)
-if [ -z $MCP ]
+if [ -z "$MCP" ]
 then
     NO_UPLOAD=true
 fi
@@ -45,7 +45,7 @@ do
         rm -rf $OUT/recovery*
         rm -rf $OUT/root*
     fi
-    DEVICE_NAME=$(echo $TARGET_PRODUCT | sed s/koush_// | sed s/aosp_// | sed s/htc_// | sed s/_us// | sed s/cyanogen_// | sed s/generic_//)
+    DEVICE_NAME=$(echo $TARGET_PRODUCT | sed s/koush_// | sed s/aosp_// | sed s/htc_// | sed s/_us// | sed s/cyanogen_// | sed s/generic_// | sed s/full_//)
     PRODUCT_NAME=$(basename $OUT)
     make -j16 recoveryimage out/target/product/$PRODUCT_NAME/system/bin/updater
     RESULT=$?
@@ -61,16 +61,20 @@ do
     mcpguard $OUT/utilities/update.zip recoveries/recovery-clockwork-$1-$DEVICE_NAME.zip
     mcpguard $OUT/utilities/update.zip recoveries/recovery-clockwork-$DEVICE_NAME.zip
 
+    ALL_DEVICES=$DEVICE_NAME
+
     if [ $DEVICE_NAME == "sholes" ]
     then
         mcpguard $OUT/utilities/update.zip recoveries/recovery-clockwork-$1-milestone.zip
         mcpguard $OUT/utilities/update.zip recoveries/recovery-clockwork-milestone.zip
+        ALL_DEVICES=$ALL_DEVICES' milestone'
     fi
 
     if [ $DEVICE_NAME == "tab" ]
     then
         mcpguard $OUT/utilities/update.zip recoveries/recovery-clockwork-$1-tmobile_tab.zip
         mcpguard $OUT/utilities/update.zip recoveries/recovery-clockwork-$1-att_tab.zip
+        ALL_DEVICES=$ALL_DEVICES' tmobile_tab att_tab'
     fi
     
     if [ $DEVICE_NAME == "galaxys" ]
@@ -79,6 +83,15 @@ do
         mcpguard $OUT/utilities/update.zip recoveries/recovery-clockwork-vibrant.zip
         mcpguard $OUT/utilities/update.zip recoveries/recovery-clockwork-$1-captivate.zip
         mcpguard $OUT/utilities/update.zip recoveries/recovery-clockwork-captivate.zip
+        ALL_DEVICES=$ALL_DEVICES' vibrant captivate'
+    fi
+    
+    if [ -f ~/.rommanager_api_key ]
+    then
+        for device in $ALL_DEVICES
+        do
+            curl 'https://rommanager.appspot.com/api/updateDevice?apikey='$(cat ~/.rommanager_api_key)'&board='$device'&version='$1
+        done
     fi
 done
 
