@@ -21,6 +21,7 @@ RECOVERY_DIR=$UTILITIES_DIR/recovery
 rm -rf $RECOVERY_DIR
 mkdir -p $RECOVERY_DIR
 cd $RECOVERY_DIR
+cp -R $OUT/recovery/root/etc etc
 cp -R $OUT/recovery/root/sbin sbin
 cp -R $OUT/recovery/root/res res
 SCRIPT_DIR=META-INF/com/google/android
