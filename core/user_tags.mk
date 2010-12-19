@@ -359,6 +359,7 @@ GRANDFATHERED_USER_MODULES += \
 	libxml2 \
 	libzipfile \
 	lights.kraken \
+	lights.msm7x30 \
 	lights.qsd8k \
 	line_endings \
 	linker \
@@ -398,6 +399,7 @@ GRANDFATHERED_USER_MODULES += \
 	org-netbeans-api-visual \
 	org-openide-util \
 	osgi \
+	overlay.default \
 	pand \
 	parseStringTest \
 	ping \
