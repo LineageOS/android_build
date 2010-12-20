@@ -57,7 +57,7 @@ do
     mcpguard $OUT/recovery.img recoveries/recovery-clockwork-$1-$DEVICE_NAME.img
 
     . build/tools/device/mkrecoveryzip.sh $1
-    mcpguard $OUT/utilities/update.zip recoveries/recovery-clockwork-$DEVICE_NAME.zip
+    mcpguard $OUT/utilities/update.zip recoveries/recovery-clockwork-$1-$DEVICE_NAME.zip
 
     ALL_DEVICES=$DEVICE_NAME
 
