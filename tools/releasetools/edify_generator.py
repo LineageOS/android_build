@@ -234,12 +234,14 @@ class EdifyGenerator(object):
     else:
       # backward compatibility with older target-files that lack recovery.fstab
       if self.info["partition_type"] == "MTD":
+        partition_type, partition = common.GetTypeAndDevice(mount_point, self.info)
         self.script.append(
             ('assert(package_extract_file("%(fn)s", "/tmp/%(partition)s.img"),\n'
              '       write_raw_image("/tmp/%(partition)s.img", "%(partition)s"),\n'
              '       delete("/tmp/%(partition)s.img"));')
             % {'partition': partition, 'fn': fn})
       elif self.info["partition_type"] == "EMMC":
+        partition_type, partition = common.GetTypeAndDevice(mount_point, self.info)
         self.script.append(
             ('package_extract_file("%(fn)s", "%(dir)s%(partition)s");')
             % {'partition': partition, 'fn': fn,
