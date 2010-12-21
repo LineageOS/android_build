@@ -771,12 +771,22 @@ $(call dist-for-goals,sdk, \
 findbugs: $(INTERNAL_FINDBUGS_HTML_TARGET) $(INTERNAL_FINDBUGS_XML_TARGET)
 
 .PHONY: clean
+dirs_to_clean := \
+	$(PRODUCT_OUT) \
+	$(TARGET_COMMON_OUT_ROOT) \
+	$(HOST_OUT) \
+	$(HOST_COMMON_OUT_ROOT)
 clean:
-	@rm -rf $(OUT_DIR)
-	@echo "Entire build directory removed."
+	@for dir in $(dirs_to_clean) ; do \
+	    echo "Cleaning $$dir..."; \
+	    rm -rf $$dir; \
+	done
+	@echo "Clean."; \
 
 .PHONY: clobber
-clobber: clean
+clobber:
+	@rm -rf $(OUT_DIR)
+	@echo "Entire build directory removed."
 
 # The rules for dataclean and installclean are defined in cleanbuild.mk.
 
