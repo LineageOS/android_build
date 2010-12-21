@@ -238,11 +238,11 @@ class EdifyGenerator(object):
             ('assert(package_extract_file("%(fn)s", "/tmp/%(partition)s.img"),\n'
              '       write_raw_image("/tmp/%(partition)s.img", "%(partition)s"),\n'
              '       delete("/tmp/%(partition)s.img"));')
-            % {'partition': mount_point, 'fn': fn})
+            % {'partition': partition, 'fn': fn})
       elif self.info["partition_type"] == "EMMC":
         self.script.append(
             ('package_extract_file("%(fn)s", "%(dir)s%(partition)s");')
-            % {'partition': mount_point, 'fn': fn,
+            % {'partition': partition, 'fn': fn,
                'dir': self.info.get("partition_path", ""),
                })
       else:
