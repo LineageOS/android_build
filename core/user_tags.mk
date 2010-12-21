@@ -123,9 +123,7 @@ GRANDFATHERED_USER_MODULES += \
 	fw_bcm4329.bin \
 	genext2fs \
 	gps.mahimahi \
-	gps.vision \
 	gralloc.default \
-	gralloc.msm7x30 \
 	gralloc.qsd8k \
 	groovy-all-1.7.0 \
 	grxmlcompile \
@@ -249,7 +247,6 @@ GRANDFATHERED_USER_MODULES += \
 	libmincrypt \
 	libminui \
 	libminzip \
-	libmm-omxcore \
 	libmtdutils \
 	libmusicbundle \
 	libneo_cgi \
@@ -257,9 +254,6 @@ GRANDFATHERED_USER_MODULES += \
 	libneo_util \
 	libnetlink \
 	libnetutils \
-	libOmxCore \
-	libOmxVdec \
-	libOmxVenc \
 	libop \
 	libOpenSLES \
 	libopensles_helper \
@@ -359,7 +353,6 @@ GRANDFATHERED_USER_MODULES += \
 	libxml2 \
 	libzipfile \
 	lights.kraken \
-	lights.msm7x30 \
 	lights.qsd8k \
 	line_endings \
 	linker \
@@ -399,7 +392,6 @@ GRANDFATHERED_USER_MODULES += \
 	org-netbeans-api-visual \
 	org-openide-util \
 	osgi \
-	overlay.default \
 	pand \
 	parseStringTest \
 	ping \
