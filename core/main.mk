@@ -773,9 +773,7 @@ findbugs: $(INTERNAL_FINDBUGS_HTML_TARGET) $(INTERNAL_FINDBUGS_XML_TARGET)
 .PHONY: clean
 dirs_to_clean := \
 	$(PRODUCT_OUT) \
-	$(TARGET_COMMON_OUT_ROOT) \
-	$(HOST_OUT) \
-	$(HOST_COMMON_OUT_ROOT)
+	$(TARGET_COMMON_OUT_ROOT)
 clean:
 	@for dir in $(dirs_to_clean) ; do \
 	    echo "Cleaning $$dir..."; \
