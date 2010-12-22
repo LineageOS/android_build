@@ -156,6 +156,20 @@ class EdifyGenerator(object):
            ");")
     self.script.append(self.WordWrap(cmd))
 
+  def RunBackup(self, command, mount_point, dynamic=False):
+    systemEntry = self.fstab[mount_point]
+    if dynamic:
+      for p in ["vendor", "product", "system_ext"]:
+        fstabEntry = self.fstab.get("/"+p, None)
+        if fstabEntry:
+          self.script.append('map_partition("%s");' % (fstabEntry.device,))
+
+      self.script.append(('run_program("/tmp/install/bin/backuptool.sh", "%s", map_partition("%s"), "%s");' % (
+          command, systemEntry.device, systemEntry.fs_type)))
+    else:
+      self.script.append(('run_program("/tmp/install/bin/backuptool.sh", "%s", "%s", "%s");' % (
+          command, systemEntry.device, systemEntry.fs_type)))
+
   def ShowProgress(self, frac, dur):
     """Update the progress bar, advancing it over 'frac' over the next
     'dur' seconds.  'dur' may be zero to advance it via SetProgress
@@ -247,6 +261,12 @@ class EdifyGenerator(object):
           self._GetSlotSuffixDeviceForEntry(p),
           p.mount_point, mount_flags))
       self.mounts.add(p.mount_point)
+
+  def Unmount(self, mount_point):
+    """Unmount the partition with the given mount_point."""
+    if mount_point in self.mounts:
+      self.mounts.remove(mount_point)
+      self.script.append('unmount("%s");' % (mount_point,))
 
   def UnpackPackageDir(self, src, dst):
     """Unpack a given directory from the OTA package into the given
