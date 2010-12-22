@@ -159,6 +159,10 @@ Usage:  ota_from_target_files [flags] input_target_files output_ota_package
 
   --override_device <device>
       Override device-specific asserts. Can be a comma-separated list.
+
+  --backup <boolean>
+      Enable or disable the execution of backuptool.sh.
+      Disabled by default.
 """
 
 from __future__ import print_function
@@ -211,6 +215,7 @@ OPTIONS.extracted_input = None
 OPTIONS.key_passwords = []
 OPTIONS.skip_postinstall = False
 OPTIONS.override_device = 'auto'
+OPTIONS.backuptool = False
 
 
 METADATA_NAME = 'META-INF/com/android/metadata'
@@ -823,6 +828,11 @@ else if get_stage("%(bcb_dev)s") == "3/3" then
   script.SetPermissionsRecursive("/tmp/install", 0, 0, 0755, 0644, None, None)
   script.SetPermissionsRecursive("/tmp/install/bin", 0, 0, 0755, 0755, None, None)
 
+  if OPTIONS.backuptool:
+    script.Mount("/system")
+    script.RunBackup("backup")
+    script.Unmount("/system")
+
   system_progress = 0.75
 
   if OPTIONS.wipe_user_data:
@@ -861,6 +871,12 @@ else if get_stage("%(bcb_dev)s") == "3/3" then
 
   common.CheckSize(boot_img.data, "boot.img", target_info)
   common.ZipWriteStr(output_zip, "boot.img", boot_img.data)
+
+  if OPTIONS.backuptool:
+    script.ShowProgress(0.02, 10)
+    script.Mount("/system")
+    script.RunBackup("restore")
+    script.Unmount("/system")
 
   script.ShowProgress(0.05, 5)
   script.WriteRawImage("/boot", "boot.img")
@@ -1854,6 +1870,8 @@ def main(argv):
       OPTIONS.skip_postinstall = True
     elif o in ("--override_device"):
       OPTIONS.override_device = a
+    elif o in ("--backup"):
+      OPTIONS.backuptool = bool(a.lower() == 'true')
     else:
       return False
     return True
@@ -1885,6 +1903,7 @@ def main(argv):
                                  "extracted_input_target_files=",
                                  "skip_postinstall",
                                  "override_device=",
+                                 "backup=",
                              ], extra_option_handler=option_handler)
 
   if len(args) != 2:
