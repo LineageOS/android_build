@@ -221,6 +221,10 @@ A/B OTA specific options
       For VABC downgrades, we must finish merging before doing data wipe, and
       since data wipe is required for downgrading OTA, this might cause long
       wait time in recovery.
+
+  --backup <boolean>
+      Enable or disable the execution of backuptool.sh.
+      Disabled by default.
 """
 
 from __future__ import print_function
@@ -285,6 +289,7 @@ OPTIONS.custom_images = {}
 OPTIONS.disable_vabc = False
 OPTIONS.spl_downgrade = False
 OPTIONS.vabc_downgrade = False
+OPTIONS.backuptool = False
 
 POSTINSTALL_CONFIG = 'META/postinstall_config.txt'
 DYNAMIC_PARTITION_INFO = 'META/dynamic_partitions_info.txt'
@@ -1292,6 +1297,8 @@ def main(argv):
       OPTIONS.wipe_user_data = True
     elif o == "--vabc_downgrade":
       OPTIONS.vabc_downgrade = True
+    elif o == "--backup":
+      OPTIONS.backuptool = True
     else:
       return False
     return True
@@ -1336,6 +1343,7 @@ def main(argv):
                                  "disable_vabc",
                                  "spl_downgrade",
                                  "vabc_downgrade",
+                                 "backup=",
                              ], extra_option_handler=option_handler)
 
   if len(args) != 2:
