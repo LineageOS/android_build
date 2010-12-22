@@ -156,6 +156,9 @@ class EdifyGenerator(object):
            ");")
     self.script.append(self.WordWrap(cmd))
 
+  def RunBackup(self, command):
+    self.script.append(('run_program("/tmp/install/bin/backuptool.sh", "%s");' % command))
+
   def ShowProgress(self, frac, dur):
     """Update the progress bar, advancing it over 'frac' over the next
     'dur' seconds.  'dur' may be zero to advance it via SetProgress
@@ -359,8 +362,10 @@ class EdifyGenerator(object):
     self.script.append(extra)
 
   def Unmount(self, mount_point):
-    self.script.append('unmount("%s");' % mount_point)
-    self.mounts.remove(mount_point)
+    """Unmount the partition with the given mount_point."""
+    if mount_point in self.mounts:
+      self.script.append('unmount("%s");' % mount_point)
+      self.mounts.remove(mount_point)
 
   def UnmountAll(self):
     for p in sorted(self.mounts):
