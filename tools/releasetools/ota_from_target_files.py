@@ -144,6 +144,10 @@ Non-A/B OTA specific options
       that any changes made to the system partition are done using the new
       recovery (new kernel, etc.).
 
+  --backup <boolean>
+      Enable or disable the execution of backuptool.sh.
+      Disabled by default.
+
 A/B OTA specific options
 
   --disable_fec_computation
@@ -304,6 +308,7 @@ OPTIONS.worker_threads = multiprocessing.cpu_count() // 2
 if OPTIONS.worker_threads == 0:
   OPTIONS.worker_threads = 1
 OPTIONS.two_step = False
+OPTIONS.backuptool = False
 OPTIONS.include_secondary = False
 OPTIONS.block_based = True
 OPTIONS.updater_binary = None
@@ -1221,6 +1226,8 @@ def main(argv):
                          "integers are allowed." % (a, o))
     elif o in ("-2", "--two_step"):
       OPTIONS.two_step = True
+    elif o == "--backup":
+      OPTIONS.backuptool = True
     elif o == "--include_secondary":
       OPTIONS.include_secondary = True
     elif o == "--no_signing":
@@ -1336,6 +1343,7 @@ def main(argv):
                                  "extra_script=",
                                  "worker_threads=",
                                  "two_step",
+                                 "backup=",
                                  "include_secondary",
                                  "no_signing",
                                  "block",
