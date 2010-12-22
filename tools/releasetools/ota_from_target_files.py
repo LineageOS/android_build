@@ -244,6 +244,10 @@ A/B OTA specific options
 
   --vabc_compression_param
       Compression algorithm to be used for VABC. Available options: gz, brotli, none
+
+  --backup <boolean>
+      Enable or disable the execution of backuptool.sh.
+      Disabled by default.
 """
 
 from __future__ import print_function
@@ -316,6 +320,7 @@ OPTIONS.compressor_types = None
 OPTIONS.enable_zucchini = True
 OPTIONS.enable_lz4diff = False
 OPTIONS.vabc_compression_param = None
+OPTIONS.backuptool = False
 
 POSTINSTALL_CONFIG = 'META/postinstall_config.txt'
 DYNAMIC_PARTITION_INFO = 'META/dynamic_partitions_info.txt'
@@ -1428,6 +1433,8 @@ def main(argv):
       OPTIONS.enable_lz4diff = a.lower() != "false"
     elif o == "--vabc_compression_param":
       OPTIONS.vabc_compression_param = a.lower()
+    elif o == "--backup":
+      OPTIONS.backuptool = True
     else:
       return False
     return True
@@ -1478,6 +1485,7 @@ def main(argv):
                                  "enable_zucchini=",
                                  "enable_lz4diff=",
                                  "vabc_compression_param=",
+                                 "backup=",
                              ], extra_option_handler=option_handler)
 
   if len(args) != 2:
