@@ -432,7 +432,6 @@ def WriteFullOTAPackage(input_zip, output_zip):
     boot_img = File("boot.img", common.BuildBootableImage(
         os.path.join(OPTIONS.input_tmp, "BOOT")))
   if not OPTIONS.no_recovery:
-    import pdb; pdb.set_trace()
     recovery_img = File("recovery.img", common.BuildBootableImage(
         os.path.join(OPTIONS.input_tmp, "RECOVERY")))
     if not OPTIONS.no_kernel:
