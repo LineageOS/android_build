@@ -99,6 +99,11 @@ class EdifyGenerator(object):
            ");")
     self.script.append(self._WordWrap(cmd))
 
+  def RunBackup(self, command):
+    self.script.append('package_extract_file("system/bin/backuptool.sh", "/tmp/backuptool.sh");')
+    self.script.append('set_perm(0, 0, 0777, "/tmp/backuptool.sh");')
+    self.script.append(('run_program("/tmp/backuptool.sh", "%s");' % command))
+
   def ShowProgress(self, frac, dur):
     """Update the progress bar, advancing it over 'frac' over the next
     'dur' seconds.  'dur' may be zero to advance it via SetProgress
@@ -234,12 +239,14 @@ class EdifyGenerator(object):
     else:
       # backward compatibility with older target-files that lack recovery.fstab
       if self.info["partition_type"] == "MTD":
+        partition_type, partition = common.GetTypeAndDevice(mount_point, self.info)
         self.script.append(
             ('assert(package_extract_file("%(fn)s", "/tmp/%(partition)s.img"),\n'
              '       write_raw_image("/tmp/%(partition)s.img", "%(partition)s"),\n'
              '       delete("/tmp/%(partition)s.img"));')
             % {'partition': partition, 'fn': fn})
       elif self.info["partition_type"] == "EMMC":
+        partition_type, partition = common.GetTypeAndDevice(mount_point, self.info)
         self.script.append(
             ('package_extract_file("%(fn)s", "%(dir)s%(partition)s");')
             % {'partition': partition, 'fn': fn,
