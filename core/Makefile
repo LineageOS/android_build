@@ -1077,8 +1077,8 @@ ifeq ($(TARGET_NO_PREREQ),true)
 TARGET_OTA_NO_PREREQ := true
 endif
 ifeq ($(TARGET_OTA_NO_PREREQ),)
-# default to "false"
-$(INTERNAL_OTA_PACKAGE_TARGET): no_prereq := false
+# default to "true"
+$(INTERNAL_OTA_PACKAGE_TARGET): no_prereq := true
 else
 $(INTERNAL_OTA_PACKAGE_TARGET): no_prereq := $(TARGET_OTA_NO_PREREQ)
 endif
