@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAABn///GE\u003d",
+        "filename": "core/Makefile",
+        "patchSetId": 1
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 94
+      },
+      "writtenOn": "2010-12-26T11:23:00Z",
+      "side": 1,
+      "message": "This line is stopping my builds from completing.  I changed it to $(1) and it built fine.",
+      "revId": "7066907bca6dbd62a4ede1d7f4a31cb4d9df7771",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    }
+  ]
+}
