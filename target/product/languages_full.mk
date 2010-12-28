@@ -20,4 +20,59 @@
 # the system misbehaves when a density is the first locale.
 
 # Those are all the locales that have translations.
-PRODUCT_LOCALES := en_US en_GB fr_FR it_IT es_ES es_US de_DE nl_NL cs_CZ pl_PL zh_TW zh_CN ru_RU ko_KR nb_NO pt_PT pt_BR da_DK el_GR sv_SE tr_TR ja_JP
+PRODUCT_LOCALES := en_US \
+ ar_EG \
+ ar_IL \
+ bg_BG \
+ ca_ES \
+ cs_CZ \
+ da_DK \
+ de_AT \
+ de_CH \
+ de_DE \
+ de_LI \
+ el_GR \
+ en_AU \
+ en_CA \
+ en_GB \
+ en_IE \
+ en_IN \
+ en_NZ \
+ en_SG \
+ en_ZA \
+ fi_FI \
+ fr_BE \
+ fr_CA \
+ fr_CH \
+ fr_FR \
+ he_IL \
+ hi_IN \
+ hr_HR \
+ hu_HU \
+ id_ID \
+ it_CH \
+ it_IT \
+ iw_IL \
+ ja_JP \
+ ko_KR \
+ lt_LT \
+ lv_LV \
+ nb_NO \
+ nl_BE \
+ nl_NL \
+ pl_PL \
+ pt_BR \
+ pt_PT \
+ ro_RO \
+ ru_RU \
+ sk_SK \
+ sl_SI \
+ sr_RS \
+ sv_SE \
+ th_TH \
+ tl_PH \
+ tr_TR \
+ uk_UA \
+ vi_VN \
+ zh_CN \
+ zh_TW
