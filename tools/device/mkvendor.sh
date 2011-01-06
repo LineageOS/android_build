@@ -78,4 +78,6 @@ mv $DEVICE_DIR/device.mk $DEVICE_DIR/device_$DEVICE.mk
 
 echo Done!
 echo Use the following command to set up your build environment:
-echo lunch full_$DEVICE-eng
+echo '  'lunch full_$DEVICE-eng
+echo And use the follwowing command to build a recovery:
+echo '  '. build/tools/device/makerecoveries.sh full_$DEVICE-eng

@@ -1,15 +1,10 @@
 if [ -z "$1" ]
 then
-    echo "Please provide a version number."
+    echo "Please provide a lunch option."
     return
 fi
 
-if [ -z "$2" ]
-then
-    PRODUCTS='koush_aloha-eng koush_pulse-eng koush_buzz-eng koush_streak-eng koush_espresso-eng koush_legend-eng koush_pulsemini-eng koush_liberty-eng koush_inc-eng koush_supersonic-eng koush_bravo-eng koush_dream-eng koush_sapphire-eng koush_passion-eng koush_sholes-eng koush_magic-eng koush_hero-eng koush_heroc-eng koush_desirec-eng'
-else
-    PRODUCTS=$2
-fi
+PRODUCTS=$1
 
 for product in $PRODUCTS
 do
@@ -35,6 +30,8 @@ function mcpguard () {
     fi
 }
 
+VERSION=$(cat bootable/recovery/Android.mk | grep RECOVERY_VERSION | grep ClockworkMod | sed s/'RECOVERY_VERSION := ClockworkMod Recovery v'//g)
+echo Recovery Version: $VERSION
 
 for lunchoption in $PRODUCTS
 do
@@ -54,30 +51,30 @@ do
         echo build error!
         break
     fi
-    mcpguard $OUT/recovery.img recoveries/recovery-clockwork-$1-$DEVICE_NAME.img
+    mcpguard $OUT/recovery.img recoveries/recovery-clockwork-$VERSION-$DEVICE_NAME.img
 
-    . build/tools/device/mkrecoveryzip.sh $1
-    mcpguard $OUT/utilities/update.zip recoveries/recovery-clockwork-$1-$DEVICE_NAME.zip
+    . build/tools/device/mkrecoveryzip.sh $VERSION
+    mcpguard $OUT/utilities/update.zip recoveries/recovery-clockwork-$VERSION-$DEVICE_NAME.zip
 
     ALL_DEVICES=$DEVICE_NAME
 
     if [ $DEVICE_NAME == "sholes" ]
     then
-        mcpguard $OUT/utilities/update.zip recoveries/recovery-clockwork-$1-milestone.zip
+        mcpguard $OUT/utilities/update.zip recoveries/recovery-clockwork-$VERSION-milestone.zip
         ALL_DEVICES=$ALL_DEVICES' milestone'
     fi
 
     if [ $DEVICE_NAME == "tab" ]
     then
-        mcpguard $OUT/utilities/update.zip recoveries/recovery-clockwork-$1-tmobile_tab.zip
-        mcpguard $OUT/utilities/update.zip recoveries/recovery-clockwork-$1-att_tab.zip
+        mcpguard $OUT/utilities/update.zip recoveries/recovery-clockwork-$VERSION-tmobile_tab.zip
+        mcpguard $OUT/utilities/update.zip recoveries/recovery-clockwork-$VERSION-att_tab.zip
         ALL_DEVICES=$ALL_DEVICES' tmobile_tab att_tab'
     fi
     
     if [ $DEVICE_NAME == "galaxys" ]
     then
-        mcpguard $OUT/utilities/update.zip recoveries/recovery-clockwork-$1-vibrant.zip
-        mcpguard $OUT/utilities/update.zip recoveries/recovery-clockwork-$1-captivate.zip
+        mcpguard $OUT/utilities/update.zip recoveries/recovery-clockwork-$VERSION-vibrant.zip
+        mcpguard $OUT/utilities/update.zip recoveries/recovery-clockwork-$VERSION-captivate.zip
         ALL_DEVICES=$ALL_DEVICES' vibrant captivate'
     fi
     
@@ -85,7 +82,7 @@ do
     then
         for device in $ALL_DEVICES
         do
-            curl 'https://rommanager.appspot.com/api/updateDevice?apikey='$(cat ~/.rommanager_api_key)'&board='$device'&version='$1
+            curl 'https://rommanager.appspot.com/api/updateDevice?apikey='$(cat ~/.rommanager_api_key)'&board='$device'&version='$VERSION
         done
     fi
 done
