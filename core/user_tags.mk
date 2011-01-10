@@ -196,6 +196,7 @@ GRANDFATHERED_USER_MODULES += \
 	libctest \
 	libcutils \
 	libclearsilverregex \
+	libcyanogen-dsp \
 	libdb \
 	libdbus \
 	libdiskconfig \

@@ -27,6 +27,7 @@ PRODUCT_PACKAGES := \
     Camera \
     CertInstaller \
     DrmProvider \
+    DSPManager \
     Email \
     Gallery3D \
     LatinIME \
