@@ -9,6 +9,8 @@ Invoke ". build/envsetup.sh" from your shell to add the following functions to y
 - jgrep:   Greps on all local Java files.
 - resgrep: Greps on all local res/*.xml files.
 - godir:   Go to the directory containing a file.
+- cmremote: Add git remote for CM Gerrit Review
+- cmgerrit: Send patch request request to CyanogenMod repos
 - mka:     Builds using SCHED_BATCH on all processors
 - reposync: Parallel repo sync using ionice and SCHED_BATCH
 
@@ -1091,6 +1093,58 @@ function cmremote()
         git remote add cmremote ssh://$CMUSER@review.cyanogenmod.com:29418/$GERRIT_REMOTE
     fi
     echo You can now push to "cmremote".
+}
+
+function cmgerrit()
+{
+        ##################################################################################
+        # Gerrit tool for easiness of submitting changes to CM repos                     #
+        # Wes Garner                                                                     #
+        # Usage: cmgerrit <for/changes> <branch/change-id>                               #
+        # Note: for = new submissions, changes = new patch set for current submission    #
+        ##################################################################################
+
+    local mode=$1
+    local target=$2
+
+    repo=$(cat .git/config  | grep git://github.com | awk '{ print $3 }' | sed s#git://github.com/##g)
+    user=`git config --get review.review.cyanogenmod.com.username`
+
+    if [ -z "$repo" ]; then
+        echo "Unable to detect current repo, are you in the root of the repo you would like to submit patches for?"
+        return
+    fi
+
+    if [ -z $mode ] || [ -z $target ]; then
+        echo "CyanogenMod Gerrit Usage: "
+        echo "      Must be in root of repo that patches are being submitted for"
+        echo "      cmgerrit <for/changes> <branch/change-id>"
+        echo ""
+    fi
+    if [ -z $mode ]; then
+        echo -n "Is this a new change or a new patchset to a current change? (for = new, changes = patch set): "
+        read mode
+        if [ -z $mode ]; then
+            echo "I'm sorry you didn't enter a mode, please try again."
+            return
+        fi
+    fi
+    if [ -z $target ]; then
+        echo -n "What is the branch (for a new change) OR change-id (for a current change) you are working with: "
+        read target
+        if [ -z $target ]; then
+            echo "I'm sorry you didn't enter a target, please try again."
+            return
+        fi
+    fi
+    echo "Pushing patch set to $repo, Mode: $mode, Target: $target"
+
+    if [ -z "$user" ]
+    then
+        git push ssh://review.cyanogenmod.com:29418/$repo HEAD:refs/$mode/$target
+    else
+        git push ssh://$user@review.cyanogenmod.com:29418/$repo HEAD:refs/$mode/$target
+    fi
 }
 
 function mka() {
