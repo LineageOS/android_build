@@ -8,7 +8,7 @@
 #      http://www.apache.org/licenses/LICENSE-2.0
 #
 
-ifeq ($(TARGET_PREBUILT_KERNEL),)
+ifeq ($(TARGET_BUILD_KERNEL),true)
 
 ifeq ($(TARGET_ARCH),x86)
 KERNEL_TARGET := bzImage
