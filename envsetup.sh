@@ -65,6 +65,115 @@ function check_product()
     # hide successful answers, but allow the errors to show
 }
 
+function exists_in_local_manifest(){
+	local local_path=$1
+
+	T=$(gettop)
+    if [ ! "$T" ]; then
+        echo "Couldn't locate the top of the tree.  Try setting TOP." >&2
+        return 1
+    fi
+
+	if [ ! -f $T/.repo/local_manifest.xml ]; then
+		return 1
+	else
+		python <<EOF
+import sys
+from xml.etree.ElementTree import ElementTree, SubElement
+local_manifest = ElementTree() ; 
+local_root = local_manifest.parse('$T/.repo/local_manifest.xml')
+for p in local_root.findall('project'):
+	if p.get('path','') == '$local_path':
+		sys.exit(0)
+sys.exit(1)
+EOF
+		return $?
+	fi
+}
+
+function add_kernel_to_local_manifest(){
+	local local_path=$1
+
+	T=$(gettop)
+    if [ ! "$T" ]; then
+        echo "Couldn't locate the top of the tree.  Try setting TOP." >&2
+        return
+    fi
+
+	if [ ! -f $T/.repo/local_manifest.xml ]; then
+cat > $T/.repo/local_manifest.xml <<EOF
+<?xml version="1.0" encoding="UTF-8"?>
+<manifest></manifest>
+EOF
+	fi
+
+python <<EOF
+from xml.etree.ElementTree import ElementTree, SubElement
+local_manifest = ElementTree() 
+kernel_manifest = ElementTree()
+local_root = local_manifest.parse('$T/.repo/local_manifest.xml')
+kernel_root = kernel_manifest.parse('$T/.repo/manifests/kernel.xml')
+for p in kernel_root.findall('project'):
+	if p.get('path','') == '$local_path':
+		SubElement(local_root, 'project', attrib=p.attrib)
+		break
+local_manifest.write('$T/.repo/local_manifest.xml')
+EOF
+}
+
+function choosekernel()
+{
+	T=$(gettop)
+    if [ ! "$T" ]; then
+        echo "Couldn't locate the top of the tree.  Try setting TOP." >&2
+        return
+    fi
+
+	local kernel_dir=$(get_build_var TARGET_KERNEL_DIR)
+	#  No kernel source dir available, use prebuilt one
+	if [ ! "$kernel_dir" ]; then
+        export TARGET_BUILD_KERNEL="false"
+		return
+	fi
+
+    echo "Kernel choices are:"
+    echo "     1. build-kernel"
+    echo "     2. prebuilt-kernel"
+    echo
+
+	export TARGET_BUILD_KERNEL=
+    local ANSWER=""
+	while [ -z "$TARGET_BUILD_KERNEL" ] ; do
+        echo -n "Which would you like? [2] "
+        read ANSWER
+        case $ANSWER in
+        1|build-kernel)
+            export TARGET_BUILD_KERNEL="true"
+            ;;
+		""|2|prebuilt-kernel)
+            export TARGET_BUILD_KERNEL="false"
+            ;;
+        *)
+            echo
+            echo "I didn't understand your response.  Please try again."
+            echo
+            ;;
+        esac
+        if [ -n "$1" ] ; then
+            break
+        fi
+    done
+	
+	if [ "$TARGET_BUILD_KERNEL" = "true" ]; then
+		if ! exists_in_local_manifest "$kernel_dir" ; then
+			add_kernel_to_local_manifest "$kernel_dir"
+			mkdir -p $kernel_dir
+			repo sync $kernel_dir
+		fi
+	fi
+}
+
+
 VARIANT_CHOICES=(user userdebug eng)
 
 # check to see if the supplied variant is valid
@@ -462,7 +571,33 @@ function print_lunch_menu()
 
 function lunch()
 {
-    local answer
+    local answer optargs
+
+	# reset opt args
+    export TARGET_BUILD_KERNEL=
+
+	optargs=$(getopt -o b,p -l build-kernel,prebuilt-kernel,build_kernel,prebuilt_kernel -n lunch -- "$@")
+	eval set -- "$optargs"
+	while true; do
+	    case $1 in
+			-b|--build-kernel|--prebuilt_kernel)
+				export TARGET_BUILD_KERNEL="true"
+				shift
+				;;
+			-p|--prebuilt-kernel|--prebuilt_kernel)
+				export TARGET_BUILD_KERNEL="false"
+				shift
+				;;
+        	--)
+			    shift ; break
+				;;
+			*)
+				echo "Unknown option: '$1'"
+				shift
+				;;
+		esac
+	done
+
 
     if [ "$1" ] ; then
         answer=$1
@@ -507,6 +642,7 @@ function lunch()
         export TARGET_BUILD_VARIANT=eng
         export TARGET_SIMULATOR=true
         export TARGET_BUILD_TYPE=debug
+	    export TARGET_BUILD_KERNEL="false"
     else
         local product=$(echo -n $selection | sed -e "s/-.*$//")
         check_product $product
@@ -538,7 +674,11 @@ function lunch()
         export TARGET_BUILD_VARIANT=$variant
         export TARGET_SIMULATOR=false
         export TARGET_BUILD_TYPE=release
+	    if [ -z "$TARGET_BUILD_KERNEL" ] ; then
+			choosekernel
+		fi
     fi # !simulator
+
 
     echo
 
