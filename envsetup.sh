@@ -1197,3 +1197,7 @@ do
     . $f
 done
 unset f
+
+# Find number of cores for make -j(x)
+# example: make -j$p bacon
+p=`grep 'processor' /proc/cpuinfo | wc -l`
