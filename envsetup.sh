@@ -65,6 +65,107 @@ function check_product()
     # hide successful answers, but allow the errors to show
 }
 
+function exists_in_local_manifest(){
+	local local_path=$1
+
+	T=$(gettop)
+    if [ ! "$T" ]; then
+        echo "Couldn't locate the top of the tree.  Try setting TOP." >&2
+        return 1
+    fi
+
+	if [ ! -f $T/.repo/local_manifest.xml ]; then
+		return 1
+	else
+		python <<EOF
+import sys
+from xml.etree.ElementTree import ElementTree, SubElement
+local_manifest = ElementTree() ; 
+local_root = local_manifest.parse('$T/.repo/local_manifest.xml')
+for p in local_root.findall('project'):
+	if p.get('path','') == '$local_path':
+		sys.exit(0)
+sys.exit(1)
+EOF
+		return $?
+	fi
+}
+
+function add_kernel_to_local_manifest(){
+	local local_path=$1
+
+	T=$(gettop)
+    if [ ! "$T" ]; then
+        echo "Couldn't locate the top of the tree.  Try setting TOP." >&2
+        return
+    fi
+
+	if [ ! -f $T/.repo/local_manifest.xml ]; then
+cat > $T/.repo/local_manifest.xml <<EOF
+<?xml version="1.0" encoding="UTF-8"?>
+<manifest></manifest>
+EOF
+	fi
+
+python <<EOF
+from xml.etree.ElementTree import ElementTree, SubElement
+local_manifest = ElementTree() 
+kernel_manifest = ElementTree()
+local_root = local_manifest.parse('$T/.repo/local_manifest.xml')
+kernel_root = kernel_manifest.parse('$T/.repo/manifests/kernel.xml')
+for p in kernel_root.findall('project'):
+	if p.get('path','') == '$local_path':
+		SubElement(local_root, 'project', attrib=p.attrib)
+		break
+local_manifest.write('$T/.repo/local_manifest.xml')
+EOF
+}
+
+function check_kernel_tree()
+{
+	T=$(gettop)
+    if [ ! "$T" ]; then
+        echo "Couldn't locate the top of the tree.  Try setting TOP." >&2
+        return
+    fi
+	local kernel_dir=$(get_build_var TARGET_KERNEL_DIR)
+	if [ ! "$kernel_dir" ]; then
+		return
+	fi
+	if exists_in_local_manifest "$kernel_dir" ; then
+		return
+	fi
+
+    local ANSWER=""
+	while [ -z "$BUILD_KERNEL" ] ; do
+        echo -n "Would you like compile the kernel, (otherwise use prebuilt) ? [YES/no] "
+        read ANSWER
+        case $ANSWER in
+        ""|YES|yes|Y|y)
+            export BUILD_KERNEL=1
+            ;;
+        NO|no|N|n)
+            export BUILD_KERNEL=0
+            ;;
+        *)
+            echo
+            echo "I didn't understand your response.  Please try again."
+            echo
+            ;;
+        esac
+        if [ -n "$1" ] ; then
+            break
+        fi
+    done
+	
+	if [ "$BUILD_KERNEL" = "1" ]; then
+		add_kernel_to_local_manifest "$kernel_dir"
+		mkdir -p $kernel_dir
+		repo sync $kernel_dir
+	fi
+}
+
+
 VARIANT_CHOICES=(user userdebug eng)
 
 # check to see if the supplied variant is valid
@@ -539,6 +640,8 @@ function lunch()
         export TARGET_SIMULATOR=false
         export TARGET_BUILD_TYPE=release
     fi # !simulator
+
+	check_kernel_tree
 
     echo
 
