@@ -40,6 +40,7 @@ PRODUCT_LOCALES := en_US \
  en_NZ \
  en_SG \
  en_ZA \
+ es_ES \
  fi_FI \
  fr_BE \
  fr_CA \
@@ -75,4 +76,5 @@ PRODUCT_LOCALES := en_US \
  uk_UA \
  vi_VN \
  zh_CN \
+ zh_HK \
  zh_TW
