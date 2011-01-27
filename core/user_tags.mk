@@ -218,6 +218,7 @@ GRANDFATHERED_USER_MODULES += \
 	libfdlibm \
 	libfdlibm-host \
 	libFFTEm \
+	libFLAC \
 	libfst \
 	libft2 \
 	libgdbus_static \
