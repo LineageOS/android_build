@@ -1142,6 +1142,7 @@ $(INTERNAL_OTA_PACKAGE_TARGET): $(BUILT_TARGET_FILES_PACKAGE) $(OTATOOLS)
 .PHONY: otapackage
 otapackage: $(INTERNAL_OTA_PACKAGE_TARGET)
 bacon: otapackage
+leo: otapackage
 
 # -----------------------------------------------------------------
 # The update package
@@ -1179,12 +1180,19 @@ $(INTERNAL_UPDATE_PACKAGE_TARGET): $(BUILT_TARGET_FILES_PACKAGE) $(OTATOOLS)
 
 .PHONY: updatepackage
 updatepackage: $(INTERNAL_UPDATE_PACKAGE_TARGET)
-.PHONY: otapackage bacon
+.PHONY: otapackage  bacon leo
 otapackage: $(INTERNAL_OTA_PACKAGE_TARGET)
 bacon: otapackage
 	$(hide) \
 		WANT_SQUASHFS=$(WANT_SQUASHFS) \
-		./vendor/cyanogen/tools/squisher
+		./vendor/cyanogen/tools/squisher 
+leo: otapackage
+	$(hide) \
+		WANT_LEOUPDATE=$(WANT_LEOUPDATE) \
+		./vendor/cyanogen/tools/leoupdate
+	$(hide) \
+		WANT_SQUASHFS=$(WANT_SQUASHFS) \
+		./vendor/cyanogen/tools/squisher 
 
 endif    # TARGET_NO_KERNEL != true
 endif    # TARGET_DEVICE != generic
