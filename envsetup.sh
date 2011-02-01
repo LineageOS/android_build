@@ -473,7 +473,8 @@ function print_lunch_menu()
 
 function brunch()
 {
-    breakfast
+    breakfast $* && mka bacon
+    return $?
 }
 
 function breakfast()
@@ -487,7 +488,8 @@ function breakfast()
             . $f
         done
     unset f
-    lunch
+    lunch $*
+    return $?
 }
 
 function lunch()
