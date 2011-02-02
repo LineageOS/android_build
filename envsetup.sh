@@ -473,7 +473,21 @@ function print_lunch_menu()
 
 function brunch()
 {
-    breakfast $* && mka bacon
+    target=$1
+    echo "z$target" | grep -q "-"
+    if [ $? -eq 0 ]; then
+        # A buildtype was specified, assume a full device name
+        breakfast $target
+    else
+        # This is probably just the CM model name
+        breakfast cyanogen_$target-eng
+    fi
+    if [ $? -eq 0 ]; then
+        mka bacon
+    else
+        echo "No such item in brunch menu. Try 'breakfast'"
+        return 1
+    fi
     return $?
 }
 
