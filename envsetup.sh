@@ -496,13 +496,18 @@ function breakfast()
         done
     unset f
 
-    echo "z$target" | grep -q "-"
-    if [ $? -eq 0 ]; then
-        # A buildtype was specified, assume a full device name
-        lunch $target
+    if [ $# -eq 0 ]; then
+        # No arguments, so let's have the full menu
+        lunch
     else
-        # This is probably just the CM model name
-        lunch cyanogen_$target-eng
+        echo "z$target" | grep -q "-"
+        if [ $? -eq 0 ]; then
+            # A buildtype was specified, assume a full device name
+            lunch $target
+        else
+            # This is probably just the CM model name
+            lunch cyanogen_$target-eng
+        fi
     fi
     return $?
 }
