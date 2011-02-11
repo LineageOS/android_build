@@ -89,9 +89,9 @@ def main(argv):
     usage()
   dirlist = argv[i:-1]
   filename = argv[-1]
-  results = list(set(perform_find(mindepth, prune, dirlist, filename)))
+  results = perform_find(mindepth, prune, dirlist, filename)
   results.sort()
-  for r in results:
+  for r in set(results):
     print r
 
 if __name__ == "__main__":
