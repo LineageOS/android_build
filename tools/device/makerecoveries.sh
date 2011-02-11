@@ -66,6 +66,7 @@ do
 
     if [ $DEVICE_NAME == "tab" ]
     then
+        mcpguard $OUT/utilities/update.zip recoveries/recovery-clockwork-$VERSION-verizon_tab.zip
         mcpguard $OUT/utilities/update.zip recoveries/recovery-clockwork-$VERSION-tmobile_tab.zip
         mcpguard $OUT/utilities/update.zip recoveries/recovery-clockwork-$VERSION-att_tab.zip
         ALL_DEVICES=$ALL_DEVICES' tmobile_tab att_tab'
