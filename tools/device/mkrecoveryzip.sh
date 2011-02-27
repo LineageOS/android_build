@@ -62,10 +62,13 @@ done
 
 
 echo 'ui_print("Replacing stock recovery with ClockworkMod recovery...");' >> $UPDATER_SCRIPT
+
+echo 'delete("sbin/recovery");' >> $UPDATER_SCRIPT
+echo 'package_extract_file("sbin/recovery", "/sbin/recovery");' >> $UPDATER_SCRIPT
+echo 'set_perm(0, 0, 0755, "/sbin/recovery");' >> $UPDATER_SCRIPT
 echo 'symlink("recovery", "/sbin/busybox");' >> $UPDATER_SCRIPT
 
-echo 'delete("/etc");' >> $UPDATER_SCRIPT
-echo 'package_extract_dir("/etc", "/");' >> $UPDATER_SCRIPT
+echo 'run_program("/sbin/busybox", "sh", "-c", "rm -f /etc ; mkdir -p /etc;");' >> $UPDATER_SCRIPT
 
 for file in $FILES
 do
