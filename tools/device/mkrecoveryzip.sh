@@ -90,5 +90,5 @@ rm -f $UTILITIES_DIR/update.zip
 zip -ry $UTILITIES_DIR/unsigned.zip . -x $SYMLINKS '*\[*' '*\[\[*'
 java -jar $ANDROID_ROOT/out/host/darwin-x86/framework/signapk.jar -w $ANDROID_ROOT/build/target/product/security/testkey.x509.pem $ANDROID_ROOT/build/target/product/security/testkey.pk8 $UTILITIES_DIR/unsigned.zip $UTILITIES_DIR/update.zip
 
-echo Recovery FakeFlash is now available at $OUT/recovery/update.zip
+echo Recovery FakeFlash is now available at $OUT/utilities/update.zip
 popd > /dev/null 2> /dev/null
