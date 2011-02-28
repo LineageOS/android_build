@@ -68,7 +68,7 @@ echo 'package_extract_file("sbin/recovery", "/sbin/recovery");' >> $UPDATER_SCRI
 echo 'set_perm(0, 0, 0755, "/sbin/recovery");' >> $UPDATER_SCRIPT
 echo 'symlink("recovery", "/sbin/busybox");' >> $UPDATER_SCRIPT
 
-echo 'run_program("/sbin/busybox", "sh", "-c", "rm -f /etc ; mkdir -p /etc;");' >> $UPDATER_SCRIPT
+echo 'run_program("/sbin/busybox", "sh", "-c", "busybox rm -f /etc ; busybox mkdir -p /etc;");' >> $UPDATER_SCRIPT
 
 for file in $FILES
 do
