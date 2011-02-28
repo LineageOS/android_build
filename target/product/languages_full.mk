@@ -15,7 +15,7 @@
 #
 
 # This is a build configuration that just contains a list of languages.
-# It helps in situations where laugnages must come first in the list,
+# It helps in situations where languages must come first in the list,
 # mostly because screen densities interfere with the list of locales and
 # the system misbehaves when a density is the first locale.
 
