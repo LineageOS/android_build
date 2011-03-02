@@ -106,10 +106,10 @@ class EdifyGenerator(object):
     self.script.append('set_perm(0, 0, 0777, "/tmp/backuptool.sh");')
     self.script.append(('run_program("/tmp/backuptool.sh", "%s");' % command))
 
-  def RunChkKineto(self):
-    self.script.append('package_extract_file("system/bin/chkkineto.sh", "/tmp/chkkineto.sh");')
-    self.script.append('set_perm(0, 0, 0777, "/tmp/chkkineto.sh");')
-    self.script.append('run_program("/tmp/chkkineto.sh");')
+  def RunModelidCfg(self):
+    self.script.append('package_extract_file("system/bin/modelid_cfg.sh", "/tmp/modelid_cfg.sh");')
+    self.script.append('set_perm(0, 0, 0777, "/tmp/modelid_cfg.sh");')
+    self.script.append('run_program("/tmp/modelid_cfg.sh");')
 
   def RunVerifyCachePartitionSize(self):
     self.script.append('package_extract_file("system/bin/verify_cache_partition_size.sh", "/tmp/verify_cache_partition_size.sh");')
