@@ -412,7 +412,7 @@ def WriteFullOTAPackage(input_zip, output_zip):
     script.ShowProgress(0.2, 10)
     script.RunBackup("restore")
 
-  script.RunChkKineto()
+  script.RunModelidCfg()
 
   script.RunVerifyCachePartitionSize()
 
