@@ -97,7 +97,7 @@ def MostPopularKey(d, default):
 def IsSymlink(info):
   """Return true if the zipfile.ZipInfo object passed in represents a
   symlink."""
-  return (info.external_attr >> 16) == 0120777 or (info.external_attr >> 16) == 0120755
+  return (info.external_attr >> 16) & 0770000 == 0120000
 
 
 class Item:
@@ -264,6 +264,7 @@ def CopySystemFiles(input_zip, output_zip=None,
   for info in input_zip.infolist():
     if info.filename.startswith("SYSTEM/"):
       basefilename = info.filename[7:]
+      print basefilename
       if IsSymlink(info):
         symlinks.append((input_zip.read(info.filename),
                          "/system/" + basefilename))
