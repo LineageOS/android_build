@@ -264,7 +264,6 @@ def CopySystemFiles(input_zip, output_zip=None,
   for info in input_zip.infolist():
     if info.filename.startswith("SYSTEM/"):
       basefilename = info.filename[7:]
-      print basefilename
       if IsSymlink(info):
         symlinks.append((input_zip.read(info.filename),
                          "/system/" + basefilename))
