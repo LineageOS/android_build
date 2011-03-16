@@ -55,6 +55,7 @@ PRODUCT_LOCALES := en_US \
  it_IT \
  iw_IL \
  ja_JP \
+ ka_GE \
  ko_KR \
  lt_LT \
  lv_LV \
