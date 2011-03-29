@@ -63,7 +63,7 @@ unpackbootimg -i $BOOTIMAGEFILE > /dev/null
 BASE=$(cat $TMPDIR/$BOOTIMAGEFILE-base)
 CMDLINE=$(cat $TMPDIR/$BOOTIMAGEFILE-cmdline)
 PAGESIZE=$(cat $TMPDIR/$BOOTIMAGEFILE-pagesize)
-export SEDCMD=s/__CMDLINE__/$CMDLINE/g
+export SEDCMD="s#__CMDLINE__#$CMDLINE#g"
 echo $SEDCMD > $TMPDIR/sedcommand
 cp $TMPDIR/$BOOTIMAGEFILE-zImage $DEVICE_DIR/kernel
 popd > /dev/null
