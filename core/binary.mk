@@ -1427,6 +1427,11 @@ my_tracked_gen_files :=
 $(foreach f,$(my_tracked_src_files),$(eval my_src_file_obj_$(s):=))
 my_tracked_src_files :=
 
+## Allow a device's own headers to take precedence over global ones
+ifneq ($(TARGET_SPECIFIC_HEADER_PATH),)
+my_c_includes := $(TOPDIR)$(TARGET_SPECIFIC_HEADER_PATH) $(my_c_includes)
+endif
+
 my_c_includes += $(TOPDIR)$(LOCAL_PATH) $(intermediates) $(generated_sources_dir)
 
 my_c_includes := $(foreach inc,$(my_c_includes),$(call clean-path,$(inc)))
