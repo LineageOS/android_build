@@ -745,10 +745,10 @@ ifneq ($(BOARD_USES_COMBINED_RECOVERY),true)
 	rm $(TARGET_RECOVERY_ROOT_OUT)/init*.rc
 endif
 	echo Modifying ramdisk contents...
-ifeq ($(BOARD_USES_RECOVERY_CHARGEMODE),true)
-	cp -f $(recovery_initrc) $(TARGET_RECOVERY_ROOT_OUT)/init.rc
-else
+ifeq ($(BOARD_USES_COMBINED_RECOVERY),true)
 	cp -f $(recovery_initrc) $(TARGET_RECOVERY_ROOT_OUT)/
+else
+	cp -f $(recovery_initrc) $(TARGET_RECOVERY_ROOT_OUT)/init.rc
 endif
 	cp -f $(recovery_binary) $(TARGET_RECOVERY_ROOT_OUT)/sbin/
 ifneq ($(BOARD_USES_COMBINED_RECOVERY),true)
