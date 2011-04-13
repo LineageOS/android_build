@@ -729,8 +729,11 @@ $(RECOVERY_INSTALL_OTA_KEYS): $(OTA_PUBLIC_KEYS) $(DUMPKEY_JAR)
 TARGET_RECOVERY_ROOT_TIMESTAMP := $(TARGET_RECOVERY_OUT)/root.ts
 
 $(TARGET_RECOVERY_ROOT_TIMESTAMP): $(INTERNAL_RECOVERY_FILES) \
+		$(INSTALLED_RAMDISK_TARGET) \
+		$(INSTALLED_BOOTIMAGE_TARGET) \
 		$(recovery_binary) \
 		$(recovery_initrc) \
+		$(INSTALLED_2NDBOOTLOADER_TARGET) \
 		$(recovery_build_prop) $(recovery_resource_deps) \
 		$(recovery_fstab) \
 		$(RECOVERY_INSTALL_OTA_KEYS)
@@ -772,26 +775,23 @@ endif
 
 ifeq ($(BOARD_USES_MKIMAGE),true)
 #BOARD_USES_MKIMAGE
-INTERNAL_RECOVERYIMAGE_ARGS := -A ARM -O Linux -T RAMDisk -C gzip -n Image -d $(recovery_ramdisk)
+INTERNAL_RECOVERYIMAGE_ARGS := -A ARM -O Linux -T RAMDisk -C gzip -n Image -d $(recovery_ramdisk).cpio.gz
 
 $(INSTALLED_RECOVERYIMAGE_TARGET): $(MKBOOTFS) $(MKIMAGE) $(MINIGZIP) \
 		$(TARGET_RECOVERY_ROOT_TIMESTAMP) \
-		$(INSTALLED_RAMDISK_TARGET) \
-		$(INSTALLED_BOOTIMAGE_TARGET) \
-		$(recovery_kernel) \
-		$(INSTALLED_2NDBOOTLOADER_TARGET)
+		$(recovery_kernel)
 	@echo ----- Making recovery image ------
-	$(MKBOOTFS) $(TARGET_RECOVERY_ROOT_OUT) | $(MINIGZIP) > $(recovery_ramdisk)
-	$(MKIMAGE) $(INTERNAL_RECOVERYIMAGE_ARGS) $@
-	@echo ----- Made recovery image -------- $@
+	$(MKBOOTFS) $(TARGET_RECOVERY_ROOT_OUT) | $(MINIGZIP) > $(recovery_ramdisk).cpio.gz
+	$(MKIMAGE) $(INTERNAL_RECOVERYIMAGE_ARGS) $(recovery_ramdisk)
+	@echo ----- Made recovery ramdisk -------- $(recovery_ramdisk)
+	$(hide) rm -f $@
+	zip -qDj $@ $(recovery_ramdisk) $(recovery_kernel)
+	@echo ----- Made recovery image \(zip\) -------- $@
 
 else ifeq ($(BOARD_USES_INITRAMFS),true)
 # BOARD_USES_INITRAMFS
 $(INSTALLED_RECOVERYIMAGE_TARGET): $(MKBOOTFS) $(MKBOOTIMG) \
-		$(TARGET_RECOVERY_ROOT_TIMESTAMP) \
-		$(INSTALLED_RAMDISK_TARGET) \
-		$(INSTALLED_BOOTIMAGE_TARGET) \
-		$(INSTALLED_2NDBOOTLOADER_TARGET)
+		$(TARGET_RECOVERY_ROOT_TIMESTAMP)
 	@echo ----- Making recovery image ------
 	$(MKBOOTFS) $(TARGET_RECOVERY_ROOT_OUT) > $@
 	@echo ----- Made recovery image -------- $@
@@ -800,10 +800,7 @@ $(INSTALLED_RECOVERYIMAGE_TARGET): $(MKBOOTFS) $(MKBOOTIMG) \
 else
 $(INSTALLED_RECOVERYIMAGE_TARGET): $(MKBOOTFS) $(MKBOOTIMG) $(MINIGZIP) \
 		$(TARGET_RECOVERY_ROOT_TIMESTAMP) \
-		$(INSTALLED_RAMDISK_TARGET) \
-		$(INSTALLED_BOOTIMAGE_TARGET) \
-		$(recovery_kernel) \
-		$(INSTALLED_2NDBOOTLOADER_TARGET)
+		$(recovery_kernel)
 	@echo ----- Making recovery image ------
 	$(MKBOOTFS) $(TARGET_RECOVERY_ROOT_OUT) | $(MINIGZIP) > $(recovery_ramdisk)
 	$(MKBOOTIMG) $(INTERNAL_RECOVERYIMAGE_ARGS) --output $@
