@@ -672,12 +672,17 @@ recovery_binary := $(call intermediates-dir-for,EXECUTABLES,recovery)/recovery
 recovery_resources_common := $(call include-path-for, recovery)/res
 recovery_resources_htc := $(call include-path-for, recovery)/htc/res
 recovery_resources_private := $(strip $(wildcard $(TARGET_DEVICE_DIR)/recovery/res))
+recovery_binary_private := $(strip $(wildcard $(TARGET_DEVICE_DIR)/recovery/sbin))
 recovery_resource_deps := $(shell find $(recovery_resources_common) \
-  $(recovery_resources_private) -type f)
+  $(recovery_resources_private) $(recovery_binary_private) -type f)
 recovery_fstab := $(strip $(wildcard $(TARGET_DEVICE_DIR)/recovery.fstab))
 
 ifeq ($(recovery_resources_private),)
   $(info No private recovery resources for TARGET_DEVICE $(TARGET_DEVICE))
+endif
+
+ifeq ($(recovery_binary_private),)
+  $(info No private recovery binary for TARGET_DEVICE $(TARGET_DEVICE))
 endif
 
 ifeq ($(recovery_fstab),)
@@ -763,6 +768,8 @@ ifeq ($(BOARD_USES_RECOVERY_CHARGEMODE),true)
 	cp -rf $(recovery_resources_htc) $(TARGET_RECOVERY_ROOT_OUT)/
 endif
 	$(foreach item,$(recovery_resources_private), \
+	  cp -rf $(item) $(TARGET_RECOVERY_ROOT_OUT)/)
+	$(foreach item,$(recovery_binary_private), \
 	  cp -rf $(item) $(TARGET_RECOVERY_ROOT_OUT)/)
 	$(foreach item,$(recovery_fstab), \
 	  cp -f $(item) $(TARGET_RECOVERY_ROOT_OUT)/etc/recovery.fstab)
