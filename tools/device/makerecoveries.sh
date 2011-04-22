@@ -79,9 +79,11 @@ do
         ALL_DEVICES=$ALL_DEVICES' vibrant captivate'
     fi
     
-	if [ -f "ROMManagerManifest/device.rb" ]
+	if [ -f "ROMManagerManifest/devices.rb" ]
 	then
-		ruby ROMManagerManifest/device.rb $device $VERSION
+		pushd ROMManagerManifest
+		ruby devices.rb $device $VERSION
+		popd
 	fi
 done
 
