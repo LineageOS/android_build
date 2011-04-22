@@ -79,13 +79,10 @@ do
         ALL_DEVICES=$ALL_DEVICES' vibrant captivate'
     fi
     
-    if [ -f ~/.rommanager_api_key ]
-    then
-        for device in $ALL_DEVICES
-        do
-            curl 'https://rommanager.appspot.com/api/updateDevice?apikey='$(cat ~/.rommanager_api_key)'&board='$device'&version='$VERSION
-        done
-    fi
+	if [ -f "ROMManagerManifest/device.rb" ]
+	then
+		ruby ROMManagerManifest/device.rb $device $VERSION
+	fi
 done
 
 for published_recovery in $PUBLISHED_RECOVERIES
