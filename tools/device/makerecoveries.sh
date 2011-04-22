@@ -81,9 +81,12 @@ do
     
 	if [ -f "ROMManagerManifest/devices.rb" ]
 	then
-		pushd ROMManagerManifest
-		ruby devices.rb $device $VERSION
-		popd
+		for device in $ALL_DEVICES
+		do
+			pushd ROMManagerManifest
+			ruby devices.rb $device $VERSION
+			popd
+		done
 	fi
 done
 
