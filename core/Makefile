@@ -15,15 +15,18 @@ endif
 # <dest file> is relative to $(PRODUCT_OUT), so it should look like,
 # e.g., "system/etc/file.xml".
 # The filter part means "only eval the copy-one-file rule if this
-# src:dest pair is the first one to match %:dest"
+# src:dest pair is the first one to match the same dest"
+unique_product_copy_files_destinations := $(sort \
+    $(foreach cf,$(PRODUCT_COPY_FILES), $(call word-colon,2,$(cf))))
 $(foreach cf,$(PRODUCT_COPY_FILES), \
-  $(eval _src := $(call word-colon,1,$(cf))) \
-  $(eval _dest := $(call word-colon,2,$(cf))) \
-  $(eval _fulldest := $(call append-path,$(PRODUCT_OUT),$(_dest))) \
-  $(if $(filter $(_src):$(_dest),$(firstword $(filter %:$(_dest),$(PRODUCT_COPY_FILES)))), \
-    $(eval $(call copy-one-file,$(_src),$(_fulldest))),) \
-  $(eval ALL_DEFAULT_INSTALLED_MODULES += $(_fulldest)) \
- )
+    $(eval _src := $(call word-colon,1,$(cf))) \
+    $(eval _dest := $(call word-colon,2,$(cf))) \
+    $(if $(filter $(unique_product_copy_files_destinations),$(_dest)), \
+        $(eval _fulldest := $(call append-path,$(PRODUCT_OUT),$(_dest))) \
+        $(eval $(call copy-one-file,$(_src),$(_fulldest))) \
+        $(eval ALL_DEFAULT_INSTALLED_MODULES += $(_fulldest)) \
+        $(eval unique_product_copy_files_destinations := $(filter-out $(_dest), \
+            $(unique_product_copy_files_destinations)))))
 
 define set-product-variable
 $(shell echo Define: $(1) $(2))
@@ -291,12 +294,15 @@ $(all_event_log_tags_file): $(all_event_log_tags_src)
 
 event_log_tags_file := $(TARGET_OUT)/etc/event-log-tags
 
-# Include tags from all packages included in this product.
+# Include tags from all packages included in this product, plus all
+# tags that are part of the system (ie, not in a vendor/ or device/
+# directory).
 event_log_tags_src := \
     $(sort $(foreach m,\
       $(PRODUCTS.$(INTERNAL_PRODUCT).PRODUCT_PACKAGES) \
       $(call module-names-for-tag-list,user), \
-      $(ALL_MODULES.$(m).EVENT_LOG_TAGS)))
+      $(ALL_MODULES.$(m).EVENT_LOG_TAGS)) \
+      $(filter-out vendor/% device/% out/%,$(all_event_log_tags_src)))
 
 $(event_log_tags_file): PRIVATE_SRC_FILES := $(event_log_tags_src)
 $(event_log_tags_file): PRIVATE_MERGED_FILE := $(all_event_log_tags_file)
@@ -1162,6 +1168,7 @@ ifneq ($(TARGET_SIMULATOR),true)
 ifneq ($(TARGET_PRODUCT),sdk)
 ifneq ($(TARGET_DEVICE),generic)
 ifneq ($(TARGET_NO_KERNEL),true)
+ifneq ($(recovery_fstab),)
 
 # -----------------------------------------------------------------
 # OTA update package
@@ -1260,6 +1267,7 @@ bacon: otapackage
 		WANT_SQUASHFS=$(WANT_SQUASHFS) \
 		./vendor/cyanogen/tools/squisher
 
+endif    # recovery_fstab is defined
 endif    # TARGET_NO_KERNEL != true
 endif    # TARGET_DEVICE != generic
 endif    # TARGET_PRODUCT != sdk
@@ -1278,8 +1286,12 @@ $(INSTALLED_FILES_FILE): $(INSTALLED_SYSTEMIMAGE)
 
 .PHONY: installed-file-list
 installed-file-list: $(INSTALLED_FILES_FILE)
-$(call dist-for-goals, sdk, $(INSTALLED_FILES_FILE))
+ifneq ($(filter sdk win_sdk,$(MAKECMDGOALS)),)
+$(call dist-for-goals, sdk win_sdk, $(INSTALLED_FILES_FILE))
+endif
+ifneq ($(filter sdk_addon,$(MAKECMDGOALS)),)
 $(call dist-for-goals, sdk_addon, $(INSTALLED_FILES_FILE))
+endif
 
 # -----------------------------------------------------------------
 # A zip of the tests that are built when running "make tests".
@@ -1524,9 +1536,10 @@ $(INTERNAL_SDK_TARGET): $(deps)
 
 # Is a Windows SDK requested? If so, we need some definitions from here
 # in order to find the Linux SDK used to create the Windows one.
+MAIN_SDK_NAME := $(sdk_name)
+MAIN_SDK_DIR  := $(sdk_dir)
+MAIN_SDK_ZIP  := $(INTERNAL_SDK_TARGET)
 ifneq ($(filter win_sdk,$(MAKECMDGOALS)),)
-LINUX_SDK_NAME := $(sdk_name)
-LINUX_SDK_DIR  := $(sdk_dir)
 include $(TOPDIR)development/build/tools/windows_sdk.mk
 endif
 
@@ -1551,3 +1564,12 @@ $(INTERNAL_FINDBUGS_HTML_TARGET): $(INTERNAL_FINDBUGS_XML_TARGET)
 # -----------------------------------------------------------------
 # These are some additional build tasks that need to be run.
 include $(sort $(wildcard $(BUILD_SYSTEM)/tasks/*.mk))
+-include $(sort $(wildcard vendor/*/build/tasks/*.mk))
+
+# -----------------------------------------------------------------
+# Create SDK repository packages. Must be done after tasks/* since
+# we need the addon rules defined.
+ifneq ($(sdk_repo_goal),)
+include $(TOPDIR)development/build/tools/sdk_repo.mk
+endif
+
