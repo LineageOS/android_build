@@ -324,41 +324,145 @@ INTERNAL_RAMDISK_FILES := $(filter $(TARGET_ROOT_OUT)/%, \
 	$(ALL_GENERATED_SOURCES) \
 	$(ALL_DEFAULT_INSTALLED_MODULES))
 
-ifeq ($(BOARD_USES_INITRAMFS),true)
-BUILT_RAMDISK_TARGET := $(PRODUCT_OUT)/ramdisk.cpio
-else
-BUILT_RAMDISK_TARGET := $(PRODUCT_OUT)/ramdisk.img
-endif
+BUILT_INITRAMFS_TARGET := $(PRODUCT_OUT)/ramdisk.cpio
+BUILT_COMPRESSED_INITRAMFS_TARGET := $(PRODUCT_OUT)/ramdisk.cpio.gz
+
+$(BUILT_INITRAMFS_TARGET): $(INTERNAL_RAMDISK_FILES) $(MKBOOTFS)
+	$(call pretty,"Target initramfs: $@")
+	$(hide) $(MKBOOTFS) $(TARGET_ROOT_OUT) > $(BUILT_INITRAMFS_TARGET)
+
+$(BUILT_COMPRESSED_INITRAMFS_TARGET): $(BUILT_INITRAMFS_TARGET) | $(MINIGZIP)
+	$(call pretty,"Target compressed initramfs: $@")
+	$(hide) $(MINIGZIP) < $(BUILT_INITRAMFS_TARGET) > $(BUILT_COMPRESSED_INITRAMFS_TARGET)
 
 ifeq ($(BOARD_USES_MKIMAGE),true)
 # BOARD_USES_MKIMAGE
-INTERNAL_URAMDISKIMAGE_ARGS := -A ARM -O Linux -T RAMDisk -C gzip -n Image -d $(BUILT_RAMDISK_TARGET).cpio.gz
+INTERNAL_URAMDISKIMAGE_ARGS := -A ARM -O Linux -T RAMDisk -C gzip -n Image -d $(BUILT_COMPRESSED_INITRAMFS_TARGET)
 
 # We just build this directly to the install location.
-INSTALLED_RAMDISK_TARGET := $(BUILT_RAMDISK_TARGET)
-$(INSTALLED_RAMDISK_TARGET):  $(MKIMAGE) $(INTERNAL_RAMDISK_FILES) | $(MINIGZIP) 
+INSTALLED_RAMDISK_TARGET := $(PRODUCT_OUT)/ramdisk.img
+$(INSTALLED_RAMDISK_TARGET):  $(MKIMAGE) $(BUILT_COMPRESSED_INITRAMFS_TARGET)
 	$(call pretty,"Target ram disk: $@")
-	$(hide) $(MKBOOTFS) $(TARGET_ROOT_OUT) | $(MINIGZIP) > $(BUILT_RAMDISK_TARGET).cpio.gz
 	$(MKIMAGE) $(INTERNAL_URAMDISKIMAGE_ARGS) $@
-	$(hide) rm $(BUILT_RAMDISK_TARGET).cpio.gz
-
-else ifeq ($(BOARD_USES_INITRAMFS),true)
-# BOARD_USES_INITRAMFS
-# We just build this directly to the install location.
-INSTALLED_RAMDISK_TARGET := $(BUILT_RAMDISK_TARGET)
-$(INSTALLED_RAMDISK_TARGET): $(MKBOOTFS) $(INTERNAL_RAMDISK_FILES) | $(MINIGZIP)
-	$(call pretty,"Target ram disk: $@")
-	$(hide) $(MKBOOTFS) $(TARGET_ROOT_OUT) > $@
 
 else
 # We just build this directly to the install location.
-INSTALLED_RAMDISK_TARGET := $(BUILT_RAMDISK_TARGET)
-$(INSTALLED_RAMDISK_TARGET): $(MKBOOTFS) $(INTERNAL_RAMDISK_FILES) | $(MINIGZIP)
-	$(call pretty,"Target ram disk: $@")
-	$(hide) $(MKBOOTFS) $(TARGET_ROOT_OUT) | $(MINIGZIP) > $@
+INSTALLED_RAMDISK_TARGET := $(BUILT_COMPRESSED_INITRAMFS_TARGET)
 endif
 
-ifeq (,$(filter true, $(TARGET_NO_KERNEL) $(BOARD_USES_INITRAMFS)))
+# -----------------------------------------------------------------
+# recovery ramdisk
+INTERNAL_RECOVERY_FILES := $(filter $(TARGET_RECOVERY_OUT)/%, \
+	$(ALL_PREBUILT) \
+	$(ALL_COPIED_HEADERS) \
+	$(ALL_GENERATED_SOURCES) \
+	$(ALL_DEFAULT_INSTALLED_MODULES))
+
+# Keys authorized to sign OTA packages this build will accept.  The
+# build always uses test-keys for this; release packaging tools will
+# substitute other keys for this one.
+OTA_PUBLIC_KEYS := $(SRC_TARGET_DIR)/product/security/testkey.x509.pem
+
+# Generate a file containing the keys that will be read by the
+# recovery binary.
+RECOVERY_INSTALL_OTA_KEYS := \
+	$(call intermediates-dir-for,PACKAGING,ota_keys)/keys
+DUMPKEY_JAR := $(HOST_OUT_JAVA_LIBRARIES)/dumpkey.jar
+$(RECOVERY_INSTALL_OTA_KEYS): PRIVATE_OTA_PUBLIC_KEYS := $(OTA_PUBLIC_KEYS)
+$(RECOVERY_INSTALL_OTA_KEYS): $(OTA_PUBLIC_KEYS) $(DUMPKEY_JAR)
+	@echo "DumpPublicKey: $@ <= $(PRIVATE_OTA_PUBLIC_KEYS)"
+	@rm -rf $@
+	@mkdir -p $(dir $@)
+	java -jar $(DUMPKEY_JAR) $(PRIVATE_OTA_PUBLIC_KEYS) > $@
+
+TARGET_RECOVERY_ROOT_TIMESTAMP := $(TARGET_RECOVERY_OUT)/root.ts
+TARGET_RECOVERY_INITRAMFS := $(PRODUCT_OUT)/recovery.cpio
+TARGET_RECOVERY_COMPRESSED_INITRAMFS := $(PRODUCT_OUT)/recovery.cpio.gz
+
+recovery_binary := $(call intermediates-dir-for,EXECUTABLES,recovery)/recovery
+ifneq ($(TARGET_RECOVERY_INITRC),)
+   recovery_initrc := $(TARGET_RECOVERY_INITRC) # Use target specific init.rc
+else
+ifeq ($(BOARD_USES_RECOVERY_CHARGEMODE),true)
+   recovery_initrc := $(call include-path-for, recovery)/etc/init.htc.rc
+else
+   recovery_initrc := $(call include-path-for, recovery)/etc/init.rc
+endif
+endif
+recovery_build_prop := $(INSTALLED_BUILD_PROP_TARGET)
+
+recovery_resources_common := $(call include-path-for, recovery)/res
+recovery_resources_htc := $(call include-path-for, recovery)/htc/res
+recovery_resources_private := $(strip $(wildcard $(TARGET_DEVICE_DIR)/recovery/res))
+recovery_resource_deps := $(shell find $(recovery_resources_common) \
+  $(recovery_resources_private) -type f)
+recovery_fstab := $(strip $(wildcard $(TARGET_DEVICE_DIR)/recovery.fstab))
+
+ifeq ($(recovery_resources_private),)
+  $(info No private recovery resources for TARGET_DEVICE $(TARGET_DEVICE))
+endif
+
+ifeq ($(recovery_fstab),)
+  $(info No recovery.fstab for TARGET_DEVICE $(TARGET_DEVICE))
+endif
+
+$(TARGET_RECOVERY_ROOT_TIMESTAMP): $(INTERNAL_RECOVERY_FILES) \
+		$(INSTALLED_RAMDISK_TARGET) \
+		$(recovery_binary) \
+		$(recovery_initrc) \
+		$(INSTALLED_2NDBOOTLOADER_TARGET) \
+		$(recovery_build_prop) $(recovery_resource_deps) \
+		$(recovery_fstab) \
+		$(RECOVERY_INSTALL_OTA_KEYS)
+	@echo ----- Making recovery filesystem ------
+	mkdir -p $(TARGET_RECOVERY_OUT)
+	mkdir -p $(TARGET_RECOVERY_ROOT_OUT)
+	mkdir -p $(TARGET_RECOVERY_ROOT_OUT)/etc
+	mkdir -p $(TARGET_RECOVERY_ROOT_OUT)/tmp
+	echo Copying baseline ramdisk...
+	cp -R $(TARGET_ROOT_OUT) $(TARGET_RECOVERY_OUT)
+ifneq ($(BOARD_USES_COMBINED_RECOVERY),true)
+	rm $(TARGET_RECOVERY_ROOT_OUT)/init*.rc
+endif
+	echo Modifying ramdisk contents...
+ifeq ($(BOARD_USES_COMBINED_RECOVERY),true)
+	cp -f $(recovery_initrc) $(TARGET_RECOVERY_ROOT_OUT)/
+else
+	cp -f $(recovery_initrc) $(TARGET_RECOVERY_ROOT_OUT)/init.rc
+endif
+	cp -f $(recovery_binary) $(TARGET_RECOVERY_ROOT_OUT)/sbin/
+ifneq ($(BOARD_USES_COMBINED_RECOVERY),true)
+	rm -f $(TARGET_RECOVERY_ROOT_OUT)/init.*.rc
+endif
+	mkdir -p $(TARGET_RECOVERY_ROOT_OUT)/system/bin
+	cp -rf $(recovery_resources_common) $(TARGET_RECOVERY_ROOT_OUT)/
+ifeq ($(BOARD_USES_RECOVERY_CHARGEMODE),true)
+	cp -rf $(recovery_resources_htc) $(TARGET_RECOVERY_ROOT_OUT)/
+endif
+	$(foreach item,$(recovery_resources_private), \
+	  cp -rf $(item) $(TARGET_RECOVERY_ROOT_OUT)/)
+	$(foreach item,$(recovery_fstab), \
+	  cp -f $(item) $(TARGET_RECOVERY_ROOT_OUT)/etc/recovery.fstab)
+	cp $(RECOVERY_INSTALL_OTA_KEYS) $(TARGET_RECOVERY_ROOT_OUT)/res/keys
+ifeq ($(BOARD_USES_COMBINED_RECOVERY),true)
+	cp $(INSTALLED_DEFAULT_PROP_TARGET) $(TARGET_RECOVERY_ROOT_OUT)/default.prop
+	mv $(TARGET_RECOVERY_ROOT_OUT)/etc $(TARGET_RECOVERY_ROOT_OUT)/misc
+else
+	cat $(INSTALLED_DEFAULT_PROP_TARGET) $(recovery_build_prop) \
+	        > $(TARGET_RECOVERY_ROOT_OUT)/default.prop
+endif
+	@echo ----- Made recovery filesystem -------- $(TARGET_RECOVERY_ROOT_OUT)
+	@touch $(TARGET_RECOVERY_ROOT_TIMESTAMP)
+
+$(TARGET_RECOVERY_INITRAMFS): $(TARGET_RECOVERY_ROOT_TIMESTAMP)
+	$(call pretty,"Recovery initramfs: $@")
+	$(hide) $(MKBOOTFS) $(TARGET_RECOVERY_ROOT_OUT) > $(TARGET_RECOVERY_INITRAMFS)
+
+$(TARGET_RECOVERY_COMPRESSED_INITRAMFS): $(TARGET_RECOVERY_INITRAMFS) | $(MINIGZIP)
+	$(call pretty,"Recovery compressed initramfs: $@")
+	$(hide) $(MINIGZIP) < $(TARGET_RECOVERY_INITRAMFS) > $(TARGET_RECOVERY_COMPRESSED_INITRAMFS)
+
+ifeq (,$(filter true, $(TARGET_NO_KERNEL) $(BOARD_USES_INITRAMFS) $(BOARD_USES_CUSTOM_BOOTIMG)))
 
 # -----------------------------------------------------------------
 # the boot image, which is a collection of other images.
@@ -405,6 +509,10 @@ $(INSTALLED_BOOTIMAGE_TARGET): $(MKBOOTIMG) $(INTERNAL_BOOTIMAGE_FILES)
 	$(hide) $(MKBOOTIMG) $(INTERNAL_BOOTIMAGE_ARGS) --output $@
 	$(hide) $(call assert-max-image-size,$@,$(BOARD_BOOTIMAGE_PARTITION_SIZE),raw)
 endif # TARGET_BOOTIMAGE_USE_EXT2
+
+else ifeq ($(BOARD_USES_CUSTOM_BOOTIMG),true)
+
+include $(BOARD_CUSTOM_BOOTIMG_MK)
 
 else	# TARGET_NO_KERNEL
 # HACK: The top-level targets depend on the bootimage.  Not all targets
@@ -646,48 +754,19 @@ utilities: $(INTERNAL_UTILITY_FILES)
 # If neither TARGET_NO_KERNEL nor TARGET_NO_RECOVERY are true
 ifeq (,$(filter true, $(TARGET_NO_KERNEL) $(TARGET_NO_RECOVERY) $(BUILD_TINY_ANDROID)))
 
-ifeq (true,$(BOARD_USES_INITRAMFS))
-INSTALLED_RECOVERYIMAGE_TARGET := $(PRODUCT_OUT)/recovery.cpio
-else
 INSTALLED_RECOVERYIMAGE_TARGET := $(PRODUCT_OUT)/recovery.img
-endif
 
-ifneq ($(TARGET_RECOVERY_INITRC),)
-   recovery_initrc := $(TARGET_RECOVERY_INITRC) # Use target specific init.rc
-else
-ifeq ($(BOARD_USES_RECOVERY_CHARGEMODE),true)
-   recovery_initrc := $(call include-path-for, recovery)/etc/init.htc.rc
-else
-   recovery_initrc := $(call include-path-for, recovery)/etc/init.rc
-endif
-endif
 ifneq ($(TARGET_PREBUILT_RECOVERY_KERNEL),)
   recovery_kernel := $(TARGET_PREBUILT_RECOVERY_KERNEL) # Use prebuilt recovery kernel
 else
   recovery_kernel := $(INSTALLED_KERNEL_TARGET) # same as a non-recovery system
 endif
 recovery_ramdisk := $(PRODUCT_OUT)/ramdisk-recovery.img
-recovery_build_prop := $(INSTALLED_BUILD_PROP_TARGET)
-recovery_binary := $(call intermediates-dir-for,EXECUTABLES,recovery)/recovery
-recovery_resources_common := $(call include-path-for, recovery)/res
-recovery_resources_htc := $(call include-path-for, recovery)/htc/res
-recovery_resources_private := $(strip $(wildcard $(TARGET_DEVICE_DIR)/recovery/res))
-recovery_resource_deps := $(shell find $(recovery_resources_common) \
-  $(recovery_resources_private) -type f)
-recovery_fstab := $(strip $(wildcard $(TARGET_DEVICE_DIR)/recovery.fstab))
-
-ifeq ($(recovery_resources_private),)
-  $(info No private recovery resources for TARGET_DEVICE $(TARGET_DEVICE))
-endif
-
-ifeq ($(recovery_fstab),)
-  $(info No recovery.fstab for TARGET_DEVICE $(TARGET_DEVICE))
-endif
 
 INTERNAL_RECOVERYIMAGE_ARGS := \
 	$(addprefix --second ,$(INSTALLED_2NDBOOTLOADER_TARGET)) \
 	--kernel $(recovery_kernel) \
-	--ramdisk $(recovery_ramdisk)
+	--ramdisk $(TARGET_RECOVERY_COMPRESSED_INITRAMFS)
 
 # Assumes this has already been stripped
 ifdef BOARD_KERNEL_CMDLINE
@@ -703,110 +782,27 @@ endif
 ifneq ($(BOARD_FORCE_RAMDISK_ADDRESS),)
     INTERNAL_RECOVERYIMAGE_ARGS += --ramdiskaddr $(BOARD_FORCE_RAMDISK_ADDRESS)
 endif
-INTERNAL_RECOVERY_FILES := $(filter $(TARGET_RECOVERY_OUT)/%, \
-	$(ALL_PREBUILT) \
-	$(ALL_COPIED_HEADERS) \
-	$(ALL_GENERATED_SOURCES) \
-	$(ALL_DEFAULT_INSTALLED_MODULES))
-
-# Keys authorized to sign OTA packages this build will accept.  The
-# build always uses test-keys for this; release packaging tools will
-# substitute other keys for this one.
-OTA_PUBLIC_KEYS := $(SRC_TARGET_DIR)/product/security/testkey.x509.pem
-
-# Generate a file containing the keys that will be read by the
-# recovery binary.
-RECOVERY_INSTALL_OTA_KEYS := \
-	$(call intermediates-dir-for,PACKAGING,ota_keys)/keys
-DUMPKEY_JAR := $(HOST_OUT_JAVA_LIBRARIES)/dumpkey.jar
-$(RECOVERY_INSTALL_OTA_KEYS): PRIVATE_OTA_PUBLIC_KEYS := $(OTA_PUBLIC_KEYS)
-$(RECOVERY_INSTALL_OTA_KEYS): $(OTA_PUBLIC_KEYS) $(DUMPKEY_JAR)
-	@echo "DumpPublicKey: $@ <= $(PRIVATE_OTA_PUBLIC_KEYS)"
-	@rm -rf $@
-	@mkdir -p $(dir $@)
-	java -jar $(DUMPKEY_JAR) $(PRIVATE_OTA_PUBLIC_KEYS) > $@
-
-TARGET_RECOVERY_ROOT_TIMESTAMP := $(TARGET_RECOVERY_OUT)/root.ts
-
-$(TARGET_RECOVERY_ROOT_TIMESTAMP): $(INTERNAL_RECOVERY_FILES) \
-		$(INSTALLED_RAMDISK_TARGET) \
-		$(INSTALLED_BOOTIMAGE_TARGET) \
-		$(recovery_binary) \
-		$(recovery_initrc) \
-		$(INSTALLED_2NDBOOTLOADER_TARGET) \
-		$(recovery_build_prop) $(recovery_resource_deps) \
-		$(recovery_fstab) \
-		$(RECOVERY_INSTALL_OTA_KEYS)
-	@echo ----- Making recovery filesystem ------
-	mkdir -p $(TARGET_RECOVERY_OUT)
-	mkdir -p $(TARGET_RECOVERY_ROOT_OUT)
-	mkdir -p $(TARGET_RECOVERY_ROOT_OUT)/etc
-	mkdir -p $(TARGET_RECOVERY_ROOT_OUT)/tmp
-	echo Copying baseline ramdisk...
-	cp -R $(TARGET_ROOT_OUT) $(TARGET_RECOVERY_OUT)
-ifneq ($(BOARD_USES_COMBINED_RECOVERY),true)
-	rm $(TARGET_RECOVERY_ROOT_OUT)/init*.rc
-endif
-	echo Modifying ramdisk contents...
-ifeq ($(BOARD_USES_COMBINED_RECOVERY),true)
-	cp -f $(recovery_initrc) $(TARGET_RECOVERY_ROOT_OUT)/
-else
-	cp -f $(recovery_initrc) $(TARGET_RECOVERY_ROOT_OUT)/init.rc
-endif
-	cp -f $(recovery_binary) $(TARGET_RECOVERY_ROOT_OUT)/sbin/
-ifneq ($(BOARD_USES_COMBINED_RECOVERY),true)
-	rm -f $(TARGET_RECOVERY_ROOT_OUT)/init.*.rc
-endif
-	mkdir -p $(TARGET_RECOVERY_ROOT_OUT)/system/bin
-	cp -rf $(recovery_resources_common) $(TARGET_RECOVERY_ROOT_OUT)/
-ifeq ($(BOARD_USES_RECOVERY_CHARGEMODE),true)
-	cp -rf $(recovery_resources_htc) $(TARGET_RECOVERY_ROOT_OUT)/
-endif
-	$(foreach item,$(recovery_resources_private), \
-	  cp -rf $(item) $(TARGET_RECOVERY_ROOT_OUT)/)
-	$(foreach item,$(recovery_fstab), \
-	  cp -f $(item) $(TARGET_RECOVERY_ROOT_OUT)/etc/recovery.fstab)
-	cp $(RECOVERY_INSTALL_OTA_KEYS) $(TARGET_RECOVERY_ROOT_OUT)/res/keys
-ifeq ($(BOARD_USES_COMBINED_RECOVERY),true)
-	cp $(INSTALLED_DEFAULT_PROP_TARGET) $(TARGET_RECOVERY_ROOT_OUT)/default.prop
-	mv $(TARGET_RECOVERY_ROOT_OUT)/etc $(TARGET_RECOVERY_ROOT_OUT)/misc
-else
-	cat $(INSTALLED_DEFAULT_PROP_TARGET) $(recovery_build_prop) \
-	        > $(TARGET_RECOVERY_ROOT_OUT)/default.prop
-endif
-	@echo ----- Made recovery filesystem -------- $(TARGET_RECOVERY_ROOT_OUT)
-	@touch $(TARGET_RECOVERY_ROOT_TIMESTAMP)
 
 ifeq ($(BOARD_USES_MKIMAGE),true)
 #BOARD_USES_MKIMAGE
-INTERNAL_RECOVERYIMAGE_ARGS := -A ARM -O Linux -T RAMDisk -C gzip -n Image -d $(recovery_ramdisk).cpio.gz
+INTERNAL_RECOVERYIMAGE_ARGS := -A ARM -O Linux -T RAMDisk -C gzip -n Image -d $(TARGET_RECOVERY_COMPRESSED_INITRAMFS)
 
-$(INSTALLED_RECOVERYIMAGE_TARGET): $(MKBOOTFS) $(MKIMAGE) $(MINIGZIP) \
-		$(TARGET_RECOVERY_ROOT_TIMESTAMP) \
+$(INSTALLED_RECOVERYIMAGE_TARGET): $(MKIMAGE) \
+		$(TARGET_RECOVERY_COMPRESSED_INITRAMFS) \
 		$(recovery_kernel)
 	@echo ----- Making recovery image ------
-	$(MKBOOTFS) $(TARGET_RECOVERY_ROOT_OUT) | $(MINIGZIP) > $(recovery_ramdisk).cpio.gz
 	$(MKIMAGE) $(INTERNAL_RECOVERYIMAGE_ARGS) $(recovery_ramdisk)
 	@echo ----- Made recovery ramdisk -------- $(recovery_ramdisk)
 	$(hide) rm -f $@
 	zip -qDj $@ $(recovery_ramdisk) $(recovery_kernel)
 	@echo ----- Made recovery image \(zip\) -------- $@
 
-else ifeq ($(BOARD_USES_INITRAMFS),true)
-# BOARD_USES_INITRAMFS
-$(INSTALLED_RECOVERYIMAGE_TARGET): $(MKBOOTFS) $(MKBOOTIMG) \
-		$(TARGET_RECOVERY_ROOT_TIMESTAMP)
-	@echo ----- Making recovery image ------
-	$(MKBOOTFS) $(TARGET_RECOVERY_ROOT_OUT) > $@
-	@echo ----- Made recovery image -------- $@
-	$(hide) $(call assert-max-image-size,$@,$(BOARD_RECOVERYIMAGE_PARTITION_SIZE),raw)
-
 else
-$(INSTALLED_RECOVERYIMAGE_TARGET): $(MKBOOTFS) $(MKBOOTIMG) $(MINIGZIP) \
+$(INSTALLED_RECOVERYIMAGE_TARGET): $(MKBOOTIMG) \
+		$(TARGET_RECOVERY_COMPRESSED_INITRAMFS) \
 		$(TARGET_RECOVERY_ROOT_TIMESTAMP) \
 		$(recovery_kernel)
 	@echo ----- Making recovery image ------
-	$(MKBOOTFS) $(TARGET_RECOVERY_ROOT_OUT) | $(MINIGZIP) > $(recovery_ramdisk)
 	$(MKBOOTIMG) $(INTERNAL_RECOVERYIMAGE_ARGS) --output $@
 	@echo ----- Made recovery image -------- $@
 	$(hide) $(call assert-max-image-size,$@,$(BOARD_RECOVERYIMAGE_PARTITION_SIZE),raw)
