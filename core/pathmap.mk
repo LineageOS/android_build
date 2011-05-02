@@ -86,7 +86,6 @@ FRAMEWORKS_BASE_SUBDIRS := \
 	    sax \
 	    telephony \
 	    wifi \
-            wimax \
 	    vpn \
 	    keystore \
 	    voip \
