@@ -23,6 +23,8 @@
 PRODUCT_LOCALES := en_US \
  ar_EG \
  ar_IL \
+ ur_PK \
+ fa_IR \
  bg_BG \
  ca_ES \
  cs_CZ \
