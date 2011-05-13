@@ -75,6 +75,11 @@ do
 done
 
 mv $DEVICE_DIR/device.mk $DEVICE_DIR/device_$DEVICE.mk
+RECOVERY_FSTAB=$TMPDIR/ramdisk/etc/recovery.fstab
+if [ -f "$RECOVERY_FSTAB" ]
+then
+  cp $RECOVERY_FSTAB $DEVICE_DIR/recovery.fstab
+fi
 
 echo Done!
 echo Use the following command to set up your build environment:
