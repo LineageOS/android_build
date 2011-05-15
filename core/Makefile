@@ -656,6 +656,7 @@ ifneq ($(TARGET_PREBUILT_RECOVERY_KERNEL),)
 else
   recovery_kernel := $(INSTALLED_KERNEL_TARGET) # same as a non-recovery system
 endif
+recovery_uncompressed_ramdisk := $(PRODUCT_OUT)/ramdisk-recovery.cpio
 recovery_ramdisk := $(PRODUCT_OUT)/ramdisk-recovery.img
 recovery_build_prop := $(INSTALLED_BUILD_PROP_TARGET)
 recovery_binary := $(call intermediates-dir-for,EXECUTABLES,recovery)/recovery
@@ -768,11 +769,15 @@ endif
 	@echo ----- Made recovery filesystem -------- $(TARGET_RECOVERY_ROOT_OUT)
 	@touch $(TARGET_RECOVERY_ROOT_TIMESTAMP)
 
-$(recovery_ramdisk): $(MKBOOTFS) \
-    $(MINIGZIP) \
+$(recovery_uncompressed_ramdisk): $(MINIGZIP) \
     $(TARGET_RECOVERY_ROOT_TIMESTAMP)
+	@echo ----- Making uncompressed recovery ramdisk ------
+	$(MKBOOTFS) $(TARGET_RECOVERY_ROOT_OUT) > $@
+
+$(recovery_ramdisk): $(MKBOOTFS) \
+    $(recovery_uncompressed_ramdisk)
 	@echo ----- Making recovery ramdisk ------
-	$(MKBOOTFS) $(TARGET_RECOVERY_ROOT_OUT) | $(MINIGZIP) > $@
+	$(MINIGZIP) < $(recovery_uncompressed_ramdisk) > $@
 
 ifeq ($(BOARD_USES_MKIMAGE),true)
 #BOARD_USES_MKIMAGE
