@@ -330,11 +330,7 @@ INTERNAL_RAMDISK_FILES := $(filter $(TARGET_ROOT_OUT)/%, \
 	$(ALL_GENERATED_SOURCES) \
 	$(ALL_DEFAULT_INSTALLED_MODULES))
 
-ifeq ($(BOARD_USES_INITRAMFS),true)
-BUILT_RAMDISK_TARGET := $(PRODUCT_OUT)/ramdisk.cpio
-else
 BUILT_RAMDISK_TARGET := $(PRODUCT_OUT)/ramdisk.img
-endif
 
 ifeq ($(BOARD_USES_MKIMAGE),true)
 # BOARD_USES_MKIMAGE
@@ -348,14 +344,6 @@ $(INSTALLED_RAMDISK_TARGET):  $(MKIMAGE) $(INTERNAL_RAMDISK_FILES) | $(MINIGZIP)
 	$(MKIMAGE) $(INTERNAL_URAMDISKIMAGE_ARGS) $@
 	$(hide) rm $(BUILT_RAMDISK_TARGET).cpio.gz
 
-else ifeq ($(BOARD_USES_INITRAMFS),true)
-# BOARD_USES_INITRAMFS
-# We just build this directly to the install location.
-INSTALLED_RAMDISK_TARGET := $(BUILT_RAMDISK_TARGET)
-$(INSTALLED_RAMDISK_TARGET): $(MKBOOTFS) $(INTERNAL_RAMDISK_FILES) | $(MINIGZIP)
-	$(call pretty,"Target ram disk: $@")
-	$(hide) $(MKBOOTFS) $(TARGET_ROOT_OUT) > $@
-
 else
 # We just build this directly to the install location.
 INSTALLED_RAMDISK_TARGET := $(BUILT_RAMDISK_TARGET)
@@ -364,7 +352,7 @@ $(INSTALLED_RAMDISK_TARGET): $(MKBOOTFS) $(INTERNAL_RAMDISK_FILES) | $(MINIGZIP)
 	$(hide) $(MKBOOTFS) $(TARGET_ROOT_OUT) | $(MINIGZIP) > $@
 endif
 
-ifeq (,$(filter true, $(TARGET_NO_KERNEL) $(BOARD_USES_INITRAMFS)))
+ifneq ($(strip $(TARGET_NO_KERNEL)),true)
 
 # -----------------------------------------------------------------
 # the boot image, which is a collection of other images.
@@ -652,11 +640,7 @@ utilities: $(INTERNAL_UTILITY_FILES)
 # If neither TARGET_NO_KERNEL nor TARGET_NO_RECOVERY are true
 ifeq (,$(filter true, $(TARGET_NO_KERNEL) $(TARGET_NO_RECOVERY) $(BUILD_TINY_ANDROID)))
 
-ifeq (true,$(BOARD_USES_INITRAMFS))
-INSTALLED_RECOVERYIMAGE_TARGET := $(PRODUCT_OUT)/recovery.cpio
-else
 INSTALLED_RECOVERYIMAGE_TARGET := $(PRODUCT_OUT)/recovery.img
-endif
 
 ifneq ($(TARGET_RECOVERY_INITRC),)
    recovery_initrc := $(TARGET_RECOVERY_INITRC) # Use target specific init.rc
@@ -784,36 +768,30 @@ endif
 	@echo ----- Made recovery filesystem -------- $(TARGET_RECOVERY_ROOT_OUT)
 	@touch $(TARGET_RECOVERY_ROOT_TIMESTAMP)
 
+$(recovery_ramdisk): $(MKBOOTFS) \
+    $(MINIGZIP) \
+    $(TARGET_RECOVERY_ROOT_TIMESTAMP)
+	@echo ----- Making recovery ramdisk ------
+	$(MKBOOTFS) $(TARGET_RECOVERY_ROOT_OUT) | $(MINIGZIP) > $@
+
 ifeq ($(BOARD_USES_MKIMAGE),true)
 #BOARD_USES_MKIMAGE
-INTERNAL_RECOVERYIMAGE_ARGS := -A ARM -O Linux -T RAMDisk -C gzip -n Image -d $(recovery_ramdisk).cpio.gz
+INTERNAL_RECOVERYIMAGE_ARGS := -A ARM -O Linux -T RAMDisk -C gzip -n Image -d $(recovery_ramdisk)
 
-$(INSTALLED_RECOVERYIMAGE_TARGET): $(MKBOOTFS) $(MKIMAGE) $(MINIGZIP) \
-		$(TARGET_RECOVERY_ROOT_TIMESTAMP) \
+$(INSTALLED_RECOVERYIMAGE_TARGET): $(MKIMAGE) $(recovery_ramdisk) \
 		$(recovery_kernel)
 	@echo ----- Making recovery image ------
-	$(MKBOOTFS) $(TARGET_RECOVERY_ROOT_OUT) | $(MINIGZIP) > $(recovery_ramdisk).cpio.gz
-	$(MKIMAGE) $(INTERNAL_RECOVERYIMAGE_ARGS) $(recovery_ramdisk)
-	@echo ----- Made recovery ramdisk -------- $(recovery_ramdisk)
+	$(MKIMAGE) $(INTERNAL_RECOVERYIMAGE_ARGS) $(recovery_ramdisk).img
+	@echo ----- Made recovery mkimage ramdisk -------- $(recovery_ramdisk).img
 	$(hide) rm -f $@
-	zip -qDj $@ $(recovery_ramdisk) $(recovery_kernel)
+	zip -qDj $@ $(recovery_ramdisk).img $(recovery_kernel)
 	@echo ----- Made recovery image \(zip\) -------- $@
 
-else ifeq ($(BOARD_USES_INITRAMFS),true)
-# BOARD_USES_INITRAMFS
-$(INSTALLED_RECOVERYIMAGE_TARGET): $(MKBOOTFS) $(MKBOOTIMG) \
-		$(TARGET_RECOVERY_ROOT_TIMESTAMP)
-	@echo ----- Making recovery image ------
-	$(MKBOOTFS) $(TARGET_RECOVERY_ROOT_OUT) > $@
-	@echo ----- Made recovery image -------- $@
-	$(hide) $(call assert-max-image-size,$@,$(BOARD_RECOVERYIMAGE_PARTITION_SIZE),raw)
-
 else
-$(INSTALLED_RECOVERYIMAGE_TARGET): $(MKBOOTFS) $(MKBOOTIMG) $(MINIGZIP) \
-		$(TARGET_RECOVERY_ROOT_TIMESTAMP) \
+$(INSTALLED_RECOVERYIMAGE_TARGET): $(MKBOOTIMG) \
+		$(recovery_ramdisk) \
 		$(recovery_kernel)
 	@echo ----- Making recovery image ------
-	$(MKBOOTFS) $(TARGET_RECOVERY_ROOT_OUT) | $(MINIGZIP) > $(recovery_ramdisk)
 	$(MKBOOTIMG) $(INTERNAL_RECOVERYIMAGE_ARGS) --output $@
 	@echo ----- Made recovery image -------- $@
 	$(hide) $(call assert-max-image-size,$@,$(BOARD_RECOVERYIMAGE_PARTITION_SIZE),raw)
