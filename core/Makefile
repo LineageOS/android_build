@@ -332,8 +332,8 @@ INTERNAL_RAMDISK_FILES := $(filter $(TARGET_ROOT_OUT)/%, \
 
 BUILT_RAMDISK_TARGET := $(PRODUCT_OUT)/ramdisk.img
 
-ifeq ($(BOARD_USES_MKIMAGE),true)
-# BOARD_USES_MKIMAGE
+ifeq ($(BOARD_USES_UBOOT),true)
+# BOARD_USES_UBOOT
 INTERNAL_URAMDISKIMAGE_ARGS := -A ARM -O Linux -T RAMDisk -C gzip -n Image -d $(BUILT_RAMDISK_TARGET).cpio.gz
 
 # We just build this directly to the install location.
@@ -779,17 +779,18 @@ $(recovery_ramdisk): $(MKBOOTFS) \
 	@echo ----- Making recovery ramdisk ------
 	$(MINIGZIP) < $(recovery_uncompressed_ramdisk) > $@
 
-ifeq ($(BOARD_USES_MKIMAGE),true)
-#BOARD_USES_MKIMAGE
+ifeq ($(BOARD_USES_UBOOT),true)
+#BOARD_USES_UBOOT
 INTERNAL_RECOVERYIMAGE_ARGS := -A ARM -O Linux -T RAMDisk -C gzip -n Image -d $(recovery_ramdisk)
+recovery_uboot_ramdisk := $(recovery_ramdisk:%.img=%.ub)
 
 $(INSTALLED_RECOVERYIMAGE_TARGET): $(MKIMAGE) $(recovery_ramdisk) \
 		$(recovery_kernel)
 	@echo ----- Making recovery image ------
-	$(MKIMAGE) $(INTERNAL_RECOVERYIMAGE_ARGS) $(recovery_ramdisk).img
-	@echo ----- Made recovery mkimage ramdisk -------- $(recovery_ramdisk).img
+	$(MKIMAGE) $(INTERNAL_RECOVERYIMAGE_ARGS) $(recovery_uboot_ramdisk)
+	@echo ----- Made recovery uboot ramdisk -------- $(recovery_uboot_ramdisk)
 	$(hide) rm -f $@
-	zip -qDj $@ $(recovery_ramdisk).img $(recovery_kernel)
+	zip -qDj $@ $(recovery_uboot_ramdisk) $(recovery_kernel)
 	@echo ----- Made recovery image \(zip\) -------- $@
 
 else
