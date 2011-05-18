@@ -31,8 +31,9 @@ ifeq ($(wildcard $(sdk_105_root)),)
 $(warning *****************************************************)
 $(warning * You are building on Mac OSX 10.6.)
 $(warning * Can not find SDK 10.5 at $(sdk_105_root))
+$(warning * Falling back to 10.6 SDK.)
 $(warning *****************************************************)
-$(error Stop.)
+sdk_105_root := /Developer/SDKs/MacOSX10.6.sdk
 endif
 
 HOST_GLOBAL_CFLAGS += -isysroot $(sdk_105_root) -mmacosx-version-min=10.5
