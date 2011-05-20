@@ -3,11 +3,16 @@
 #
 
 ifneq ($(strip $(TARGET_NO_BOOTLOADER)),true)
-  INSTALLED_BOOTLOADER_MODULE := $(PRODUCT_OUT)/bootloader
-  ifeq ($(strip $(TARGET_BOOTLOADER_IS_2ND)),true)
+  ifeq ($(BOARD_USES_UBOOT),true)
+    INSTALLED_BOOTLOADER_TARGET := $(PRODUCT_OUT)/bootloader
     INSTALLED_2NDBOOTLOADER_TARGET := $(PRODUCT_OUT)/2ndbootloader
   else
-    INSTALLED_2NDBOOTLOADER_TARGET :=
+    INSTALLED_BOOTLOADER_MODULE := $(PRODUCT_OUT)/bootloader
+    ifeq ($(strip $(TARGET_BOOTLOADER_IS_2ND)),true)
+      INSTALLED_2NDBOOTLOADER_TARGET := $(PRODUCT_OUT)/2ndbootloader
+    else
+      INSTALLED_2NDBOOTLOADER_TARGET :=
+    endif
   endif
 else
   INSTALLED_BOOTLOADER_MODULE :=
