@@ -55,15 +55,15 @@ Usage:  ota_from_target_files [flags] input_target_files output_ota_package
 
 import sys
 
-if sys.hexversion < 0x02040000:
-  print >> sys.stderr, "Python 2.4 or newer is required."
+if sys.hexversion < 0x02050000:
+  print >> sys.stderr, "Python 2.5 or newer is required."
   sys.exit(1)
 
 import copy
 import errno
 import os
 import re
-import sha
+import hashlib
 import subprocess
 import tempfile
 import time
@@ -330,7 +330,7 @@ def MakeRecoveryPatch(output_zip, recovery_img, boot_img):
   # we check to see if this recovery has already been installed by
   # testing just the first 2k.
   HEADER_SIZE = 2048
-  header_sha1 = sha.sha(recovery_img.data[:HEADER_SIZE]).hexdigest()
+  header_sha1 = hashlib.sha1(recovery_img.data[:HEADER_SIZE]).hexdigest()
   sh = """#!/system/bin/sh
 if ! applypatch -c %(recovery_type)s:%(recovery_device)s:%(header_size)d:%(header_sha1)s; then
   log -t recovery "Installing new recovery image"
@@ -523,7 +523,7 @@ def WriteIncrementalOTAPackage(target_zip, source_zip, output_zip):
       verbatim_targets.append((tf.name, tf.size))
     else:
       common.ZipWriteStr(output_zip, "patch/" + tf.name + ".p", d)
-      patch_list.append((tf.name, tf, sf, tf.size, sha.sha(d).hexdigest()))
+      patch_list.append((tf.name, tf, sf, tf.size, hashlib.sha1(d).hexdigest()))
       largest_source_size = max(largest_source_size, sf.size)
 
   source_fp = GetBuildProp("ro.build.fingerprint", source_zip)
