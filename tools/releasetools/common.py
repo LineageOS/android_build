@@ -20,7 +20,7 @@ import imp
 import os
 import platform
 import re
-import sha
+import hashlib
 import shutil
 import subprocess
 import sys
@@ -659,7 +659,7 @@ class File(object):
     self.name = name
     self.data = data
     self.size = len(data)
-    self.sha1 = sha.sha(data).hexdigest()
+    self.sha1 = hashlib.sha1(data).hexdigest()
 
   def WriteToTemp(self):
     t = tempfile.NamedTemporaryFile()
