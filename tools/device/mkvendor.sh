@@ -3,8 +3,10 @@
 function usage
 {
     echo Usage:
-    echo "  $(basename $0) manufacturer device boot.img"
+    echo "  $(basename $0) manufacturer device [boot.img]"
     echo "  The boot.img argument is the extracted recovery or boot image."
+    echo "  The boot.img argument should not be provided for devices"
+    echo "  that have non standard boot images (ie, Samsung)."
     echo
     echo Example:
     echo "  $(basename $0) ~/Downloads/recovery-passion.img motorola sholes"
@@ -27,19 +29,6 @@ then
     usage
 fi
 
-if [ -z "$BOOTIMAGE" ]
-then
-    usage
-fi
-
-if [ -z "$UNPACKBOOTIMG" ]
-then
-    echo unpackbootimg not found. Is your android build environment set up and have the host tools been built?
-    exit 0
-fi
-
-BOOTIMAGEFILE=$(basename $BOOTIMAGE)
-
 ANDROID_TOP=$(dirname $0)/../../../
 pushd $ANDROID_TOP > /dev/null
 ANDROID_TOP=$(pwd)
@@ -51,22 +40,49 @@ TEMPLATE_DIR=$(pwd)
 popd > /dev/null
 
 DEVICE_DIR=$ANDROID_TOP/device/$MANUFACTURER/$DEVICE
-echo Output will be in $DEVICE_DIR
-mkdir -p $DEVICE_DIR
 
-TMPDIR=/tmp/bootimg
-rm -rf $TMPDIR
-mkdir -p $TMPDIR
-cp $BOOTIMAGE $TMPDIR
-pushd $TMPDIR > /dev/null
-unpackbootimg -i $BOOTIMAGEFILE > /dev/null
-BASE=$(cat $TMPDIR/$BOOTIMAGEFILE-base)
-CMDLINE=$(cat $TMPDIR/$BOOTIMAGEFILE-cmdline)
-PAGESIZE=$(cat $TMPDIR/$BOOTIMAGEFILE-pagesize)
-export SEDCMD="s#__CMDLINE__#$CMDLINE#g"
-echo $SEDCMD > $TMPDIR/sedcommand
-cp $TMPDIR/$BOOTIMAGEFILE-zImage $DEVICE_DIR/kernel
-popd > /dev/null
+if [ ! -z "$BOOTIMAGE" ]
+then
+    if [ -z "$UNPACKBOOTIMG" ]
+    then
+        echo unpackbootimg not found. Is your android build environment set up and have the host tools been built?
+        exit 0
+    fi
+
+    BOOTIMAGEFILE=$(basename $BOOTIMAGE)
+
+    echo Output will be in $DEVICE_DIR
+    mkdir -p $DEVICE_DIR
+
+    TMPDIR=/tmp/bootimg
+    rm -rf $TMPDIR
+    mkdir -p $TMPDIR
+    cp $BOOTIMAGE $TMPDIR
+    pushd $TMPDIR > /dev/null
+    unpackbootimg -i $BOOTIMAGEFILE > /dev/null
+    BASE=$(cat $TMPDIR/$BOOTIMAGEFILE-base)
+    CMDLINE=$(cat $TMPDIR/$BOOTIMAGEFILE-cmdline)
+    PAGESIZE=$(cat $TMPDIR/$BOOTIMAGEFILE-pagesize)
+    export SEDCMD="s#__CMDLINE__#$CMDLINE#g"
+    echo $SEDCMD > $TMPDIR/sedcommand
+    cp $TMPDIR/$BOOTIMAGEFILE-zImage $DEVICE_DIR/kernel
+    popd > /dev/null
+
+    RECOVERY_FSTAB=$TMPDIR/ramdisk/etc/recovery.fstab
+    if [ -f "$RECOVERY_FSTAB" ]
+    then
+      cp $RECOVERY_FSTAB $DEVICE_DIR/recovery.fstab
+    fi
+
+else
+    mkdir -p $DEVICE_DIR
+    touch $DEVICE_DIR/kernel
+    BASE=10000000
+    CMDLINE=no_console_suspend
+    PAGESIZE=00000800
+    export SEDCMD="s#__CMDLINE__#$CMDLINE#g"
+    echo $SEDCMD > $TMPDIR/sedcommand
+fi
 
 for file in $(find $TEMPLATE_DIR -name '*.template')
 do
@@ -75,11 +91,7 @@ do
 done
 
 mv $DEVICE_DIR/device.mk $DEVICE_DIR/device_$DEVICE.mk
-RECOVERY_FSTAB=$TMPDIR/ramdisk/etc/recovery.fstab
-if [ -f "$RECOVERY_FSTAB" ]
-then
-  cp $RECOVERY_FSTAB $DEVICE_DIR/recovery.fstab
-fi
+
 
 echo Done!
 echo Use the following command to set up your build environment:
