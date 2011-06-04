@@ -9,7 +9,7 @@ function usage
     echo "  that have non standard boot images (ie, Samsung)."
     echo
     echo Example:
-    echo "  $(basename $0) ~/Downloads/recovery-passion.img motorola sholes"
+    echo "  $(basename $0) motorola sholes ~/Downloads/recovery-sholes.img"
     exit 0
 }
 
