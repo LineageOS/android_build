@@ -132,6 +132,9 @@ GRANDFATHERED_USER_MODULES += \
 	gzip \
 	hciattach \
 	hierarchyviewer \
+	hierarchyviewer1 \
+	hierarchyviewer2 \
+	hierarchyviewerlib \
 	hist_trace \
 	hosttestlib \
 	icudata \
@@ -378,6 +381,7 @@ GRANDFATHERED_USER_MODULES += \
 	mkyaffs2image \
 	monkey \
 	monkeyrunner \
+	MonkeyRunnerTest \
 	mtpd \
 	ndc \
 	netcfg \
