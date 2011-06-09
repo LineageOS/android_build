@@ -11,6 +11,8 @@ ARCH_ARM_HAVE_ARMV7A            := true
 ARCH_ARM_HAVE_VFP               := true
 ARCH_ARM_HAVE_VFP_D32           := true
 ARCH_ARM_HAVE_NEON              := true
+ARCH_ARM_NEON_SUPPORTS_UNALIGNED_ACCESS := true
+ARCH_ARM_MEMCPY_ALIGNMENT_DIVIDER := 16
 
 # Note: Hard coding the 'tune' value here is probably not ideal,
 # and a better solution should be found in the future.
