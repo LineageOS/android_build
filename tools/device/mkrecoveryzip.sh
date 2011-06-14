@@ -1,22 +1,22 @@
 #!/bin/bash
 
-if [ -z "$OUT" ]
+OUT=$1
+SIGNAPK=$2
+
+if [ -z "$OUT" -o -z "$SIGNAPK" ]
 then
     echo "Android build environment not detected."
-    return
+    exit 1
 fi
+
+ANDROID_ROOT=$(pwd)
+OUT=$ANDROID_ROOT/$OUT
+SIGNAPK=$ANDROID_ROOT/$SIGNAPK
 
 pushd . > /dev/null 2> /dev/null
-croot
-if [ ! -f $OUT/system/bin/updater ]
-then
-    UPDATER=$(echo $OUT | cut -c $((pwd ; echo -n /) | wc -c)-100)
-    UPDATER=$UPDATER/system/bin/updater
-    make -j4 $UPDATER
-fi
-ANDROID_ROOT=$(pwd)
 
 UTILITIES_DIR=$OUT/utilities
+mkdir -p $UTILITIES_DIR
 RECOVERY_DIR=$UTILITIES_DIR/recovery
 rm -rf $RECOVERY_DIR
 mkdir -p $RECOVERY_DIR
@@ -89,8 +89,9 @@ echo 'set_perm_recursive(0, 2000, 0755, 0755, "/sbin");' >> $UPDATER_SCRIPT
 echo 'run_program("/sbin/busybox", "sh", "-c", "/sbin/killrecovery.sh");' >> $UPDATER_SCRIPT
 rm -f $UTILITIES_DIR/unsigned.zip
 rm -f $UTILITIES_DIR/update.zip
+echo zip -ry $UTILITIES_DIR/unsigned.zip . -x $SYMLINKS '*\[*' '*\[\[*'
 zip -ry $UTILITIES_DIR/unsigned.zip . -x $SYMLINKS '*\[*' '*\[\[*'
-java -jar $ANDROID_ROOT/out/host/darwin-x86/framework/signapk.jar -w $ANDROID_ROOT/build/target/product/security/testkey.x509.pem $ANDROID_ROOT/build/target/product/security/testkey.pk8 $UTILITIES_DIR/unsigned.zip $UTILITIES_DIR/update.zip
+java -jar $SIGNAPK -w $ANDROID_ROOT/build/target/product/security/testkey.x509.pem $ANDROID_ROOT/build/target/product/security/testkey.pk8 $UTILITIES_DIR/unsigned.zip $UTILITIES_DIR/update.zip
 
 echo Recovery FakeFlash is now available at $OUT/utilities/update.zip
 popd > /dev/null 2> /dev/null

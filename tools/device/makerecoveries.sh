@@ -44,7 +44,7 @@ do
     fi
     DEVICE_NAME=$(echo $TARGET_PRODUCT | sed s/koush_// | sed s/aosp_// | sed s/htc_// | sed s/_us// | sed s/cyanogen_// | sed s/generic_// | sed s/full_//)
     PRODUCT_NAME=$(basename $OUT)
-    make -j16 recoveryimage out/target/product/$PRODUCT_NAME/system/bin/updater
+    make -j16 recoveryzip
     RESULT=$?
     if [ $RESULT != "0" ]
     then
@@ -52,32 +52,7 @@ do
         break
     fi
     mcpguard $OUT/recovery.img recoveries/recovery-clockwork-$VERSION-$DEVICE_NAME.img
-
-    . build/tools/device/mkrecoveryzip.sh $VERSION
     mcpguard $OUT/utilities/update.zip recoveries/recovery-clockwork-$VERSION-$DEVICE_NAME.zip
-
-    ALL_DEVICES=$DEVICE_NAME
-
-    if [ $DEVICE_NAME == "sholes" ]
-    then
-        mcpguard $OUT/utilities/update.zip recoveries/recovery-clockwork-$VERSION-milestone.zip
-        ALL_DEVICES=$ALL_DEVICES' milestone'
-    fi
-
-    if [ $DEVICE_NAME == "tab" ]
-    then
-        mcpguard $OUT/utilities/update.zip recoveries/recovery-clockwork-$VERSION-verizon_tab.zip
-        mcpguard $OUT/utilities/update.zip recoveries/recovery-clockwork-$VERSION-tmobile_tab.zip
-        mcpguard $OUT/utilities/update.zip recoveries/recovery-clockwork-$VERSION-att_tab.zip
-        ALL_DEVICES=$ALL_DEVICES' tmobile_tab att_tab'
-    fi
-    
-    if [ $DEVICE_NAME == "galaxys" ]
-    then
-        mcpguard $OUT/utilities/update.zip recoveries/recovery-clockwork-$VERSION-vibrant.zip
-        mcpguard $OUT/utilities/update.zip recoveries/recovery-clockwork-$VERSION-captivate.zip
-        ALL_DEVICES=$ALL_DEVICES' vibrant captivate'
-    fi
     
 	if [ -f "ROMManagerManifest/devices.rb" ]
 	then
