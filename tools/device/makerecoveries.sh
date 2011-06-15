@@ -54,15 +54,12 @@ do
     mcpguard $OUT/recovery.img recoveries/recovery-clockwork-$VERSION-$DEVICE_NAME.img
     mcpguard $OUT/utilities/update.zip recoveries/recovery-clockwork-$VERSION-$DEVICE_NAME.zip
     
-	if [ -f "ROMManagerManifest/devices.rb" ]
-	then
-		for device in $ALL_DEVICES
-		do
-			pushd ROMManagerManifest
-			ruby devices.rb $device $VERSION
-			popd
-		done
-	fi
+    if [ -f "ROMManagerManifest/devices.rb" ]
+    then
+        pushd ROMManagerManifest
+        ruby devices.rb $DEVICE_NAME $VERSION
+        popd
+    fi
 done
 
 for published_recovery in $PUBLISHED_RECOVERIES
