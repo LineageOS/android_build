@@ -374,6 +374,11 @@ $(info Building the SDK under darwin-ppc is actually obsolete and unsupported.)
 $(error stop)
 endif
 
+ifeq ($(HOST_OS),darwin)
+$(info DEXPREOPT is broken on darwin.)
+WITH_DEXPREOPT := false
+endif
+
 ifeq ($(HOST_OS),windows)
 SDK_ONLY := true
 endif
