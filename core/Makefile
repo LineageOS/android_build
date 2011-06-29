@@ -523,8 +523,13 @@ target_notice_file_html := $(TARGET_OUT_INTERMEDIATES)/NOTICE.html
 target_notice_file_html_gz := $(TARGET_OUT_INTERMEDIATES)/NOTICE.html.gz
 tools_notice_file_txt := $(HOST_OUT_INTERMEDIATES)/NOTICE.txt
 tools_notice_file_html := $(HOST_OUT_INTERMEDIATES)/NOTICE.html
+target_notice_file_cm_txt := $(TARGET_OUT_INTERMEDIATES)/NOTICE-CM.txt
+target_notice_file_cm_html := $(TARGET_OUT_INTERMEDIATES)/NOTICE-CM.html
+target_notice_file_cm_html_gz := $(TARGET_OUT_INTERMEDIATES)/NOTICE-CM.html.gz
 
 kernel_notice_file := $(TARGET_OUT_NOTICE_FILES)/src/kernel.txt
+
+device_notice_file := $(TARGET_OUT_NOTICE_FILES)/CM/src/device.txt
 
 $(eval $(call combine-notice-files, \
 			$(target_notice_file_txt), \
@@ -540,6 +545,13 @@ $(eval $(call combine-notice-files, \
 			$(HOST_OUT_NOTICE_FILES), \
 			$(ALL_DEFAULT_INSTALLED_MODULES)))
 
+$(eval $(call combine-notice-files, \
+			$(target_notice_file_cm_txt), \
+			$(target_notice_file_cm_html), \
+			"CyanogenMod Notices for files contained in the filesystem images in this directory:", \
+			$(TARGET_OUT_NOTICE_FILES)/CM, \
+			$(ALL_DEFAULT_INSTALLED_MODULES) $(device_notice_file)))
+
 # Install the html file at /system/etc/NOTICE.html.gz.
 # This is not ideal, but this is very late in the game, after a lot of
 # the module processing has already been done -- in fact, we used the
@@ -551,9 +563,16 @@ installed_notice_html_gz := $(TARGET_OUT)/etc/NOTICE.html.gz
 $(installed_notice_html_gz): $(target_notice_file_html_gz) | $(ACP)
 	$(copy-file-to-target)
 
+# Install the CM html file at /system/etc/NOTICE.html.gz.
+$(target_notice_file_cm_html_gz): $(target_notice_file_cm_html) | $(MINIGZIP)
+	$(hide) $(MINIGZIP) -9 < $< > $@
+installed_notice_html_cm_gz := $(TARGET_OUT)/etc/CM-NOTICE.html.gz
+$(installed_notice_html_cm_gz): $(target_notice_file_cm_html_gz) | $(ACP)
+	$(copy-file-to-target)
+
 # if we've been run my mm, mmm, etc, don't reinstall this every time
 ifeq ($(ONE_SHOT_MAKEFILE),)
-ALL_DEFAULT_INSTALLED_MODULES += $(installed_notice_html_gz)
+ALL_DEFAULT_INSTALLED_MODULES += $(installed_notice_html_gz) $(installed_notice_html_cm_gz)
 endif
 
 # The kernel isn't really a module, so to get its module file in there, we
@@ -566,6 +585,13 @@ $(kernel_notice_file): \
 	$(hide) mkdir -p $(dir $@)
 	$(hide) $(ACP) $< $@
 
+# The device isn't a module, either
+$(device_notice_file): \
+	    $(strip $(wildcard $(TARGET_DEVICE_DIR)/NOTICE.cm)) \
+	    | $(ACP)
+	@echo Copying device notice: $@
+	$(hide) mkdir -p $(dir $@)
+	$(hide) $(ACP) $< $@
 
 # -----------------------------------------------------------------
 # Build a keystore with the authorized keys in it, used to verify the
@@ -1480,6 +1506,7 @@ sdk_atree_files := \
 deps := \
 	$(target_notice_file_txt) \
 	$(tools_notice_file_txt) \
+	$(tools_notice_file_cm_txt) \
 	$(OUT_DOCS)/offline-sdk-timestamp \
 	$(SYMBOLS_ZIP) \
 	$(INSTALLED_SYSTEMIMAGE) \
