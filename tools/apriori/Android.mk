@@ -29,7 +29,9 @@ LOCAL_CFLAGS += -DFSCANF_IS_BROKEN
 LOCAL_LDLIBS += -lintl
 endif
 
-
+ifeq ($(TARGET_USES_2G_VM_SPLIT),true)
+LOCAL_CFLAGS += -DVM_SPLIT_2G
+endif
 
 LOCAL_SRC_FILES := \
 	apriori.c \
