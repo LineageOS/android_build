@@ -589,9 +589,11 @@ $(kernel_notice_file): \
 $(device_notice_file): \
 	    $(strip $(wildcard $(TARGET_DEVICE_DIR)/NOTICE.cm)) \
 	    | $(ACP)
-	@echo Copying device notice: $@
-	$(hide) mkdir -p $(dir $@)
-	$(hide) $(ACP) $< $@
+	$(hide) if [ -f "$(TARGET_DEVICE_DIR)/NOTICE.cm" ]; then \
+	    echo Copying device notice: $@; \
+	    mkdir -p $(dir $@); \
+	    $(ACP) $< $@; \
+	fi
 
 # -----------------------------------------------------------------
 # Build a keystore with the authorized keys in it, used to verify the
