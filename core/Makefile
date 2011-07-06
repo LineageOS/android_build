@@ -354,6 +354,33 @@ endif
 
 ifneq ($(strip $(TARGET_NO_KERNEL)),true)
 
+ifeq ($(BOARD_USES_UBOOT_MULTIIMAGE),true)
+
+# We just build this directly to the install location.
+INSTALLED_BOOTIMAGE_TARGET := $(PRODUCT_OUT)/boot.img
+
+INTERNAL_URAMDISKIMAGE_ARGS := -A ARM -O Linux -T multi -C none -n Image
+
+BOARD_UBOOT_ENTRY := $(strip $(BOARD_UBOOT_ENTRY))
+ifdef BOARD_UBOOT_ENTRY
+  INTERNAL_URAMDISKIMAGE_ARGS += -e $(BOARD_UBOOT_ENTRY)
+endif
+
+BOARD_UBOOT_LOAD := $(strip $(BOARD_UBOOT_LOAD))
+ifdef BOARD_UBOOT_LOAD
+  INTERNAL_URAMDISKIMAGE_ARGS += -a $(BOARD_UBOOT_LOAD)
+endif
+
+UBOOT_DATA_ARGS = $(shell echo $(INSTALLED_KERNEL_TARGET):$(INSTALLED_RAMDISK_TARGET)|sed -e 's/[[:space:]]//g')
+INTERNAL_URAMDISKIMAGE_ARGS += -d $(UBOOT_DATA_ARGS)
+
+$(INSTALLED_BOOTIMAGE_TARGET):  $(MKIMAGE) $(INTERNAL_RAMDISK_FILES) | $(MINIGZIP) 
+	$(call pretty,"Target boot image: $@")
+	$(MKIMAGE) $(INTERNAL_URAMDISKIMAGE_ARGS) $@
+#	$(hide) $(call assert-max-image-size,$@,$(BOARD_BOOTIMAGE_PARTITION_SIZE),raw)
+
+else ## Standard ANDROID bootimg
+
 # -----------------------------------------------------------------
 # the boot image, which is a collection of other images.
 INTERNAL_BOOTIMAGE_ARGS := \
@@ -399,6 +426,8 @@ $(INSTALLED_BOOTIMAGE_TARGET): $(MKBOOTIMG) $(INTERNAL_BOOTIMAGE_FILES)
 	$(hide) $(MKBOOTIMG) $(INTERNAL_BOOTIMAGE_ARGS) --output $@
 	$(hide) $(call assert-max-image-size,$@,$(BOARD_BOOTIMAGE_PARTITION_SIZE),raw)
 endif # TARGET_BOOTIMAGE_USE_EXT2
+
+endif # standard ANDROID bootimg (not uboot multiimage)
 
 else	# TARGET_NO_KERNEL
 # HACK: The top-level targets depend on the bootimage.  Not all targets
@@ -820,6 +849,33 @@ $(INSTALLED_RECOVERYIMAGE_TARGET): $(MKIMAGE) $(recovery_ramdisk) \
 	$(hide) rm -f $@
 	zip -qDj $@ $(recovery_uboot_ramdisk) $(recovery_kernel)
 	@echo ----- Made recovery image \(zip\) -------- $@
+
+
+else ifeq ($(BOARD_USES_UBOOT_MULTIIMAGE),true)
+
+INTERNAL_RECOVERYIMAGE_ARGS := -A ARM -O Linux -T multi -C none -n Image
+
+BOARD_UBOOT_ENTRY := $(strip $(BOARD_UBOOT_ENTRY))
+ifdef BOARD_UBOOT_ENTRY
+  INTERNAL_RECOVERYIMAGE_ARGS += -e $(BOARD_UBOOT_ENTRY)
+endif
+
+BOARD_UBOOT_LOAD := $(strip $(BOARD_UBOOT_LOAD))
+ifdef BOARD_UBOOT_LOAD
+  INTERNAL_RECOVERYIMAGE_ARGS += -a $(BOARD_UBOOT_LOAD)
+endif
+
+UBOOT_DATA_ARGS = $(shell echo $(recovery_kernel):$(recovery_ramdisk)|sed -e 's/[[:space:]]//g')
+INTERNAL_RECOVERYIMAGE_ARGS += -d $(UBOOT_DATA_ARGS)
+
+$(INSTALLED_RECOVERYIMAGE_TARGET): $(MKIMAGE) \
+		$(recovery_ramdisk) \
+		$(recovery_kernel)
+	@echo ----- Making recovery uboot image ------
+	$(MKIMAGE) $(INTERNAL_RECOVERYIMAGE_ARGS) $@
+	@echo ----- Made recovery uboot image -------- $@
+	#$(hide) $(call assert-max-image-size,$@,$(BOARD_RECOVERYIMAGE_PARTITION_SIZE),raw)
+
 
 else ifndef BOARD_CUSTOM_BOOTIMG_MK
 $(INSTALLED_RECOVERYIMAGE_TARGET): $(MKBOOTIMG) \
