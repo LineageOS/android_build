@@ -1350,6 +1350,10 @@ ifeq ($(TARGET_USES_LEOUPDATE), true)
 	# should also use TARGET_CUSTOM_RELEASETOOL
 	./vendor/cyanogen/tools/leoupdate
 endif
+ifeq ($(TARGET_USES_U8800UPDATE), true)
+	# USE SPECIAL UPDATE PACKAGE FOR U8800
+	./vendor/cyanogen/tools/u8800update
+endif
 	$(hide) \
 	WANT_SQUASHFS=$(WANT_SQUASHFS) \
 	./vendor/cyanogen/tools/squisher
