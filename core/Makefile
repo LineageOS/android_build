@@ -1138,15 +1138,15 @@ endif
 
 ifeq ($(BOARD_USES_UBOOT_MULTIIMAGE),true)
 
-  INTERNAL_URAMDISKIMAGE_ARGS := -A ARM -O Linux -T multi -C none -n Image
+  ZIP_SAVE_UBOOTIMG_ARGS := -A ARM -O Linux -T multi -C none -n Image
 
   BOARD_UBOOT_ENTRY := $(strip $(BOARD_UBOOT_ENTRY))
   ifdef BOARD_UBOOT_ENTRY
-    INTERNAL_URAMDISKIMAGE_ARGS += -e $(BOARD_UBOOT_ENTRY)
+    ZIP_SAVE_UBOOTIMG_ARGS += -e $(BOARD_UBOOT_ENTRY)
   endif
   BOARD_UBOOT_LOAD := $(strip $(BOARD_UBOOT_LOAD))
   ifdef BOARD_UBOOT_LOAD
-    INTERNAL_URAMDISKIMAGE_ARGS += -a $(BOARD_UBOOT_LOAD)
+    ZIP_SAVE_UBOOTIMG_ARGS += -a $(BOARD_UBOOT_LOAD)
   endif
 
 endif
@@ -1217,8 +1217,8 @@ endif
 ifdef BOARD_KERNEL_PAGESIZE
 	$(hide) echo "$(BOARD_KERNEL_PAGESIZE)" > $(zip_root)/BOOT/pagesize
 endif
-ifdef INTERNAL_URAMDISKIMAGE_ARGS
-	$(hide) echo "$(INTERNAL_URAMDISKIMAGE_ARGS)" > $(zip_root)/BOOT/ubootargs
+ifdef ZIP_SAVE_UBOOTIMG_ARGS
+	$(hide) echo "$(ZIP_SAVE_UBOOTIMG_ARGS)" > $(zip_root)/BOOT/ubootargs
 endif
 
 	$(hide) $(foreach t,$(INSTALLED_RADIOIMAGE_TARGET),\
