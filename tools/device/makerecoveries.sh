@@ -30,7 +30,7 @@ function mcpguard () {
     fi
 }
 
-VERSION=$(cat bootable/recovery/Android.mk | grep RECOVERY_VERSION | grep ClockworkMod | sed s/'RECOVERY_VERSION := ClockworkMod Recovery v'//g)
+VERSION=$(cat bootable/recovery/Android.mk | grep RECOVERY_VERSION | grep RECOVERY_NAME | awk '{ print $4 }' | sed s/v//g)
 echo Recovery Version: $VERSION
 
 for lunchoption in $PRODUCTS
