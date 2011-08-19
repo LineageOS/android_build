@@ -760,6 +760,58 @@ function tapas()
     destroy_build_var_cache
 }
 
+function eat()
+{
+    if [ "$OUT" ] ; then
+        MODVERSION=`sed -n -e'/ro\.cm\.version/s/.*=//p' $OUT/system/build.prop`
+        ZIPFILE=cm-$MODVERSION.zip
+        ZIPPATH=$OUT/$ZIPFILE
+        if [ ! -f $ZIPPATH ] ; then
+            echo "Nothing to eat"
+            return 1
+        fi
+        adb start-server # Prevent unexpected starting server message from adb get-state in the next line
+        if [ $(adb get-state) != device -a $(adb shell busybox test -e /sbin/recovery 2> /dev/null; echo $?) != 0 ] ; then
+            echo "No device is online. Waiting for one..."
+            echo "Please connect USB and/or enable USB debugging"
+            until [ $(adb get-state) = device -o $(adb shell busybox test -e /sbin/recovery 2> /dev/null; echo $?) = 0 ];do
+                sleep 1
+            done
+            echo "Device Found.."
+        fi
+        # if adbd isn't root we can't write to /cache/recovery/
+        adb root
+        sleep 1
+        adb wait-for-device
+        SZ=`stat -c %s $ZIPPATH`
+        CACHESIZE=`adb shell busybox df -PB1 /cache | grep /cache | tr -s ' ' | cut -d ' ' -f 4`
+        if [ $CACHESIZE -gt $SZ ];
+        then
+            PUSHDIR=/cache/
+            DIR=cache
+        else
+            PUSHDIR=/storage/sdcard0/
+             # Optional path for sdcard0 in recovery
+             [ -z "$1" ] && DIR=sdcard/0 || DIR=$1
+        fi
+        echo "Pushing $ZIPFILE to $PUSHDIR"
+        if adb push $ZIPPATH $PUSHDIR ; then
+            cat << EOF > /tmp/command
+--update_package=/$DIR/$ZIPFILE
+EOF
+            if adb push /tmp/command /cache/recovery/ ; then
+                echo "Rebooting into recovery for installation"
+                adb reboot recovery
+            fi
+            rm /tmp/command
+        fi
+    else
+        echo "Nothing to eat"
+        return 1
+    fi
+    return $?
+}
+
 function gettop
 {
     local TOPFILE=build/core/envsetup.mk
