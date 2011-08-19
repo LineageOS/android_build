@@ -625,6 +625,28 @@ function tapas()
     printconfig
 }
 
+function eat()
+{
+    if [ "$OUT" ] ; then
+        MODVERSION=`sed -n -e'/ro\.modversion/s/^.*CyanogenMod-//p' $OUT/system/build.prop`
+        ZIPFILE=$OUT/update-cm-$MODVERSION-signed.zip
+        echo "Pushing update-cm-$MODVERSION-signed.zip to device"
+        adb push $ZIPFILE /mnt/sdcard/
+        cat << EOF > /tmp/extendedcommand
+ui_print("Nom nom nom nom...");
+install_zip("/sdcard/update-cm-$MODVERSION-signed.zip");
+EOF
+        adb push /tmp/extendedcommand /cache/recovery/
+        rm /tmp/extendedcommand
+        echo "Rebooting into recovery for installation"
+        adb reboot recovery
+    else
+        echo "Nothing to eat"
+        return 1
+    fi
+    return $?
+}
+
 function gettop
 {
     local TOPFILE=build/core/envsetup.mk
