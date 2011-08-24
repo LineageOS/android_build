@@ -629,20 +629,27 @@ function eat()
 {
     if [ "$OUT" ] ; then
         MODVERSION=`sed -n -e'/ro\.modversion/s/^.*CyanogenMod-//p' $OUT/system/build.prop`
-        ZIPFILE=$OUT/update-cm-$MODVERSION-signed.zip
+        ZIPFILE=update-cm-$MODVERSION-signed.zip
+        ZIPPATH=$OUT/$ZIPFILE
+        if [ ! -f $ZIPPATH ] ; then
+            echo "Nothing to eat"
+            return 1
+        fi
         if [ $(adb get-state) != device ] ; then
             echo "No device is online. Waiting for one..."
             adb wait-for-device
         fi
-        echo "Pushing update-cm-$MODVERSION-signed.zip to device"
-        if adb push $ZIPFILE /mnt/sdcard/ ; then
+        echo "Pushing $ZIPFILE to device"
+        if adb push $ZIPPATH /mnt/sdcard/ ; then
             cat << EOF > /tmp/extendedcommand
 ui_print("Nom nom nom nom...");
-install_zip("/sdcard/update-cm-$MODVERSION-signed.zip");
+install_zip("/sdcard/$ZIPFILE");
 EOF
             if adb push /tmp/extendedcommand /cache/recovery/ ; then
                 echo "Rebooting into recovery for installation"
                 adb reboot recovery
+                # alternative way :
+                # adb shell "sync && reboot recovery && exit"
             fi
             rm /tmp/extendedcommand
         fi
