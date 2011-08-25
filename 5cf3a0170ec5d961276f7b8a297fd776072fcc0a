@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAH3///mI\u003d",
+        "filename": "envsetup.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 649,
+      "author": {
+        "id": 280
+      },
+      "writtenOn": "2011-08-25T01:26:45Z",
+      "side": 1,
+      "message": "sync \u0026\u0026 reboot recovery \u0026\u0026 exit",
+      "revId": "5cf3a0170ec5d961276f7b8a297fd776072fcc0a",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    }
+  ]
+}
