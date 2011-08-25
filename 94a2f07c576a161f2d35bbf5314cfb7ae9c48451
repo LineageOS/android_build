@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAH3///kY\u003d",
+        "filename": "envsetup.sh",
+        "patchSetId": 3
+      },
+      "lineNbr": 641,
+      "author": {
+        "id": 10
+      },
+      "writtenOn": "2011-08-25T05:27:52Z",
+      "side": 1,
+      "message": "My path is huge, and this variable has the full path.",
+      "revId": "94a2f07c576a161f2d35bbf5314cfb7ae9c48451",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAH3///kU\u003d",
+        "filename": "envsetup.sh",
+        "patchSetId": 3
+      },
+      "lineNbr": 649,
+      "author": {
+        "id": 10
+      },
+      "writtenOn": "2011-08-25T05:27:52Z",
+      "side": 1,
+      "message": "This is almost exactly what \"adb reboot recovery\" does, except \"adb reboot\" actually waits for userspace to shutdown cleanly.",
+      "revId": "94a2f07c576a161f2d35bbf5314cfb7ae9c48451",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    }
+  ]
+}
