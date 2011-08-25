@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAH3///i0\u003d",
+        "filename": "envsetup.sh",
+        "patchSetId": 4
+      },
+      "lineNbr": 649,
+      "author": {
+        "id": 280
+      },
+      "writtenOn": "2011-08-25T13:04:52Z",
+      "side": 1,
+      "message": "you can do a if/else here checking if $TARGET_PRODUCT or $(basename $OUT) etc needs to reboot via adb shell",
+      "revId": "b87fe0ee84bb6524f89c46aadaa6e167e6678df7",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    }
+  ]
+}
