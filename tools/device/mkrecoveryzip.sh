@@ -1,5 +1,10 @@
 #!/bin/bash
 
+# Build 2 sets of zip's.  One that uses the update.img file and one that attempt
+# to in-place update the existing update partition.  "so that devices that are
+# unable to flash the recovery partition can still run it by replacing the stock
+# partition during runtime."
+
 OUT=$1
 SIGNAPK=$2
 
@@ -21,6 +26,34 @@ RECOVERY_DIR=$UTILITIES_DIR/recovery
 rm -rf $RECOVERY_DIR
 mkdir -p $RECOVERY_DIR
 cd $RECOVERY_DIR
+
+#build Recovery flash update package. ...
+cp $OUT/recovery.img .
+SCRIPT_DIR=META-INF/com/google/android
+mkdir -p $SCRIPT_DIR
+cp $OUT/system/bin/updater $SCRIPT_DIR/update-binary
+
+UPDATER_SCRIPT=$SCRIPT_DIR/updater-script
+rm -f $UPDATER_SCRIPT
+touch $UPDATER_SCRIPT
+
+echo 'ui_print("Replacing stock recovery with ClockworkMod recovery...");' >> $UPDATER_SCRIPT
+echo 'assert(package_extract_file("recovery.img", "/tmp/recovery.img"), write_raw_image("/tmp/recovery.img", "recovery"), delete("/tmp/recovery.img"));' >> $UPDATER_SCRIPT
+
+rm -f $OUT/unsigned.zip
+rm -f $OUT/update.zip
+echo zip -ry $OUT/unsigned.zip META-INF recovery.img
+zip -ry $OUT/unsigned.zip META-INF recovery.img
+java -jar $SIGNAPK -w $ANDROID_ROOT/build/target/product/security/testkey.x509.pem $ANDROID_ROOT/build/target/product/security/testkey.pk8 $OUT/unsigned.zip $OUT/update.zip
+
+echo Recovery is now available at $OUT/update.zip
+# clean up for the fake update build.
+rm -rf META-INF recovery.img
+
+#
+#build Recovery FakeFlash update package...
+#
+
 cp -R $OUT/recovery/root/etc etc
 cp -R $OUT/recovery/root/sbin sbin
 cp -R $OUT/recovery/root/res res
@@ -79,7 +112,7 @@ do
         echo 'set_perm(0, 0, 0755, "'$(echo $file | sed s!\\./!/!g)'");' >> $UPDATER_SCRIPT
     fi
 done
-    
+
 for file in $SYMLINKS
 do
     echo 'symlink("'$(readlink $file)'", "'$(echo $file | sed s!\\./!/!g)'");' >> $UPDATER_SCRIPT
