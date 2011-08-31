@@ -642,7 +642,7 @@ function eat()
         echo "Pushing $ZIPFILE to device"
         if adb push $ZIPPATH /mnt/sdcard/ ; then
             cat << EOF > /tmp/command
---update_package=SDCARD:/$ZIPFILE
+--update_package=/sdcard/$ZIPFILE
 EOF
             if adb push /tmp/command /cache/recovery/ ; then
                 echo "Rebooting into recovery for installation"
