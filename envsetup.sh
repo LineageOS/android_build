@@ -636,15 +636,14 @@ function eat()
         fi
         echo "Pushing update-cm-$MODVERSION-signed.zip to device"
         if adb push $ZIPFILE /mnt/sdcard/ ; then
-            cat << EOF > /tmp/extendedcommand
-ui_print("Nom nom nom nom...");
-install_zip("/sdcard/update-cm-$MODVERSION-signed.zip");
+            cat << EOF > /tmp/command
+--update_package="SDCARD:/update-cm-$MODVERSION-signed.zip"
 EOF
-            if adb push /tmp/extendedcommand /cache/recovery/ ; then
+            if adb push /tmp/command /cache/recovery/ ; then
                 echo "Rebooting into recovery for installation"
                 adb reboot recovery
             fi
-            rm /tmp/extendedcommand
+            rm /tmp/command
         fi
     else
         echo "Nothing to eat"
