@@ -1265,6 +1265,25 @@ function reposync() {
     esac
 }
 
+function cmreposync() {
+
+    # sync once to update repo list (any project would do)
+    repo sync --no-repo-verify CyanogenMod/android
+
+    # sync all CyanogenMod projects
+    case `uname -s` in
+        Darwin)
+            repo list | awk '{if ($NF~/^CyanogenMod/) print $NF}' \
+            | xargs repo sync --no-repo-verify -j 10
+            ;;
+        *)
+            repo list | awk '{if ($NF~/^CyanogenMod/) print $NF}' \
+            | xargs schedtool -B -n 1 -e ionice -n 1 \
+            repo sync --no-repo-verify -j 10
+            ;;
+    esac
+}
+
 # Force JAVA_HOME to point to java 1.6 if it isn't already set
 function set_java_home() {
     if [ ! "$JAVA_HOME" ]; then
