@@ -642,9 +642,14 @@ function eat()
             echo "Nothing to eat"
             return 1
         fi
-        if [ $(adb get-state) != device ] ; then
+        adb start-server # Prevent unexpected starting server message from adb get-state in the next line
+        if [ $(adb get-state) != device -a $(adb shell busybox test -e /sbin/recovery 2> /dev/null; echo $?) != 0 ] ; then
             echo "No device is online. Waiting for one..."
-            adb wait-for-device
+            echo "Please connect USB and/or enable USB debugging"
+            until [ $(adb get-state) = device -o $(adb shell busybox test -e /sbin/recovery 2> /dev/null; echo $?) = 0 ];do
+                sleep 1
+            done
+            echo "Device Found.."
         fi
         echo "Pushing $ZIPFILE to device"
         if adb push $ZIPPATH /mnt/sdcard/ ; then
