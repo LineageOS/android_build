@@ -635,6 +635,7 @@ function eat()
             echo "Nothing to eat"
             return 1
         fi
+        adb start-server # Prevent unexpected starting server message from adb get-state in the next line
         if [ $(adb get-state) != device ] ; then
             echo "No device is online. Waiting for one..."
             adb wait-for-device
