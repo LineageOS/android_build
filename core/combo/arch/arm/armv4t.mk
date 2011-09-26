@@ -20,4 +20,4 @@ DEFAULT_TARGET_CPU := arm920t
 # Note: Hard coding the 'tune' value here is probably not ideal,
 # and a better solution should be found in the future.
 #
-arch_variant_cflags := -march=armv4t -mtune=arm920t -D__ARM_ARCH_4T__
+arch_variant_cflags := -march=armv4t -mtune=arm920t

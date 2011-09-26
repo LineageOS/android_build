@@ -22,9 +22,4 @@ endif
 arch_variant_cflags := \
     -mcpu=$(TARGET_ARCH_VARIANT_CPU) \
     -mfloat-abi=softfp \
-    -mfpu=$(TARGET_ARCH_VARIANT_FPU) \
-    -D__ARM_ARCH_5__ \
-    -D__ARM_ARCH_5T__ \
-    -D__ARM_ARCH_5E__ \
-    -D__ARM_ARCH_5TE__
-
+    -mfpu=$(TARGET_ARCH_VARIANT_FPU)

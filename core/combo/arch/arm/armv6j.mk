@@ -15,8 +15,4 @@ arch_variant_cflags := \
     -march=armv6j \
     -mtune=arm1136jf-s \
     -pipe \
-    -fomit-frame-pointer \
-    -D__ARM_ARCH_5__ \
-    -D__ARM_ARCH_5T__ \
-    -D__ARM_ARCH_5E__ \
-    -D__ARM_ARCH_5TE__
+    -fomit-frame-pointer

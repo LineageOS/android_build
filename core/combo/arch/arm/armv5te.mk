@@ -13,9 +13,4 @@ ARCH_ARM_HAVE_FFS               := true
 #
 arch_variant_cflags := \
     -march=armv5te \
-    -mtune=xscale  \
-    -D__ARM_ARCH_5__ \
-    -D__ARM_ARCH_5T__ \
-    -D__ARM_ARCH_5E__ \
-    -D__ARM_ARCH_5TE__
-
+    -mtune=xscale
