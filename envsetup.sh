@@ -437,6 +437,13 @@ function add_lunch_combo()
 
 # add the default one here
 add_lunch_combo full-eng
+add_lunch_combo full_x86-eng
+
+# if we're on linux, add the simulator.  There is a special case
+# in lunch to deal with the simulator
+if [ "$(uname)" = "Linux" ] ; then
+    add_lunch_combo simulator
+fi
 
 function print_lunch_menu()
 {
@@ -1289,6 +1296,7 @@ else
 fi
 unset _xarray
 
+# Execute the contents of any vendorsetup.sh files we can find.
 for f in `{ setopt nullglob; /bin/ls vendor/*/vendorsetup.sh vendor/*/build/vendorsetup.sh device/*/*/vendorsetup.sh; } 2> /dev/null`
 do
     echo "including $f"
