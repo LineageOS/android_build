@@ -57,7 +57,7 @@ do
     if [ -f "ROMManagerManifest/devices.rb" ]
     then
         pushd ROMManagerManifest
-        ruby devices.rb $DEVICE_NAME $VERSION
+        ruby devices.rb $DEVICE_NAME $VERSION $lunchoption
         popd
     fi
 done
