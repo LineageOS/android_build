@@ -332,54 +332,67 @@ INTERNAL_RAMDISK_FILES := $(filter $(TARGET_ROOT_OUT)/%, \
 
 BUILT_RAMDISK_TARGET := $(PRODUCT_OUT)/ramdisk.img
 
-ifeq ($(BOARD_USES_UBOOT),true)
-# BOARD_USES_UBOOT
-INTERNAL_URAMDISKIMAGE_ARGS := -A ARM -O Linux -T RAMDisk -C gzip -n Image -d $(BUILT_RAMDISK_TARGET).cpio.gz
-
-# We just build this directly to the install location.
-INSTALLED_RAMDISK_TARGET := $(BUILT_RAMDISK_TARGET)
-$(INSTALLED_RAMDISK_TARGET):  $(MKIMAGE) $(INTERNAL_RAMDISK_FILES) | $(MINIGZIP) 
-	$(call pretty,"Target ram disk: $@")
-	$(hide) $(MKBOOTFS) $(TARGET_ROOT_OUT) | $(MINIGZIP) > $(BUILT_RAMDISK_TARGET).cpio.gz
-	$(MKIMAGE) $(INTERNAL_URAMDISKIMAGE_ARGS) $@
-	$(hide) rm $(BUILT_RAMDISK_TARGET).cpio.gz
-
-else
 # We just build this directly to the install location.
 INSTALLED_RAMDISK_TARGET := $(BUILT_RAMDISK_TARGET)
 $(INSTALLED_RAMDISK_TARGET): $(MKBOOTFS) $(INTERNAL_RAMDISK_FILES) | $(MINIGZIP)
 	$(call pretty,"Target ram disk: $@")
 	$(hide) $(MKBOOTFS) $(TARGET_ROOT_OUT) | $(MINIGZIP) > $@
-endif
-
-ifneq ($(strip $(TARGET_NO_KERNEL)),true)
 
 ifeq ($(BOARD_USES_UBOOT_MULTIIMAGE),true)
+# Sanity check to make sure BOARD_USES_UBOOT is turned on if we are doing MULTIIMAGE
+BOARD_USES_UBOOT := true
+endif
 
-# We just build this directly to the install location.
+ifeq ($(BOARD_USES_UBOOT),true)
+
+INTERNAL_UBOOT_IMAGENAME := CM-$(PRODUCT_VERSION_MAJOR).$(PRODUCT_VERSION_MINOR).$(PRODUCT_VERSION_MAINTENANCE)$(PRODUCT_VERSION_DEVICE_SPECIFIC) $(TARGET_DEVICE) Ramdisk
+
+INTERNAL_URAMDISKIMAGE_ARGS := -A ARM -O Linux -T RAMDisk -C none -n "$(INTERNAL_UBOOT_IMAGENAME)" -d $(BUILT_RAMDISK_TARGET)
+ZIP_SAVE_UBOOTIMG_ARGS := $(INTERNAL_URAMDISKIMAGE_ARGS)
+BUILT_UBOOT_RAMDISK_TARGET := $(BUILT_RAMDISK_TARGET:%.img=%.ub)
+
+$(BUILT_UBOOT_RAMDISK_TARGET): $(INSTALLED_RAMDISK_TARGET) $(MKIMAGE)
+	$(MKIMAGE) $(INTERNAL_URAMDISKIMAGE_ARGS) $@
+	@echo ----- Made uboot ramdisk -------- $@
+
+INSTALLED_RAMDISK_TARGET := $(BUILT_UBOOT_RAMDISK_TARGET)
+
+ifeq ($(BOARD_USES_UBOOT_MULTIIMAGE),true)
+ifneq ($(strip $(TARGET_NO_KERNEL)),true)
+
 INSTALLED_BOOTIMAGE_TARGET := $(PRODUCT_OUT)/boot.img
 
-INTERNAL_URAMDISKIMAGE_ARGS := -A ARM -O Linux -T multi -C none -n Image
+INTERNAL_UBOOT_MULTIIMAGENAME := CM-$(PRODUCT_VERSION_MAJOR).$(PRODUCT_VERSION_MINOR).$(PRODUCT_VERSION_MAINTENANCE)$(PRODUCT_VERSION_DEVICE_SPECIFIC) $(TARGET_DEVICE) Multiboot
+
+INTERNAL_UMULTIIMAGE_ARGS := -A ARM -O Linux -T multi -C none -n "$(INTERNAL_UBOOT_MULTIIMAGENAME)"
 
 BOARD_UBOOT_ENTRY := $(strip $(BOARD_UBOOT_ENTRY))
 ifdef BOARD_UBOOT_ENTRY
-  INTERNAL_URAMDISKIMAGE_ARGS += -e $(BOARD_UBOOT_ENTRY)
+  INTERNAL_UMULTIIMAGE_ARGS += -e $(BOARD_UBOOT_ENTRY)
 endif
 
 BOARD_UBOOT_LOAD := $(strip $(BOARD_UBOOT_LOAD))
 ifdef BOARD_UBOOT_LOAD
-  INTERNAL_URAMDISKIMAGE_ARGS += -a $(BOARD_UBOOT_LOAD)
+  INTERNAL_UMULTIIMAGE_ARGS += -a $(BOARD_UBOOT_LOAD)
 endif
 
-UBOOT_DATA_ARGS = $(shell echo $(INSTALLED_KERNEL_TARGET):$(INSTALLED_RAMDISK_TARGET)|sed -e 's/[[:space:]]//g')
-INTERNAL_URAMDISKIMAGE_ARGS += -d $(UBOOT_DATA_ARGS)
+INTERNAL_UMULTIIMAGE_ARGS += -d $(INSTALLED_KERNEL_TARGET):$(BUILT_UBOOT_RAMDISK_TARGET)
+ZIP_SAVE_UBOOTIMG_ARGS := $(INTERNAL_UMULTIIMAGE_ARGS)
+$(INSTALLED_BOOTIMAGE_TARGET): $(MKIMAGE) $(INTERNAL_RAMDISK_FILES) $(BUILT_UBOOT_RAMDISK_TARGET) $(INSTALLED_KERNEL_TARGET)
+	$(MKIMAGE) $(INTERNAL_UMULTIIMAGE_ARGS) $@
+	@echo ----- Made uboot multiimage -------- $@
 
-$(INSTALLED_BOOTIMAGE_TARGET):  $(MKIMAGE) $(INTERNAL_RAMDISK_FILES) $(INSTALLED_RAMDISK_TARGET) $(INSTALLED_KERNEL_TARGET)
-	$(call pretty,"Target boot image: $@")
-	$(MKIMAGE) $(INTERNAL_URAMDISKIMAGE_ARGS) $@
-#	$(hide) $(call assert-max-image-size,$@,$(BOARD_BOOTIMAGE_PARTITION_SIZE),raw)
+endif #!TARGET_NO_KERNEL
+else
+#We are using uboot but no multiimage just spit out the ramdisk for the bootimage
+INSTALLED_BOOTIMAGE_TARGET = $(BUILT_UBOOT_RAMDISK_TARGET)
+endif
 
-else ## Standard ANDROID bootimg
+else # !BOARD_USES_UBOOT (Standard android bootimg)
+
+ifneq ($(strip $(TARGET_NO_KERNEL)),true)
+
+INSTALLED_BOOTIMAGE_TARGET := $(PRODUCT_OUT)/boot.img
 
 # -----------------------------------------------------------------
 # the boot image, which is a collection of other images.
@@ -409,7 +422,7 @@ ifneq ($(BOARD_FORCE_RAMDISK_ADDRESS),)
     INTERNAL_BOOTIMAGE_ARGS += --ramdiskaddr $(BOARD_FORCE_RAMDISK_ADDRESS)
 endif
 
-INSTALLED_BOOTIMAGE_TARGET := $(PRODUCT_OUT)/boot.img
+ifndef BOARD_CUSTOM_BOOTIMG_MK
 
 ifeq ($(TARGET_BOOTIMAGE_USE_EXT2),true)
 tmp_dir_for_image := $(call intermediates-dir-for,EXECUTABLES,boot_img)/bootimg
@@ -419,24 +432,31 @@ $(INSTALLED_BOOTIMAGE_TARGET): $(MKEXT2IMG) $(INTERNAL_BOOTIMAGE_FILES)
 	$(call pretty,"Target boot image: $@")
 	$(hide) $(MKEXT2BOOTIMG) $(INTERNAL_BOOTIMAGE_ARGS) --output $@
 
-else ifndef BOARD_CUSTOM_BOOTIMG_MK # TARGET_BOOTIMAGE_USE_EXT2 != true
+else # TARGET_BOOTIMAGE_USE_EXT2 != true
 
 $(INSTALLED_BOOTIMAGE_TARGET): $(MKBOOTIMG) $(INTERNAL_BOOTIMAGE_FILES)
 	$(call pretty,"Target boot image: $@")
 	$(hide) $(MKBOOTIMG) $(INTERNAL_BOOTIMAGE_ARGS) --output $@
 	$(hide) $(call assert-max-image-size,$@,$(BOARD_BOOTIMAGE_PARTITION_SIZE),raw)
-endif # TARGET_BOOTIMAGE_USE_EXT2
 
-endif # standard ANDROID bootimg (not uboot multiimage)
+endif
 
-else	# TARGET_NO_KERNEL
+endif # !BOARD_CUSTOM_BOOTIMG_MK
+
+else # TARGET_NO_KERNEL
 # HACK: The top-level targets depend on the bootimage.  Not all targets
 # can produce a bootimage, though, and emulator targets need the ramdisk
 # instead.  Fake it out by calling the ramdisk the bootimage.
 # TODO: make the emulator use bootimages, and make mkbootimg accept
 #       kernel-less inputs.
+
 INSTALLED_BOOTIMAGE_TARGET := $(INSTALLED_RAMDISK_TARGET)
+
 endif
+
+endif # standard Android bootimg
+
+
 
 # -----------------------------------------------------------------
 # NOTICE files
@@ -833,23 +853,18 @@ $(recovery_ramdisk): $(MKBOOTFS) \
 	$(MINIGZIP) < $(recovery_uncompressed_ramdisk) > $@
 
 ifeq ($(BOARD_USES_UBOOT),true)
-#BOARD_USES_UBOOT
-INTERNAL_RECOVERYIMAGE_ARGS := -A ARM -O Linux -T RAMDisk -C gzip -n Image -d $(recovery_ramdisk)
+INTERNAL_RECOVERYRAMDISK_IMAGENAME := CWM $(TARGET_DEVICE) Ramdisk
+INTERNAL_RECOVERYRAMDISKIMAGE_ARGS := -A ARM -O Linux -T RAMDisk -C none -n "$(INTERNAL_RECOVERYRAMDISK_IMAGENAME)" -d $(recovery_ramdisk)
 recovery_uboot_ramdisk := $(recovery_ramdisk:%.img=%.ub)
 
-$(INSTALLED_RECOVERYIMAGE_TARGET): $(MKIMAGE) $(recovery_ramdisk) \
-		$(recovery_kernel)
+$(recovery_uboot_ramdisk): $(MKIMAGE) $(recovery_ramdisk)
 	@echo ----- Making recovery image ------
-	$(MKIMAGE) $(INTERNAL_RECOVERYIMAGE_ARGS) $(recovery_uboot_ramdisk)
-	@echo ----- Made recovery uboot ramdisk -------- $(recovery_uboot_ramdisk)
-	$(hide) rm -f $@
-	zip -qDj $@ $(recovery_uboot_ramdisk) $(recovery_kernel)
-	@echo ----- Made recovery image \(zip\) -------- $@
+	$(MKIMAGE) $(INTERNAL_RECOVERYRAMDISKIMAGE_ARGS) $@
+	@echo ----- Made recovery uboot ramdisk -------- $@
 
-
-else ifeq ($(BOARD_USES_UBOOT_MULTIIMAGE),true)
-
-INTERNAL_RECOVERYIMAGE_ARGS := -A ARM -O Linux -T multi -C none -n Image
+ifeq ($(BOARD_USES_UBOOT_MULTIIMAGE),true)
+INTERNAL_RECOVERYIMAGE_IMAGENAME := CWM $(TARGET_DEVICE) Multiboot
+INTERNAL_RECOVERYIMAGE_ARGS := -A ARM -O Linux -T multi -C none -n "$(INTERNAL_RECOVERYIMAGE_IMAGENAME)"
 
 BOARD_UBOOT_ENTRY := $(strip $(BOARD_UBOOT_ENTRY))
 ifdef BOARD_UBOOT_ENTRY
@@ -861,17 +876,24 @@ ifdef BOARD_UBOOT_LOAD
   INTERNAL_RECOVERYIMAGE_ARGS += -a $(BOARD_UBOOT_LOAD)
 endif
 
-UBOOT_DATA_ARGS = $(shell echo $(recovery_kernel):$(recovery_ramdisk)|sed -e 's/[[:space:]]//g')
-INTERNAL_RECOVERYIMAGE_ARGS += -d $(UBOOT_DATA_ARGS)
+INTERNAL_RECOVERYIMAGE_ARGS += -d $(strip $(recovery_kernel)):$(strip $(recovery_uboot_ramdisk))
 
 $(INSTALLED_RECOVERYIMAGE_TARGET): $(MKIMAGE) \
-		$(recovery_ramdisk) \
+		$(recovery_uboot_ramdisk) \
 		$(recovery_kernel)
-	@echo ----- Making recovery uboot image ------
 	$(MKIMAGE) $(INTERNAL_RECOVERYIMAGE_ARGS) $@
-	@echo ----- Made recovery uboot image -------- $@
-	#$(hide) $(call assert-max-image-size,$@,$(BOARD_RECOVERYIMAGE_PARTITION_SIZE),raw)
+	@echo ----- Made recovery uboot multiimage -------- $@
 
+else #!BOARD_USES_UBOOT_MULTIIMAGE
+
+# If we are not on a multiimage platform lets zip the kernel with the ramdisk
+# for Rom Manager
+$(INSTALLED_RECOVERYIMAGE_TARGET): $(recovery_uboot_ramdisk) $(recovery_kernel)
+	$(hide) rm -f $@
+	zip -qDj $@ $(recovery_uboot_ramdisk) $(recovery_kernel)
+	@echo ----- Made recovery image \(zip\) -------- $@
+
+endif #BOARD_USES_UBOOT
 
 else ifndef BOARD_CUSTOM_BOOTIMG_MK
 $(INSTALLED_RECOVERYIMAGE_TARGET): $(MKBOOTIMG) \
@@ -884,7 +906,7 @@ $(INSTALLED_RECOVERYIMAGE_TARGET): $(MKBOOTIMG) \
 
 endif
 
-else
+else #TARGET_NO_KERNEL or TARGET_NO_RECOVERY or BUILD_TINY_ANDROID are true
 INSTALLED_RECOVERYIMAGE_TARGET :=
 endif
 
@@ -1131,22 +1153,6 @@ $(BUILT_TARGET_FILES_PACKAGE): tool_extensions := $(TARGET_DEVICE_DIR)/../common
 else
 $(BUILT_TARGET_FILES_PACKAGE): tool_extensions := $(TARGET_RELEASETOOLS_EXTENSIONS)
 endif
-
-ifeq ($(BOARD_USES_UBOOT_MULTIIMAGE),true)
-
-  ZIP_SAVE_UBOOTIMG_ARGS := -A ARM -O Linux -T multi -C none -n Image
-
-  BOARD_UBOOT_ENTRY := $(strip $(BOARD_UBOOT_ENTRY))
-  ifdef BOARD_UBOOT_ENTRY
-    ZIP_SAVE_UBOOTIMG_ARGS += -e $(BOARD_UBOOT_ENTRY)
-  endif
-  BOARD_UBOOT_LOAD := $(strip $(BOARD_UBOOT_LOAD))
-  ifdef BOARD_UBOOT_LOAD
-    ZIP_SAVE_UBOOTIMG_ARGS += -a $(BOARD_UBOOT_LOAD)
-  endif
-
-endif
-
 
 # Depending on the various images guarantees that the underlying
 # directories are up-to-date.
