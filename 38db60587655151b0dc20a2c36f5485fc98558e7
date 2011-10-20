@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAKH///Rg\u003d",
+        "filename": "core/Makefile",
+        "patchSetId": 1
+      },
+      "lineNbr": 347,
+      "author": {
+        "id": 1778
+      },
+      "writtenOn": "2011-10-20T23:46:42Z",
+      "side": 1,
+      "message": "I suggest using a more descriptive internal name for\r\nthese (something better than \u0027Image\u0027).",
+      "revId": "38db60587655151b0dc20a2c36f5485fc98558e7",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAKH///RY\u003d",
+        "filename": "core/Makefile",
+        "patchSetId": 1
+      },
+      "lineNbr": 359,
+      "author": {
+        "id": 1778
+      },
+      "writtenOn": "2011-10-20T23:46:42Z",
+      "side": 1,
+      "message": "I suggest using a more descriptive internal name for\r\nthese (something better than \u0027Image\u0027).",
+      "revId": "38db60587655151b0dc20a2c36f5485fc98558e7",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAKH///Rc\u003d",
+        "filename": "core/Makefile",
+        "patchSetId": 1
+      },
+      "lineNbr": 848,
+      "author": {
+        "id": 1778
+      },
+      "writtenOn": "2011-10-20T23:46:42Z",
+      "side": 1,
+      "message": "I suggest using a more descriptive internal name for\r\nthese (something better than \u0027Image\u0027).",
+      "revId": "38db60587655151b0dc20a2c36f5485fc98558e7",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    }
+  ]
+}
