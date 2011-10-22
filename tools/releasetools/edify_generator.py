@@ -232,7 +232,10 @@ class EdifyGenerator(object):
              '       delete("/tmp/%(device)s.img"));') % args)
       elif partition_type == "EMMC":
         self.script.append(
-            'package_extract_file("%(fn)s", "%(device)s");' % args)
+            ('delete("/tmp/emmc.img"),\n'
+             'assert(package_extract_file("%(fn)s", "/tmp/emmc.img"),\n'
+             '       write_raw_image("/tmp/emmc.img", "%(device)s"),\n'
+             '       delete("/tmp/emmc.img"));') % args)
       elif partition_type == "BML":
 	        self.script.append(
             ('assert(package_extract_file("%(fn)s", "/tmp/%(device)s.img"),\n'
