@@ -433,48 +433,58 @@ def _BuildBootableImage(sourcedir, fs_config_file, info_dict=None,
   if has_ramdisk:
     ramdisk_img = make_ramdisk()
 
-  # use MKBOOTIMG from environ, or "mkbootimg" if empty or not set
-  mkbootimg = os.getenv('MKBOOTIMG') or "mkbootimg"
-
-  cmd = [mkbootimg, "--kernel", os.path.join(sourcedir, "kernel")]
-
-  fn = os.path.join(sourcedir, "second")
+  """check if uboot is requested"""
+  fn = os.path.join(sourcedir, "ubootargs")
   if os.access(fn, os.F_OK):
-    cmd.append("--second")
-    cmd.append(fn)
-
-  fn = os.path.join(sourcedir, "cmdline")
-  if os.access(fn, os.F_OK):
-    cmd.append("--cmdline")
-    cmd.append(open(fn).read().rstrip("\n"))
-
-  fn = os.path.join(sourcedir, "base")
-  if os.access(fn, os.F_OK):
-    cmd.append("--base")
-    cmd.append(open(fn).read().rstrip("\n"))
-
-  fn = os.path.join(sourcedir, "pagesize")
-  if os.access(fn, os.F_OK):
-    cmd.append("--pagesize")
-    cmd.append(open(fn).read().rstrip("\n"))
-
-  args = info_dict.get("mkbootimg_args", None)
-  if args and args.strip():
-    cmd.extend(shlex.split(args))
-
-  args = info_dict.get("mkbootimg_version_args", None)
-  if args and args.strip():
-    cmd.extend(shlex.split(args))
-
-  if has_ramdisk:
-    cmd.extend(["--ramdisk", ramdisk_img.name])
-
-  img_unsigned = None
-  if info_dict.get("vboot", None):
-    img_unsigned = tempfile.NamedTemporaryFile()
-    cmd.extend(["--output", img_unsigned.name])
+    cmd = ["mkimage"]
+    for argument in open(fn).read().rstrip("\n").split(" "):
+      cmd.append(argument)
+    cmd.append("-d")
+    cmd.append(os.path.join(sourcedir, "kernel") + ":" + ramdisk_img.name)
+    cmd.append(img.name)
   else:
-    cmd.extend(["--output", img.name])
+    # use MKBOOTIMG from environ, or "mkbootimg" if empty or not set
+    mkbootimg = os.getenv('MKBOOTIMG') or "mkbootimg"
+
+    cmd = [mkbootimg, "--kernel", os.path.join(sourcedir, "kernel")]
+
+    fn = os.path.join(sourcedir, "second")
+    if os.access(fn, os.F_OK):
+      cmd.append("--second")
+      cmd.append(fn)
+
+    fn = os.path.join(sourcedir, "cmdline")
+    if os.access(fn, os.F_OK):
+      cmd.append("--cmdline")
+      cmd.append(open(fn).read().rstrip("\n"))
+
+    fn = os.path.join(sourcedir, "base")
+    if os.access(fn, os.F_OK):
+      cmd.append("--base")
+      cmd.append(open(fn).read().rstrip("\n"))
+
+    fn = os.path.join(sourcedir, "pagesize")
+    if os.access(fn, os.F_OK):
+      cmd.append("--pagesize")
+      cmd.append(open(fn).read().rstrip("\n"))
+
+    args = info_dict.get("mkbootimg_args", None)
+    if args and args.strip():
+      cmd.extend(shlex.split(args))
+
+    args = info_dict.get("mkbootimg_version_args", None)
+    if args and args.strip():
+      cmd.extend(shlex.split(args))
+
+    if has_ramdisk:
+      cmd.extend(["--ramdisk", ramdisk_img.name])
+
+    img_unsigned = None
+    if info_dict.get("vboot", None):
+      img_unsigned = tempfile.NamedTemporaryFile()
+      cmd.extend(["--output", img_unsigned.name])
+    else:
+      cmd.extend(["--output", img.name])
 
   p = Run(cmd, stdout=subprocess.PIPE)
   p.communicate()
