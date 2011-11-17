@@ -855,6 +855,7 @@ recovery_sepolicy := $(call intermediates-dir-for,ETC,sepolicy.recovery)/sepolic
 recovery_kernel := $(INSTALLED_KERNEL_TARGET) # same as a non-recovery system
 recovery_ramdisk := $(PRODUCT_OUT)/ramdisk-recovery.img
 recovery_build_prop := $(intermediate_system_build_prop)
+recovery_uncompressed_ramdisk := $(PRODUCT_OUT)/ramdisk-recovery.cpio
 recovery_resources_common := $(call include-path-for, recovery)/res
 
 # Set recovery_density to the density bucket of the device.
@@ -997,6 +998,11 @@ define build-recoveryimage-target
             rm -rf $(TARGET_RECOVERY_ROOT_OUT)/system; \
             ln -sf /system_root/system $(TARGET_RECOVERY_ROOT_OUT)/system) # Mount the system_root_image to /system_root and symlink /system.
   $(hide) $(MKBOOTFS) -d $(TARGET_OUT) $(TARGET_RECOVERY_ROOT_OUT) | $(MINIGZIP) > $(recovery_ramdisk)
+
+$(recovery_uncompressed_ramdisk): $(MINIGZIP) $(recovery_ramdisk)
+	@echo -e ${CL_CYN}"----- Making uncompressed recovery ramdisk ------"${CL_RST}
+	$(MKBOOTFS) $(TARGET_RECOVERY_ROOT_OUT) > $@
+
   $(if $(filter true,$(PRODUCTS.$(INTERNAL_PRODUCT).PRODUCT_SUPPORTS_VBOOT)), \
     $(hide) $(MKBOOTIMG) $(INTERNAL_RECOVERYIMAGE_ARGS) $(INTERNAL_MKBOOTIMG_VERSION_ARGS) $(BOARD_MKBOOTIMG_ARGS) --output $(1).unsigned, \
     $(hide) $(MKBOOTIMG) $(INTERNAL_RECOVERYIMAGE_ARGS) $(INTERNAL_MKBOOTIMG_VERSION_ARGS) $(BOARD_MKBOOTIMG_ARGS) --output $(1) --id > $(RECOVERYIMAGE_ID_FILE))
