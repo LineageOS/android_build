@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAALn///6E\u003d",
+        "filename": "envsetup.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 1205,
+      "author": {
+        "id": 280
+      },
+      "writtenOn": "2011-11-18T12:54:38Z",
+      "side": 1,
+      "message": "please remove or comment out this line, or include function _cmgerrit",
+      "revId": "f215ae7250885e7ef014fed36d2828db4eb1d775",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    }
+  ]
+}
