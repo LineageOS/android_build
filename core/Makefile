@@ -671,19 +671,11 @@ $(TARGET_RECOVERY_ROOT_TIMESTAMP): $(INTERNAL_RECOVERY_FILES) \
 	mkdir -p $(TARGET_RECOVERY_ROOT_OUT)/tmp
 	echo Copying baseline ramdisk...
 	cp -R $(TARGET_ROOT_OUT) $(TARGET_RECOVERY_OUT)
-ifneq ($(BOARD_USES_COMBINED_RECOVERY),true)
 	rm $(TARGET_RECOVERY_ROOT_OUT)/init*.rc
-endif
 	echo Modifying ramdisk contents...
-ifeq ($(BOARD_USES_COMBINED_RECOVERY),true)
-	cp -f $(recovery_initrc) $(TARGET_RECOVERY_ROOT_OUT)/
-else
 	cp -f $(recovery_initrc) $(TARGET_RECOVERY_ROOT_OUT)/init.rc
-endif
 	cp -f $(recovery_binary) $(TARGET_RECOVERY_ROOT_OUT)/sbin/
-ifneq ($(BOARD_USES_COMBINED_RECOVERY),true)
 	rm -f $(TARGET_RECOVERY_ROOT_OUT)/init.*.rc
-endif
 	mkdir -p $(TARGET_RECOVERY_ROOT_OUT)/system/bin
 	cp -rf $(recovery_resources_common) $(TARGET_RECOVERY_ROOT_OUT)/
 	$(foreach item,$(recovery_resources_private), \
@@ -691,14 +683,8 @@ endif
 	$(foreach item,$(recovery_fstab), \
 	  cp -f $(item) $(TARGET_RECOVERY_ROOT_OUT)/etc/recovery.fstab)
 	cp $(RECOVERY_INSTALL_OTA_KEYS) $(TARGET_RECOVERY_ROOT_OUT)/res/keys
-ifeq ($(BOARD_USES_COMBINED_RECOVERY),true)
-	cp $(INSTALLED_DEFAULT_PROP_TARGET) $(TARGET_RECOVERY_ROOT_OUT)/default.prop
-	rm -rf $(TARGET_RECOVERY_ROOT_OUT)/misc
-	mv $(TARGET_RECOVERY_ROOT_OUT)/etc $(TARGET_RECOVERY_ROOT_OUT)/misc
-else
 	cat $(INSTALLED_DEFAULT_PROP_TARGET) $(recovery_build_prop) \
 	        > $(TARGET_RECOVERY_ROOT_OUT)/default.prop
-endif
 	@echo ----- Made recovery filesystem -------- $(TARGET_RECOVERY_ROOT_OUT)
 	@touch $(TARGET_RECOVERY_ROOT_TIMESTAMP)
 
