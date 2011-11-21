@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAMX///+c\u003d",
+        "filename": "core/combo/arch/arm/armv6-vfp.mk",
+        "patchSetId": 1
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 431
+      },
+      "writtenOn": "2011-11-21T19:04:26Z",
+      "side": 1,
+      "message": "Same",
+      "revId": "ada2c61f541abd518e71c3d1e98a4f15e79c52f9",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAMX///+g\u003d",
+        "filename": "core/combo/arch/arm/armv6j.mk",
+        "patchSetId": 1
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 431
+      },
+      "writtenOn": "2011-11-21T19:04:26Z",
+      "side": 1,
+      "message": "should be ARMv6 :)",
+      "revId": "ada2c61f541abd518e71c3d1e98a4f15e79c52f9",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    }
+  ]
+}
