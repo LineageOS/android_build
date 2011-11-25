@@ -66,6 +66,7 @@ function check_product()
     else
        CM_BUILD=
     fi
+    export CM_BUILD
 
     CALLED_FROM_SETUP=true BUILD_SYSTEM=build/core \
         TARGET_PRODUCT=$1 \
