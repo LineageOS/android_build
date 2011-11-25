@@ -1300,14 +1300,14 @@ $(INTERNAL_OTA_PACKAGE_TARGET): $(BUILT_TARGET_FILES_PACKAGE) $(DISTTOOLS)
 	   -k $(KEY_CERT_PAIR) \
        --backup=$(backuptool) \
 	   $(BUILT_TARGET_FILES_PACKAGE) $@
+ifneq ($(TARGET_CUSTOM_RELEASETOOL),)
+	@echo "Running releasetool"
+	$(TARGET_CUSTOM_RELEASETOOL)
+endif
 
 .PHONY: otapackage bacon
 otapackage: $(INTERNAL_OTA_PACKAGE_TARGET)
 bacon: otapackage
-ifneq ($(TARGET_CUSTOM_RELEASETOOL),)
-	$(hide) \
-	$(TARGET_CUSTOM_RELEASETOOL)
-endif
 
 # -----------------------------------------------------------------
 # The update package
