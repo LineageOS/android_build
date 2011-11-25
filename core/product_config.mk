@@ -186,8 +186,7 @@ all_product_configs := $(call get-product-makefiles,\
     $(SRC_TARGET_DIR)/product/AndroidProducts.mk)
 else
   ifneq ($(CM_BUILD),)
-    $(call import-products, device/cm/$(CM_BUILD)/device.mk)
-    all_product_configs := device/cm/$(CM_BUILD)/device.mk
+    all_product_configs := device/*/$(CM_BUILD)/cm.mk
   else
     # Read in all of the product definitions specified by the AndroidProducts.mk
     # files in the tree.
@@ -234,16 +233,6 @@ $(call import-products, $(current_product_makefile))
 endif  # Import all or just the current product makefile
 
 # Sanity check
-=======
-  # Read in all of the product definitions specified by the AndroidProducts.mk
-    # files in the tree.
-    #
-    #TODO: when we start allowing direct pointers to product files,
-    #    guarantee that they're in this list.
-    $(call import-products, $(get-all-product-makefiles))
-  endif
-endif # TARGET_BUILD_APPS
->>>>>>> build: Preliminary support for CM product builds
 $(check-all-products)
 
 ifneq ($(filter dump-products, $(MAKECMDGOALS)),)
