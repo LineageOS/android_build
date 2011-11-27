@@ -606,6 +606,17 @@ function lunch()
     build_build_var_cache
     if [ $? -ne 0 ]
     then
+        # if we can't find a product, try to grab it off the CM github
+        T=$(gettop)
+        pushd $T > /dev/null
+        build/tools/roomservice.py $product
+        popd > /dev/null
+        check_product $product
+    else
+        build/tools/roomservice.py $product true
+    fi
+    if [ $? -ne 0 ]
+    then
         echo
         echo "** Don't have a product spec for: '$product'"
         echo "** Do you have the right repo manifest?"
