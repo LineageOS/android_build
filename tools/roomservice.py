@@ -6,7 +6,7 @@ import json
 from xml.etree import ElementTree
 
 product = sys.argv[1];
-device = product.split("_")[1]
+device = product[product.index("_") + 1:]
 print "Device %s not found. Attempting to retrieve device repository from CyanogenMod Github (http://github.com/CyanogenMod)." % device
 
 result = json.loads(urllib2.urlopen("http://github.com/api/v2/json/repos/show/CyanogenMod").read())
