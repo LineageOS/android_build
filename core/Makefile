@@ -1351,6 +1351,7 @@ endif
 .PHONY: otapackage bacon
 otapackage: $(INTERNAL_OTA_PACKAGE_TARGET)
 bacon: otapackage
+	$(hide) ./vendor/cm/tools/squisher
 
 # -----------------------------------------------------------------
 # The update package
