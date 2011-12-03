@@ -1314,17 +1314,17 @@ $(INTERNAL_OTA_PACKAGE_TARGET): $(BUILT_TARGET_FILES_PACKAGE) $(OTATOOLS)
 	@echo "Package OTA: $@"
 	$(OTA_FROM_TARGET_SCRIPT) -v \
 	   -p $(HOST_OUT) \
-           -k $(KEY_CERT_PAIR) \
-           --backup=$(backuptool) \
+	   -k $(KEY_CERT_PAIR) \
+	   --backup=$(backuptool) \
 	   --override_device=$(override_device) \
-           $(BUILT_TARGET_FILES_PACKAGE) $@
+	   $(BUILT_TARGET_FILES_PACKAGE) $@
 
 .PHONY: otapackage bacon
 otapackage: $(INTERNAL_OTA_PACKAGE_TARGET)
 bacon: otapackage
 ifneq ($(TARGET_CUSTOM_RELEASETOOL),)
-        @echo "Running releasetool"
-        $(hide) $(TARGET_CUSTOM_RELEASETOOL)
+	@echo "Running releasetool"
+	$(hide) $(TARGET_CUSTOM_RELEASETOOL)
 else
 	$(hide) ./vendor/cm/tools/squisher
 endif
