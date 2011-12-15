@@ -1,0 +1,17 @@
+Change-Id: I56f252e6c983505b3a89cbc5c3d8c8cd8581a1c1
+Code-Review+2: Steve Kondik <shade@chemlab.org>
+Verified+1: Steve Kondik <shade@chemlab.org>
+Code-Review+1: Esa Laukkanen <ele.linux@gmail.com>
+Code-Review+1: Tom Giordano <tomgiordano83@gmail.com>
+Code-Review+1: Burstlam <burstlam@gmail.com>
+Code-Review+1: Lalit Maganti <tilal6991@gmail.com>
+Code-Review+1: kallt kaffe <kallt_kaffe@apedroid.com>
+Code-Review+1: Yanuar Harry <ai.the.smarties.physics@gmail.com>
+Code-Review+1: Conn O'Griofa <connogriofa@gmail.com>
+Code-Review+1: Adam Farden <adam@farden.cz>
+Code-Review+1: randomblame <dumbandroid@gmail.com>
+Submitted-by: Steve Kondik <shade@chemlab.org>
+Submitted-at: Thu, 15 Dec 2011 08:22:52 +0300
+Reviewed-on: http://review.cyanogenmod.com/10301
+Project: CyanogenMod/android_build
+Branch: refs/heads/ics
