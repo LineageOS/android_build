@@ -115,7 +115,6 @@ $(info $(space))
 $(info Please follow the machine setup instructions at)
 $(info $(space)$(space)$(space)$(space)http://source.android.com/download)
 $(info ************************************************************)
-$(error stop)
 endif
 
 # Check for the correct version of javac
@@ -131,7 +130,6 @@ $(info $(space))
 $(info Please follow the machine setup instructions at)
 $(info $(space)$(space)$(space)$(space)http://source.android.com/download)
 $(info ************************************************************)
-$(error stop)
 endif
 
 $(shell echo 'VERSIONS_CHECKED := $(VERSION_CHECK_SEQUENCE_NUMBER)' \
