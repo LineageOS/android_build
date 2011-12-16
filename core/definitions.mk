@@ -843,11 +843,13 @@ define transform-proto-to-java
 @echo "Protoc: $@ <= $(PRIVATE_PROTO_SRC_FILES)"
 @rm -rf $(PRIVATE_PROTO_JAVA_OUTPUT_DIR)
 @mkdir -p $(PRIVATE_PROTO_JAVA_OUTPUT_DIR)
-$(hide) $(PROTOC) \
-	$(addprefix --proto_path=, $(PRIVATE_PROTO_INCLUDES)) \
-	$(PRIVATE_PROTO_JAVA_OUTPUT_OPTION)=$(PRIVATE_PROTO_JAVA_OUTPUT_DIR) \
-	$(PRIVATE_PROTOC_FLAGS) \
-	$(PRIVATE_PROTO_SRC_FILES)
+$(hide) for f in $(PRIVATE_PROTO_SRC_FILES); do \
+        $(PROTOC) \
+        $(addprefix --proto_path=, $(PRIVATE_PROTO_INCLUDES)) \
+        $(PRIVATE_PROTO_JAVA_OUTPUT_OPTION)=$(PRIVATE_PROTO_JAVA_OUTPUT_DIR) \
+        $(PRIVATE_PROTOC_FLAGS) \
+        $$f; \
+        done
 $(hide) touch $@
 endef
 
@@ -1586,10 +1588,9 @@ endef
 define add-dex-to-package
 $(if $(filter classes.dex,$(notdir $(PRIVATE_DEX_FILE))),\
 $(hide) $(AAPT) add -k $@ $(PRIVATE_DEX_FILE),\
-$(eval _adtp_classes.dex := $(dir $(PRIVATE_DEX_FILE))/classes.dex)\
-$(hide) cp $(PRIVATE_DEX_FILE) $(_adtp_classes.dex) && \
-$(AAPT) add -k $@ $(_adtp_classes.dex) && \
-rm -f $(_adtp_classes.dex))
+$(hide) _adtp_classes_dex=$(dir $(PRIVATE_DEX_FILE))classes.dex; \
+cp $(PRIVATE_DEX_FILE) $$_adtp_classes_dex && \
+$(AAPT) add -k $@ $$_adtp_classes_dex && rm -f $$_adtp_classes_dex)
 endef
 
 define add-java-resources-to-package

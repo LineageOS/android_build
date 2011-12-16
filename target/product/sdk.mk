@@ -30,21 +30,18 @@ PRODUCT_PACKAGES := \
 	libWnnEngDic \
 	libWnnJpnDic \
 	libwnndict \
-    Phone \
+	Phone \
 	PinyinIME \
 	Protips \
 	SoftKeyboard \
 	SystemUI \
 	Launcher2 \
-	AccountAndSyncSettings \
 	Development \
 	DrmProvider \
 	Fallback \
-	GPSEnable \
 	Settings \
 	SdkSetup \
 	CustomLocale \
-	gpstest \
 	sqlite3 \
 	LatinIME \
 	CertInstaller \
@@ -84,6 +81,7 @@ PRODUCT_PACKAGES += \
 	traceview \
 	android \
 	dexdump \
+	lint \
 	monkeyrunner
 
 # Native host Java libraries that are parts of the SDK.
@@ -117,6 +115,7 @@ PRODUCT_PACKAGES += \
 	org.eclipse.jface_3.4.2.M20090107-0800 \
 	osgi \
 	layoutlib \
+	lint \
 	monkeyrunner \
 	guavalib \
 	jsr305lib \
