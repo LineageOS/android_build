@@ -238,6 +238,9 @@ _product_stash_var_list += \
 _product_stash_var_list += \
 	DEFAULT_SYSTEM_DEV_CERTIFICATE
 
+_product_stash_var_list += \
+	PLATFORM_VENDOR
+
 #
 # Stash vaues of the variables in _product_stash_var_list.
 # $(1): Renamed prefix
