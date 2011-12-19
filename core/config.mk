@@ -370,4 +370,15 @@ INTERNAL_PLATFORM_API_FILE := $(TARGET_OUT_COMMON_INTERMEDIATES)/PACKAGING/publi
 # objects. E.g., prebuilt/$(TARGET_PREBUILT_TAG)/libc.so
 TARGET_PREBUILT_TAG := android-$(TARGET_ARCH)
 
+## Set the platform vendor for checks within the source trees
+ifneq ($(filter omap3 omap4, $(TARGET_BOARD_PLATFORM)),)
+    PLATFORM_VENDOR ?= omap
+else ifneq ($(filter tegra $(TARGET_BOARD_PLATFORM)),)
+    PLATFORM_VENDOR ?= tegra
+else ifneq ($(filter msm7k qsd8k msm7x30 msm8660 $(TARGET_BOARD_PLATFORM)),)
+    PLATFORM_VENDOR ?= qcom
+else
+    PLATFORM_VENDOR ?= UNKNOWN
+endif
+
 include $(BUILD_SYSTEM)/dumpvar.mk
