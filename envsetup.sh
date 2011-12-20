@@ -58,6 +58,14 @@ function check_product()
         echo "Couldn't locate the top of the tree.  Try setting TOP." >&2
         return
     fi
+
+    if (echo -n $1 | grep -q -e "^cyanogen_") ; then
+       CM_BUILD=$(echo -n $1 | sed -e 's/^cyanogen_//g')
+    else
+       CM_BUILD=
+    fi
+    export CM_BUILD
+
     CALLED_FROM_SETUP=true BUILD_SYSTEM=build/core \
         TARGET_PRODUCT=$1 TARGET_BUILD_VARIANT= \
         TARGET_SIMULATOR= TARGET_BUILD_TYPE= \
