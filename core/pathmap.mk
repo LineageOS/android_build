@@ -89,6 +89,7 @@ FRAMEWORKS_BASE_SUBDIRS := \
 	    vpn \
 	    keystore \
 	    voip \
+	    omapmmlib \
 	 )
 
 #
