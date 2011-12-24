@@ -9,8 +9,17 @@ product = sys.argv[1];
 device = product[product.index("_") + 1:]
 print "Device %s not found. Attempting to retrieve device repository from CyanogenMod Github (http://github.com/CyanogenMod)." % device
 
-result = json.loads(urllib2.urlopen("http://github.com/api/v2/json/repos/show/CyanogenMod").read())
-for repository in result['repositories']:
+repositories = []
+
+page = 1
+while True:
+    result = json.loads(urllib2.urlopen("http://github.com/api/v2/json/repos/show/CyanogenMod?page=%d" % page).read())
+    if len(result['repositories']) == 0:
+        break
+    repositories = repositories + result['repositories']
+    page = page + 1
+
+for repository in repositories:
     repo_name = repository['name']
     if repo_name.startswith("android_device_") and repo_name.endswith("_" + device):
         print "Found repository: %s" % repository['name']
