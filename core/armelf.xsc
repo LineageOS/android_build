@@ -8,6 +8,7 @@ SECTIONS
   /* Read-only sections, merged into text segment: */
   . = 0 + SIZEOF_HEADERS;
   .hash           : { *(.hash) }
+  .gnu.hash       : { *(.gnu.hash) }
   .dynsym         : { *(.dynsym) }
   .dynstr         : { *(.dynstr) }
   .gnu.version    : { *(.gnu.version) }

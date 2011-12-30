@@ -106,6 +106,7 @@ SECTIONS
   PROVIDE (edata = .);
   .dynamic        : { *(.dynamic) }
   .hash           : { *(.hash) }
+  .gnu.hash       : { *(.gnu.hash) }
   .dynsym         : { *(.dynsym) }
   .dynstr         : { *(.dynstr) }
 /*  .shstrtab	  : { *(.shstrtab) } */

@@ -133,6 +133,7 @@ TARGET_GLOBAL_CFLAGS += -Wno-psabi
 
 TARGET_GLOBAL_LDFLAGS += \
 			-Wl,-z,noexecstack \
+			-Wl,--hash-style=gnu \
 			-Wl,--icf=safe \
 			$(arch_variant_ldflags)
 
