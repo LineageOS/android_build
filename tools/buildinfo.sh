@@ -40,4 +40,6 @@ echo "# Do not try to parse ro.build.description or .fingerprint"
 echo "ro.build.description=$PRIVATE_BUILD_DESC"
 echo "ro.build.fingerprint=$BUILD_FINGERPRINT"
 
+echo "ro.cm.device=$CM_DEVICE"
+
 echo "# end build properties"
