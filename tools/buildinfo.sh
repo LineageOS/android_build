@@ -60,4 +60,6 @@ if [ -n "$BUILD_THUMBPRINT" ] ; then
 fi
 echo "ro.build.characteristics=$TARGET_AAPT_CHARACTERISTICS"
 
+echo "ro.lineage.device=$LINEAGE_DEVICE"
+
 echo "# end build properties"
