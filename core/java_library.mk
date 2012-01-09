@@ -44,7 +44,7 @@ include $(BUILD_SYSTEM)/java.mk
 ifeq ($(LOCAL_IS_STATIC_JAVA_LIBRARY),true)
 # No dex or resources; all we want are the .class files.
 $(common_javalib.jar) : $(full_classes_jar)
-	@echo "target Static Jar: $(PRIVATE_MODULE) ($@)"
+	@echo -e ${CL_PFX}"target Static Jar:"${CL_RST}" $(PRIVATE_MODULE) ($@)"
 	$(copy-file-to-target)
 
 $(LOCAL_BUILT_MODULE): $(common_javalib.jar)
@@ -54,7 +54,7 @@ else # !LOCAL_IS_STATIC_JAVA_LIBRARY
 
 $(common_javalib.jar): PRIVATE_DEX_FILE := $(built_dex)
 $(common_javalib.jar) : $(built_dex) $(java_resource_sources) | $(AAPT)
-	@echo "target Jar: $(PRIVATE_MODULE) ($@)"
+	@echo -e ${CL_PFX}"target Jar:"${CL_RST}" $(PRIVATE_MODULE) ($@)"
 	$(create-empty-package)
 	$(add-dex-to-package)
 ifneq ($(extra_jar_args),)
@@ -80,7 +80,7 @@ $(built_odex): PRIVATE_MODULE := $(LOCAL_MODULE)
 # Make sure the boot jars get dex-preopt-ed first
 $(built_odex) : $(DEXPREOPT_BOOT_ODEXS)
 $(built_odex) : $(common_javalib.jar) | $(DEXPREOPT) $(DEXOPT)
-	@echo "Dexpreopt Jar: $(PRIVATE_MODULE) ($@)"
+	@echo -e ${CL_PFX}"Dexpreopt Jar:"${CL_RST}" $(PRIVATE_MODULE) ($@)"
 	$(hide) rm -f $@
 	$(call dexpreopt-one-file,$<,$@)
 
