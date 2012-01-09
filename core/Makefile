@@ -1,5 +1,16 @@
 # Put some miscellaneous rules here
 
+# Build system colors
+#
+# PFX: Prefix "target C++:" in yellow
+# INS: Module "Install:" output color (cyan for ics)
+
+ifneq ($(BUILD_WITH_COLORS),0)
+  CL_PFX="\033[33m"
+  CL_INS="\033[36m"
+  CL_RST="\033[0m"
+endif
+
 # HACK: clear LOCAL_PATH from including last build target before calling
 # intermedites-dir-for
 LOCAL_PATH := $(BUILD_SYSTEM)
@@ -540,6 +551,7 @@ $(INSTALLED_BOOTIMAGE_TARGET): $(MKBOOTIMG) $(INTERNAL_BOOTIMAGE_FILES) $(BOOT_S
 	$(hide) $(MKBOOTIMG) $(INTERNAL_BOOTIMAGE_ARGS) $(INTERNAL_MKBOOTIMG_VERSION_ARGS) $(BOARD_MKBOOTIMG_ARGS) --output $@
 	$(BOOT_SIGNER) /boot $@ $(PRODUCTS.$(INTERNAL_PRODUCT).PRODUCT_VERITY_SIGNING_KEY).pk8 $(PRODUCTS.$(INTERNAL_PRODUCT).PRODUCT_VERITY_SIGNING_KEY).x509.pem $@
 	$(hide) $(call assert-max-image-size,$@,$(BOARD_BOOTIMAGE_PARTITION_SIZE))
+	@echo -e ${CL_INS}"Made boot image: $@"${CL_RST}
 
 .PHONY: bootimage-nodeps
 bootimage-nodeps: $(MKBOOTIMG) $(BOOT_SIGNER)
@@ -569,12 +581,14 @@ $(INSTALLED_BOOTIMAGE_TARGET): $(MKBOOTIMG) $(INTERNAL_BOOTIMAGE_FILES)
 	$(call pretty,"Target boot image: $@")
 	$(hide) $(MKBOOTIMG) $(INTERNAL_BOOTIMAGE_ARGS) $(INTERNAL_MKBOOTIMG_VERSION_ARGS) $(BOARD_MKBOOTIMG_ARGS) --output $@
 	$(hide) $(call assert-max-image-size,$@,$(BOARD_BOOTIMAGE_PARTITION_SIZE))
+	@echo -e ${CL_INS}"Made boot image: $@"${CL_RST}
 
 .PHONY: bootimage-nodeps
 bootimage-nodeps: $(MKBOOTIMG)
 	@echo "make $@: ignoring dependencies"
 	$(hide) $(MKBOOTIMG) $(INTERNAL_BOOTIMAGE_ARGS) $(INTERNAL_MKBOOTIMG_VERSION_ARGS) $(BOARD_MKBOOTIMG_ARGS) --output $(INSTALLED_BOOTIMAGE_TARGET)
 	$(hide) $(call assert-max-image-size,$(INSTALLED_BOOTIMAGE_TARGET),$(BOARD_BOOTIMAGE_PARTITION_SIZE))
+	@echo -e ${CL_INS}"Made boot image: $@"${CL_RST}
 
 endif # TARGET_BOOTIMAGE_USE_EXT2
 endif # BOARD_USES_RECOVERY_AS_BOOT
@@ -981,7 +995,7 @@ define build-recoveryimage-target
   $(if $(filter true,BOARD_USES_RECOVERY_AS_BOOT), \
     $(hide) $(call assert-max-image-size,$(1),$(BOARD_BOOTIMAGE_PARTITION_SIZE)), \
     $(hide) $(call assert-max-image-size,$(1),$(BOARD_RECOVERYIMAGE_PARTITION_SIZE)))
-  @echo ----- Made recovery image: $(1) --------
+  @echo -e ${CL_INS}"Made recovery image: $@"${CL_RST}
 endef
 
 ifeq ($(BOARD_USES_RECOVERY_AS_BOOT),true)
@@ -1149,7 +1163,7 @@ endif
 
 
 $(INSTALLED_SYSTEMIMAGE): $(BUILT_SYSTEMIMAGE) $(RECOVERY_FROM_BOOT_PATCH) | $(ACP)
-	@echo "Install system fs image: $@"
+	@echo -e ${CL_INS}"Install system fs image: $@"${CL_RST}
 	$(copy-file-to-target)
 	$(hide) $(call assert-max-image-size,$@ $(RECOVERY_FROM_BOOT_PATCH),$(BOARD_SYSTEMIMAGE_PARTITION_SIZE))
 
@@ -1634,7 +1648,7 @@ $(BUILT_TARGET_FILES_PACKAGE): \
 		$(APKCERTS_FILE) \
 		$(HOST_OUT_EXECUTABLES)/fs_config \
 		| $(ACP)
-	@echo "Package target files: $@"
+	@echo -e ${CL_PFX}"Package target files:"${CL_RST}" $@"
 	$(hide) rm -rf $@ $(zip_root)
 	$(hide) mkdir -p $(dir $@) $(zip_root)
 ifneq (,$(INSTALLED_RECOVERYIMAGE_TARGET)$(filter true,$(BOARD_USES_RECOVERY_AS_BOOT)))
@@ -1860,7 +1874,7 @@ else
 endif
 
 $(INTERNAL_OTA_PACKAGE_TARGET): $(BUILT_TARGET_FILES_PACKAGE)
-	@echo "Package OTA: $@"
+	@echo -e ${CL_PFX}"Package OTA:"${CL_RST}" $@"
 	$(hide) PATH=$(foreach p,$(INTERNAL_USERIMAGES_BINARY_PATHS),$(p):)$$PATH MKBOOTIMG=$(MKBOOTIMG) \
 	   $(OTA_FROM_TARGET_SCRIPT) -v \
 	   --block \
@@ -1895,7 +1909,7 @@ else
 endif
 
 $(INTERNAL_UPDATE_PACKAGE_TARGET): $(BUILT_TARGET_FILES_PACKAGE)
-	@echo "Package: $@"
+	@echo -e ${CL_PFX}"Package:"${CL_RST}" $@"
 	$(hide) PATH=$(foreach p,$(INTERNAL_USERIMAGES_BINARY_PATHS),$(p):)$$PATH MKBOOTIMG=$(MKBOOTIMG) \
 	   $(IMG_FROM_TARGET_SCRIPT) -v \
 	   -p $(HOST_OUT) \
@@ -1937,7 +1951,7 @@ name := $(name)-apps-$(FILE_NAME_TAG)
 
 APPS_ZIP := $(PRODUCT_OUT)/$(name).zip
 $(APPS_ZIP): $(INSTALLED_SYSTEMIMAGE)
-	@echo "Package apps: $@"
+	@echo -e ${CL_PFX}"Package apps:"${CL_RST}" $@"
 	$(hide) rm -rf $@
 	$(hide) mkdir -p $(dir $@)
 	$(hide) apps_to_zip=`find $(TARGET_OUT_APPS) $(TARGET_OUT_APPS_PRIVILEGED) -mindepth 2 -maxdepth 3 -name "*.apk"`; \
@@ -2004,7 +2018,7 @@ name := $(TARGET_PRODUCT)-emulator-$(FILE_NAME_TAG)
 INTERNAL_EMULATOR_PACKAGE_TARGET := $(PRODUCT_OUT)/$(name).zip
 
 $(INTERNAL_EMULATOR_PACKAGE_TARGET): $(INTERNAL_EMULATOR_PACKAGE_FILES)
-	@echo "Package: $@"
+	@echo -e ${CL_PFX}"Package:"${CL_RST}" $@"
 	$(hide) zip -qjX $@ $(INTERNAL_EMULATOR_PACKAGE_FILES)
 
 endif

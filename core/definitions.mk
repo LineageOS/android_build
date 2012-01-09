@@ -1202,7 +1202,7 @@ endef
 ###########################################################
 
 define transform-cpp-to-o
-@echo "target $(PRIVATE_ARM_MODE) C++: $(PRIVATE_MODULE) <= $<"
+@echo -e ${CL_PFX}"target $(PRIVATE_ARM_MODE) C++:"${CL_RST}" $(PRIVATE_MODULE) <= $<"
 @mkdir -p $(dir $@)
 $(hide) $(RELATIVE_PWD) $(PRIVATE_CXX) \
 	$(addprefix -I , $(PRIVATE_C_INCLUDES)) \
@@ -1255,7 +1255,7 @@ $(hide) $(RELATIVE_PWD) $(PRIVATE_CC) \
 endef
 
 define transform-c-to-o-no-deps
-@echo "target $(PRIVATE_ARM_MODE) C: $(PRIVATE_MODULE) <= $<"
+@echo ${CL_PFX}"target $(PRIVATE_ARM_MODE) C:"${CL_RST}" $(PRIVATE_MODULE) <= $<"
 $(call transform-c-or-s-to-o-no-deps, \
     $(PRIVATE_CFLAGS) \
     $(PRIVATE_CONLYFLAGS) \
@@ -1264,7 +1264,7 @@ $(call transform-c-or-s-to-o-no-deps, \
 endef
 
 define transform-s-to-o-no-deps
-@echo "target asm: $(PRIVATE_MODULE) <= $<"
+@echo -e ${CL_PFX}"target asm:"${CL_RST}" $(PRIVATE_MODULE) <= $<"
 $(call transform-c-or-s-to-o-no-deps, $(PRIVATE_ASFLAGS))
 endef
 
@@ -1295,7 +1295,7 @@ endef
 ###########################################################
 
 define transform-m-to-o-no-deps
-@echo "target ObjC: $(PRIVATE_MODULE) <= $<"
+@echo ${CL_PFX}"target ObjC:"${CL_RST}" $(PRIVATE_MODULE) <= $<"
 $(call transform-c-or-s-to-o-no-deps, $(PRIVATE_CFLAGS) $(PRIVATE_DEBUG_CFLAGS))
 endef
 
@@ -1309,7 +1309,7 @@ endef
 ###########################################################
 
 define transform-host-cpp-to-o
-@echo "$($(PRIVATE_PREFIX)DISPLAY) C++: $(PRIVATE_MODULE) <= $<"
+@echo ${CL_PFX}"$($(PRIVATE_PREFIX)DISPLAY) C++:"${CL_RST}" $(PRIVATE_MODULE) <= $<"
 @mkdir -p $(dir $@)
 $(hide) $(RELATIVE_PWD) $(PRIVATE_CXX) \
 	$(addprefix -I , $(PRIVATE_C_INCLUDES)) \
@@ -1360,7 +1360,7 @@ $(hide) $(RELATIVE_PWD) $(PRIVATE_CC) \
 endef
 
 define transform-host-c-to-o-no-deps
-@echo "$($(PRIVATE_PREFIX)DISPLAY) C: $(PRIVATE_MODULE) <= $<"
+@echo ${CL_PFX}"$($(PRIVATE_PREFIX)DISPLAY) C:"${CL_RST}" $(PRIVATE_MODULE) <= $<"
 $(call transform-host-c-or-s-to-o-no-deps, $(PRIVATE_CFLAGS) $(PRIVATE_CONLYFLAGS) $(PRIVATE_DEBUG_CFLAGS))
 endef
 
@@ -2079,7 +2079,7 @@ $(if $(PRIVATE_EXTRA_JAR_ARGS),$(call add-java-resources-to,$@))
 endef
 
 define transform-java-to-classes.jar
-@echo "target Java: $(PRIVATE_MODULE) ($(PRIVATE_CLASS_INTERMEDIATES_DIR))"
+@echo -e ${CL_PFX}"target Java:"${CL_RST}" $(PRIVATE_MODULE) ($(PRIVATE_CLASS_INTERMEDIATES_DIR))"
 $(call compile-java,$(TARGET_JAVAC),$(PRIVATE_BOOTCLASSPATH))
 endef
 
@@ -2673,7 +2673,7 @@ endef
 ###########################################################
 
 define transform-generated-source
-@echo "target Generated: $(PRIVATE_MODULE) <= $<"
+@echo -e ${CL_PFX}"target Generated:"${CL_RST}" $(PRIVATE_MODULE) <= $<"
 @mkdir -p $(dir $@)
 $(hide) $(PRIVATE_CUSTOM_TOOL)
 endef
