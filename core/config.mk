@@ -31,7 +31,7 @@ SRC_HEADERS := \
 	$(TOPDIR)dalvik/libnativehelper/include \
 	$(TOPDIR)frameworks/base/include \
 	$(TOPDIR)frameworks/base/opengl/include \
-    $(TOPDIR)frameworks/base/native/include \
+	$(TOPDIR)frameworks/base/native/include \
 	$(TOPDIR)external/skia/include
 SRC_HOST_HEADERS:=$(TOPDIR)tools/include
 SRC_LIBRARIES:= $(TOPDIR)libs
@@ -44,6 +44,17 @@ SRC_DROIDDOC_DIR := $(TOPDIR)build/tools/droiddoc
 
 # Various mappings to avoid hard-coding paths all over the place
 include $(BUILD_SYSTEM)/pathmap.mk
+
+# #########################################################
+# Build color for the prefixes
+# #########################################################
+
+# Target prefix (yellow)
+CL_PFX="\033[33m"
+
+# Must be used at end of line to reset color terminal
+CL_RST="\033[0m"
+
 
 # ###############################################################
 # Build system internal files
