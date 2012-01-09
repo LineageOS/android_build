@@ -198,7 +198,7 @@ $(R_file_stamp): PRIVATE_RESOURCE_PUBLICS_OUTPUT := \
 			$(intermediates.COMMON)/public_resources.xml
 $(R_file_stamp): PRIVATE_PROGUARD_OPTIONS_FILE := $(proguard_options_file)
 $(R_file_stamp): $(all_res_assets) $(full_android_manifest) $(AAPT) | $(ACP)
-	@echo "target R.java/Manifest.java: $(PRIVATE_MODULE) ($@)"
+	@echo -e ${CL_PFX}"target R.java/Manifest.java:"${CL_RST}" $(PRIVATE_MODULE) ($@)"
 	@rm -f $@
 	$(create-resource-java-files)
 	$(hide) for GENERATED_MANIFEST_FILE in `find $(PRIVATE_SOURCE_INTERMEDIATES_DIR) \
@@ -231,7 +231,7 @@ $(R_file_stamp): $(resource_export_package)
 # can't know anything about PRODUCT.  Clear it out just for this target.
 $(resource_export_package): PRODUCT_AAPT_CONFIG :=
 $(resource_export_package): $(all_res_assets) $(full_android_manifest) $(AAPT)
-	@echo "target Export Resources: $(PRIVATE_MODULE) ($@)"
+	@echo -e ${CL_PFX}"target Export Resources:"${CL_RST}" $(PRIVATE_MODULE) ($@)"
 	$(create-empty-package)
 	$(add-assets-to-package)
 endif
@@ -334,7 +334,7 @@ ifneq ($(TARGET_BUILD_APPS),)
     $(LOCAL_BUILT_MODULE): PRODUCT_AAPT_CONFIG :=
 endif
 $(LOCAL_BUILT_MODULE): $(all_res_assets) $(jni_shared_libraries) $(full_android_manifest)
-	@echo "target Package: $(PRIVATE_MODULE) ($@)"
+	@echo -e ${CL_PFX}"target Package:"${CL_RST}" $(PRIVATE_MODULE) ($@)"
 	$(create-empty-package)
 	$(add-assets-to-package)
 ifneq ($(jni_shared_libraries),)

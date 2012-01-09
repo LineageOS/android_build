@@ -1,5 +1,16 @@
 # Put some miscellaneous rules here
 
+# Build system colors
+#
+# PFX: Prefix "target C++:" in yellow
+# INS: Module "Install:" output color (green for gingerbread)
+
+ifneq ($(BUILD_WITH_COLORS),0)
+  CL_PFX="\033[33m"
+  CL_INS="\033[32m"
+  CL_RST="\033[0m"
+endif
+
 # Pick a reasonable string to use to identify files.
 ifneq "" "$(filter eng.%,$(BUILD_NUMBER))"
   # BUILD_NUMBER has a timestamp in it, which means that
@@ -230,7 +241,7 @@ $(APKCERTS_FILE):
 else
 $(APKCERTS_FILE): $(all_built_packages)
 endif
-	@echo APK certs list: $@
+	@echo -e ${CL_PFX}"APK certs list:"${CL_RST}" $@"
 	@mkdir -p $(dir $@)
 	@rm -f $@
 	$(hide) $(foreach p,$(PACKAGES),\
@@ -471,7 +482,7 @@ define combine-notice-files
 $(1) $(2): PRIVATE_MESSAGE := $(3)
 $(1) $(2) $(4)/hash-timestamp: PRIVATE_DIR := $(4)
 $(4)/hash-timestamp: $(5) $(BUILD_SYSTEM)/Makefile
-	@echo Finding NOTICE files: $$@
+	@echo -e ${CL_PFX}"Finding NOTICE files:"${CL_RST}" $$@"
 	$$(hide) rm -rf $$@ $$(PRIVATE_DIR)/hash
 	$$(hide) mkdir -p $$(PRIVATE_DIR)/hash
 	$$(hide) for file in $$$$(find $$(PRIVATE_DIR)/src -type f); do \
@@ -481,7 +492,7 @@ $(4)/hash-timestamp: $(5) $(BUILD_SYSTEM)/Makefile
 		done
 	$$(hide) touch $$@
 $(1): $(4)/hash-timestamp
-	@echo Combining NOTICE files: $$@
+	@echo -e ${CL_PFX}"Combining NOTICE files:"${CL_RST}" $$@"
 	$$(hide) mkdir -p $$(dir $$@)
 	$$(hide) echo $$(PRIVATE_MESSAGE) > $$@
 	$$(hide) find $$(PRIVATE_DIR)/hash -type f | xargs cat | sort | \
@@ -506,7 +517,7 @@ $(1): $(4)/hash-timestamp
 			echo >> $$@; \
 		done
 $(2): $(4)/hash-timestamp
-	@echo Combining NOTICE files: $$@
+	@echo -e ${CL_PFX}"Combining NOTICE files:"${CL_RST}" $$@"
 	$$(hide) mkdir -p $$(dir $$@)
 	$$(hide) echo "<html><head>" > $$@
 	$$(hide) echo "<style type=\"text/css\">" >> $$@
@@ -611,7 +622,7 @@ endif
 $(kernel_notice_file): \
 	    prebuilt/$(TARGET_PREBUILT_TAG)/kernel/LINUX_KERNEL_COPYING \
 	    | $(ACP)
-	@echo Copying: $@
+	@echo -e ${CL_PFX}"Copying:"${CL_RST}" $@"
 	$(hide) mkdir -p $(dir $@)
 	$(hide) $(ACP) $< $@
 
@@ -620,7 +631,7 @@ $(device_notice_file): \
 	    $(strip $(wildcard $(TARGET_DEVICE_DIR)/NOTICE.cm)) \
 	    | $(ACP)
 	$(hide) if [ -f "$(TARGET_DEVICE_DIR)/NOTICE.cm" ]; then \
-	    echo Copying device notice: $@; \
+	    echo -e ${CL_PFX}"Copying device notice:"${CL_RST}" $@"; \
 	    mkdir -p $(dir $@); \
 	    $(ACP) $< $@; \
 	fi
@@ -769,7 +780,7 @@ RECOVERY_INSTALL_OTA_KEYS := \
 DUMPKEY_JAR := $(HOST_OUT_JAVA_LIBRARIES)/dumpkey.jar
 $(RECOVERY_INSTALL_OTA_KEYS): PRIVATE_OTA_PUBLIC_KEYS := $(OTA_PUBLIC_KEYS)
 $(RECOVERY_INSTALL_OTA_KEYS): $(OTA_PUBLIC_KEYS) $(DUMPKEY_JAR)
-	@echo "DumpPublicKey: $@ <= $(PRIVATE_OTA_PUBLIC_KEYS)"
+	@echo -e ${CL_PFX}"DumpPublicKey:"${CL_RST}" $@ <= $(PRIVATE_OTA_PUBLIC_KEYS)"
 	@rm -rf $@
 	@mkdir -p $(dir $@)
 	java -jar $(DUMPKEY_JAR) $(PRIVATE_OTA_PUBLIC_KEYS) > $@
@@ -928,7 +939,7 @@ ifeq ($(INTERNAL_USERIMAGES_USE_EXT),true)
 ## generate an ext2 image
 # $(1): output file
 define build-systemimage-target
-    @echo "Target system fs image: $(1)"
+    @echo -e ${CL_PFX}"Target system fs image:"${CL_RST}" $(1)"
     $(call build-userimage-ext-target,$(TARGET_OUT),$(1),system,$(INTERNAL_USERIMAGES_EXT_VARIANT),$(BOARD_SYSTEMIMAGE_PARTITION_SIZE))
 endef
 
@@ -937,7 +948,7 @@ else # INTERNAL_USERIMAGES_USE_EXT != true
 ## generate a yaffs2 image
 # $(1): output file
 define build-systemimage-target
-    @echo "Target system fs image: $(1)"
+    @echo -e ${CL_PFX}"Target system fs image:"${CL_RST}" $(1)"
     @mkdir -p $(dir $(1))
     $(hide) $(MKYAFFS2) -f $(mkyaffs2_extra_flags) $(TARGET_OUT) $(1)
 endef
@@ -961,14 +972,14 @@ $(RECOVERY_FROM_BOOT_PATCH): $(INSTALLED_RECOVERYIMAGE_TARGET) \
                              $(INSTALLED_BOOTIMAGE_TARGET) \
 			     $(HOST_OUT_EXECUTABLES)/imgdiff \
 	                     $(HOST_OUT_EXECUTABLES)/bsdiff
-	@echo "Construct recovery from boot"
+	@echo -e ${CL_PFX}"Construct recovery from boot"${CL_RST}
 	mkdir -p $(dir $@)
 	PATH=$(HOST_OUT_EXECUTABLES):$$PATH $(HOST_OUT_EXECUTABLES)/imgdiff $(INSTALLED_BOOTIMAGE_TARGET) $(INSTALLED_RECOVERYIMAGE_TARGET) $@
 endif
 
 
 $(INSTALLED_SYSTEMIMAGE): $(BUILT_SYSTEMIMAGE) $(RECOVERY_FROM_BOOT_PATCH) | $(ACP)
-	@echo "Install system fs image: $@"
+	@echo -e ${CL_PFX}"Install system fs image:"${CL_RST}" $@"
 	$(copy-file-to-target)
 	$(hide) $(call assert-max-image-size,$@ $(RECOVERY_FROM_BOOT_PATCH),$(BOARD_SYSTEMIMAGE_PARTITION_SIZE),yaffs)
 
@@ -977,7 +988,7 @@ systemimage: $(INSTALLED_SYSTEMIMAGE)
 .PHONY: systemimage-nodeps snod
 systemimage-nodeps snod: $(filter-out systemimage-nodeps snod,$(MAKECMDGOALS)) \
 	            | $(INTERNAL_USERIMAGES_DEPS)
-	@echo "make $@: ignoring dependencies"
+	@echo -e ${CL_PFX}"make $@:"${CL_RST}" ignoring dependencies"
 	$(call build-systemimage-target,$(INSTALLED_SYSTEMIMAGE))
 	$(hide) $(call assert-max-image-size,$(INSTALLED_SYSTEMIMAGE),$(BOARD_SYSTEMIMAGE_PARTITION_SIZE),yaffs)
 
@@ -1163,7 +1174,7 @@ $(BUILT_TARGET_FILES_PACKAGE): \
 		$(APKCERTS_FILE) \
 		$(HOST_OUT_EXECUTABLES)/fs_config \
 		| $(ACP)
-	@echo "Package target files: $@"
+	@echo -e ${CL_PFX}"Package target files:"${CL_RST}" $@"
 	$(hide) rm -rf $@ $(zip_root)
 	$(hide) mkdir -p $(dir $@) $(zip_root)
 	@# Components of the recovery image
@@ -1304,7 +1315,7 @@ else
 endif
 
 $(INTERNAL_OTA_PACKAGE_TARGET): $(BUILT_TARGET_FILES_PACKAGE) $(OTATOOLS)
-	@echo "Package OTA: $@"
+	@echo -e ${CL_PFX}"Package OTA:"${CL_RST}" $@"
 	$(OTA_FROM_TARGET_SCRIPT) -v \
 	   -p $(HOST_OUT) \
            -k $(KEY_CERT_PAIR) \
@@ -1350,7 +1361,7 @@ else
 endif
 
 $(INTERNAL_UPDATE_PACKAGE_TARGET): $(BUILT_TARGET_FILES_PACKAGE) $(OTATOOLS)
-	@echo "Package: $@"
+	@echo -e ${CL_PFX}"Package:"${CL_RST}" $@"
 	$(IMG_FROM_TARGET_SCRIPT) -v \
 	   -s $(extensions) \
 	   -p $(HOST_OUT) \
@@ -1384,7 +1395,7 @@ endif    # TARGET_SIMULATOR != true
 # gets the DexOpt one if we're doing that.
 INSTALLED_FILES_FILE := $(PRODUCT_OUT)/installed-files.txt
 $(INSTALLED_FILES_FILE): $(INSTALLED_SYSTEMIMAGE)
-	@echo Installed file list: $@
+	@echo -e ${CL_PFX}"Installed file list:"${CL_RST}" $@"
 	@mkdir -p $(dir $@)
 	@rm -f $@
 	$(hide) build/tools/fileslist.py $(TARGET_OUT) $(TARGET_OUT_DATA) > $@
@@ -1420,7 +1431,7 @@ $(BUILT_TESTS_ZIP_PACKAGE): \
 		$(BUILT_SYSTEMIMAGE) \
 		$(INSTALLED_USERDATAIMAGE_TARGET) \
 		| $(ACP)
-	@echo "Package test files: $@"
+	@echo -e ${CL_PFX}"Package test files:"${CL_RST}" $@"
 	$(hide) rm -rf $@ $(zip_root)
 	$(hide) mkdir -p $(dir $@) $(zip_root)
 	@# Some parts of the system image
@@ -1463,7 +1474,7 @@ name := $(name)-symbols-$(FILE_NAME_TAG)
 
 SYMBOLS_ZIP := $(PRODUCT_OUT)/$(name).zip
 $(SYMBOLS_ZIP): $(INSTALLED_SYSTEMIMAGE) $(INSTALLED_BOOTIMAGE_TARGET)
-	@echo "Package symbols: $@"
+	@echo -e ${CL_PFX}"Package symbols:"${CL_RST}" $@"
 	$(hide) rm -rf $@
 	$(hide) mkdir -p $(dir $@)
 	$(hide) zip -qr $@ $(TARGET_OUT_UNSTRIPPED)
@@ -1480,7 +1491,7 @@ name := $(name)-apps-$(FILE_NAME_TAG)
 
 APPS_ZIP := $(PRODUCT_OUT)/$(name).zip
 $(APPS_ZIP): $(INSTALLED_SYSTEMIMAGE)
-	@echo "Package apps: $@"
+	@echo -e ${CL_PFX}"Package apps:"${CL_RST}" $@"
 	$(hide) rm -rf $@
 	$(hide) mkdir -p $(dir $@)
 	$(hide) zip -qj $@ $(TARGET_OUT_APPS)/*
@@ -1492,7 +1503,7 @@ $(APPS_ZIP): $(INSTALLED_SYSTEMIMAGE)
 #
 EMMA_META_ZIP := $(PRODUCT_OUT)/emma_meta.zip
 $(EMMA_META_ZIP): $(INSTALLED_SYSTEMIMAGE)
-	@echo "Collecting Emma coverage meta files."
+	@echo -e ${CL_PFX}"Collecting Emma coverage meta files."${CL_RST}
 	$(hide) find $(TARGET_COMMON_OUT_ROOT) -name "coverage.em" | \
 		zip -@ -q $@
 
@@ -1520,7 +1531,7 @@ name := $(TARGET_PRODUCT)-emulator-$(FILE_NAME_TAG)
 INTERNAL_EMULATOR_PACKAGE_TARGET := $(PRODUCT_OUT)/$(name).zip
 
 $(INTERNAL_EMULATOR_PACKAGE_TARGET): $(INTERNAL_EMULATOR_PACKAGE_FILES)
-	@echo "Package: $@"
+	@echo -e ${CL_PFX}"Package:"${CL_RST}" $@"
 	$(hide) zip -qj $@ $(INTERNAL_EMULATOR_PACKAGE_FILES)
 
 endif
@@ -1618,7 +1629,7 @@ $(INTERNAL_SDK_TARGET): PRIVATE_INPUT_FILES := $(sdk_atree_files)
 #SDK_GNU_ERROR := true
 
 $(INTERNAL_SDK_TARGET): $(deps)
-	@echo "Package SDK: $@"
+	@echo -e ${CL_PFX}"Package SDK:"${CL_RST}" $@"
 	$(hide) rm -rf $(PRIVATE_DIR) $@
 	$(hide) for f in $(target_gnu_MODULES); do \
 	  if [ -f $$f ]; then \
@@ -1666,11 +1677,11 @@ endif # !simulator
 INTERNAL_FINDBUGS_XML_TARGET := $(PRODUCT_OUT)/findbugs.xml
 INTERNAL_FINDBUGS_HTML_TARGET := $(PRODUCT_OUT)/findbugs.html
 $(INTERNAL_FINDBUGS_XML_TARGET): $(ALL_FINDBUGS_FILES)
-	@echo UnionBugs: $@
+	@echo -e ${CL_PFX}"UnionBugs:"${CL_RST}" $@"
 	$(hide) prebuilt/common/findbugs/bin/unionBugs $(ALL_FINDBUGS_FILES) \
 	> $@
 $(INTERNAL_FINDBUGS_HTML_TARGET): $(INTERNAL_FINDBUGS_XML_TARGET)
-	@echo ConvertXmlToText: $@
+	@echo -e ${CL_PFX}"ConvertXmlToText:"${CL_RST}" $@"
 	$(hide) prebuilt/common/findbugs/bin/convertXmlToText -html:fancy.xsl \
 	$(INTERNAL_FINDBUGS_XML_TARGET)	> $@
 
