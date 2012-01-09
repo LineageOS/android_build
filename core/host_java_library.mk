@@ -58,7 +58,7 @@ $(built_dex): $(full_classes_jar) $(DX)
 
 $(LOCAL_BUILT_MODULE): PRIVATE_DEX_FILE := $(built_dex)
 $(LOCAL_BUILT_MODULE): $(built_dex) $(java_resource_sources) | $(AAPT)
-	@echo "Host Jar: $(PRIVATE_MODULE) ($@)"
+	@echo -e ${CL_PFX}"Host Jar:"${CL_RST}" $(PRIVATE_MODULE) ($@)"
 	$(create-empty-package)
 	$(add-dex-to-package)
 ifneq ($(extra_jar_args),)

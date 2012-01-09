@@ -185,11 +185,11 @@ $(full_classes_compiled_jar): PRIVATE_JAVAC_DEBUG_FLAGS := -g
 ifneq ($(strip $(LOCAL_JARJAR_RULES)),)
 $(full_classes_jarjar_jar): PRIVATE_JARJAR_RULES := $(LOCAL_JARJAR_RULES)
 $(full_classes_jarjar_jar): $(full_classes_compiled_jar) | $(JARJAR)
-	@echo JarJar: $@
+	@echo -e ${CL_PFX}"JarJar:"${CL_RST}" $@"
 	$(hide) java -jar $(JARJAR) process $(PRIVATE_JARJAR_RULES) $< $@
 else
 $(full_classes_jarjar_jar): $(full_classes_compiled_jar) | $(ACP)
-	@echo Copying: $@
+	@echo -e ${CL_PFX}"Copying:"${CL_RST}" $@"
 	$(hide) $(ACP) $< $@
 endif
 
@@ -221,13 +221,13 @@ $(PRIVATE_EMMA_COVERAGE_FILE): $(full_classes_emma_jar)
 LOCAL_PROGUARD_FLAGS := $(LOCAL_PROGUARD_FLAGS) $(addprefix -libraryjars ,$(EMMA_JAR))
 else
 $(full_classes_emma_jar): $(full_classes_jarjar_jar) | $(ACP)
-	@echo Copying: $@
+	@echo -e ${CL_PFX}"Copying:"${CL_RST}" $@"
 	$(copy-file-to-target)
 endif
 
 # Keep a copy of the jar just before proguard processing.
 $(full_classes_jar): $(full_classes_emma_jar) | $(ACP)
-	@echo Copying: $@
+	@echo -e ${CL_PFX}"Copying:"${CL_RST}" $@"
 	$(hide) $(ACP) $< $@
 
 # Run proguard if necessary, otherwise just copy the file.
@@ -289,7 +289,7 @@ endif
 $(built_dex_intermediate): $(full_classes_proguard_jar) $(DX)
 	$(transform-classes.jar-to-dex)
 $(built_dex): $(built_dex_intermediate) | $(ACP)
-	@echo Copying: $@
+	@echo -e ${CL_PFX}"Copying:"${CL_RST}" $@"
 	$(hide) $(ACP) $< $@
 ifneq ($(GENERATE_DEX_DEBUG),)
 	$(install-dex-debug)
@@ -303,7 +303,7 @@ $(findbugs_xml) : PRIVATE_AUXCLASSPATH := $(addprefix -auxclasspath ,$(strip \
 # We can't depend directly on full_classes_jar because the PRIVATE_
 # vars won't be set up correctly.
 $(findbugs_xml) : $(LOCAL_BUILT_MODULE)
-	@echo Findbugs: $@
+	@echo -e ${CL_PFX}"Findbugs:"${CL_RST}" $@"
 	$(hide) $(FINDBUGS) -textui -effort:min -xml:withMessages \
 		$(PRIVATE_AUXCLASSPATH) \
 		$(PRIVATE_JAR_FILE) \
@@ -316,7 +316,7 @@ $(findbugs_html) : PRIVATE_XML_FILE := $(findbugs_xml)
 $(LOCAL_MODULE)-findbugs : $(findbugs_html)
 $(findbugs_html) : $(findbugs_xml)
 	@mkdir -p $(dir $@)
-	@echo ConvertXmlToText: $@
+	@echo -e ${CL_PFX}"ConvertXmlToText:"${CL_RST}" $@"
 	$(hide) prebuilt/common/findbugs/bin/convertXmlToText -html:fancy.xsl $(PRIVATE_XML_FILE) \
 	> $@
 
