@@ -16,6 +16,24 @@
       "revId": "93a92c01ec4e617b35f68e0f5d704db3865aecdc",
       "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAPH///Ro\u003d",
+        "filename": "core/base_rules.mk",
+        "patchSetId": 8
+      },
+      "lineNbr": 474,
+      "author": {
+        "id": 1039
+      },
+      "writtenOn": "2012-01-13T22:28:23Z",
+      "side": 1,
+      "message": "yes, to see better the installed files\n\nits usefull when you build a single project like the recovery with \"mm -B\", to find and copy paste the output binary path",
+      "parentUuid": "AAAAPH///Vo\u003d",
+      "revId": "93a92c01ec4e617b35f68e0f5d704db3865aecdc",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
     }
   ]
 }
