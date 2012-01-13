@@ -13,7 +13,6 @@ SECTIONS
 . = 0x8000 + SIZEOF_HEADERS; 
   .interp         : { *(.interp) }
   .hash           : { *(.hash) }
-  .gnu.hash       : { *(.gnu.hash) }
   .dynsym         : { *(.dynsym) }
   .dynstr         : { *(.dynstr) }
   .gnu.version    : { *(.gnu.version) }
