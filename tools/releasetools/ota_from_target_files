@@ -56,6 +56,10 @@ Usage:  ota_from_target_files [flags] input_target_files output_ota_package
       Enable or disable the execution of backuptool.sh.
       Disabled by default.
 
+  --configid <boolean>
+     Enable or disable the execution of modelid_cfg.sh.
+      Disabled by default.
+
   --override_device <device>
       Override device-specific asserts. Can be a comma-separated list.
 
@@ -96,6 +100,7 @@ OPTIONS.extra_script = None
 OPTIONS.aslr_mode = True
 OPTIONS.worker_threads = 3
 OPTIONS.backuptool = False
+OPTIONS.modelidcfg = False
 OPTIONS.override_device = 'auto'
 
 def MostPopularKey(d, default):
@@ -441,6 +446,9 @@ def WriteFullOTAPackage(input_zip, output_zip):
     script.ShowProgress(0.2, 10)
     script.RunBackup("restore")
 
+  if OPTIONS.modelidcfg:
+    script.RunConfig("")
+
   script.ShowProgress(0.2, 10)
   script.WriteRawImage("/boot", "boot.img")
 
@@ -781,6 +789,8 @@ def main(argv):
       OPTIONS.worker_threads = int(a)
     elif o in ("--backup"):
       OPTIONS.backuptool = bool(a.lower() == 'true')
+    elif o in ("--configid"):
+      OPTIONS.modelidcfg = bool(a.lower() == 'true')
     elif o in ("--override_device"):
       OPTIONS.override_device = a
     else:

@@ -1278,6 +1278,12 @@ else
     $(INTERNAL_OTA_PACKAGE_TARGET): backuptool := false
 endif
 
+ifneq ($(NAM_VARIANT),)
+    $(INTERNAL_OTA_PACKAGE_TARGET): modelidcfg := true
+else
+    $(INTERNAL_OTA_PACKAGE_TARGET): modelidcfg := false
+endif
+
 ifeq ($(TARGET_OTA_ASSERT_DEVICE),)
     $(INTERNAL_OTA_PACKAGE_TARGET): override_device := auto
 else
@@ -1325,6 +1331,12 @@ ifeq ($(TARGET_RELEASETOOL_IMG_FROM_TARGET_SCRIPT),)
     IMG_FROM_TARGET_SCRIPT := ./build/tools/releasetools/img_from_target_files
 else
     IMG_FROM_TARGET_SCRIPT := $(TARGET_RELEASETOOL_IMG_FROM_TARGET_SCRIPT)
+endif
+
+ifneq ($(NAM_VARIANT),)
+    $(INTERNAL_OTA_PACKAGE_TARGET): modelidcfg := true
+else
+    $(INTERNAL_OTA_PACKAGE_TARGET): modelidcfg := false
 endif
 
 $(INTERNAL_UPDATE_PACKAGE_TARGET): $(BUILT_TARGET_FILES_PACKAGE) $(DISTTOOLS)
