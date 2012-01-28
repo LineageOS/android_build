@@ -21,7 +21,11 @@
 
 PRODUCT_PROPERTY_OVERRIDES := \
     keyguard.no_require_sim=true \
+
+ifeq ($(LINEAGE_BUILD),)
+PRODUCT_PROPERTY_OVERRIDES := \
     ro.com.android.dataroaming=true
+endif
 
 PRODUCT_COPY_FILES := \
     frameworks/native/data/etc/handheld_core_hardware.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/handheld_core_hardware.xml
