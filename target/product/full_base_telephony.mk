@@ -20,8 +20,7 @@
 # entirely appropriate to inherit from for on-device configurations.
 
 PRODUCT_PROPERTY_OVERRIDES := \
-    keyguard.no_require_sim=true \
-    ro.com.android.dataroaming=true
+    keyguard.no_require_sim=true
 
 PRODUCT_COPY_FILES := \
     device/generic/goldfish/data/etc/apns-conf.xml:system/etc/apns-conf.xml \
