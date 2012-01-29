@@ -27,6 +27,7 @@ import tempfile
 import threading
 import time
 import zipfile
+import string
 
 try:
   from hashlib import sha1 as sha1
@@ -81,6 +82,7 @@ def CloseInheritedPipes():
 def LoadInfoDict(zip):
   """Read and parse the META/misc_info.txt key/value pairs from the
   input target files and return a dict."""
+
 
   d = {}
   try:
@@ -371,8 +373,16 @@ def SignFile(input_name, output_name, key, password, align=None,
   else:
     sign_name = output_name
 
-  cmd = ["java", "-Xmx2048m", "-jar",
+  x = subprocess.Popen(['uname', '-m'])
+  p = string.rstrip("x")
+  if p == "x86_64":
+    cmd = ["java", "-Xmx2048m", "-jar",
            os.path.join(OPTIONS.search_path, "framework", "signapk.jar")]
+  else:
+    cmd = ["java", "-Xmx1024m", "-jar",
+           os.path.join(OPTIONS.search_path, "framework", "signapk.jar")]
+  x.terminate()
+
   if whole_file:
     cmd.append("-w")
   cmd.extend([key + ".x509.pem", key + ".pk8",
