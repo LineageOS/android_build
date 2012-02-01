@@ -58,7 +58,7 @@ Usage:  ota_from_target_files [flags] input_target_files output_ota_package
 
   --configid <boolean>
      Enable or disable the execution of modelid_cfg.sh.
-      Disabled by default.
+      Enabled by default.
 
   --override_device <device>
       Override device-specific asserts. Can be a comma-separated list.
@@ -100,7 +100,7 @@ OPTIONS.extra_script = None
 OPTIONS.aslr_mode = True
 OPTIONS.worker_threads = 3
 OPTIONS.backuptool = False
-OPTIONS.modelidcfg = False
+OPTIONS.modelidcfg = True
 OPTIONS.override_device = 'auto'
 
 def MostPopularKey(d, default):
