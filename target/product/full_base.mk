@@ -32,6 +32,11 @@ PRODUCT_PACKAGES := \
     VideoEditor \
     WAPPushManager
 
+PRODUCT_PACKAGES += \
+    libvideoeditor_jni \
+    libvideoeditorplayer \
+    libvideoeditor_core
+
 # Additional settings used in all AOSP builds
 PRODUCT_PROPERTY_OVERRIDES := \
     ro.com.android.dateformat=MM-dd-yyyy \

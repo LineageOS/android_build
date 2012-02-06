@@ -50,10 +50,7 @@ PRODUCT_PACKAGES += \
     icu.dat
 
 PRODUCT_PACKAGES += \
-    librs_jni \
-    libvideoeditor_jni \
-    libvideoeditorplayer \
-    libvideoeditor_core
+    librs_jni
 
 PRODUCT_PACKAGES += \
     audio.primary.default \
