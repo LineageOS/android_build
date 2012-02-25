@@ -8,6 +8,9 @@ To make these errors go away, you have two choices:
 
    2) You can update current.txt by executing the following command:
          make %UPDATE_API%
+      ^^^^^^^^^^^^^^^^^^
+      NO. NO. STOP BEING LAZY. SERIOUSLY.
+      DO NOT DO THIS in CM. THIS IS A LIE. IT WILL BREAK THINGS.
 
       To submit the revised current.txt to the main Android repository,
       you will need approval.
