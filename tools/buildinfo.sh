@@ -9,7 +9,7 @@ echo "ro.build.version.incremental=$BUILD_NUMBER"
 echo "ro.build.version.sdk=$PLATFORM_SDK_VERSION"
 echo "ro.build.version.codename=$PLATFORM_VERSION_CODENAME"
 echo "ro.build.version.release=$PLATFORM_VERSION"
-echo "ro.build.date=`date`"
+echo "ro.build.date=`LANG=C date`"
 if [ -z "$BUILD_UTC_DATE" ] ; then
     BUILD_UTC_DATE=`date +%s`
 fi
