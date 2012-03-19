@@ -1190,12 +1190,14 @@ endif
 ifdef INSTALLED_KERNEL_TARGET
 	$(hide) $(ACP) $(INSTALLED_KERNEL_TARGET) $(zip_root)/BOOT/kernel
 endif
-ifdef INSTALLED_RAMDISK_TARGET
-	$(hide) $(ACP) $(INSTALLED_RAMDISK_TARGET) $(zip_root)/BOOT/ramdisk.img
-endif
-ifdef INSTALLED_BOOTLOADER_MODULE
-	$(hide) $(ACP) \
-		$(INSTALLED_BOOTLOADER_MODULE) $(zip_root)/BOOT/bootloader
+ifneq ($(strip $(BOARD_HAS_LOCKED_BOOTLOADER)), true)
+	ifdef INSTALLED_RAMDISK_TARGET
+		$(hide) $(ACP) $(INSTALLED_RAMDISK_TARGET) $(zip_root)/BOOT/ramdisk.img
+	endif
+	ifdef INSTALLED_BOOTLOADER_MODULE
+		$(hide) $(ACP) \
+			$(INSTALLED_BOOTLOADER_MODULE) $(zip_root)/BOOT/bootloader
+	endif
 endif
 ifdef INSTALLED_2NDBOOTLOADER_TARGET
 	$(hide) $(ACP) \
