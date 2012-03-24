@@ -113,7 +113,7 @@ $(error Directory names containing spaces not supported)
 endif
 
 
-# Check for the correct version of java (1.6)
+# Check for the correct version of java
 java_version := $(shell java -version 2>&1 | head -n 1 | grep '^java .*[ "]1\.6[\. "$$]')
 ifneq ($(shell java -version 2>&1 | grep -i openjdk),)
 java_version :=
@@ -127,11 +127,11 @@ $(info Your version is: $(shell java -version 2>&1 | head -n 1).)
 $(info The correct version is: Java SE 1.6.)
 $(info $(space))
 $(info Please follow the machine setup instructions at)
-$(info $(space)$(space)$(space)$(space)http://source.android.com/source/initializing.html)
+$(info $(space)$(space)$(space)$(space)http://source.android.com/source/download.html)
 $(info ************************************************************)
 endif
 
-# Check for the correct version of javac (1.6)
+# Check for the correct version of javac
 javac_version := $(shell javac -version 2>&1 | head -n 1 | grep '[ "]1\.6[\. "$$]')
 ifeq ($(strip $(javac_version)),)
 $(info ************************************************************)
@@ -142,26 +142,7 @@ $(info Your version is: $(shell javac -version 2>&1 | head -n 1).)
 $(info The correct version is: 1.6.)
 $(info $(space))
 $(info Please follow the machine setup instructions at)
-$(info $(space)$(space)$(space)$(space)http://source.android.com/source/initializing.html)
-$(info ************************************************************)
-$(error stop)
-endif
-
-# Check for the correct version of python (2.5 -- 2.7)
-# Although they probably have seen syntax errors before now if they got this far
-python_version := $(shell python -V 2>&1 | grep '[ "]2\.7[\. "$$]')
-ifeq ($(strip $(python_version)),)
-$(info ************************************************************)
-$(info You are attempting to build with the incorrect version)
-$(info of python.)
-$(info $(space))
-$(info Your version is:)
-$(info $(shell python -V))
-$(info $(space))
-$(info The correct version is: 2.5 -- 2.7.)
-$(info $(space))
-$(info Please follow the machine setup instructions at)
-$(info $(space)$(space)$(space)$(space)http://source.android.com/source/initializing.html)
+$(info $(space)$(space)$(space)$(space)http://source.android.com/source/download.html)
 $(info ************************************************************)
 $(error stop)
 endif
