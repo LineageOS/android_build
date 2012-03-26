@@ -43,8 +43,15 @@ endif # build_mac_version is 10.6
 HOST_GLOBAL_CFLAGS += -fPIC
 HOST_NO_UNDEFINED_LDFLAGS := -Wl,-undefined,error
 
-HOST_CC := $(CC)
-HOST_CXX := $(CXX)
+host_gcc_version := $(shell gcc --version)
+ifneq ($(filter LLVM build 2336.9.00, $(host_gcc_version)),)
+ # On Xcode 4.3 and later force the use of the gnu compatible compilers
+ HOST_CC := gcc
+ HOST_CXX := g++
+else
+ HOST_CC := $(CC)
+ HOST_CXX := $(CXX)
+endif
 HOST_AR := $(AR)
 HOST_STRIP := $(STRIP)
 HOST_STRIP_COMMAND = $(HOST_STRIP) --strip-debug $< -o $@
