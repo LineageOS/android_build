@@ -357,7 +357,7 @@ BUILT_RAMDISK_TARGET := $(PRODUCT_OUT)/ramdisk.img
 # We just build this directly to the install location.
 INSTALLED_RAMDISK_TARGET := $(BUILT_RAMDISK_TARGET)
 $(INSTALLED_RAMDISK_TARGET): $(MKBOOTFS) $(INTERNAL_RAMDISK_FILES) | $(MINIGZIP)
-	$(call pretty,"Target ram disk: $@")
+	$(call pretty,-e ${CL_PFX}"Target ram disk:"${CL_RST}" $@")
 	$(hide) $(MKBOOTFS) $(TARGET_ROOT_OUT) | $(MINIGZIP) > $@
 
 ifneq ($(strip $(TARGET_NO_KERNEL)),true)
@@ -398,13 +398,13 @@ tmp_dir_for_image := $(call intermediates-dir-for,EXECUTABLES,boot_img)/bootimg
 INTERNAL_BOOTIMAGE_ARGS += --tmpdir $(tmp_dir_for_image)
 INTERNAL_BOOTIMAGE_ARGS += --genext2fs $(MKEXT2IMG)
 $(INSTALLED_BOOTIMAGE_TARGET): $(MKEXT2IMG) $(INTERNAL_BOOTIMAGE_FILES)
-	$(call pretty,"Target boot image: $@")
+	$(call pretty,-e ${CL_PFX}"Target boot image:"${CL_RST}" $@")
 	$(hide) $(MKEXT2BOOTIMG) $(INTERNAL_BOOTIMAGE_ARGS) --output $@
 
 else ifndef BOARD_CUSTOM_BOOTIMG_MK # TARGET_BOOTIMAGE_USE_EXT2 != true
 
 $(INSTALLED_BOOTIMAGE_TARGET): $(MKBOOTIMG) $(INTERNAL_BOOTIMAGE_FILES)
-	$(call pretty,"Target boot image: $@")
+	$(call pretty,-e ${CL_PFX}"Target boot image:"${CL_RST}" $@")
 	$(hide) $(MKBOOTIMG) $(INTERNAL_BOOTIMAGE_ARGS) --output $@
 	$(hide) $(call assert-max-image-size,$@,$(BOARD_BOOTIMAGE_PARTITION_SIZE),raw)
 endif # ifndef BOARD_CUSTOM_BOOTIMG_MK
@@ -737,7 +737,7 @@ $(TARGET_RECOVERY_ROOT_TIMESTAMP): $(INTERNAL_RECOVERY_FILES) \
 		$(recovery_build_prop) $(recovery_resource_deps) \
 		$(recovery_fstab) \
 		$(RECOVERY_INSTALL_OTA_KEYS)
-	@echo ----- Making recovery filesystem ------
+	@echo -e ${CL_PFX}"----- Making recovery filesystem ------"${CL_RST}
 	mkdir -p $(TARGET_RECOVERY_OUT)
 	mkdir -p $(TARGET_RECOVERY_ROOT_OUT)
 	mkdir -p $(TARGET_RECOVERY_ROOT_OUT)/etc
@@ -760,26 +760,26 @@ $(TARGET_RECOVERY_ROOT_TIMESTAMP): $(INTERNAL_RECOVERY_FILES) \
 	        > $(TARGET_RECOVERY_ROOT_OUT)/default.prop
 	echo Modifying default.prop
 	sed -i 's/ro.build.date.utc=.*/ro.build.date.utc=0/g' $(TARGET_RECOVERY_ROOT_OUT)/default.prop
-	@echo ----- Made recovery filesystem -------- $(TARGET_RECOVERY_ROOT_OUT)
+	@echo "----- Made recovery filesystem --------" $(TARGET_RECOVERY_ROOT_OUT)
 	@touch $(TARGET_RECOVERY_ROOT_TIMESTAMP)
 
 $(recovery_uncompressed_ramdisk): $(MINIGZIP) \
     $(TARGET_RECOVERY_ROOT_TIMESTAMP)
-	@echo ----- Making uncompressed recovery ramdisk ------
+	@echo "----- Making uncompressed recovery ramdisk ------"
 	$(MKBOOTFS) $(TARGET_RECOVERY_ROOT_OUT) > $@
 
 $(recovery_ramdisk): $(MKBOOTFS) \
     $(recovery_uncompressed_ramdisk)
-	@echo ----- Making recovery ramdisk ------
+	@echo "----- Making recovery ramdisk ------"
 	$(MINIGZIP) < $(recovery_uncompressed_ramdisk) > $@
 
 ifndef BOARD_CUSTOM_BOOTIMG_MK
 $(INSTALLED_RECOVERYIMAGE_TARGET): $(MKBOOTIMG) \
 		$(recovery_ramdisk) \
 		$(recovery_kernel)
-	@echo ----- Making recovery image ------
+	@echo "----- Making recovery image ------"
 	$(MKBOOTIMG) $(INTERNAL_RECOVERYIMAGE_ARGS) --output $@
-	@echo ----- Made recovery image -------- $@
+	@echo -e ${CL_INS}"Made recovery image: $@"${CL_RST}
 	$(hide) $(call assert-max-image-size,$@,$(BOARD_RECOVERYIMAGE_PARTITION_SIZE),raw)
 endif
 
@@ -792,7 +792,7 @@ recoveryimage: $(INSTALLED_RECOVERYIMAGE_TARGET)
 
 INSTALLED_RECOVERYZIP_TARGET := $(PRODUCT_OUT)/utilities/update.zip
 $(INSTALLED_RECOVERYZIP_TARGET): $(INSTALLED_RECOVERYIMAGE_TARGET) $(TARGET_OUT)/bin/updater $(HOST_OUT_JAVA_LIBRARIES)/signapk.jar
-	@echo ----- Making recovery zip -----
+	@echo -e ${CL_PFX}"----- Making recovery zip -----"${CL_RST}
 	./build/tools/device/mkrecoveryzip.sh $(PRODUCT_OUT) $(HOST_OUT_JAVA_LIBRARIES)/signapk.jar
 
 .PHONY: recoveryzip
@@ -900,7 +900,7 @@ endif
 
 
 $(INSTALLED_SYSTEMIMAGE): $(BUILT_SYSTEMIMAGE) $(RECOVERY_FROM_BOOT_PATCH) | $(ACP)
-	@echo "Install system fs image: $@"
+	@echo -e ${CL_INS}"Install system fs image: $@"${CL_RST}
 	$(copy-file-to-target)
 	$(hide) $(call assert-max-image-size,$@ $(RECOVERY_FROM_BOOT_PATCH),$(BOARD_SYSTEMIMAGE_PARTITION_SIZE),yaffs)
 
@@ -916,7 +916,7 @@ systemimage-nodeps snod: $(filter-out systemimage-nodeps snod,$(MAKECMDGOALS)) \
 #######
 ## system tarball
 define build-systemtarball-target
-    $(call pretty,"Target system fs tarball: $(INSTALLED_SYSTEMTARBALL_TARGET)")
+    $(call pretty,-e ${CL_PFX}"Target system fs tarball:"${CL_RST}" $(INSTALLED_SYSTEMTARBALL_TARGET)")
     $(MKTARBALL) $(FS_GET_STATS) \
 		$(PRODUCT_OUT) system $(PRIVATE_SYSTEM_TAR) \
 		$(INSTALLED_SYSTEMTARBALL_TARGET)
@@ -1113,7 +1113,7 @@ $(BUILT_TARGET_FILES_PACKAGE): \
 		$(APKCERTS_FILE) \
 		$(HOST_OUT_EXECUTABLES)/fs_config \
 		| $(ACP)
-	@echo "Package target files: $@"
+	@echo -e ${CL_PFX}"Package target files:"${CL_RST}" $@"
 	$(hide) rm -rf $@ $(zip_root)
 	$(hide) mkdir -p $(dir $@) $(zip_root)
 	@# Components of the recovery image
@@ -1270,7 +1270,7 @@ else
 endif
 
 $(INTERNAL_OTA_PACKAGE_TARGET): $(BUILT_TARGET_FILES_PACKAGE) $(OTATOOLS)
-	@echo "Package OTA: $@"
+	@echo -e ${CL_PFX}"Package OTA:"${CL_RST}" $@"
 	$(OTA_FROM_TARGET_SCRIPT) -v \
 	   -p $(HOST_OUT) \
 	   -k $(KEY_CERT_PAIR) \
@@ -1282,7 +1282,7 @@ $(INTERNAL_OTA_PACKAGE_TARGET): $(BUILT_TARGET_FILES_PACKAGE) $(OTATOOLS)
 otapackage: $(INTERNAL_OTA_PACKAGE_TARGET)
 bacon: otapackage
 ifneq ($(TARGET_CUSTOM_RELEASETOOL),)
-	@echo "Running releasetool"
+	@echo -e ${CL_PFX}"Running releasetool"${CL_RST}
 	$(hide) $(TARGET_CUSTOM_RELEASETOOL)
 else
 	$(hide) ./vendor/cm/tools/squisher
@@ -1313,7 +1313,7 @@ else
 endif
 
 $(INTERNAL_UPDATE_PACKAGE_TARGET): $(BUILT_TARGET_FILES_PACKAGE) $(OTATOOLS)
-	@echo "Package: $@"
+	@echo -e ${CL_PFX}"Package:"${CL_RST}" $@"
 	$(IMG_FROM_TARGET_SCRIPT) -v \
 	   -s $(extensions) \
 	   -p $(HOST_OUT) \
@@ -1409,7 +1409,7 @@ name := $(name)-apps-$(FILE_NAME_TAG)
 
 APPS_ZIP := $(PRODUCT_OUT)/$(name).zip
 $(APPS_ZIP): $(INSTALLED_SYSTEMIMAGE)
-	@echo "Package apps: $@"
+	@echo -e ${CL_PFX}"Package apps:"${CL_RST}" $@"
 	$(hide) rm -rf $@
 	$(hide) mkdir -p $(dir $@)
 	$(hide) zip -qj $@ $(TARGET_OUT_APPS)/*
@@ -1445,7 +1445,7 @@ name := $(TARGET_PRODUCT)-emulator-$(FILE_NAME_TAG)
 INTERNAL_EMULATOR_PACKAGE_TARGET := $(PRODUCT_OUT)/$(name).zip
 
 $(INTERNAL_EMULATOR_PACKAGE_TARGET): $(INTERNAL_EMULATOR_PACKAGE_FILES)
-	@echo "Package: $@"
+	@echo -e ${CL_PFX}"Package:"${CL_RST}" $@"
 	$(hide) zip -qj $@ $(INTERNAL_EMULATOR_PACKAGE_FILES)
 
 # -----------------------------------------------------------------
