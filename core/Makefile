@@ -430,6 +430,7 @@ INTERNAL_BOOTIMAGE_ARGS += --genext2fs $(MKEXT2IMG)
 $(INSTALLED_BOOTIMAGE_TARGET): $(MKEXT2IMG) $(INTERNAL_BOOTIMAGE_FILES)
 	$(call pretty,"Target boot image: $@")
 	$(hide) $(MKEXT2BOOTIMG) $(INTERNAL_BOOTIMAGE_ARGS) --output $@
+	@echo -e ${CL_INS}"Made boot image: $@"${CL_RST}
 
 else ifndef BOARD_CUSTOM_BOOTIMG_MK # TARGET_BOOTIMAGE_USE_EXT2 != true
 
@@ -437,6 +438,8 @@ $(INSTALLED_BOOTIMAGE_TARGET): $(MKBOOTIMG) $(INTERNAL_BOOTIMAGE_FILES)
 	$(call pretty,"Target boot image: $@")
 	$(hide) $(MKBOOTIMG) $(INTERNAL_BOOTIMAGE_ARGS) --output $@
 	$(hide) $(call assert-max-image-size,$@,$(BOARD_BOOTIMAGE_PARTITION_SIZE),raw)
+	@echo -e ${CL_INS}"Made boot image: $@"${CL_RST}
+
 endif # TARGET_BOOTIMAGE_USE_EXT2
 
 endif # standard ANDROID bootimg (not uboot multiimage)
@@ -796,17 +799,17 @@ $(TARGET_RECOVERY_ROOT_TIMESTAMP): $(INTERNAL_RECOVERY_FILES) \
 		$(recovery_build_prop) $(recovery_resource_deps) \
 		$(recovery_fstab) \
 		$(RECOVERY_INSTALL_OTA_KEYS)
-	@echo ----- Making recovery filesystem ------
+	@echo "----- Making recovery filesystem -----"
 	mkdir -p $(TARGET_RECOVERY_OUT)
 	mkdir -p $(TARGET_RECOVERY_ROOT_OUT)
 	mkdir -p $(TARGET_RECOVERY_ROOT_OUT)/etc
 	mkdir -p $(TARGET_RECOVERY_ROOT_OUT)/tmp
-	echo Copying baseline ramdisk...
+	@echo Copying baseline ramdisk...
 	cp -R $(TARGET_ROOT_OUT) $(TARGET_RECOVERY_OUT)
 ifneq ($(BOARD_USES_COMBINED_RECOVERY),true)
 	rm $(TARGET_RECOVERY_ROOT_OUT)/init*.rc
 endif
-	echo Modifying ramdisk contents...
+	@echo Modifying ramdisk contents...
 ifeq ($(BOARD_USES_COMBINED_RECOVERY),true)
 	cp -f $(recovery_initrc) $(TARGET_RECOVERY_ROOT_OUT)/
 else
@@ -831,17 +834,17 @@ else
 	cat $(INSTALLED_DEFAULT_PROP_TARGET) $(recovery_build_prop) \
 	        > $(TARGET_RECOVERY_ROOT_OUT)/default.prop
 endif
-	@echo ----- Made recovery filesystem -------- $(TARGET_RECOVERY_ROOT_OUT)
+	@echo "----- Made recovery filesystem -----" $(TARGET_RECOVERY_ROOT_OUT)
 	@touch $(TARGET_RECOVERY_ROOT_TIMESTAMP)
 
 $(recovery_uncompressed_ramdisk): $(MINIGZIP) \
     $(TARGET_RECOVERY_ROOT_TIMESTAMP)
-	@echo ----- Making uncompressed recovery ramdisk ------
+	@echo "----- Making uncompressed recovery ramdisk -----"
 	$(MKBOOTFS) $(TARGET_RECOVERY_ROOT_OUT) > $@
 
 $(recovery_ramdisk): $(MKBOOTFS) \
     $(recovery_uncompressed_ramdisk)
-	@echo ----- Making recovery ramdisk ------
+	@echo "----- Making recovery ramdisk -----"
 	$(MINIGZIP) < $(recovery_uncompressed_ramdisk) > $@
 
 ifeq ($(BOARD_USES_UBOOT),true)
@@ -851,12 +854,12 @@ recovery_uboot_ramdisk := $(recovery_ramdisk:%.img=%.ub)
 
 $(INSTALLED_RECOVERYIMAGE_TARGET): $(MKIMAGE) $(recovery_ramdisk) \
 		$(recovery_kernel)
-	@echo ----- Making recovery image ------
+	@echo "----- Making recovery image -----"
 	$(MKIMAGE) $(INTERNAL_RECOVERYIMAGE_ARGS) $(recovery_uboot_ramdisk)
-	@echo ----- Made recovery uboot ramdisk -------- $(recovery_uboot_ramdisk)
+	@echo -e ${CL_INS}"Made recovery uboot ramdisk $(recovery_uboot_ramdisk)"${CL_RST}
 	$(hide) rm -f $@
 	zip -qDj $@ $(recovery_uboot_ramdisk) $(recovery_kernel)
-	@echo ----- Made recovery image \(zip\) -------- $@
+	@echo -e ${CL_INS}"Made recovery image \(zip\) $@"${CL_RST}
 
 
 else ifeq ($(BOARD_USES_UBOOT_MULTIIMAGE),true)
@@ -879,9 +882,9 @@ INTERNAL_RECOVERYIMAGE_ARGS += -d $(UBOOT_DATA_ARGS)
 $(INSTALLED_RECOVERYIMAGE_TARGET): $(MKIMAGE) \
 		$(recovery_ramdisk) \
 		$(recovery_kernel)
-	@echo ----- Making recovery uboot image ------
+	@echo "----- Making recovery uboot image -----"
 	$(MKIMAGE) $(INTERNAL_RECOVERYIMAGE_ARGS) $@
-	@echo ----- Made recovery uboot image -------- $@
+	@echo -e ${CL_INS}"Made recovery uboot image $@"${CL_RST}
 	#$(hide) $(call assert-max-image-size,$@,$(BOARD_RECOVERYIMAGE_PARTITION_SIZE),raw)
 
 
@@ -889,9 +892,9 @@ else ifndef BOARD_CUSTOM_BOOTIMG_MK
 $(INSTALLED_RECOVERYIMAGE_TARGET): $(MKBOOTIMG) \
 		$(recovery_ramdisk) \
 		$(recovery_kernel)
-	@echo ----- Making recovery image ------
+	@echo "----- Making recovery image -----"
 	$(MKBOOTIMG) $(INTERNAL_RECOVERYIMAGE_ARGS) --output $@
-	@echo ----- Made recovery image -------- $@
+	@echo -e ${CL_INS}"Made recovery image $@"${CL_RST}
 	$(hide) $(call assert-max-image-size,$@,$(BOARD_RECOVERYIMAGE_PARTITION_SIZE),raw)
 
 endif
@@ -905,7 +908,7 @@ recoveryimage: $(INSTALLED_RECOVERYIMAGE_TARGET)
 
 INSTALLED_RECOVERYZIP_TARGET := $(PRODUCT_OUT)/utilities/update.zip
 $(INSTALLED_RECOVERYZIP_TARGET): $(INSTALLED_RECOVERYIMAGE_TARGET) $(TARGET_OUT)/bin/updater
-	@echo ----- Making recovery zip -----
+	@echo -e ${CL_PFX}"----- Making recovery zip -----"${CL_RST}
 	./build/tools/device/mkrecoveryzip.sh $(PRODUCT_OUT) $(HOST_OUT_JAVA_LIBRARIES)/signapk.jar
 
 .PHONY: recoveryzip
@@ -979,7 +982,7 @@ endif
 
 
 $(INSTALLED_SYSTEMIMAGE): $(BUILT_SYSTEMIMAGE) $(RECOVERY_FROM_BOOT_PATCH) | $(ACP)
-	@echo -e ${CL_PFX}"Install system fs image:"${CL_RST}" $@"
+	@echo -e ${CL_INS}"Install system fs image:"${CL_RST}" $@"
 	$(copy-file-to-target)
 	$(hide) $(call assert-max-image-size,$@ $(RECOVERY_FROM_BOOT_PATCH),$(BOARD_SYSTEMIMAGE_PARTITION_SIZE),yaffs)
 
@@ -1374,10 +1377,12 @@ otapackage: $(INTERNAL_OTA_PACKAGE_TARGET)
 bacon: otapackage
 
 ifeq ($(TARGET_CUSTOM_RELEASETOOL),)
+	@echo "Running releasetool..."
 	$(hide) \
 	WANT_SQUASHFS=$(WANT_SQUASHFS) \
 	./vendor/cyanogen/tools/squisher
 else
+	@echo "Running custom releasetool..."
 	$(hide) \
 	WANT_SQUASHFS=$(WANT_SQUASHFS) \
 	$(TARGET_CUSTOM_RELEASETOOL)
