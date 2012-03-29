@@ -21,7 +21,7 @@ full_src_files := $(addprefix $(LOCAL_PATH)/,$(LOCAL_SRC_FILES))
 $(LOCAL_BUILT_MODULE) : PRIVATE_SRC_FILES := $(full_src_files)
 
 $(LOCAL_BUILT_MODULE) : $(full_src_files) $(KCM)
-	@echo KeyCharMap: $@
+	@echo -e ${CL_GRN}"KeyCharMap:"${CL_RST} $@
 	@mkdir -p $(dir $@)
 	$(hide) $(KCM) $(PRIVATE_SRC_FILES) $@
     

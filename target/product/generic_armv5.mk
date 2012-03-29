@@ -14,8 +14,19 @@
 # limitations under the License.
 #
 
+<<<<<<< HEAD:target/product/generic_armv5.mk
 # This is a generic product that isn't specialized for a specific device.
 # It includes the base Android platform.
+=======
+gpl_source_tgz := $(call intermediates-dir-for,PACKAGING,gpl_source,HOST,COMMON)/gpl_source.tgz
+
+$(gpl_source_tgz): PRIVATE_PATHS := $(sort $(patsubst %/, %, $(dir $(ALL_GPL_MODULE_LICENSE_FILES))))
+$(gpl_source_tgz) : $(ALL_GPL_MODULE_LICENSE_FILES)
+	@echo -e ${CL_GRN}"Package gpl sources:"${CL_RST}" $@"
+	@rm -rf $(dir $@) && mkdir -p $(dir $@)
+	$(hide) tar cfz $@ --exclude ".git*" $(PRIVATE_PATHS)
+
+>>>>>>> cd5ea04... build-with-colors: moar colors:core/tasks/collect_gpl_sources.mk
 
 $(call inherit-product, $(SRC_TARGET_DIR)/product/generic.mk)
 $(call inherit-product, $(SRC_TARGET_DIR)/product/core.mk)

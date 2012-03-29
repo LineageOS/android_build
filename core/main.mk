@@ -770,22 +770,22 @@ dirs_to_clean := \
 	$(TARGET_COMMON_OUT_ROOT)
 clean:
 	@for dir in $(dirs_to_clean) ; do \
-	    echo "Cleaning $$dir..."; \
+	    echo -e ${CL_GRN}"Cleaning $$dir..."${CL_RST}; \
 	    rm -rf $$dir; \
 	done
-	@echo "Clean."; \
+	@echo -e ${CL_GRN}"Clean."${CL_RST}; \
 
 .PHONY: clobber
 clobber:
 	@rm -rf $(OUT_DIR)/*
-	@echo "Entire build directory removed."
+	@echo -e ${CL_GRN}"Entire build directory removed."${CL_RST}
 
 # The rules for dataclean and installclean are defined in cleanbuild.mk.
 
 #xxx scrape this from ALL_MODULE_NAME_TAGS
 .PHONY: modules
 modules:
-	@echo "Available sub-modules:"
+	@echo -e ${CL_GRN}"Available sub-modules:"${CL_RST}
 	@echo "$(call module-names-for-tag-list,$(ALL_MODULE_TAGS))" | \
 	      tr -s ' ' '\n' | sort -u | $(COLUMN)
 

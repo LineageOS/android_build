@@ -84,7 +84,7 @@ endif
 $(full_target): PRIVATE_STAGING_DIR := $(staging)
 
 $(full_target): $(sdk_addon_deps) | $(ACP)
-	@echo Packaging SDK Addon: $@
+	@echo -e ${CL_GRN}"Packaging SDK Addon:"${CL_RST}" $@"
 	$(hide) mkdir -p $(PRIVATE_STAGING_DIR)/docs/reference
 	$(hide) if [ -n "$(PRIVATE_DOCS_DIR)" ] ; then \
 	    $(ACP) -r $(PRIVATE_DOCS_DIR)/* $(PRIVATE_STAGING_DIR)/docs/reference ;\
