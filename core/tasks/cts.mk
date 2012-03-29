@@ -165,7 +165,7 @@ $(INTERNAL_CTS_TARGET): PRIVATE_CTS_DIR := $(cts_dir)
 $(INTERNAL_CTS_TARGET): PRIVATE_DIR := $(cts_dir)/$(cts_name)
 $(INTERNAL_CTS_TARGET): TMP_DIR := $(cts_dir)/temp
 $(INTERNAL_CTS_TARGET): $(cts_dir)/all_cts_files_stamp $(DEFAULT_TEST_PLAN) $(CORE_VM_TEST_DESC)
-	@echo "Package CTS: $@"
+	@echo -e ${CL_GRN}"Package CTS:"${CL_RST}" $@"
 	$(hide) cd $(dir $@) && zip -rq $(notdir $@) $(PRIVATE_NAME)
 
 .PHONY: cts
