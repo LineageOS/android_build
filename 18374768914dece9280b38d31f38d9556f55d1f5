@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAASH///D0\u003d",
+        "filename": "core/tasks/kernel.mk",
+        "patchSetId": 1
+      },
+      "lineNbr": 96,
+      "author": {
+        "id": 1039
+      },
+      "writtenOn": "2012-04-11T15:54:12Z",
+      "side": 1,
+      "message": "is that a remains ? kernel/arch/arm/configs \u003c\u003c kernel prefix",
+      "revId": "18374768914dece9280b38d31f38d9556f55d1f5",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    }
+  ]
+}
