@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAASX///4M\u003d",
+        "filename": "core/tasks/kernel.mk",
+        "patchSetId": 4
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1039
+      },
+      "writtenOn": "2012-04-12T07:45:05Z",
+      "side": 1,
+      "message": "could you add \"| tail -n 1\" or not use system/lib/modules directly to allow to override the modules.dep (if it requires some fixes of additions for optional modules)\n\nactually, if two are found, the build breaks (generally there is the final one at root (lib/modules) and searched one in the genenated tree lib/modules/[modver]/kernel....",
+      "revId": "126ac584677a20869a228f0282b03237ca8c522a",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    }
+  ]
+}
