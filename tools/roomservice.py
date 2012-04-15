@@ -49,7 +49,8 @@ def add_to_manifest(repositories):
         lm = ElementTree.Element("manifest")
 
     for repository in repositories:
-        (repo_name, repo_target) = repository
+        repo_name = repository['repository']
+        repo_target = repository['target_path']
         if exists_in_tree(lm, repo_name):
             print 'CyanogenMod/%s already exists' % (repo_name)
             continue
@@ -57,6 +58,10 @@ def add_to_manifest(repositories):
         print 'Adding dependency: CyanogenMod/%s -> %s' % (repo_name, repo_target)
         project = ElementTree.Element("project", attrib = { "path": repo_target,
             "remote": "github", "name": "CyanogenMod/%s" % repo_name })
+
+        if 'branch' in repository:
+            project.set('revision',repository['branch'])
+
         lm.append(project)
 
     indent(lm, 0)
@@ -79,7 +84,7 @@ def fetch_dependencies(repo_path, repositories):
         print dependencies
 
         for dependency in dependencies:
-            fetch_list.append((dependency['repository'],dependency['target_path']))
+            fetch_list.append(dependency)
             syncable_repos.append(dependency['target_path'])
 
         dependencies_file.close()
@@ -100,7 +105,8 @@ for repository in repositories:
         manufacturer = repo_name.replace("android_device_", "").replace("_" + device, "")
 
         repo_path = "device/%s/%s" % (manufacturer, device)
-        add_to_manifest([(repo_name,repo_path)])
+
+        add_to_manifest([{'repository':repo_name,'target_path':repo_path}])
 
         print "Syncing repository to retrieve project."
         os.system('repo sync %s' % repo_path)
