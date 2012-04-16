@@ -91,7 +91,8 @@ define clean-module-folder
 endef
 
 ifeq ($(TARGET_ARCH),arm)
-    ARM_CROSS_COMPILE:=CROSS_COMPILE=$(ARM_EABI_TOOLCHAIN)/arm-eabi-
+    CROSS_COMPILE ?= $(ARM_EABI_TOOLCHAIN)/arm-eabi-
+    ARM_CROSS_COMPILE := CROSS_COMPILE=$(CROSS_COMPILE)
 endif
 
 ifeq ($(TARGET_KERNEL_MODULES),)
