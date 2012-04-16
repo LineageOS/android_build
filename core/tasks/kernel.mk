@@ -4,7 +4,11 @@ TARGET_AUTO_KDIR := $(shell echo $(TARGET_DEVICE_DIR) | sed -e 's/^device/kernel
 
 ## Externally influenced variables
 # kernel location - optional, defaults to kernel/<vendor>/<device>
+
 TARGET_KERNEL_SOURCE ?= $(TARGET_AUTO_KDIR)
+ARCH ?= arm
+CROSS_COMPILE ?= arm-eabi-
+
 KERNEL_SRC := $(TARGET_KERNEL_SOURCE)
 # kernel configuration - mandatory
 KERNEL_DEFCONFIG := $(TARGET_KERNEL_CONFIG)
@@ -99,15 +103,15 @@ $(KERNEL_OUT):
 	mkdir -p $(KERNEL_MODULES_OUT)
 
 $(KERNEL_CONFIG): $(KERNEL_OUT)
-	$(MAKE) -C $(KERNEL_SRC) O=$(KERNEL_OUT) ARCH=arm CROSS_COMPILE=arm-eabi- $(KERNEL_DEFCONFIG)
+	$(MAKE) -C $(KERNEL_SRC) O=$(KERNEL_OUT) $(KERNEL_DEFCONFIG)
 
 $(KERNEL_OUT)/piggy : $(TARGET_PREBUILT_INT_KERNEL)
 	$(hide) gunzip -c $(KERNEL_OUT)/arch/arm/boot/compressed/piggy.gzip > $(KERNEL_OUT)/piggy
 
 TARGET_KERNEL_BINARIES: $(KERNEL_OUT) $(KERNEL_CONFIG) $(KERNEL_HEADERS_INSTALL)
-	$(MAKE) -C $(KERNEL_SRC) O=$(KERNEL_OUT) ARCH=arm CROSS_COMPILE=arm-eabi- $(TARGET_PREBUILT_INT_KERNEL_TYPE)
-	$(MAKE) -C $(KERNEL_SRC) O=$(KERNEL_OUT) ARCH=arm CROSS_COMPILE=arm-eabi- modules
-	$(MAKE) -C $(KERNEL_SRC) O=$(KERNEL_OUT) INSTALL_MOD_PATH=../../$(KERNEL_MODULES_INSTALL) ARCH=arm CROSS_COMPILE=arm-eabi- modules_install
+	$(MAKE) -C $(KERNEL_SRC) O=$(KERNEL_OUT) $(TARGET_PREBUILT_INT_KERNEL_TYPE)
+	$(MAKE) -C $(KERNEL_SRC) O=$(KERNEL_OUT) modules
+	$(MAKE) -C $(KERNEL_SRC) O=$(KERNEL_OUT) INSTALL_MOD_PATH=../../$(KERNEL_MODULES_INSTALL) modules_install
 
 $(TARGET_KERNEL_MODULES): TARGET_KERNEL_BINARIES
 
@@ -116,7 +120,7 @@ $(TARGET_PREBUILT_INT_KERNEL): $(TARGET_KERNEL_MODULES)
 	$(clean-module-folder)
 
 $(KERNEL_HEADERS_INSTALL): $(KERNEL_OUT) $(KERNEL_CONFIG)
-	$(MAKE) -C $(KERNEL_SRC) O=$(KERNEL_OUT) ARCH=arm CROSS_COMPILE=arm-eabi- headers_install
+	$(MAKE) -C $(KERNEL_SRC) O=$(KERNEL_OUT) headers_install
 
 endif # FULL_KERNEL_BUILD
 
