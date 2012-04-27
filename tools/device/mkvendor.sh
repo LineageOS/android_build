@@ -105,7 +105,7 @@ then
                 cp $TMPDIR/ramdisk/$f $DEVICE_DIR/recovery/root/sbin
             fi
         done
-        cp $TEMPLATE_DIR/init.htc.rc $DEVICE_DIR/recovery/root
+        cp $TEMPLATE_DIR/init.htc.rc $DEVICE_DIR/recovery/root/init.$DEVICE.rc
     fi
 fi
 
