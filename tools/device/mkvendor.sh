@@ -94,6 +94,19 @@ then
     then
         cp $RECOVERY_FSTAB $DEVICE_DIR/recovery.fstab
     fi
+    if [ -f "$TMPDIR/ramdisk/sbin/htcbatt" ]
+    then
+        mkdir -p $DEVICE_DIR/recovery/root/sbin
+        CHARGER_FILES="/sbin/choice_fn /sbin/htcbatt /sbin/power_test /sbin/offmode_charging /sbin/detect_key"
+        for f in $CHARGER_FILES
+        do
+            if [ -f "$TMPDIR/ramdisk/$f" ]
+            then
+                cp $TMPDIR/ramdisk/$f $DEVICE_DIR/recovery/root/sbin
+            fi
+        done
+        cp $TEMPLATE_DIR/init.htc.rc $DEVICE_DIR/recovery/root
+    fi
 fi
 
 
