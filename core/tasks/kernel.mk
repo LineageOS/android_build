@@ -91,17 +91,18 @@ define clean-module-folder
 endef
 
 ifeq ($(TARGET_ARCH),arm)
+    ARM_CROSS_COMPILE := $(ARM_EABI_TOOLCHAIN)/arm-eabi-
     ifneq ($(USE_CCACHE),)
-      ccache := $(ANDROID_BUILD_TOP)/prebuilt/$(HOST_PREBUILT_TAG)/ccache/ccache
-      # Check that the executable is here.
-      ccache := $(strip $(wildcard $(ccache)))
-      ifdef ccache
-        ARM_CROSS_COMPILE:=CROSS_COMPILE="$(ccache) $(ARM_EABI_TOOLCHAIN)/arm-eabi-"
-        ccache = 
-      else
-        ARM_CROSS_COMPILE:=CROSS_COMPILE=$(ARM_EABI_TOOLCHAIN)/arm-eabi-
-      endif
+        ccache := $(ANDROID_BUILD_TOP)/prebuilt/$(HOST_PREBUILT_TAG)/ccache/ccache
+        # Check that the executable is here.
+        ccache := $(strip $(wildcard $(ccache)))
+        ifdef ccache
+            ARM_CROSS_COMPILE := $(ccache) $(ARM_CROSS_COMPILE)
+            ccache =
+        endif
     endif
+
+    ARM_CROSS_COMPILE := CROSS_COMPILE="$(ARM_CROSS_COMPILE)"
 endif
 
 ifeq ($(TARGET_KERNEL_MODULES),)
