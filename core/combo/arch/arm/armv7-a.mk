@@ -26,7 +26,6 @@ endif
 arch_variant_cflags := \
     -march=armv7-a \
     -mtune=$(strip $(TARGET_ARCH_VARIANT_CPU)) \
-    -mcpu=$(strip $(TARGET_ARCH_VARIANT_CPU)) \
     -D__ARM_ARCH_7__ \
     -D__ARM_ARCH_7A__
 
