@@ -37,7 +37,7 @@ for repository in repositories:
                 sys.exit()
 
         repo_path = "device/%s/%s" % (manufacturer, device)
-        project = ElementTree.Element("project", attrib = { "path": repo_path, "remote": "github", "name": "CyanogenMod/%s" % repository['name'], revision="gingerbread" })
+        project = ElementTree.Element("project", attrib = { "path": repo_path, "remote": "github", "name": "CyanogenMod/%s" % repository['name'], "revision": "gingerbread" })
         lm.append(project)
         
         raw_xml = ElementTree.tostring(lm)
