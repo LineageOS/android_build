@@ -102,7 +102,7 @@ def add_to_manifest(repositories):
 
         print 'Adding dependency: CyanogenMod/%s -> %s' % (repo_name, repo_target)
         project = ElementTree.Element("project", attrib = { "path": repo_target,
-            "remote": "github", "name": "CyanogenMod/%s" % repo_name, revision: "ics" })
+            "remote": "github", "name": "CyanogenMod/%s" % repo_name, "revision": "ics" })
 
         if 'branch' in repository:
             project.set('revision',repository['branch'])
