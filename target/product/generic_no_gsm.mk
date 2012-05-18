@@ -66,7 +66,7 @@ PRODUCT_COPY_FILES := \
 $(call inherit-product-if-exists, frameworks/base/data/fonts/fonts.mk)
 $(call inherit-product-if-exists, external/lohit-fonts/fonts.mk)
 $(call inherit-product-if-exists, frameworks/base/data/keyboards/keyboards.mk)
-$(call inherit-product, $(SRC_TARGET_DIR)/product/core.mk)
+$(call inherit-product, $(SRC_TARGET_DIR)/product/core_no_gsm.mk)
 
 # Overrides
 PRODUCT_BRAND := generic
