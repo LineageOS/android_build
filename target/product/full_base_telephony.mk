@@ -25,8 +25,5 @@ PRODUCT_PACKAGES := \
 PRODUCT_PROPERTY_OVERRIDES := \
     keyguard.no_require_sim=true
 
-PRODUCT_COPY_FILES := \
-    device/generic/goldfish/data/etc/apns-conf.xml:system/etc/apns-conf.xml
-
 $(call inherit-product, $(SRC_TARGET_DIR)/product/full_base.mk)
 $(call inherit-product, $(SRC_TARGET_DIR)/product/telephony.mk)
