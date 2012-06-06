@@ -1868,6 +1868,16 @@ function reposync() {
             ;;
     esac
 }
+
+function repodiff() {
+    if [ -z "$*" ]; then
+        echo "Usage: repodiff <ref-from> [[ref-to] [--numstat]]"
+        return
+    fi
+    diffopts=$* repo forall -c \
+      'echo "$REPO_PATH ($REPO_REMOTE)"; git diff ${diffopts} 2>/dev/null ;'
+}
+
 # Force JAVA_HOME to point to java 1.7 or java 1.6  if it isn't already set.
 #
 # Note that the MacOS path for java 1.7 includes a minor revision number (sigh).
