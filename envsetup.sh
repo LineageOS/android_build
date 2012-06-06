@@ -25,6 +25,7 @@ Invoke ". build/envsetup.sh" from your shell to add the following functions to y
 - cmrebase:  Rebase a Gerrit change and push it again
 - mka:       Builds using SCHED_BATCH on all processors
 - reposync:  Parallel repo sync using ionice and SCHED_BATCH
+- repodiff:  Diff 2 different branches or tags within the same repo
 
 Environment options:
 - SANITIZE_HOST: Set to 'true' to use ASAN for all host modules. Note that
@@ -1958,6 +1959,15 @@ function reposync() {
             schedtool -B -n 1 -e ionice -n 1 repo sync -j 4 "$@"
             ;;
     esac
+}
+
+function repodiff() {
+    if [ -z "$*" ]; then
+        echo "Usage: repodiff <ref-from> [[ref-to] [--numstat]]"
+        return
+    fi
+    diffopts=$* repo forall -c \
+      'echo "$REPO_PATH ($REPO_REMOTE)"; git diff ${diffopts} 2>/dev/null ;'
 }
 
 # Force JAVA_HOME to point to java 1.7/1.8 if it isn't already set.
