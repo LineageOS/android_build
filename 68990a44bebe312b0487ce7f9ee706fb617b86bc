@@ -1,0 +1,9 @@
+Change-Id: I68990a44bebe312b0487ce7f9ee706fb617b86bc
+Code-Review+2: Ricardo Cerqueira <cyanogenmod@cerqueira.org>
+Verified+1: Ricardo Cerqueira <cyanogenmod@cerqueira.org>
+Code-Review+1: Emilio López <turl@tuxfamily.org>
+Submitted-by: Ricardo Cerqueira <cyanogenmod@cerqueira.org>
+Submitted-at: Mon, 11 Jun 2012 15:18:25 +0400
+Reviewed-on: http://review.cyanogenmod.com/17467
+Project: CyanogenMod/android_build
+Branch: refs/heads/ics
