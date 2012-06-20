@@ -19,6 +19,8 @@ BOOTIMAGE=$3
 
 UNPACKBOOTIMG=$(which unpackbootimg)
 
+echo Arguments: $@
+
 if [ -z "$MANUFACTURER" ]
 then
     usage
