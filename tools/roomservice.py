@@ -13,7 +13,11 @@ if len(sys.argv) > 2:
 else:
     depsonly = None
 
-device = product[product.index("_") + 1:]
+try:
+    device = product[product.index("_") + 1:]
+except:
+    device = product
+
 if not depsonly:
     print "Device %s not found. Attempting to retrieve device repository from CyanogenMod Github (http://github.com/CyanogenMod)." % device
 
