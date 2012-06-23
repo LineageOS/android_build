@@ -20,4 +20,3 @@
 PRODUCT_PACKAGES := \
     Mms
 
-PRODUCT_COPY_FILES := \
