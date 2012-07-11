@@ -56,6 +56,7 @@ PRODUCT_PACKAGES := \
     drmserver \
     dx \
     ext \
+    framework2 \
     framework-res \
     hprof-conv \
     icu.dat \
