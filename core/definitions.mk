@@ -883,7 +883,7 @@ define transform-cpp-to-o
 @echo -e ${CL_PFX}"target $(PRIVATE_ARM_MODE) C++:"${CL_RST}" $(PRIVATE_MODULE) <= $<"
 $(hide) $(PRIVATE_CXX) \
 	$(addprefix -I , $(PRIVATE_C_INCLUDES)) \
-	@$(PRIVATE_IMPORT_INCLUDES) \
+	$(shell cat $(PRIVATE_IMPORT_INCLUDES)) \
 	$(addprefix -isystem ,\
 	    $(if $(PRIVATE_NO_DEFAULT_COMPILER_FLAGS),, \
 	        $(filter-out $(PRIVATE_C_INCLUDES), \
@@ -913,7 +913,7 @@ define transform-c-or-s-to-o-no-deps
 @mkdir -p $(dir $@)
 $(hide) $(PRIVATE_CC) \
 	$(addprefix -I , $(PRIVATE_C_INCLUDES)) \
-	@$(PRIVATE_IMPORT_INCLUDES) \
+	$(shell cat $(PRIVATE_IMPORT_INCLUDES)) \
 	$(addprefix -isystem ,\
 	    $(if $(PRIVATE_NO_DEFAULT_COMPILER_FLAGS),, \
 	        $(filter-out $(PRIVATE_C_INCLUDES), \
@@ -975,7 +975,7 @@ define transform-host-cpp-to-o
 @echo -e ${CL_PFX}"host C++:"${CL_RST}" $(PRIVATE_MODULE) <= $<"
 $(hide) $(PRIVATE_CXX) \
 	$(addprefix -I , $(PRIVATE_C_INCLUDES)) \
-	@$(PRIVATE_IMPORT_INCLUDES) \
+	$(shell cat $(PRIVATE_IMPORT_INCLUDES)) \
 	$(addprefix -isystem ,\
 	    $(if $(PRIVATE_NO_DEFAULT_COMPILER_FLAGS),, \
 	        $(filter-out $(PRIVATE_C_INCLUDES), \
@@ -1003,7 +1003,7 @@ define transform-host-c-or-s-to-o-no-deps
 @mkdir -p $(dir $@)
 $(hide) $(PRIVATE_CC) \
 	$(addprefix -I , $(PRIVATE_C_INCLUDES)) \
-	@$(PRIVATE_IMPORT_INCLUDES) \
+	$(shell cat $(PRIVATE_IMPORT_INCLUDES)) \
 	$(addprefix -isystem ,\
 	    $(if $(PRIVATE_NO_DEFAULT_COMPILER_FLAGS),, \
 	        $(filter-out $(PRIVATE_C_INCLUDES), \
