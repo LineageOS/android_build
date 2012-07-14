@@ -162,7 +162,7 @@ endif
 TARGET_GLOBAL_CPPFLAGS += -fvisibility-inlines-hidden
 
 # More flags/options can be added here
-TARGET_RELEASE_CFLAGS := \
+TARGET_RELEASE_CFLAGS += \
 			-DNDEBUG \
 			-g \
 			-Wstrict-aliasing=2 \
