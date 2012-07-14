@@ -162,6 +162,8 @@ endif
 TARGET_GLOBAL_CPPFLAGS += -fvisibility-inlines-hidden
 
 # More flags/options can be added here
+ifndef TARGET_EXTRA_CFLAGS
+  TARGET_RELEASE_CFLAGS := \
 TARGET_RELEASE_CFLAGS := \
 			-DNDEBUG \
 			-g \
@@ -169,6 +171,15 @@ TARGET_RELEASE_CFLAGS := \
 			-fgcse-after-reload \
 			-frerun-cse-after-loop \
 			-frename-registers
+else
+  TARGET_RELEASE_CFLAGS += \
+			  -DNDEBUG \
+			  -g \
+			  -Wstrict-aliasing=2 \
+			  -fgcse-after-reload \
+			  -frerun-cse-after-loop \
+			  -frename-registers
+endif
 
 libc_root := bionic/libc
 libm_root := bionic/libm
