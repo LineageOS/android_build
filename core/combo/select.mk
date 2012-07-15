@@ -66,9 +66,17 @@ ifneq ($(USE_CCACHE),)
   ifeq ($(HOST_OS)-$(BUILD_OS),windows-linux)
     CCACHE_HOST_TAG := linux-$(BUILD_ARCH)
   endif
-  ccache := prebuilts/misc/$(CCACHE_HOST_TAG)/ccache/ccache
-  # Check that the executable is here.
-  ccache := $(strip $(wildcard $(ccache)))
+  CCACHE_HOST_EXTRA_TAG := $(subst $(HOST_PREBUILT_TAG),$(CCACHE_HOST_TAG),$(HOST_PREBUILT_EXTRA_TAG))
+
+  # search executable
+  ifneq ($(strip $(wildcard prebuilts/misc/$(CCACHE_HOST_EXTRA_TAG)/ccache/ccache)),)
+    ccache := prebuilts/misc/$(CCACHE_HOST_EXTRA_TAG)/ccache/ccache
+  else
+    ifneq ($(strip $(wildcard prebuilts/misc/$(CCACHE_HOST_TAG)/ccache/ccache)),)
+      ccache := prebuilts/misc/$(CCACHE_HOST_TAG)/ccache/ccache
+    endif
+  endif
+
   ifdef ccache
     # prepend ccache if necessary
     ifneq ($(ccache),$(firstword $($(combo_target)CC)))

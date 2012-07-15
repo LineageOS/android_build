@@ -94,12 +94,28 @@ $(error HOST_BUILD_TYPE must be either release or debug, not '$(HOST_BUILD_TYPE)
 endif
 endif
 
+# Get whether the host is running a 32-bit or a 64-bit OS
+HOST_BITS := $(strip $(shell getconf LONG_BIT))
+ifneq ($(HOST_BITS),32)
+ifneq ($(HOST_BITS),64)
+HOST_BITS :=
+endif
+endif
+
 # This is the standard way to name a directory containing prebuilt host
 # objects. E.g., prebuilt/$(HOST_PREBUILT_TAG)/cc
 ifeq ($(HOST_OS),windows)
   HOST_PREBUILT_TAG := windows
 else
   HOST_PREBUILT_TAG := $(HOST_OS)-$(HOST_ARCH)
+endif
+
+# If $(HOST_BITS) could be determined $(HOST_PREBUILT_EXTRA_TAG) contains
+# this as well and should be checked for a prebuilt first
+ifeq ($(strip $(HOST_BITS)),)
+  HOST_PREBUILT_EXTRA_TAG := $(HOST_PREBUILT_TAG)
+else
+  HOST_PREBUILT_EXTRA_TAG := $(HOST_PREBUILT_TAG)-$(HOST_BITS)
 endif
 
 # TARGET_COPY_OUT_* are all relative to the staging directory, ie PRODUCT_OUT.

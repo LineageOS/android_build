@@ -19,7 +19,11 @@
 
 # You can set TARGET_TOOLS_PREFIX to get gcc from somewhere else
 ifeq ($(strip $(TARGET_TOOLS_PREFIX)),)
+ifneq ($(strip $(wildcard prebuilt/$(HOST_PREBUILT_EXTRA_TAG)/toolchain/sh-4.3.3)),)
+TARGET_TOOLCHAIN_ROOT := prebuilt/$(HOST_PREBUILT_EXTRA_TAG)/toolchain/sh-4.3.3
+else
 TARGET_TOOLCHAIN_ROOT := prebuilt/$(HOST_PREBUILT_TAG)/toolchain/sh-4.3.3
+endif
 TARGET_TOOLS_PREFIX := $(TARGET_TOOLCHAIN_ROOT)/bin/sh-linux-gnu-
 endif
 
