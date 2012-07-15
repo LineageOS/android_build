@@ -1948,7 +1948,7 @@ define transform-classes.jar-to-dex
 @mkdir -p $(dir $@)
 $(hide) rm -f $(dir $@)classes*.dex
 $(hide) $(DX) \
-    $(if $(findstring windows,$(HOST_OS)),,-JXms16M -JXmx2048M) \
+    $(if $(findstring windows,$(HOST_OS)),,-JXms16M -JXmx$(if $(call streq,$(HOST_BITS),32),1024,2048)M) \
     --dex --output=$(dir $@) \
     $(if $(NO_OPTIMIZE_DX), \
         --no-optimize) \
