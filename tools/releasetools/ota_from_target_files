@@ -411,7 +411,9 @@ def WriteFullOTAPackage(input_zip, output_zip):
   device_specific.FullOTA_InstallBegin()
 
   if OPTIONS.backuptool:
+    script.Mount("/system")
     script.RunBackup("backup")
+    script.Unmount("/system")
 
   script.ShowProgress(0.5, 0)
 
