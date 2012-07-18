@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAVX///+A\u003d",
+        "filename": "core/tasks/kernel.mk",
+        "patchSetId": 1
+      },
+      "lineNbr": 120,
+      "author": {
+        "id": 19
+      },
+      "writtenOn": "2012-07-18T14:56:20Z",
+      "side": 1,
+      "message": "why not TARGET_KERNEL_USE_ICS_TOOLCHAIN ?",
+      "revId": "dcb001201b13ebd7d2e3ceb1ffc9642351632625",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    }
+  ]
+}
