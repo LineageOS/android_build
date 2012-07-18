@@ -16,6 +16,24 @@
       "revId": "dcb001201b13ebd7d2e3ceb1ffc9642351632625",
       "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAVX///58\u003d",
+        "filename": "core/tasks/kernel.mk",
+        "patchSetId": 1
+      },
+      "lineNbr": 120,
+      "author": {
+        "id": 2195
+      },
+      "writtenOn": "2012-07-18T17:31:05Z",
+      "side": 1,
+      "message": "Or TARGET_KERNEL_USE_443_TOOLCHAIN",
+      "parentUuid": "AAAAVX///+A\u003d",
+      "revId": "dcb001201b13ebd7d2e3ceb1ffc9642351632625",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
     }
   ]
 }
