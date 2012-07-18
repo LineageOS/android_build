@@ -81,6 +81,7 @@ PRODUCT_PACKAGES := \
     libfilterfw \
     libfilterpack_imageproc \
     libgabi++ \
+    libanalogradiobroadcasting \
     libicui18n \
     libicuuc \
     libjavacore \

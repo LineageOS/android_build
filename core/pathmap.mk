@@ -101,6 +101,7 @@ FRAMEWORKS_BASE_SUBDIRS := \
 	    keystore \
 	    icu4j \
 	    voip \
+	    fmradio \
 	 )
 
 #
