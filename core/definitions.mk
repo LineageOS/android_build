@@ -92,6 +92,12 @@ $(HOST_2ND_ARCH_VAR_PREFIX)HOST_DEPENDENCIES_ON_SHARED_LIBRARIES :=
 # They are escaped and quoted so can be passed safely to a bash command.
 ANDROID_RESOURCE_GENERATED_CLASSES := 'R.class' 'R$$*.class' 'Manifest.class' 'Manifest$$*.class'
 
+ifeq ($(TARGET_DISABLE_ARM_PIE),true)
+   PIE_EXECUTABLE_TRANSFORM :=
+else
+   PIE_EXECUTABLE_TRANSFORM := -pie
+endif
+
 ###########################################################
 ## Debugging; prints a variable list to stdout
 ###########################################################
@@ -1532,7 +1538,7 @@ endef
 ###########################################################
 
 define transform-o-to-executable-inner
-$(hide) $(PRIVATE_CXX) -pie \
+$(hide) $(PRIVATE_CXX) $(PIE_EXECUTABLE_TRANSFORM) \
 	-nostdlib -Bdynamic \
 	-Wl,-dynamic-linker,$($(PRIVATE_2ND_ARCH_VAR_PREFIX)TARGET_LINKER) \
 	-Wl,--gc-sections \
