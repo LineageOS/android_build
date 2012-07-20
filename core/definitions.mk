@@ -99,6 +99,12 @@ TARGET_DISPLAY := target
 HOST_DISPLAY := host
 HOST_CROSS_DISPLAY := host cross
 
+ifeq ($(TARGET_DISABLE_ARM_PIE),true)
+   PIE_EXECUTABLE_TRANSFORM :=
+else
+   PIE_EXECUTABLE_TRANSFORM := -pie
+endif
+
 ###########################################################
 ## Debugging; prints a variable list to stdout
 ###########################################################
@@ -1706,7 +1712,7 @@ endef
 ###########################################################
 
 define transform-o-to-executable-inner
-$(hide) $(PRIVATE_CXX) -pie \
+$(hide) $(PRIVATE_CXX) $(PIE_EXECUTABLE_TRANSFORM) \
 	-nostdlib -Bdynamic \
 	-Wl,-dynamic-linker,$(PRIVATE_LINKER) \
 	-Wl,--gc-sections \
