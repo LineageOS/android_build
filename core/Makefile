@@ -749,6 +749,13 @@ INTERNAL_MKBOOTIMG_VERSION_ARGS := \
     --os_version $(PLATFORM_VERSION) \
     --os_patch_level $(PLATFORM_SECURITY_PATCH)
 
+INSTALLED_DTIMAGE_TARGET := $(PRODUCT_OUT)/dt.img
+
+ifeq ($(strip $(BOARD_KERNEL_SEPARATED_DT)),true)
+  INTERNAL_BOOTIMAGE_ARGS += --dt $(INSTALLED_DTIMAGE_TARGET)
+  BOOTIMAGE_EXTRA_DEPS    := $(INSTALLED_DTIMAGE_TARGET)
+endif
+
 # BOARD_USES_RECOVERY_AS_BOOT = true must have BOARD_BUILD_SYSTEM_ROOT_IMAGE = true.
 ifeq ($(BOARD_USES_RECOVERY_AS_BOOT),true)
 ifneq ($(BOARD_BUILD_SYSTEM_ROOT_IMAGE),true)
@@ -802,7 +809,7 @@ bootimage-nodeps: $(MKBOOTIMG) $(BOOT_SIGNER)
 
 else ifeq (true,$(PRODUCTS.$(INTERNAL_PRODUCT).PRODUCT_SUPPORTS_VBOOT)) # PRODUCT_SUPPORTS_BOOT_SIGNER != true
 
-$(INSTALLED_BOOTIMAGE_TARGET): $(MKBOOTIMG) $(INTERNAL_BOOTIMAGE_FILES) $(VBOOT_SIGNER) $(FUTILITY)
+$(INSTALLED_BOOTIMAGE_TARGET): $(MKBOOTIMG) $(INTERNAL_BOOTIMAGE_FILES) $(VBOOT_SIGNER) $(FUTILITY) $(BOOTIMAGE_EXTRA_DEPS)
 	$(call pretty,"Target boot image: $@")
 	$(hide) $(MKBOOTIMG) $(INTERNAL_BOOTIMAGE_ARGS) $(INTERNAL_MKBOOTIMG_VERSION_ARGS) $(BOARD_MKBOOTIMG_ARGS) --output $@.unsigned
 	$(VBOOT_SIGNER) $(FUTILITY) $@.unsigned $(PRODUCTS.$(INTERNAL_PRODUCT).PRODUCT_VBOOT_SIGNING_KEY).vbpubk $(PRODUCTS.$(INTERNAL_PRODUCT).PRODUCT_VBOOT_SIGNING_KEY).vbprivk $(PRODUCTS.$(INTERNAL_PRODUCT).PRODUCT_VBOOT_SIGNING_SUBKEY).vbprivk $@.keyblock $@
@@ -817,7 +824,7 @@ bootimage-nodeps: $(MKBOOTIMG) $(VBOOT_SIGNER) $(FUTILITY)
 
 else # PRODUCT_SUPPORTS_VBOOT != true
 
-$(INSTALLED_BOOTIMAGE_TARGET): $(MKBOOTIMG) $(INTERNAL_BOOTIMAGE_FILES)
+$(INSTALLED_BOOTIMAGE_TARGET): $(MKBOOTIMG) $(INTERNAL_BOOTIMAGE_FILES) $(BOOTIMAGE_EXTRA_DEPS)
 	$(call pretty,"Target boot image: $@")
 	$(hide) $(MKBOOTIMG) $(INTERNAL_BOOTIMAGE_ARGS) $(INTERNAL_MKBOOTIMG_VERSION_ARGS) $(BOARD_MKBOOTIMG_ARGS) --output $@
 	$(hide) $(call assert-max-image-size,$@,$(BOARD_BOOTIMAGE_PARTITION_SIZE))
@@ -1340,6 +1347,10 @@ endif
 ifdef BOARD_INCLUDE_RECOVERY_DTBO
   INTERNAL_RECOVERYIMAGE_ARGS += --recovery_dtbo $(BOARD_PREBUILT_DTBOIMAGE)
 endif
+ifeq ($(strip $(BOARD_KERNEL_SEPARATED_DT)),true)
+  INTERNAL_RECOVERYIMAGE_ARGS += --dt $(INSTALLED_DTIMAGE_TARGET)
+  RECOVERYIMAGE_EXTRA_DEPS    := $(INSTALLED_DTIMAGE_TARGET)
+endif
 
 # Keys authorized to sign OTA packages this build will accept.  The
 # build always uses dev-keys for this; release packaging tools will
@@ -1476,7 +1487,8 @@ $(recovery_ramdisk): $(MINIGZIP) \
 		$(hide) $(RECOVERY_RAMDISK_COMPRESSOR) < $(recovery_uncompressed_ramdisk) > $@
 
 ifndef BOARD_CUSTOM_BOOTIMG_MK
-$(INSTALLED_RECOVERYIMAGE_TARGET): $(MKBOOTIMG) $(recovery_ramdisk) $(recovery_kernel)
+$(INSTALLED_RECOVERYIMAGE_TARGET): $(MKBOOTIMG) $(recovery_ramdisk) $(recovery_kernel) \
+		$(RECOVERYIMAGE_EXTRA_DEPS)
 		@echo ----- Making recovery image ------
 		$(call build-recoveryimage-target, $@)
 endif # BOARD_CUSTOM_BOOTIMG_MK
@@ -2623,6 +2635,15 @@ endif
 ifdef BOARD_KERNEL_PAGESIZE
 	$(hide) echo "$(BOARD_KERNEL_PAGESIZE)" > $(zip_root)/$(PRIVATE_RECOVERY_OUT)/pagesize
 endif
+ifdef BOARD_KERNEL_TAGS_ADDR
+	$(hide) echo "$(BOARD_KERNEL_TAGS_ADDR)" > $(zip_root)/$(PRIVATE_RECOVERY_OUT)/tagsaddr
+endif
+ifdef BOARD_RAMDISK_OFFSET
+	$(hide) echo "$(BOARD_RAMDISK_OFFSET)" > $(zip_root)/$(PRIVATE_RECOVERY_OUT)/ramdisk_offset
+endif
+ifeq ($(strip $(BOARD_KERNEL_SEPARATED_DT)),true)
+	$(hide) $(ACP) $(INSTALLED_DTIMAGE_TARGET) $(zip_root)/$(PRIVATE_RECOVERY_OUT)/dt
+endif
 endif # INSTALLED_RECOVERYIMAGE_TARGET defined or BOARD_USES_RECOVERY_AS_BOOT is true
 	@# Components of the boot image
 	$(hide) mkdir -p $(zip_root)/BOOT
@@ -2650,6 +2671,16 @@ ifdef BOARD_KERNEL_BASE
 endif
 ifdef BOARD_KERNEL_PAGESIZE
 	$(hide) echo "$(BOARD_KERNEL_PAGESIZE)" > $(zip_root)/BOOT/pagesize
+endif
+ifdef BOARD_KERNEL_TAGS_ADDR
+	$(hide) echo "$(BOARD_KERNEL_TAGS_ADDR)" > $(zip_root)/BOOT/tagsaddr
+endif
+ifdef BOARD_RAMDISK_OFFSET
+	$(hide) echo "$(BOARD_RAMDISK_OFFSET)" > $(zip_root)/BOOT/ramdisk_offset
+endif
+
+ifeq ($(strip $(BOARD_KERNEL_SEPARATED_DT)),true)
+	$(hide) $(ACP) $(INSTALLED_DTIMAGE_TARGET) $(zip_root)/BOOT/dt
 endif
 endif # BOARD_USES_RECOVERY_AS_BOOT
 	$(hide) $(foreach t,$(INSTALLED_RADIOIMAGE_TARGET),\
