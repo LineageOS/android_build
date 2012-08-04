@@ -4,7 +4,9 @@ Invoke ". build/envsetup.sh" from your shell to add the following functions to y
 - croot:   Changes directory to the top of the tree.
 - m:       Makes from the top of the tree.
 - mm:      Builds all of the modules in the current directory.
+- mmp:     Builds all of the modules in the current directory and pushes them to the device.
 - mmm:     Builds all of the modules in the supplied directories.
+- mmmp:    Builds all of the modules in the supplied directories and pushes them to the device.
 - cgrep:   Greps on all local C/C++ files.
 - jgrep:   Greps on all local Java files.
 - resgrep: Greps on all local res/*.xml files.
@@ -676,6 +678,50 @@ EOF
     fi
     return $?
 }
+
+function mmmp()
+{
+    if [[ $# < 1 || $1 == "--help" || $1 == "-h" ]]; then
+        echo "mmmp [make arguments] <path-to-project>"
+        return 1
+    fi
+
+    # Get product name from cm_<product>
+    PRODUCT=`echo $TARGET_PRODUCT | tr "_" "\n" | tail -n 1`
+    OUTDIR=out/target/product/$PRODUCT
+
+    adb root > /dev/null
+    sleep 1
+    adb remount > /dev/null
+
+    mmm $* | tee .log
+
+    # Pull out built file locations from .log
+    # Install: <file> -- note we have to chop off the last 3 characters here (color tag)
+    LOC="$(cat .log | grep 'Install' | cut -d ':' -f 2 | awk '{print substr($0, 0, length($0)-3)}')"
+    # Copy: <file>
+    LOC="$LOC $(cat .log | grep 'Copy' | cut -d ':' -f 2)"
+
+    for FILE in $LOC; do
+        # Get target file name (i.e. system/bin/adb)
+        TARGET=$(echo $FILE | sed "s/\/$PRODUCT\//\n/" | tail -n 1)
+
+        # Don't send files that are not in /system.
+        if ! echo $TARGET | egrep '^system\/' > /dev/null ; then
+            continue
+        else
+            echo "Pushing: $TARGET"
+            adb push $FILE $TARGET &> .log
+            test $? || cat .log
+            adb shell chmod 777 $TARGET &> .log
+            test $? || cat .log
+        fi
+    done
+    rm -f .log
+    return 0
+}
+
+alias mmp='mmmp .'
 
 function gettop
 {
