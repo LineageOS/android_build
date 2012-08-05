@@ -115,6 +115,7 @@ PRODUCT_PACKAGES := \
     requestsync \
     screencap \
     sensorservice \
+    storage \
     lint \
     uiautomator
 
