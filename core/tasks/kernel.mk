@@ -106,11 +106,11 @@ ifeq ($(TARGET_ARCH),arm)
     ifneq ($(USE_CCACHE),)
      # search executable
       ccache =
-      ifneq ($(strip $(wildcard $(ANDROID_BUILD_TOP)/prebuilt/$(HOST_PREBUILT_EXTRA_TAG)/ccache/ccache)),)
-        ccache := $(ANDROID_BUILD_TOP)/prebuilt/$(HOST_PREBUILT_EXTRA_TAG)/ccache/ccache
+      ifneq ($(strip $(wildcard $(ANDROID_BUILD_TOP)/prebuilts/misc/$(HOST_PREBUILT_EXTRA_TAG)/ccache/ccache)),)
+        ccache := $(ANDROID_BUILD_TOP)/prebuilts/misc/$(HOST_PREBUILT_EXTRA_TAG)/ccache/ccache
       else
-        ifneq ($(strip $(wildcard $(ANDROID_BUILD_TOP)/prebuilt/$(HOST_PREBUILT_TAG)/ccache/ccache)),)
-          ccache := $(ANDROID_BUILD_TOP)/prebuilt/$(HOST_PREBUILT_TAG)/ccache/ccache
+        ifneq ($(strip $(wildcard $(ANDROID_BUILD_TOP)/prebuilts/misc/$(HOST_PREBUILT_TAG)/ccache/ccache)),)
+          ccache := $(ANDROID_BUILD_TOP)/prebuilts/misc/$(HOST_PREBUILT_TAG)/ccache/ccache
         endif
       endif
     endif
