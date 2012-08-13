@@ -628,6 +628,10 @@ function eat()
             done
             echo "Device Found.."
         fi
+        #Restart adbd as root, otherwise the adb push to /cache/recovery fails
+        adb root
+        sleep 1
+        adb wait-for-device
         echo "Pushing $ZIPFILE to device"
         if adb push $ZIPPATH /mnt/sdcard/ ; then
             cat << EOF > /tmp/command
@@ -636,6 +640,10 @@ EOF
             if adb push /tmp/command /cache/recovery/ ; then
                 echo "Rebooting into recovery for installation"
                 adb reboot recovery
+            else
+                echo "adbd was unable to gain root priveliges"
+                rm /tmp/command
+                return 1
             fi
             rm /tmp/command
         fi
