@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAV3///to\u003d",
+        "filename": "envsetup.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 631,
+      "author": {
+        "id": 3521
+      },
+      "writtenOn": "2012-08-14T07:43:44Z",
+      "side": 1,
+      "message": "I inserted the call to adb root here to avoid conflict with the built-in delay. There would be no point in sleeping and calling adb wait-for-device after the call to adb root, since adb root fails if no device is connected. If you are still concerned about the adb root call interfering with the delay, I can move it to line 640, after the script has pushed the zipfile, since adbd only needs to be root for the push to /cache/recovery.",
+      "revId": "430ba38343e0197d9de4844ddc79af5eb7ecb027",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    }
+  ]
+}
