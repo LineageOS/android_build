@@ -16,6 +16,24 @@
       "revId": "430ba38343e0197d9de4844ddc79af5eb7ecb027",
       "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAV3///tg\u003d",
+        "filename": "envsetup.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 631,
+      "author": {
+        "id": 1039
+      },
+      "writtenOn": "2012-08-14T07:49:32Z",
+      "side": 1,
+      "message": "adb root cause adb to restart, and there is a small time to achieve that where usb is no more connected",
+      "parentUuid": "AAAAV3///to\u003d",
+      "revId": "430ba38343e0197d9de4844ddc79af5eb7ecb027",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
     }
   ]
 }
