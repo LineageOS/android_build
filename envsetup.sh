@@ -13,11 +13,11 @@ Invoke ". build/envsetup.sh" from your shell to add the following functions to y
 - jgrep:   Greps on all local Java files.
 - resgrep: Greps on all local res/*.xml files.
 - godir:   Go to the directory containing a file.
-- cmremote: Add git remote for CM Gerrit Review
-- cmgerrit: A Git wrapper that fetches/pushes patch from/to CM Gerrit Review
-- cmrebase: Rebase a Gerrit change and push it again
-- mka:      Builds using SCHED_BATCH on all processors
-- reposync: Parallel repo sync using ionice and SCHED_BATCH
+- cmremote: Add git remote for CM Gerrit Review.
+- cmgerrit: A Git wrapper that fetches/pushes patch from/to CM Gerrit Review.
+- cmrebase: Rebase a Gerrit change and push it again.
+- mka:      Builds using SCHED_BATCH on all processors.
+- reposync: Parallel repo sync using ionice and SCHED_BATCH.
 
 Look at the source to view more functions. The complete list is:
 EOF
@@ -1641,10 +1641,14 @@ function cmrebase() {
 function mka() {
     case `uname -s` in
         Darwin)
-            make -j `sysctl hw.ncpu|cut -d" " -f2` "$@"
+            local threads=`sysctl hw.ncpu|cut -d" " -f2`
+            local load=`expr $threads \* 2`
+            make -j -l $load  "$@"
             ;;
         *)
-            schedtool -B -n 1 -e ionice -n 1 make -j `cat /proc/cpuinfo | grep "^processor" | wc -l` "$@"
+            local threads=`grep "^processor" /proc/cpuinfo | wc -l`
+            local load=`expr $threads \* 2`
+            schedtool -B -n 1 -e ionice -n 1 make -j -l $load "$@"
             ;;
     esac
 }
