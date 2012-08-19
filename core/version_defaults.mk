@@ -19,6 +19,7 @@
 #
 # Guarantees that the following are defined:
 #     PLATFORM_VERSION
+#     PLATFORM_NAME
 #     PLATFORM_SDK_VERSION
 #     PLATFORM_VERSION_CODENAME
 #     DEFAULT_APP_TARGET_SDK
@@ -42,6 +43,14 @@ ifeq "" "$(PLATFORM_VERSION)"
   # Update this value when the platform version changes (rather
   # than overriding it somewhere else).  Can be an arbitrary string.
   PLATFORM_VERSION := 4.1.1
+endif
+
+ifeq "" "$(PLATFORM_NAME)"
+  # This is the platform name (example: Jelly Bean, Ice Cream Sandwich),
+  # which is the version name revealed to the end user and the system.
+  # Update this value when the platform name changes (rather than
+  # overriding it somewhere else). Can be just about anything
+  PLATFORM_NAME := JELLY BEAN
 endif
 
 ifeq "" "$(PLATFORM_SDK_VERSION)"
