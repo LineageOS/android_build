@@ -661,6 +661,9 @@ function eat()
             done
             echo "Device Found.."
         fi
+        # if adbd isn't root we can't write to /cache/recovery/
+        adb root
+        sleep 1
         echo "Pushing $ZIPFILE to device"
         if adb push $ZIPPATH /storage/sdcard0/ ; then
             cat << EOF > /tmp/command
