@@ -259,7 +259,7 @@ ifneq (,$(user_variant))
   # explicitly disabled and the build is running on Linux (since host
   # Dalvik isn't built for non-Linux hosts).
   ifneq (true,$(DISABLE_DEXPREOPT))
-    ifeq ($(user_variant),user)
+    ifneq (,$(user_variant))
       ifeq ($(HOST_OS),linux)
         WITH_DEXPREOPT := true
       endif
