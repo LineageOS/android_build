@@ -368,6 +368,10 @@ def SignFile(input_name, output_name, key, password, align=None,
   zip file.
   """
 
+  if os.environ.get('CM_FAST_BUILD', False):
+    shutil.copy(input_name, output_name)
+    return
+
   if align == 0 or align == 1:
     align = None
 
