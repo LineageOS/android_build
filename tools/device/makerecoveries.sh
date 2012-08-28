@@ -1,7 +1,7 @@
 if [ -z "$1" ]
 then
     echo "Please provide a lunch option."
-    return
+    return 1
 fi
 
 PRODUCTS=$1
@@ -22,7 +22,7 @@ then
 fi
 
 function mcpguard () {
-    if [ -z $NO_UPLOAD ]
+    if [ -z "$NO_UPLOAD" ]
     then
         mcp $1 $2
         md5sum $1 > $1.md5sum.txt
@@ -42,7 +42,13 @@ echo Recovery Version: $RELEASE_VERSION
 for lunchoption in $PRODUCTS
 do
     lunch $lunchoption
-    if [ -z $NO_CLEAN ]
+    RESULT=$?
+    if [ "$RESULT" != "0" ]
+    then
+        echo build error!
+        return 1
+    fi
+    if [ -z "$NO_CLEAN" ]
     then
         rm -rf $OUT/obj/EXECUTABLES/recovery_intermediates
         rm -rf $OUT/recovery*
@@ -52,10 +58,10 @@ do
     PRODUCT_NAME=$(basename $OUT)
     make -j16 recoveryzip
     RESULT=$?
-    if [ $RESULT != "0" ]
+    if [ "$RESULT" != "0" ]
     then
         echo build error!
-        break
+        return 1
     fi
     mcpguard $OUT/recovery.img recoveries/recovery-clockwork-$RELEASE_VERSION-$DEVICE_NAME.img
     mcpguard $OUT/utilities/update.zip recoveries/recovery-clockwork-$RELEASE_VERSION-$DEVICE_NAME.zip
