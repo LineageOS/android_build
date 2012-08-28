@@ -1612,6 +1612,23 @@ function mka() {
     esac
 }
 
+function lmka() {
+    case `uname -s` in
+        Darwin)
+            local threads=`sysctl hw.ncpu|cut -d" " -f2`
+            local load=`expr $threads \* 2`
+            echo "Warning: Experimental Function! Use at your own risk."
+            make -j -l $load  "$@"
+            ;;
+        *)
+            local threads=`grep "^processor" /proc/cpuinfo | wc -l`
+            local load=`expr $threads \* 2`
+            echo "Warning: Experimental Function! Use at your own risk."
+            schedtool -B -n 1 -e ionice -n 1 make -j -l $load "$@"
+            ;;
+    esac
+}
+
 function reposync() {
     case `uname -s` in
         Darwin)
