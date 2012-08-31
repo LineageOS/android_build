@@ -27,16 +27,6 @@ PRODUCT_PACKAGES := \
     libwnndict \
     WAPPushManager
 
-PRODUCT_PACKAGES += \
-    Galaxy4 \
-    HoloSpiralWallpaper \
-    LiveWallpapers \
-    LiveWallpapersPicker \
-    MagicSmokeWallpapers \
-    NoiseField \
-    PhaseBeam \
-    PhotoTable
-
 # Put en_US first in the list, so make it default.
 PRODUCT_LOCALES := en_US
 
