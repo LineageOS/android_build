@@ -1612,6 +1612,17 @@ function mka() {
     esac
 }
 
+function lmka() {
+    case `uname -s` in
+        Darwin)
+            make -j -l `sysctl hw.ncpu|cut -d" " -f2` "$@"
+            ;;
+        *)
+            schedtool -B -n 1 -e ionice -n 1 make -j -l `cat /proc/cpuinfo | grep "^processor" | wc -l` "$@"
+            ;;
+    esac
+}
+
 function reposync() {
     case `uname -s` in
         Darwin)
