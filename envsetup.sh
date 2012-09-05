@@ -668,9 +668,17 @@ function eat()
         adb wait-for-device
         echo "Pushing $ZIPFILE to device"
         if adb push $ZIPPATH /storage/sdcard0/ ; then
-            cat << EOF > /tmp/command
+            # Optional path for sdcard0 in recovery
+            if [ -z "$1" ]
+            then
+               cat << EOF > /tmp/command
 --update_package=/sdcard/$ZIPFILE
 EOF
+            else
+               cat << EOF > /tmp/command
+--update_package=/$1/$ZIPFILE
+EOF
+            fi
             if adb push /tmp/command /cache/recovery/ ; then
                 echo "Rebooting into recovery for installation"
                 adb reboot recovery
