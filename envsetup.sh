@@ -525,6 +525,11 @@ function lunch()
 
     if [ "$1" ] ; then
         answer=$1
+        echo "z$answer" | grep -q "-"
+        if [ $? -ne 0 ]; then
+            # No buildtype specified, this is probably just the CM model name
+            answer=cm_$answer-userdebug
+        fi
     else
         print_lunch_menu
         echo -n "Which would you like? [full-eng] "
