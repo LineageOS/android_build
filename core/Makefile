@@ -1308,10 +1308,10 @@ otapackage: $(INTERNAL_OTA_PACKAGE_TARGET)
 bacon: otapackage
 ifneq ($(TARGET_CUSTOM_RELEASETOOL),)
 	@echo "Running custom releasetool..."
-	$(hide) OTAPACKAGE=$(PWD)/$(INTERNAL_OTA_PACKAGE_TARGET) $(TARGET_CUSTOM_RELEASETOOL)
+	$(hide) OTAPACKAGE=$(INTERNAL_OTA_PACKAGE_TARGET) $(TARGET_CUSTOM_RELEASETOOL)
 else
 	@echo "Running releasetool..."
-	$(hide) OTAPACKAGE=$(PWD)/$(INTERNAL_OTA_PACKAGE_TARGET) ./vendor/cm/tools/squisher
+	$(hide) OTAPACKAGE=$(INTERNAL_OTA_PACKAGE_TARGET) ./vendor/cm/tools/squisher
 endif
 
 # -----------------------------------------------------------------
