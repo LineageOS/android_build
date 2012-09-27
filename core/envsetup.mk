@@ -301,7 +301,11 @@ endif
 
 ifeq (,$(strip $(OUT_DIR)))
 ifeq (,$(strip $(OUT_DIR_COMMON_BASE)))
+ifneq ($(TOPDIR),)
 OUT_DIR := $(TOPDIR)out
+else
+OUT_DIR := $(CURDIR)/out
+endif
 else
 OUT_DIR := $(OUT_DIR_COMMON_BASE)/$(notdir $(PWD))
 endif
