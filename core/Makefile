@@ -266,12 +266,12 @@ $(APKCERTS_FILE):
 	@echo APK certs list: $@
 	@mkdir -p $(dir $@)
 	@rm -f $@
-	$(hide) $(foreach p,$(PACKAGES),\
+	$(hide) cd $(dir $@) && $(foreach p,$(PACKAGES),\
           $(if $(PACKAGES.$(p).EXTERNAL_KEY),\
 	    echo 'name="$(p).apk" certificate="EXTERNAL" \
-	         private_key=""' >> $@;,\
+	         private_key=""' >> $(notdir $@);,\
 	    echo 'name="$(p).apk" certificate="$(PACKAGES.$(p).CERTIFICATE)" \
-	         private_key="$(PACKAGES.$(p).PRIVATE_KEY)"' >> $@;))
+	         private_key="$(PACKAGES.$(p).PRIVATE_KEY)"' >> $(notdir $@);))
 	# In case $(PACKAGES) is empty.
 	$(hide) touch $@
 
