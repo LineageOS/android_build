@@ -20,6 +20,22 @@ while True:
         repositories.append(res)
     page = page + 1
 
+# in-place prettyprint formatter
+def indent(elem, level=0):
+    i = "\n" + level*"  "
+    if len(elem):
+        if not elem.text or not elem.text.strip():
+            elem.text = i + "  "
+        if not elem.tail or not elem.tail.strip():
+            elem.tail = i
+        for elem in elem:
+            indent(elem, level+1)
+        if not elem.tail or not elem.tail.strip():
+            elem.tail = i
+    else:
+        if level and (not elem.tail or not elem.tail.strip()):
+            elem.tail = i
+
 for repository in repositories:
     repo_name = repository['name']
     if repo_name.startswith("android_device_") and repo_name.endswith("_" + device):
@@ -40,7 +56,8 @@ for repository in repositories:
         repo_path = "device/%s/%s" % (manufacturer, device)
         project = ElementTree.Element("project", attrib = { "path": repo_path, "remote": "github", "name": "CyanogenMod/%s" % repository['name'], "revision": "gingerbread" })
         lm.append(project)
-        
+
+        indent(lm, 0)
         raw_xml = ElementTree.tostring(lm)
         raw_xml = '<?xml version="1.0" encoding="UTF-8"?>\n' + raw_xml
 
