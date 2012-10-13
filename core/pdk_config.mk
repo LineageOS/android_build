@@ -71,7 +71,7 @@ endif
 endif
 
 $(_pdk_fusion_stamp) : $(PDK_FUSION_PLATFORM_ZIP)
-	@echo "Unzip $(dir $@) <- $<"
+	@echo -e ${CL_YLW}"Unzip"${CL_RST}" $(dir $@) <- $<"
 	$(hide) rm -rf $(dir $@) && mkdir -p $(dir $@)
 	$(hide) unzip -qo $< -d $(dir $@)
 	$(call split-long-arguments,-touch,$(_pdk_fusion_files))
