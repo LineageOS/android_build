@@ -61,7 +61,7 @@ $(full_classes_emma_jar) : $(full_classes_compiled_jar) | $(EMMA_JAR)
 	$(transform-classes.jar-to-emma)
 
 $(built_javalib_jar) : $(full_classes_emma_jar)
-	@echo Copying: $@
+	@echo -e ${CL_YLW}"Copying:"${CL_RST}" $@"
 	$(hide) $(ACP) -fp $< $@
 
 else # LOCAL_EMMA_INSTRUMENT
@@ -70,7 +70,6 @@ full_classes_compiled_jar := $(built_javalib_jar)
 endif # LOCAL_EMMA_INSTRUMENT
 
 $(full_classes_compiled_jar): PRIVATE_JAVAC_DEBUG_FLAGS := -g
-
 # The layers file allows you to enforce a layering between java packages.
 # Run build/tools/java-layers.py for more details.
 layers_file := $(addprefix $(LOCAL_PATH)/, $(LOCAL_JAVA_LAYERS_FILE))
