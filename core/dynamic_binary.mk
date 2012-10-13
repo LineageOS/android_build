@@ -83,7 +83,7 @@ endif
 symbolic_input := $(relocation_packer_output)
 symbolic_output := $(my_unstripped_path)/$(my_installed_module_stem)
 $(symbolic_output) : $(symbolic_input) | $(ACP)
-	@echo "target Symbolic: $(PRIVATE_MODULE) ($@)"
+	@echo -e ${CL_GRN}"target Symbolic:"${CL_RST}" $(PRIVATE_MODULE) ($@)"
 	$(copy-file-to-target)
 
 
@@ -132,11 +132,11 @@ else
 # use cp(1) instead.
 ifneq ($(LOCAL_ACP_UNAVAILABLE),true)
 $(strip_output): $(strip_input) | $(ACP)
-	@echo "target Unstripped: $(PRIVATE_MODULE) ($@)"
+	@echo -e ${CL_GRN}"target Unstripped:"${CL_RST}" $(PRIVATE_MODULE) ($@)"
 	$(copy-file-to-target)
 else
 $(strip_output): $(strip_input)
-	@echo "target Unstripped: $(PRIVATE_MODULE) ($@)"
+	@echo -e ${CL_GRN}"target Unstripped:"${CL_RST}" $(PRIVATE_MODULE) ($@)"
 	$(copy-file-to-target-with-cp)
 endif
 endif # my_strip_module

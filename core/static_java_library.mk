@@ -122,7 +122,7 @@ $(R_file_stamp): PRIVATE_MANIFEST_PACKAGE_NAME :=
 $(R_file_stamp): PRIVATE_MANIFEST_INSTRUMENTATION_FOR :=
 
 $(R_file_stamp) : $(all_resources) $(full_android_manifest) $(AAPT) $(framework_res_package_export_deps)
-	@echo "target R.java/Manifest.java: $(PRIVATE_MODULE) ($@)"
+	@echo -e ${CL_YLW}"target R.java/Manifest.java:"${CL_RST}" $(PRIVATE_MODULE) ($@)"
 	$(create-resource-java-files)
 	$(hide) find $(PRIVATE_SOURCE_INTERMEDIATES_DIR) -name R.java | xargs cat > $@
 
