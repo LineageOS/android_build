@@ -18,7 +18,7 @@ products_pdf := $(OUT_DIR)/products.pdf
 products_graph := $(products_pdf:%.pdf=%.dot)
 
 $(products_graph):
-	@echo Product graph DOT: $@
+	@echo -e ${CL_GRN}"Product graph DOT:"${CL_RST}" $@"
 	$(hide) ( \
 		echo 'digraph {'; \
 		echo 'graph [ ratio=.5 ];'; \
@@ -41,7 +41,7 @@ $(products_graph):
 #		$(foreach p,$(ALL_PRODUCTS), echo \"$(p)\";) \
 
 $(products_pdf): $(products_graph)
-	@echo Product graph PDF: $@
+	@echo -e ${CL_GRN}"Product graph PDF:"${CL_RST}" $@"
 	dot -Tpdf -Nshape=box -o $@ $<
 
 product-graph: $(products_pdf)

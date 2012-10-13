@@ -71,7 +71,7 @@ HOST_CUSTOM_LD_COMMAND := true
 
 # Workaround for lack of "-Wl,--whole-archive" in MacOS's linker.
 define _darwin-extract-and-include-single-whole-static-lib
-@echo "preparing StaticLib: $(PRIVATE_MODULE) [including $(1)]"
+@echo -e ${CL_YLW}"preparing StaticLib:"${CL_RST}" $(PRIVATE_MODULE) [including $(1)]"
 $(hide) ldir=$(PRIVATE_INTERMEDIATES_DIR)/WHOLE/$(basename $(notdir $(1)))_objs;\
     mkdir -p $$ldir; \
     for f in `$(HOST_AR) t $(1)`; do \
