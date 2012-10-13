@@ -440,7 +440,7 @@ $(cleantarget) : PRIVATE_CLEAN_FILES := \
     $(LOCAL_INSTALLED_MODULE) \
     $(intermediates)
 $(cleantarget)::
-	@echo "Clean: $(PRIVATE_MODULE)"
+	@echo -e ${CL_GRN}"Clean:"${CL_RST}" $(PRIVATE_MODULE)"
 	$(hide) rm -rf $(PRIVATE_CLEAN_FILES)
 
 ###########################################################
@@ -499,11 +499,11 @@ ifndef LOCAL_UNINSTALLABLE_MODULE
   # installation;  hence, LOCAL_ACP_UNAVAILABLE.
 ifneq ($(LOCAL_ACP_UNAVAILABLE),true)
 $(LOCAL_INSTALLED_MODULE): $(LOCAL_BUILT_MODULE) | $(ACP)
-	@echo -e ${CL_INS}"Install: $@"${CL_RST}
+	@echo -e ${CL_CYN}"Install: $@"${CL_RST}
 	$(copy-file-to-new-target)
 else
 $(LOCAL_INSTALLED_MODULE): $(LOCAL_BUILT_MODULE)
-	@echo -e ${CL_INS}"Install: $@"${CL_RST}
+	@echo -e ${CL_CYN}"Install: $@"${CL_RST}
 	$(copy-file-to-target-with-cp)
 endif
 
@@ -511,7 +511,7 @@ ifdef LOCAL_DEX_PREOPT
 installed_odex := $(basename $(LOCAL_INSTALLED_MODULE)).odex
 built_odex := $(basename $(LOCAL_BUILT_MODULE)).odex
 $(installed_odex) : $(built_odex) | $(ACP)
-	@echo -e ${CL_INS}"Install: $@"${CL_RST}
+	@echo -e ${CL_CYN}"Install: $@"${CL_RST}
 	$(copy-file-to-target)
 
 $(LOCAL_INSTALLED_MODULE) : $(installed_odex)
