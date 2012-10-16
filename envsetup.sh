@@ -1667,9 +1667,6 @@ function dopush()
     local func=$1
     shift
 
-    # Get product name from cm_<product>
-    PRODUCT=`echo $TARGET_PRODUCT | tr "_" "\n" | tail -n 1`
-
     adb start-server # Prevent unexpected starting server message from adb get-state in the next line
     if [ $(adb get-state) != device -a $(adb shell busybox test -e /sbin/recovery 2> /dev/null; echo $?) != 0 ] ; then
         echo "No device is online. Waiting for one..."
@@ -1696,14 +1693,23 @@ function dopush()
 
     for FILE in $LOC; do
         # Get target file name (i.e. system/bin/adb)
-        TARGET=$(echo $FILE | sed "s/\/$PRODUCT\//\n/" | tail -n 1)
+        TARGET=$(echo $FILE | sed "s#$OUT/##")
 
         # Don't send files that are not in /system.
         if ! echo $TARGET | egrep '^system\/' > /dev/null ; then
             continue
         else
+            case $TARGET in
+            system/app/SystemUI.apk|system/framework/*)
+                stop_n_start=true
+            ;;
+            *)
+            ;;
+            esac
+            if $stop_n_start ; then adb shell stop ; fi
             echo "Pushing: $TARGET"
             adb push $FILE $TARGET
+            if $stop_n_start ; then adb shell start ; fi
         fi
     done
     rm -f .log
