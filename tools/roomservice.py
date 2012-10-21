@@ -38,11 +38,14 @@ if not depsonly:
 
 repositories = []
 
-authtuple = netrc.netrc().authenticators("api.github.com")
+try:
+    authtuple = netrc.netrc().authenticators("api.github.com")
 
-if authtuple:
-    githubauth = base64.encodestring('%s:%s' % (authtuple[0], authtuple[2])).replace('\n', '')
-else:
+    if authtuple:
+        githubauth = base64.encodestring('%s:%s' % (authtuple[0], authtuple[2])).replace('\n', '')
+    else:
+        githubauth = None
+except:
     githubauth = None
 
 page = 1
