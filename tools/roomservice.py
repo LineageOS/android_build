@@ -18,7 +18,6 @@ import sys
 import urllib2
 import json
 import re
-import netrc, base64
 from xml.etree import ElementTree
 
 product = sys.argv[1];
@@ -38,19 +37,9 @@ if not depsonly:
 
 repositories = []
 
-authtuple = netrc.netrc().authenticators("api.github.com")
-
-if authtuple:
-    githubauth = base64.encodestring('%s:%s' % (authtuple[0], authtuple[2])).replace('\n', '')
-else:
-    githubauth = None
-
 page = 1
 while not depsonly:
-    githubreq = urllib2.Request("https://api.github.com/users/CyanogenMod/repos?per_page=100&page=%d" % page)
-    if githubauth:
-        githubreq.add_header("Authorization","Basic %s" % githubauth)
-    result = json.loads(urllib2.urlopen(githubreq).read())
+    result = json.loads(urllib2.urlopen("https://api.github.com/users/CyanogenMod/repos?per_page=100&page=%d" % page).read())
     if len(result) == 0:
         break
     for res in result:
