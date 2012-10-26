@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAaH//9pE\u003d",
+        "filename": "envsetup.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 1320,
+      "author": {
+        "id": 3297
+      },
+      "writtenOn": "2012-10-26T16:50:28Z",
+      "side": 1,
+      "message": "boot.img - oops :p",
+      "revId": "1b68d5b78e7ca865cadee113c5a28728e0e94fff",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    }
+  ]
+}
