@@ -251,11 +251,6 @@ $(PACKAGE_STATS_FILE): $(PACKAGES_TO_STAT)
 .PHONY: package-stats
 package-stats: $(PACKAGE_STATS_FILE)
 
-# makefile workaround to allow the insert of a newline
-define \n
-
-
-endef
 # -----------------------------------------------------------------
 # Cert-to-package mapping.  Used by the post-build signing tools.
 name := $(TARGET_PRODUCT)
@@ -272,12 +267,12 @@ $(APKCERTS_FILE):
 	@echo APK certs list: $@
 	@mkdir -p $(dir $@)
 	@rm -f $@
-	$(hide) $(foreach p,$(PACKAGES),\
+	$(hide) cd $(dir $@) && $(foreach p,$(PACKAGES),\
           $(if $(PACKAGES.$(p).EXTERNAL_KEY),\
 	    echo 'name="$(p).apk" certificate="EXTERNAL" \
-	         private_key=""' >> $@;${\n},\
+	         private_key=""' >> $(notdir $@);,\
 	    echo 'name="$(p).apk" certificate="$(PACKAGES.$(p).CERTIFICATE)" \
-	         private_key="$(PACKAGES.$(p).PRIVATE_KEY)"' >> $@;${\n}))
+	         private_key="$(PACKAGES.$(p).PRIVATE_KEY)"' >> $(notdir $@);))
 	# In case $(PACKAGES) is empty.
 	$(hide) touch $@
 
