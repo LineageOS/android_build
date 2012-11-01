@@ -226,6 +226,7 @@ installclean_files := \
 	$(PRODUCT_OUT)/*.txt \
 	$(PRODUCT_OUT)/*.xlb \
 	$(PRODUCT_OUT)/*.zip \
+	$(PRODUCT_OUT)/*.zip.md5sum \
 	$(PRODUCT_OUT)/kernel \
 	$(PRODUCT_OUT)/data \
 	$(PRODUCT_OUT)/skin \
