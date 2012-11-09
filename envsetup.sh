@@ -689,6 +689,12 @@ EOF
     return $?
 }
 
+function omnom
+{
+    brunch $*
+    eat
+}
+
 function gettop
 {
     local TOPFILE=build/core/envsetup.mk
