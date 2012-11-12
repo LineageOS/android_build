@@ -35,7 +35,6 @@ PRODUCT_PACKAGES := \
     Music \
     Provision \
     Phone \
-    QuickSearchBox \
     Settings \
     SystemUI \
     CalendarProvider \

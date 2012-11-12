@@ -34,7 +34,6 @@ PRODUCT_PACKAGES := \
     Launcher2 \
     Music \
     Provision \
-    QuickSearchBox \
     Settings \
     Sync \
     Updater \
