@@ -1212,12 +1212,12 @@ function cmremote()
         echo Unable to set up the git remote, are you in the root of the repo?
         return 0
     fi
-    CMUSER=`git config --get review.review.cyanogenmod.com.username`
+    CMUSER=`git config --get review.review.cyanogenmod.org.username`
     if [ -z "$CMUSER" ]
     then
-        git remote add cmremote ssh://review.cyanogenmod.com:29418/$GERRIT_REMOTE
+        git remote add cmremote ssh://review.cyanogenmod.org:29418/$GERRIT_REMOTE
     else
-        git remote add cmremote ssh://$CMUSER@review.cyanogenmod.com:29418/$GERRIT_REMOTE
+        git remote add cmremote ssh://$CMUSER@review.cyanogenmod.org:29418/$GERRIT_REMOTE
     fi
     echo You can now push to "cmremote".
 }
@@ -1236,7 +1236,7 @@ function _cmgerrit()
     local target=$2
 
     repo=$(cat .git/config  | grep git://github.com | awk '{ print $NF }' | sed s#git://github.com/##g)
-    user=`git config --get review.review.cyanogenmod.com.username`
+    user=`git config --get review.review.cyanogenmod.org.username`
 
     if [ -z "$repo" ]; then
         echo "Unable to detect current repo, are you in the root of the repo you would like to submit patches for?"
@@ -1269,9 +1269,9 @@ function _cmgerrit()
 
     if [ -z "$user" ]
     then
-        git push ssh://review.cyanogenmod.com:29418/$repo HEAD:refs/$mode/$target
+        git push ssh://review.cyanogenmod.org:29418/$repo HEAD:refs/$mode/$target
     else
-        git push ssh://$user@review.cyanogenmod.com:29418/$repo HEAD:refs/$mode/$target
+        git push ssh://$user@review.cyanogenmod.org:29418/$repo HEAD:refs/$mode/$target
     fi
 }
 
@@ -1280,7 +1280,7 @@ function cmgerrit() {
         $FUNCNAME help
         return 1
     fi
-    local user=`git config --get review.review.cyanogenmod.com.username`
+    local user=`git config --get review.review.cyanogenmod.org.username`
     local review=`git config --get remote.github.review`
     local project=`git config --get remote.github.projectname`
     local command=$1
@@ -1538,7 +1538,7 @@ function cmrebase() {
     echo "Bringing it up to date..."
     repo sync .
     echo "Fetching change..."
-    git fetch "http://review.cyanogenmod.com/p/$repo" "refs/changes/$refs" && git cherry-pick FETCH_HEAD
+    git fetch "http://review.cyanogenmod.org/p/$repo" "refs/changes/$refs" && git cherry-pick FETCH_HEAD
     if [ "$?" != "0" ]; then
         echo "Error cherry-picking. Not uploading!"
         return
