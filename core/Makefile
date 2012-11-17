@@ -750,7 +750,7 @@ $(recovery_ramdisk): $(MKBOOTFS) \
 	@echo -e ${CL_CYN}"----- Making recovery ramdisk ------"${CL_RST}
 	$(MINIGZIP) < $(recovery_uncompressed_ramdisk) > $@
 
-ifndef ifndef BOARD_CUSTOM_BOOTIMG_MK
+ifndef BOARD_CUSTOM_BOOTIMG_MK
 $(INSTALLED_RECOVERYIMAGE_TARGET): $(MKBOOTIMG) \
 		$(recovery_ramdisk) \
 		$(recovery_kernel)
@@ -1308,12 +1308,6 @@ ifneq ($(CM_BUILD),)
     $(INTERNAL_OTA_PACKAGE_TARGET): backuptool := true
 else
     $(INTERNAL_OTA_PACKAGE_TARGET): backuptool := false
-endif
-
-ifneq ($(NAM_VARIANT),)
-    $(INTERNAL_OTA_PACKAGE_TARGET): modelidcfg := true
-else
-    $(INTERNAL_OTA_PACKAGE_TARGET): modelidcfg := false
 endif
 
 ifeq ($(TARGET_OTA_ASSERT_DEVICE),)
