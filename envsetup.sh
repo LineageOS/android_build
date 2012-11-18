@@ -693,7 +693,11 @@ EOF
 
 function omnom
 {
-    brunch $*
+    if [ $# -gt 0 -o -z "$TARGET_PRODUCT" ]; then
+        brunch $*
+    else
+        mka bacon
+    fi
     eat
 }
 
