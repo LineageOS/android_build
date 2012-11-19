@@ -28,7 +28,7 @@ $(document).ready(function() {
   $('.scroll-pane').jScrollPane( {verticalGutter:0} );
   
   // add HRs below all H2s (except for a few other h2 variants)
-  $('h2').not('#qv h2').not('#tb h2').not('#devdoc-nav h2').css({marginBottom:0}).after('<hr/>');
+  $('h2').not('#qv h2').not('#tb h2').not('.sidebox h2').not('#devdoc-nav h2').css({marginBottom:0}).after('<hr/>');
   
   // set search's onkeyup handler here so we can show suggestions 
   // even while search results are visible
@@ -979,36 +979,18 @@ function requestAppendHL(uri) {
 }
 
 
-function changeTabLang(lang) {
-  var nodes = $("#header-tabs").find("."+lang);
-  for (i=0; i < nodes.length; i++) { // for each node in this language
-    var node = $(nodes[i]);
-    node.siblings().css("display","none"); // hide all siblings
-    if (node.not(":empty").length != 0) { //if this languages node has a translation, show it
-      node.css("display","inline");
-    } else { //otherwise, show English instead
-      node.css("display","none");
-      node.siblings().filter(".en").css("display","inline");
-    }
-  }
-}
-
 function changeNavLang(lang) {
-  var nodes = $("#devdoc-nav").find("."+lang);
-  for (i=0; i < nodes.length; i++) { // for each node in this language
-    var node = $(nodes[i]);
-    node.siblings().css("display","none"); // hide all siblings
-    if (node.not(":empty").length != 0) { // if this languages node has a translation, show it
-      node.css("display","inline");
-    } else { // otherwise, show English instead
-      node.css("display","none");
-      node.siblings().filter(".en").css("display","inline");
+  var $links = $("#devdoc-nav,#header,#nav-x,.training-nav-top,.content-footer").find("a["+lang+"-lang]");
+  $links.each(function(i){ // for each link with a translation
+    var $link = $(this);
+    if (lang != "en") { // No need to worry about English, because a language change invokes new request
+      // put the desired language from the attribute as the text
+      $link.text($link.attr(lang+"-lang"))
     }
-  }
+  });
 }
 
 function changeDocLang(lang) {
-  changeTabLang(lang);
   changeNavLang(lang);
 }
 
@@ -1811,13 +1793,14 @@ function escapeHTML(string) {
 /* #################  JAVADOC REFERENCE ################### */
 /* ######################################################## */
 
-/* Initialize some droiddoc stuff */
-$(document).ready(function() {
-  
-  // init available apis based on user pref
-  changeApiLevel();
-  initSidenavHeightResize()
-});
+/* Initialize some droiddoc stuff, but only if we're in the reference */
+if (location.pathname.indexOf("/reference") == 0) {
+  $(document).ready(function() {
+    // init available apis based on user pref
+    changeApiLevel();
+    initSidenavHeightResize()
+  });
+}
 
 var API_LEVEL_COOKIE = "api_level";
 var minLevel = 1;

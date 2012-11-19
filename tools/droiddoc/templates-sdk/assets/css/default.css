@@ -95,6 +95,11 @@ body {
   position: fixed;
   margin:0;
   top: 20px; }
+  
+#devdoc-nav span.small {
+  font-size:12px;
+  font-weight:normal;
+}
 
 #content {
   width: 760px;
@@ -401,9 +406,6 @@ video.with-shadow {
     color: #555555;
     text-decoration: none;
     text-transform: uppercase; }
-  .paging-links .prev-page-link,
-  .training-nav-top .prev-page-link {
-    left: -5px; }
     .paging-links .prev-page-link:before,
     .training-nav-top .prev-page-link:before {
       content: '';
@@ -412,11 +414,14 @@ video.with-shadow {
       height: 10px;
       display: inline-block;
       margin-right: 5px; }
-  .paging-links .next-page-link,
-  .training-nav-top .next-page-link,
+    .training-nav-top .next-page-link,
     .training-nav-top .start-class-link,
     .training-nav-top .start-course-link {
     right: 10px; }
+    .paging-links .prev-page-link {
+      left: -15px; }
+    .paging-links .next-page-link {
+      right: 0px; }
     .next-page-link:after,
     .start-class-link:after,
     .start-course-link:after,
@@ -432,9 +437,9 @@ video.with-shadow {
   .training-nav-top a {
     display:block;
     float:left;
-    width:108px;
+    width:122px;
     height:28px;
-    padding: 8px 15px;
+    padding: 8px;
     line-height:28px;
     text-align:center;
     border:1px solid #DADADA;
@@ -443,7 +448,7 @@ video.with-shadow {
       
   .training-nav-top a.next-page-link {
     border-left:0;
-    width:109px;
+    width:123px;
   }
       
   .training-nav-top a.disabled,
@@ -459,7 +464,7 @@ video.with-shadow {
       
   .training-nav-top a.start-class-link,
   .training-nav-top a.start-course-link {
-    width:248px;
+    width:262px;
   }
   
   .hide {
@@ -652,6 +657,17 @@ scroll top left;
 .framed-galaxynexus-land-span-13 img {
     width: 512px;
     height: 286px; }
+
+
+.framed-galaxynexus-land-span-8{
+  background: transparent url(../images/styles/device_galaxynexus_blank_land_span8.png) no-repeat
+scroll top left;
+  padding: 26px 68px 38px 72px;
+  overflow: hidden; }
+  .framed-galaxynexus-land-span-8, .framed-galaxynexus-land-span-8 video,
+.framed-galaxynexus-land-span-8 img {
+    width: 320px;
+    height: 180px; }
 
 .framed-galaxynexus-port-span-9 {
   background: transparent url(../images/styles/device_galaxynexus_blank_port_span9.png) no-repeat
@@ -914,7 +930,7 @@ ul ul, ul ol, ol ul, ol ol {
     margin-top: 0;
 }
 li {
-  margin:0 0 4px;
+  margin:0 0 5px;
 }
 dd {
   margin:0 0 10px 30px;
@@ -924,7 +940,7 @@ dd p {
 }
 ul p,
 ol p {
-  margin:10px 0 0;
+  margin:5px 0 0;
 }
 pre strong, pre b, a strong, a b, a code {
     color: inherit;
@@ -1620,6 +1636,7 @@ EndColorStr='#ececec');
   border-left:4px solid #99CC00;
   float:right;
   padding:0 0 0 10px;
+  margin:0 0 1em 20px;
 }
 
 .sidebox h2,
@@ -1819,7 +1836,7 @@ form .form-error input[type='text'], form .form-error textarea {
 Code Style
 */
 pre {
-	margin: 1em 0;
+	margin:0 0 1em 0;
 	padding: 1em;
 	overflow: auto;
 	border: solid 1px #ddd;
@@ -2224,8 +2241,14 @@ div.figure {
 }
 
 p.table-caption {
-  margin: 0 0 4px 0; /* matches default table left-margin */
+  margin: 0 0 4px 0;
   font-size:13px;
+  color:#666;
+}
+
+p.code-caption {
+  margin: 0 0 4px 0;
+  font: 13px/1.5 'courier new', courier, monospace;
   color:#666;
 }
 
@@ -2242,15 +2265,15 @@ p.warning, div.warning {
   border-left: 4px solid;
 }
 
-p.note {
+p.note, div.note {
   border-color: #258AAF;
 }
 
-p.caution {
+p.caution, div.caution {
   border-color: #FF8800;
 }
 
-p.warning {
+p.warning, div.warning {
   border-color: #ff4443;
 }
 
@@ -2274,7 +2297,7 @@ div.note.distribute {
   margin-bottom:0;
 }
 
-blockquote {
+body.about blockquote {
   display:block;
   float:right;
   width:280px;
@@ -3357,7 +3380,7 @@ EndColorStr='#ececec');
 }
 
 #header-wrap.quicknav {
-  height:170px;
+  height:196px;
   
 }
 
@@ -3842,10 +3865,6 @@ a.download-sdk {
 .slideshow-develop .content-right {
   float: left;
 }
-.slideshow-develop .content-right p.title-intro {
-  position:absolute;
-  margin:0;
-}
 .slideshow-develop .content-right h2 {
   padding:0;
   margin-bottom:10px;
@@ -3860,6 +3879,16 @@ a.download-sdk {
 }
 .slideshow-develop .pagination ul li.active:hover {
   background-color: #F80;
+}
+.slideshow-develop .item hr {
+  margin:5px 0 10px;
+}
+.slideshow-develop .item p {
+  margin:10px 0;
+}
+.slideshow-develop .item p.title-intro {
+  position:absolute;
+  margin:0;
 }
 
 /* Feeds */
@@ -4043,6 +4072,7 @@ a.download-sdk {
 }
 .landing-docs {
   clear:left;
+  overflow:hidden;
 }
 .landing-docs h3 {
   font-size:14px;

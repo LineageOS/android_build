@@ -27,15 +27,57 @@
     </div>
     <?cs if:training ?>
       <div class="training-nav-top layout-content-col span-5" itemscope itemtype="http://schema.org/SiteNavigationElement">
-        <a href="#" class="prev-page-link hide">Previous</a>
-        <a href="#" class="next-page-link hide">Next</a>
-        <a href="#" class="start-class-link hide">Get started</a>
-        <a href="#" class="start-course-link hide">First class</a>
+        <a href="#" class="prev-page-link hide"
+            zh-TW-lang="上一堂課"
+            zh-CN-lang="上一课"
+            ru-lang="Предыдущий"
+            ko-lang="이전"
+            ja-lang="前へ"
+            es-lang="Anterior"               
+            >Previous</a>
+        <a href="#" class="next-page-link hide"
+            zh-TW-lang="下一堂課"
+            zh-CN-lang="下一课"
+            ru-lang="Следующий"
+            ko-lang="다음"
+            ja-lang="次へ"
+            es-lang="Siguiente"               
+            >Next</a>
+        <a href="#" class="start-class-link hide"
+            zh-TW-lang="開始上課"
+            zh-CN-lang="开始"
+            ru-lang="Начало работы"
+            ko-lang="시작하기"
+            ja-lang="開始する"
+            es-lang="Empezar"               
+            >Get started</a>
+        <a href="#" class="start-course-link hide"
+            zh-TW-lang="第一堂課"
+            zh-CN-lang="第一课"
+            ru-lang="Первый урок"
+            ko-lang="첫 번째 강의"
+            ja-lang="最初のクラス"
+            es-lang="Primera clase"               
+            >First class</a>
       </div>
     <?cs else ?>
       <div class="paging-links layout-content-col span-4" itemscope itemtype="http://schema.org/SiteNavigationElement">
-        <a href="#" class="prev-page-link hide">Previous</a>
-        <a href="#" class="next-page-link hide">Next</a>
+        <a href="#" class="prev-page-link hide"
+            zh-TW-lang="上一堂課"
+            zh-CN-lang="上一课"
+            ru-lang="Предыдущий"
+            ko-lang="이전"
+            ja-lang="前へ"
+            es-lang="Anterior"               
+            >Previous</a>
+        <a href="#" class="next-page-link hide"
+            zh-TW-lang="下一堂課"
+            zh-CN-lang="下一课"
+            ru-lang="Следующий"
+            ko-lang="다음"
+            ja-lang="次へ"
+            es-lang="Siguiente"               
+            >Next</a>
       </div>
     <?cs /if ?><?cs # end if training ?>
   </div>
@@ -87,8 +129,22 @@
         <?cs if:!fullscreen ?>
         <div class="paging-links layout-content-col col-4">
           <?cs if:(design||training||guide||walkthru) && !page.landing && !footer.hide ?>
-            <a href="#" class="prev-page-link hide">Previous</a>
-            <a href="#" class="next-page-link hide">Next</a>
+            <a href="#" class="prev-page-link hide"
+                zh-TW-lang="上一堂課"
+                zh-CN-lang="上一课"
+                ru-lang="Предыдущий"
+                ko-lang="이전"
+                ja-lang="前へ"
+                es-lang="Anterior"               
+                >Previous</a>
+            <a href="#" class="next-page-link hide"
+                zh-TW-lang="下一堂課"
+                zh-CN-lang="下一课"
+                ru-lang="Следующий"
+                ko-lang="다음"
+                ja-lang="次へ"
+                es-lang="Siguiente"               
+                >Next</a>
           <?cs /if ?>
         </div>
         <?cs /if ?>

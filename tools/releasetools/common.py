@@ -143,6 +143,22 @@ def LoadInfoDict(zip):
   makeint("boot_size")
 
   d["fstab"] = LoadRecoveryFSTab(zip)
+  d["build.prop"] = LoadBuildProp(zip)
+  return d
+
+def LoadBuildProp(zip):
+  try:
+    data = zip.read("SYSTEM/build.prop")
+  except KeyError:
+    print "Warning: could not find SYSTEM/build.prop in %s" % zip
+    data = ""
+
+  d = {}
+  for line in data.split("\n"):
+    line = line.strip()
+    if not line or line.startswith("#"): continue
+    name, value = line.split("=", 1)
+    d[name] = value
   return d
 
 def LoadRecoveryFSTab(zip):
@@ -196,7 +212,7 @@ def DumpInfoDict(d):
   for k, v in sorted(d.items()):
     print "%-25s = (%s) %s" % (k, type(v).__name__, v)
 
-def BuildBootableImage(sourcedir, fs_config_file):
+def BuildBootableImage(sourcedir, fs_config_file, info_dict=None):
   """Take a kernel, cmdline, and ramdisk directory from the input (in
   'sourcedir'), and turn them into a boot image.  Return the image
   data, or None if sourcedir does not appear to contains files for
@@ -205,6 +221,9 @@ def BuildBootableImage(sourcedir, fs_config_file):
   if (not os.access(os.path.join(sourcedir, "RAMDISK"), os.F_OK) or
       not os.access(os.path.join(sourcedir, "kernel"), os.F_OK)):
     return None
+
+  if info_dict is None:
+    info_dict = OPTIONS.info_dict
 
   ramdisk_img = tempfile.NamedTemporaryFile()
   img = tempfile.NamedTemporaryFile()
@@ -250,10 +269,9 @@ def BuildBootableImage(sourcedir, fs_config_file):
       cmd.append("--pagesize")
       cmd.append(open(fn).read().rstrip("\n"))
 
-    fn = os.path.join(sourcedir, "ramdiskaddr")
-    if os.access(fn, os.F_OK):
-      cmd.append("--ramdiskaddr")
-      cmd.append(open(fn).read().rstrip("\n"))
+    args = info_dict.get("mkbootimg_args", None)
+    if args and args.strip():
+      cmd.extend(args.split())
 
     cmd.extend(["--ramdisk", ramdisk_img.name,
                 "--output", img.name])
@@ -272,7 +290,8 @@ def BuildBootableImage(sourcedir, fs_config_file):
   return data
 
 
-def GetBootableImage(name, prebuilt_name, unpack_dir, tree_subdir):
+def GetBootableImage(name, prebuilt_name, unpack_dir, tree_subdir,
+                     info_dict=None):
   """Return a File object (with name 'name') with the desired bootable
   image.  Look for it in 'unpack_dir'/BOOTABLE_IMAGES under the name
   'prebuilt_name', otherwise construct it from the source files in
@@ -286,7 +305,8 @@ def GetBootableImage(name, prebuilt_name, unpack_dir, tree_subdir):
     print "building image from target_files %s..." % (tree_subdir,)
     fs_config = "META/" + tree_subdir.lower() + "_filesystem_config.txt"
     return File(name, BuildBootableImage(os.path.join(unpack_dir, tree_subdir),
-                                         os.path.join(unpack_dir, fs_config)))
+                                         os.path.join(unpack_dir, fs_config),
+                                         info_dict))
 
 
 def UnzipTemp(filename, pattern=None):
@@ -764,10 +784,11 @@ DIFF_PROGRAM_BY_EXT = {
     }
 
 class Difference(object):
-  def __init__(self, tf, sf):
+  def __init__(self, tf, sf, diff_program=None):
     self.tf = tf
     self.sf = sf
     self.patch = None
+    self.diff_program = diff_program
 
   def ComputePatch(self):
     """Compute the patch (as a string of data) needed to turn sf into
@@ -776,8 +797,11 @@ class Difference(object):
     tf = self.tf
     sf = self.sf
 
-    ext = os.path.splitext(tf.name)[1]
-    diff_program = DIFF_PROGRAM_BY_EXT.get(ext, "bsdiff")
+    if self.diff_program:
+      diff_program = self.diff_program
+    else:
+      ext = os.path.splitext(tf.name)[1]
+      diff_program = DIFF_PROGRAM_BY_EXT.get(ext, "bsdiff")
 
     ttemp = tf.WriteToTemp()
     stemp = sf.WriteToTemp()

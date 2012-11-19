@@ -5,9 +5,9 @@ pdk fusion: $(DEFAULT_GOAL)
 
 # What to build:
 # pdk fusion if:
-# 1) the platform.zip exists in the default location
+# 1) PDK_FUSION_PLATFORM_ZIP is passed in from the environment
 # or
-# 2) PDK_FUSION_PLATFORM_ZIP is passed in from the environment
+# 2) the platform.zip exists in the default location
 # or
 # 3) fusion is a command line build goal,
 #    PDK_FUSION_PLATFORM_ZIP is needed anyway, then do we need the 'fusion' goal?
@@ -16,13 +16,15 @@ pdk fusion: $(DEFAULT_GOAL)
 # or
 # 2) TARGET_BUILD_PDK is passed in from the environment
 
-# TODO: what's the best default location?
+# if PDK_FUSION_PLATFORM_ZIP is specified, do not override.
+ifndef PDK_FUSION_PLATFORM_ZIP
 _pdk_fusion_default_platform_zip := vendor/pdk/$(TARGET_DEVICE)/$(TARGET_PRODUCT)-$(TARGET_BUILD_VARIANT)/platform/platform.zip
 ifneq (,$(wildcard $(_pdk_fusion_default_platform_zip)))
 $(info $(_pdk_fusion_default_platform_zip) found, do a PDK fusion build.)
 PDK_FUSION_PLATFORM_ZIP := $(_pdk_fusion_default_platform_zip)
 TARGET_BUILD_PDK := true
 endif
+endif # !PDK_FUSION_PLATFORM_ZIP
 
 ifneq (,$(filter pdk fusion, $(MAKECMDGOALS)))
 TARGET_BUILD_PDK := true
@@ -33,7 +35,7 @@ endif
 endif  # fusion
 endif  # pdk or fusion
 
-
+ifneq (,$(filter platform-java, $(MAKECMDGOALS))$(PDK_FUSION_PLATFORM_ZIP))
 # additional items to add to platform.zip for platform-java build
 # For these dirs, add classes.jar and javalib.jar from the dir to platform.zip
 # all paths under out dir
@@ -43,16 +45,19 @@ PDK_PLATFORM_JAVA_ZIP_JAVA_LIB_DIR := \
 	target/common/obj/JAVA_LIBRARIES/core-junit_intermediates \
 	target/common/obj/JAVA_LIBRARIES/ext_intermediates \
 	target/common/obj/JAVA_LIBRARIES/framework_intermediates \
-	target/common/obj/JAVA_LIBRARIES/android.test.runner_intermediates
+	target/common/obj/JAVA_LIBRARIES/android.test.runner_intermediates \
+	target/common/obj/JAVA_LIBRARIES/telephony-common_intermediates \
+	target/common/obj/JAVA_LIBRARIES/mms-common_intermediates
 # not java libraries
 PDK_PLATFORM_JAVA_ZIP_CONTENTS := \
 	target/common/obj/APPS/framework-res_intermediates/package-export.apk \
 	target/common/obj/APPS/framework-res_intermediates/src/R.stamp
 PDK_PLATFORM_JAVA_ZIP_CONTENTS += $(foreach lib_dir,$(PDK_PLATFORM_JAVA_ZIP_JAVA_LIB_DIR),\
     $(lib_dir)/classes.jar $(lib_dir)/javalib.jar)
+endif # platform-java or FUSION build
 
 # check and override java support level
-ifeq ($(TARGET_BUILD_PDK),true)
+ifneq ($(TARGET_BUILD_PDK)$(PDK_FUSION_PLATFORM_ZIP),)
 ifneq ($(wildcard external/proguard),)
 TARGET_BUILD_JAVA_SUPPORT_LEVEL := sdk
 else # no proguard
@@ -136,7 +141,7 @@ ALL_PDK_FUSION_FILES := $(addprefix $(PRODUCT_OUT)/, $(_pdk_fusion_file_list))
 endif # PDK_FUSION_PLATFORM_ZIP
 
 ifeq ($(TARGET_BUILD_PDK),true)
-
+$(info PDK TARGET_BUILD_JAVA_SUPPORT_LEVEL $(TARGET_BUILD_JAVA_SUPPORT_LEVEL))
 ifeq ($(TARGET_BUILD_PDK_JAVA_PLATFORM),)
 
 # SDK used for Java build under PDK
@@ -150,3 +155,16 @@ $(info PDK Build uses the current platform API)
 endif # PDK_JAVA
 
 endif # BUILD_PDK
+
+ifneq (,$(filter platform platform-java, $(MAKECMDGOALS))$(filter true,$(TARGET_BUILD_PDK)))
+# files under $(PRODUCT_OUT)/symbols to help debugging.
+# Source not included to PDK due to dependency issue, so provide symbols instead.
+PDK_SYMBOL_FILES_LIST := \
+	system/bin/app_process
+
+ifdef PDK_FUSION_PLATFORM_ZIP
+# symbols should be explicitly pulled for fusion build
+$(foreach f,$(PDK_SYMBOL_FILES_LIST),\
+  $(eval $(call add-dependency,$(PRODUCT_OUT)/$(f),$(PRODUCT_OUT)/symbols/$(f))))
+endif # PLATFORM_ZIP
+endif # platform.zip build or PDK

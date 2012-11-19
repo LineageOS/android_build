@@ -33,7 +33,7 @@ endif
 
 # ---------------------------------------------------------------
 # Set up configuration for host machine.  We don't do cross-
-# compiles except for arm, so the HOST is whatever we are
+# compiles except for arm/mips, so the HOST is whatever we are
 # running on
 
 UNAME := $(shell uname -sm)
@@ -94,28 +94,12 @@ $(error HOST_BUILD_TYPE must be either release or debug, not '$(HOST_BUILD_TYPE)
 endif
 endif
 
-# Get whether the host is running a 32-bit or a 64-bit OS
-HOST_BITS := $(strip $(shell getconf LONG_BIT))
-ifneq ($(HOST_BITS),32)
-ifneq ($(HOST_BITS),64)
-HOST_BITS :=
-endif
-endif
-
 # This is the standard way to name a directory containing prebuilt host
 # objects. E.g., prebuilt/$(HOST_PREBUILT_TAG)/cc
 ifeq ($(HOST_OS),windows)
   HOST_PREBUILT_TAG := windows
 else
   HOST_PREBUILT_TAG := $(HOST_OS)-$(HOST_ARCH)
-endif
-
-# If $(HOST_BITS) could be determined $(HOST_PREBUILT_EXTRA_TAG) contains
-# this as well and should be checked for a prebuilt first
-ifeq ($(strip $(HOST_BITS)),)
-  HOST_PREBUILT_EXTRA_TAG := $(HOST_PREBUILT_TAG)
-else
-  HOST_PREBUILT_EXTRA_TAG := $(HOST_PREBUILT_TAG)-$(HOST_BITS)
 endif
 
 # TARGET_COPY_OUT_* are all relative to the staging directory, ie PRODUCT_OUT.
@@ -130,23 +114,20 @@ TARGET_COPY_OUT_RECOVERY := recovery
 # variables that we need in order to locate the output files.
 include $(BUILD_SYSTEM)/product_config.mk
 
-build_variant := $(filter-out eng user userdebug tests,$(TARGET_BUILD_VARIANT))
+build_variant := $(filter-out user userdebug eng tests,$(TARGET_BUILD_VARIANT))
 ifneq ($(build_variant)-$(words $(TARGET_BUILD_VARIANT)),-1)
 $(warning bad TARGET_BUILD_VARIANT: $(TARGET_BUILD_VARIANT))
-$(error must be empty or one of: eng user userdebug tests)
+$(error must be empty or one of: user userdebug eng tests)
 endif
 
 # ---------------------------------------------------------------
 # Set up configuration for target machine.
 # The following must be set:
 # 		TARGET_OS = { linux }
-# 		TARGET_ARCH = { arm | x86 }
+# 		TARGET_ARCH = { arm | x86 | mips }
 
-
-ifeq ($(TARGET_ARCH),)
-TARGET_ARCH := arm
-endif
 TARGET_OS := linux
+# TARGET_ARCH should be set by BoardConfig.mk and will be checked later
 
 # the target build type defaults to release
 ifneq ($(TARGET_BUILD_TYPE),debug)
@@ -205,7 +186,6 @@ HOST_OUT_SDK_ADDON := $(HOST_OUT)/sdk_addon
 HOST_OUT_INTERMEDIATES := $(HOST_OUT)/obj
 HOST_OUT_HEADERS:= $(HOST_OUT_INTERMEDIATES)/include
 HOST_OUT_INTERMEDIATE_LIBRARIES := $(HOST_OUT_INTERMEDIATES)/lib
-HOST_OUT_STATIC_LIBRARIES := $(HOST_OUT_INTERMEDIATE_LIBRARIES)
 HOST_OUT_NOTICE_FILES:=$(HOST_OUT_INTERMEDIATES)/NOTICE_FILES
 HOST_OUT_COMMON_INTERMEDIATES := $(HOST_COMMON_OUT_ROOT)/obj
 
@@ -223,7 +203,6 @@ TARGET_OUT_APPS:= $(TARGET_OUT)/app
 TARGET_OUT_KEYLAYOUT := $(TARGET_OUT)/usr/keylayout
 TARGET_OUT_KEYCHARS := $(TARGET_OUT)/usr/keychars
 TARGET_OUT_ETC := $(TARGET_OUT)/etc
-TARGET_OUT_STATIC_LIBRARIES:= $(TARGET_OUT_INTERMEDIATES)/lib
 TARGET_OUT_NOTICE_FILES:=$(TARGET_OUT_INTERMEDIATES)/NOTICE_FILES
 TARGET_OUT_FAKE := $(PRODUCT_OUT)/fake_packages
 
@@ -235,7 +214,6 @@ TARGET_OUT_DATA_APPS:= $(TARGET_OUT_DATA)/app
 TARGET_OUT_DATA_KEYLAYOUT := $(TARGET_OUT_KEYLAYOUT)
 TARGET_OUT_DATA_KEYCHARS := $(TARGET_OUT_KEYCHARS)
 TARGET_OUT_DATA_ETC := $(TARGET_OUT_ETC)
-TARGET_OUT_DATA_STATIC_LIBRARIES:= $(TARGET_OUT_STATIC_LIBRARIES)
 TARGET_OUT_DATA_NATIVE_TESTS := $(TARGET_OUT_DATA)/nativetest
 
 TARGET_OUT_CACHE := $(PRODUCT_OUT)/cache

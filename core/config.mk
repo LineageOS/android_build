@@ -14,6 +14,11 @@ else
 SHELL := /bin/bash
 endif
 
+# Utility variables.
+empty :=
+space := $(empty) $(empty)
+comma := ,
+
 # Tell python not to spam the source tree with .pyc files.  This
 # only has an effect on python 2.6 and above.
 export PYTHONDONTWRITEBYTECODE := 1
@@ -151,6 +156,9 @@ ifneq ($(words $(board_config_mk)),1)
   $(error Multiple board config files for TARGET_DEVICE $(TARGET_DEVICE): $(board_config_mk))
 endif
 include $(board_config_mk)
+ifeq ($(TARGET_ARCH),)
+  $(error TARGET_ARCH not defined by board config: $(board_config_mk))
+endif
 TARGET_DEVICE_DIR := $(patsubst %/,%,$(dir $(board_config_mk)))
 board_config_mk :=
 
@@ -222,7 +230,7 @@ TARGET_CPU_ABI2 := $(strip $(TARGET_CPU_ABI2))
 
 # $(1): os/arch
 define select-android-config-h
-system/core/include/arch/$(1)/AndroidConfig.h
+build/core/combo/include/arch/$(1)/AndroidConfig.h
 endef
 
 combo_target := HOST_
@@ -299,6 +307,7 @@ LLVM_RS_CC := $(HOST_OUT_EXECUTABLES)/llvm-rs-cc$(HOST_EXECUTABLE_SUFFIX)
 LLVM_RS_LINK := $(HOST_OUT_EXECUTABLES)/llvm-rs-link$(HOST_EXECUTABLE_SUFFIX)
 DEXOPT := $(HOST_OUT_EXECUTABLES)/dexopt$(HOST_EXECUTABLE_SUFFIX)
 DEXPREOPT := dalvik/tools/dex-preopt
+LINT := prebuilts/sdk/tools/lint
 
 # ACP is always for the build OS, not for the host OS
 ACP := $(BUILD_OUT_EXECUTABLES)/acp$(BUILD_EXECUTABLE_SUFFIX)
@@ -323,18 +332,7 @@ else
 COLUMN:= column
 endif
 
-dir := $(shell uname)
-ifeq ($(HOST_OS),windows)
-dir := $(HOST_OS)
-endif
-ifeq ($(HOST_OS),darwin)
-dir := $(HOST_OS)-$(HOST_ARCH)
-endif
-ifneq ($(strip $(wildcard prebuilt/$(HOST_PREBUILT_EXTRA_TAG)/flex/flex-2.5.4a$(HOST_EXECUTABLE_SUFFIX))),)
-OLD_FLEX := prebuilt/$(HOST_PREBUILT_EXTRA_TAG)/flex/flex-2.5.4a$(HOST_EXECUTABLE_SUFFIX)
-else
-OLD_FLEX := prebuilt/$(HOST_PREBUILT_TAG)/flex/flex-2.5.4a$(HOST_EXECUTABLE_SUFFIX)
-endif
+OLD_FLEX := prebuilts/misc/$(HOST_PREBUILT_TAG)/flex/flex-2.5.4a$(HOST_EXECUTABLE_SUFFIX)
 
 ifeq ($(HOST_OS),darwin)
 # Mac OS' screwy version of java uses a non-standard directory layout
@@ -414,8 +412,6 @@ TARGET_GLOBAL_CPPFLAGS += $(TARGET_RELEASE_CPPFLAGS)
 # define llvm tools and global flags
 include $(BUILD_SYSTEM)/llvm_config.mk
 
-PREBUILT_IS_PRESENT := $(if $(wildcard prebuilt/Android.mk),true)
-
 # ###############################################################
 # Collect a list of the SDK versions that we could compile against
 # For use with the LOCAL_SDK_VERSION variable for include $(BUILD_PACKAGE)
@@ -443,10 +439,6 @@ endef
 TARGET_AVAILABLE_SDK_VERSIONS := $(call numerically_sort,\
     $(patsubst $(HISTORICAL_SDK_VERSIONS_ROOT)/%/android.jar,%, \
     $(wildcard $(HISTORICAL_SDK_VERSIONS_ROOT)/*/android.jar)))
-
-TARGET_AVAILABLE_NDK_VERSIONS := $(call numerically_sort,\
-    $(patsubst $(HISTORICAL_NDK_VERSIONS_ROOT)/android-ndk-r%,%, \
-    $(wildcard $(HISTORICAL_NDK_VERSIONS_ROOT)/android-ndk-r*)))
 
 INTERNAL_PLATFORM_API_FILE := $(TARGET_OUT_COMMON_INTERMEDIATES)/PACKAGING/public_api.txt
 

@@ -8,16 +8,38 @@
           </a>
           <div class="btn-quicknav" id="btn-quicknav">
           	<a href="#" class="arrow-inactive">Quicknav</a>
-			<a href="#" class="arrow-active">Quicknav</a>
+			      <a href="#" class="arrow-active">Quicknav</a>
           </div>
           </div>
             <ul class="nav-x col-9">
-                <li class="design"><a href="<?cs var:toroot ?>design/index.html" <?cs
-                  if:design ?>class="selected"<?cs /if ?> >Design</a></li>
+                <li class="design">
+                  <a href="<?cs var:toroot ?>design/index.html" <?cs
+                  if:design ?>class="selected"<?cs /if ?>
+                  zh-TW-lang="設計"
+                  zh-CN-lang="设计"
+                  ru-lang="Проектирование"
+                  ko-lang="디자인"
+                  ja-lang="設計"
+                  es-lang="Diseñar"               
+                  >Design</a></li>
                 <li class="develop"><a href="<?cs var:toroot ?>develop/index.html" <?cs
-                  if:training || guide || reference || tools || develop ?>class="selected"<?cs /if ?> >Develop</a></li>
+                  if:training || guide || reference || tools || develop ?>class="selected"<?cs /if ?>
+                  zh-TW-lang="開發"
+                  zh-CN-lang="开发"
+                  ru-lang="Разработка"
+                  ko-lang="개발"
+                  ja-lang="開発"
+                  es-lang="Desarrollar"               
+                  >Develop</a></li>
                 <li class="distribute last"><a href="<?cs var:toroot ?>distribute/index.html" <?cs
-                  if:distribute ?>class="selected"<?cs /if ?> >Distribute</a></li>
+                  if:distribute ?>class="selected"<?cs /if ?>
+                  zh-TW-lang="發佈"
+                  zh-CN-lang="分发"
+                  ru-lang="Распространение"
+                  ko-lang="배포"
+                  ja-lang="配布"
+                  es-lang="Distribuir"               
+                  >Distribute</a></li>
             </ul>
             
             <!-- New Search -->
@@ -52,9 +74,9 @@
               <option value="ja">日本語</option>
               <option value="ko">한국어</option>
               <option value="ru">Русский</option>
-              <option value="zh-CN">中文 (中国)
-      </option>
-          </select>	
+              <option value="zh-CN">中文 (中国)</option>
+              <option value="zh-TW">中文 (台灣)</option>
+          </select>
         </div>
       <script type="text/javascript">
         <!--  
@@ -97,18 +119,48 @@ onkeyup="return search_changed(event, false, '<?cs var:toroot ?>')" />
                 <ul>
                     <li class="design">
                       <ul>
+                        <li><a href="<?cs var:toroot ?>design/index.html">Get Started</a></li>
                         <li><a href="<?cs var:toroot ?>design/style/index.html">Style</a></li>
                         <li><a href="<?cs var:toroot ?>design/patterns/index.html">Patterns</a></li>
                         <li><a href="<?cs var:toroot ?>design/building-blocks/index.html">Building Blocks</a></li>
                         <li><a href="<?cs var:toroot ?>design/downloads/index.html">Downloads</a></li>
+                        <li><a href="<?cs var:toroot ?>design/videos/index.html">Videos</a></li>
                       </ul>
                     </li>
                     <li class="develop">
                       <ul>
-                        <li><a href="<?cs var:toroot ?>training/index.html">Android Training</a></li>
-                        <li><a href="<?cs var:toroot ?>guide/components/index.html">API Guides</a></li>
-                        <li><a href="<?cs var:toroot ?>reference/packages.html">Reference</a></li>
-                        <li><a href="<?cs var:toroot ?>tools/index.html">Tools</a>
+                        <li><a href="<?cs var:toroot ?>training/index.html"
+                          zh-TW-lang="訓練課程"
+                          zh-CN-lang="培训"
+                          ru-lang="Курсы"
+                          ko-lang="교육"
+                          ja-lang="トレーニング"
+                          es-lang="Capacitación"               
+                          >Training</a></li>
+                        <li><a href="<?cs var:toroot ?>guide/components/index.html"
+                          zh-TW-lang="API 指南"
+                          zh-CN-lang="API 指南"
+                          ru-lang="Руководства по API"
+                          ko-lang="API 가이드"
+                          ja-lang="API ガイド"
+                          es-lang="Guías de la API"               
+                          >API Guides</a></li>
+                        <li><a href="<?cs var:toroot ?>reference/packages.html"
+                          zh-TW-lang="參考資源"
+                          zh-CN-lang="参考"
+                          ru-lang="Справочник"
+                          ko-lang="참조문서"
+                          ja-lang="リファレンス"
+                          es-lang="Referencia"               
+                          >Reference</a></li>
+                        <li><a href="<?cs var:toroot ?>tools/index.html"
+                          zh-TW-lang="相關工具"
+                          zh-CN-lang="工具"
+                          ru-lang="Инструменты"
+                          ko-lang="도구"
+                          ja-lang="ツール"
+                          es-lang="Herramientas"               
+                          >Tools</a>
                           <ul><li><a href="<?cs var:toroot ?>sdk/index.html">Get the
 SDK</a></li></ul>
                         </li>
@@ -119,9 +171,9 @@ SDK</a></li></ul>
                         <li><a href="<?cs var:toroot ?>distribute/index.html">Google Play</a></li>
                         <li><a href="<?cs var:toroot ?>distribute/googleplay/publish/index.html">Publishing</a></li>
                         <li><a href="<?cs var:toroot ?>distribute/googleplay/promote/index.html">Promoting</a></li>
-                        <!--<li><a href="<?cs var:toroot ?>distribute/googleplay/strategies/index.html">Strategies</a></li> -->
-                        <li><a href="<?cs var:toroot ?>distribute/open.html">Open
-Distribution</a></li> 
+                        <li><a href="<?cs var:toroot ?>distribute/googleplay/quality/index.html">App Quality</a></li>
+                        <li><a href="<?cs var:toroot ?>distribute/googleplay/spotlight/index.html">Spotlight</a></li>
+                        <li><a href="<?cs var:toroot ?>distribute/open.html">Open Distribution</a></li>
                       </ul>
                     </li>
                 </ul>
@@ -145,15 +197,42 @@ Distribution</a></li>
         <div class="wrap">
             <ul class="nav-x col-9 develop" style="width:75%">
                 <li><a href="<?cs var:toroot ?>training/index.html" <?cs
-                  if:training ?>class="selected"<?cs /if ?> >Android Training</a></li>
-                  <li><a href="<?cs var:toroot ?>guide/components/index.html" <?cs
-                  if:guide ?>class="selected"<?cs /if ?> >API Guides</a></li>
+                  if:training ?>class="selected"<?cs /if ?>
+                  zh-TW-lang="訓練課程"
+                  zh-CN-lang="培训"
+                  ru-lang="Курсы"
+                  ko-lang="교육"
+                  ja-lang="トレーニング"
+                  es-lang="Capacitación"               
+                  >Training</a></li>
+                <li><a href="<?cs var:toroot ?>guide/components/index.html" <?cs
+                  if:guide ?>class="selected"<?cs /if ?>
+                  zh-TW-lang="API 指南"
+                  zh-CN-lang="API 指南"
+                  ru-lang="Руководства по API"
+                  ko-lang="API 가이드"
+                  ja-lang="API ガイド"
+                  es-lang="Guías de la API"               
+                  >API Guides</a></li>
                 <li><a href="<?cs var:toroot ?>reference/packages.html" <?cs
-                  if:reference ?>class="selected"<?cs /if ?> >Reference</a></li>
+                  if:reference ?>class="selected"<?cs /if ?>
+                  zh-TW-lang="參考資源"
+                  zh-CN-lang="参考"
+                  ru-lang="Справочник"
+                  ko-lang="참조문서"
+                  ja-lang="リファレンス"
+                  es-lang="Referencia"               
+                  >Reference</a></li>
                 <li><a href="<?cs var:toroot ?>tools/index.html" <?cs
-                  if:tools ?>class="selected"<?cs /if ?> >Tools</a></li>
+                  if:tools ?>class="selected"<?cs /if ?>
+                  zh-TW-lang="相關工具"
+                  zh-CN-lang="工具"
+                  ru-lang="Инструменты"
+                  ko-lang="도구"
+                  ja-lang="ツール"
+                  es-lang="Herramientas"               
+                  >Tools</a></li>
             </ul>
-          <!--  <a class="button-secondary download-sdk">Download the SDK</a> -->
         </div>
         
     </div>

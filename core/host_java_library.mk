@@ -82,6 +82,7 @@ $(LOCAL_BUILT_MODULE): $(built_dex) $(java_resource_sources) | $(AAPT)
 	@echo -e ${CL_YLW}"Host Jar:"${CL_RST}" $(PRIVATE_MODULE) ($@)"
 	$(create-empty-package)
 	$(add-dex-to-package)
+	$(add-carried-java-resources)
 ifneq ($(extra_jar_args),)
 	$(add-java-resources-to-package)
 endif
