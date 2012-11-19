@@ -654,6 +654,7 @@ function eat()
         MODVERSION=`sed -n -e'/ro\.cm\.version/s/.*=//p' $OUT/system/build.prop`
         ZIPFILE=cm-$MODVERSION.zip
         ZIPPATH=$OUT/$ZIPFILE
+        MD5SUMFILE=$ZIPPATH.md5sum
         if [ ! -f $ZIPPATH ] ; then
             echo "Nothing to eat"
             return 1
@@ -675,10 +676,11 @@ function eat()
         if adb push $ZIPPATH /storage/sdcard0/ ; then
             # Optional path for sdcard0 in recovery
             [ -z "$1" ] && DIR=sdcard || DIR=$1
+            MD5FILE=/$DIR/$ZIPFILE.md5
             cat << EOF > /tmp/command
 --update_package=/$DIR/$ZIPFILE
 EOF
-            if adb push /tmp/command /cache/recovery/ ; then
+            if adb push /tmp/command /cache/recovery/ && adb push $MD5SUMFILE $MD5FILE; then
                 echo "Rebooting into recovery for installation"
                 adb reboot recovery
             fi
