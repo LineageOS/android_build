@@ -682,7 +682,7 @@ function eat()
             # Optional path for sdcard0 in recovery
             [ -z "$1" ] && DIR=sdcard || DIR=$1
             cat << EOF > /tmp/command
---update_package=/$DIR/$ZIPFILE
+--update_package=/$DIR/0/$ZIPFILE
 EOF
             if adb push /tmp/command /cache/recovery/ ; then
                 echo "Rebooting into recovery for installation"
