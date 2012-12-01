@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAa3//5Hw\u003d",
+        "filename": "core/tasks/kernel.mk",
+        "patchSetId": 1
+      },
+      "lineNbr": 96,
+      "author": {
+        "id": 129
+      },
+      "writtenOn": "2012-12-01T09:31:44Z",
+      "side": 1,
+      "message": "unless I use \u0027*.ko\u0027 instead of *.ko here, the kernel modules are not copied to system/lib/modules (my build system is on Ubuntu 12.04)",
+      "revId": "730dc4f8c1c7063c07994bbf452749d62aeb48cb",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    }
+  ]
+}
