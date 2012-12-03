@@ -676,7 +676,7 @@ function eat()
         if adb push $ZIPPATH /storage/sdcard0/ ; then
             # Optional path for sdcard0 in recovery
             [ -z "$1" ] && DIR=sdcard || DIR=$1
-            MD5FILE=/$DIR/$ZIPFILE.md5
+            MD5FILE=/storage/sdcard0/$ZIPFILE.md5
             cat << EOF > /tmp/command
 --update_package=/$DIR/$ZIPFILE
 EOF
