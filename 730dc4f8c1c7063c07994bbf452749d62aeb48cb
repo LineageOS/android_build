@@ -16,6 +16,24 @@
       "revId": "730dc4f8c1c7063c07994bbf452749d62aeb48cb",
       "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAa3//364\u003d",
+        "filename": "core/tasks/kernel.mk",
+        "patchSetId": 1
+      },
+      "lineNbr": 96,
+      "author": {
+        "id": 4550
+      },
+      "writtenOn": "2012-12-06T14:57:42Z",
+      "side": 1,
+      "message": "This is a direct port from cm9 so I can\u0027t see how this could cause an issue. I don\u0027t think this will ever merge in cm7, it\u0027s frozen as I can see",
+      "parentUuid": "AAAAa3//5Hw\u003d",
+      "revId": "730dc4f8c1c7063c07994bbf452749d62aeb48cb",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
     }
   ]
 }
