@@ -1,3 +1,20 @@
+# Board platforms lists to be used for
+# TARGET_BOARD_PLATFORM specific featurization
+QCOM_BOARD_PLATFORMS := msm7x27
+QCOM_BOARD_PLATFORMS += msm7x27a
+QCOM_BOARD_PLATFORMS += msm7x30
+QCOM_BOARD_PLATFORMS += msm8660
+QCOM_BOARD_PLATFORMS += msm8960
+QCOM_BOARD_PLATFORMS += msm8974
+
+MSM7K_BOARD_PLATFORMS := msm7x30
+MSM7K_BOARD_PLATFORMS += msm7x27
+MSM7K_BOARD_PLATFORMS += msm7x27a
+MSM7K_BOARD_PLATFORMS += msm7k
+
+QSD8K_BOARD_PLATFORMS := qsd8k
+
+
 # vars for use by utils
 empty :=
 space := $(empty) $(empty)
@@ -154,7 +171,17 @@ FROYO_SDK_VERSIONS   := 8
 GINGERBREAD_SDK_VERSIONS := 9 10
 HONEYCOMB_SDK_VERSIONS := 11 12 13
 ICECREAM_SANDWICH_SDK_VERSIONS := 14 15
-JELLY_BEAN_SDK_VERSIONS := 16
+JELLY_BEAN_SDK_VERSIONS := 16 17 18
+
+# $(call is-platform-sdk-version-at-least,version)
+# version is a numeric SDK_VERSION defined above
+define is-platform-sdk-version-at-least
+$(strip \
+  $(if $(filter 1,$(shell echo "$$(( $(PLATFORM_SDK_VERSION) >= $(1) ))" )), \
+    true, \
+  ) \
+)
+endef
 
 # $(call is-android-codename,codename)
 # codename is one of cupcake,donut,eclair,froyo,gingerbread,icecream
