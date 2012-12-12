@@ -1319,6 +1319,7 @@ function installboot()
         return 1
     fi
     PARTITION=`grep "^\/boot" $OUT/recovery/root/etc/recovery.fstab | awk {'print $3'}`
+    PARTITION_TYPE=`grep "^\/boot" $OUT/recovery/root/etc/recovery.fstab | awk {'print $2'}`
     if [ -z "$PARTITION" ];
     then
         echo "Unable to determine boot partition."
@@ -1337,7 +1338,12 @@ function installboot()
         do
             adb push $i /system/lib/modules/
         done
-        adb shell dd if=/cache/boot.img of=$PARTITION
+        if [ "$PARTITION_TYPE" == "mtd" ];
+        then
+            adb shell flash_image $PARTITION /cache/boot.img
+        else
+            adb shell dd if=/cache/boot.img of=$PARTITION
+        fi
         adb shell chmod 644 /system/lib/modules/*
         echo "Installation complete."
     else
