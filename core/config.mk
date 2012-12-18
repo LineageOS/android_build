@@ -363,7 +363,12 @@ endif
 
 # In-place sed is done different in linux than OS X
 ifeq ($(HOST_OS),darwin)
+GSED:=$(shell which gsed)
+ifeq ($(GSED),)
 SED_INPLACE:=sed -i ''
+else
+SED_INPLACE:=gsed -i
+endif
 else
 SED_INPLACE:=sed -i
 endif
