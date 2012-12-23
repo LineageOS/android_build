@@ -1326,13 +1326,8 @@ $(INTERNAL_OTA_PACKAGE_TARGET): $(BUILT_TARGET_FILES_PACKAGE) $(DISTTOOLS)
 .PHONY: otapackage bacon
 otapackage: $(INTERNAL_OTA_PACKAGE_TARGET)
 bacon: otapackage
-ifneq ($(TARGET_CUSTOM_RELEASETOOL),)
-	@echo -e ${CL_YLW}"Running custom releasetool..."${CL_RST}
-	$(hide) OTAPACKAGE=$(INTERNAL_OTA_PACKAGE_TARGET) APKCERTS=$(APKCERTS_FILE) $(TARGET_CUSTOM_RELEASETOOL)
-else
-	@echo -e ${CL_YLW}"Running releasetool..."${CL_RST}
-	$(hide) OTAPACKAGE=$(INTERNAL_OTA_PACKAGE_TARGET) APKCERTS=$(APKCERTS_FILE) ./vendor/cm/tools/squisher
-endif
+	$(hide) ln -f $(INTERNAL_OTA_PACKAGE_TARGET) $(PRODUCT_OUT)/cm-$(CM_VERSION).zip
+	$(hide) md5sum $(PRODUCT_OUT)/$(CM_VERSION).zip > $(PRODUCT_OUT)/$(CM_VERSION).zip.md5sum
 
 # -----------------------------------------------------------------
 # The update package
