@@ -4,7 +4,7 @@
 ####################################
 
 # TODO: replace it with device's BOOTCLASSPATH
-DEXPREOPT_BOOT_JARS := core:core-junit:bouncycastle:ext:framework:telephony-common:voip-common:mms-common:android.policy:services:apache-xml
+DEXPREOPT_BOOT_JARS := core:core-junit:bouncycastle:ext:framework:telephony-common:voip-common:mms-common:android.policy:services:apache-xml:telephony-msim
 ifneq ($(strip $(TARGET_ADDITIONAL_BOOTCLASSPATH)),)
 DEXPREOPT_BOOT_JARS := $(DEXPREOPT_BOOT_JARS):$(TARGET_ADDITIONAL_BOOTCLASSPATH)
 endif
