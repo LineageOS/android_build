@@ -230,13 +230,16 @@ function settitle()
 {
     if [ "$STAY_OFF_MY_LAWN" = "" ]; then
         local arch=$(gettargetarch)
+        if [ -z "$OLD_PROMPT_COMMAND" ]; then
+            export OLD_PROMPT_COMMAND=$PROMPT_COMMAND
+        fi
         local product=$TARGET_PRODUCT
         local variant=$TARGET_BUILD_VARIANT
         local apps=$TARGET_BUILD_APPS
         if [ -z "$apps" ]; then
-            export PROMPT_COMMAND="echo -ne \"\033]0;[${arch}-${product}-${variant}] ${USER}@${HOSTNAME}: ${PWD}\007\""
+            export PROMPT_COMMAND="echo -ne \"\033]0;[${arch}-${product}-${variant}] ${USER}@${HOSTNAME}: ${PWD}\007\";${OLD_PROMPT_COMMAND}"
         else
-            export PROMPT_COMMAND="echo -ne \"\033]0;[$arch $apps $variant] ${USER}@${HOSTNAME}: ${PWD}\007\""
+            export PROMPT_COMMAND="echo -ne \"\033]0;[$arch $apps $variant] ${USER}@${HOSTNAME}: ${PWD}\007\";${OLD_PROMPT_COMMAND}"
         fi
     fi
 }
