@@ -4,6 +4,7 @@ Invoke ". build/envsetup.sh" from your shell to add the following functions to y
 - lunch:     lunch <product_name>-<build_variant>
 - tapas:     tapas [<App1> <App2> ...] [arm|x86|mips|armv5|arm64|x86_64|mips64] [eng|userdebug|user]
 - croot:     Changes directory to the top of the tree.
+- cout:      Changes directory to out.
 - m:         Makes from the top of the tree.
 - mm:        Builds all of the modules in the current directory, but not their dependencies.
 - mmm:       Builds all of the modules in the supplied directories, but not their dependencies.
@@ -1064,6 +1065,15 @@ function croot()
         \cd $(gettop)
     else
         echo "Couldn't locate the top of the tree.  Try setting TOP."
+    fi
+}
+
+function cout()
+{
+    if [  "$OUT" ]; then
+        cd $OUT
+    else
+        echo "Couldn't locate out directory.  Try setting OUT."
     fi
 }
 
