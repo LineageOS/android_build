@@ -230,17 +230,23 @@ function settitle()
 {
     if [ "$STAY_OFF_MY_LAWN" = "" ]; then
         local arch=$(gettargetarch)
-        if [ -z "$OLD_PROMPT_COMMAND" ]; then
-            export OLD_PROMPT_COMMAND=$PROMPT_COMMAND
-        fi
         local product=$TARGET_PRODUCT
         local variant=$TARGET_BUILD_VARIANT
         local apps=$TARGET_BUILD_APPS
-        if [ -z "$apps" ]; then
-            export PROMPT_COMMAND="echo -ne \"\033]0;[${arch}-${product}-${variant}] ${USER}@${HOSTNAME}: ${PWD}\007\";${OLD_PROMPT_COMMAND}"
-        else
-            export PROMPT_COMMAND="echo -ne \"\033]0;[$arch $apps $variant] ${USER}@${HOSTNAME}: ${PWD}\007\";${OLD_PROMPT_COMMAND}"
+        if [ -z "$PROMPT_COMMAND"  ]; then
+            # No prompts
+            PROMPT_COMMAND="echo -ne \"\033]0;${USER}@${HOSTNAME}: ${PWD}\007\""
+        elif [ -z "$(echo $PROMPT_COMMAND | grep '033]0;')" ]; then
+            # Prompts exist, but no hardstatus
+            PROMPT_COMMAND="echo -ne \"\033]0;${USER}@${HOSTNAME}: ${PWD}\007\";${PROMPT_COMMAND}"
         fi
+        if [ -z "$apps" ]; then
+            PROMPT_PREFIX="[${arch}-${product}-${variant}]"
+        else
+            PROMPT_PREFIX="[$arch $apps $variant]"
+        fi
+        # Inject build data into hardstatus
+        export PROMPT_COMMAND=$(echo $PROMPT_COMMAND | sed -e 's/\\033]0;\(.*\)\\007/\\033]0;$PROMPT_PREFIX \1\\007/g')
     fi
 }
 
