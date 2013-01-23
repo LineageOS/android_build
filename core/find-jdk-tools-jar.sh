@@ -10,5 +10,10 @@ else
         LSLINE=$(ls -l "$JAVAC")
         JAVAC=$(echo -n "$LSLINE" | sed -e "s/.* -> //")
     done
-    echo $JAVAC | sed -e "s:\(.*\)/bin/javac.*:\\1/lib/tools.jar:"
+    if [ "$JAVAC" = run-java-tool ] ; then
+        java-config -t
+    else
+        echo $JAVAC | sed -e "s:\(.*\)/bin/javac.*:\\1/lib/tools.jar:"
+    fi
+
 fi
