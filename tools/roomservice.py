@@ -34,6 +34,9 @@ while True:
         repositories.append(res)
     page = page + 1
 
+local_manifests = r'.repo/local_manifests'
+if not os.path.exists(local_manifests): os.makedirs(local_manifests)
+
 # in-place prettyprint formatter
 def indent(elem, level=0):
     i = "\n" + level*"  "
@@ -57,14 +60,14 @@ for repository in repositories:
         manufacturer = repo_name.replace("android_device_", "").replace("_" + device, "")
         
         try:
-            lm = ElementTree.parse(".repo/local_manifest.xml")
+            lm = ElementTree.parse(".repo/local_manifests/roomservice.xml")
             lm = lm.getroot()
         except:
             lm = ElementTree.Element("manifest")
         
         for child in lm.getchildren():
             if child.attrib['name'].endswith("_" + device):
-                print "Duplicate device '%s' found in local_manifest.xml." % child.attrib['name']
+                print "Duplicate device '%s' found in local manifest" % child.attrib['name']
                 sys.exit()
 
         repo_path = "device/%s/%s" % (manufacturer, device)
@@ -75,7 +78,7 @@ for repository in repositories:
         raw_xml = ElementTree.tostring(lm)
         raw_xml = '<?xml version="1.0" encoding="UTF-8"?>\n' + raw_xml
 
-        f = open('.repo/local_manifest.xml', 'w')
+        f = open('.repo/local_manifests/roomservice.xml', 'w')
         f.write(raw_xml)
         f.close()
         
@@ -84,4 +87,4 @@ for repository in repositories:
         print "Done!"
         sys.exit()
 
-print "Repository for %s not found in the CyanogenMod Github repository list. If this is in error, you may need to manually add it to your local_manifest.xml." % device
+print "Repository for %s not found in the CyanogenMod Github repository list. If this is in error, you may need to manually add it to your local_manifests/roomservice.xml." % device
