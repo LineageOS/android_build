@@ -60,6 +60,9 @@ while not depsonly:
         repositories.append(res)
     page = page + 1
 
+local_manifests = r'.repo/local_manifests'
+if not os.path.exists(local_manifests): os.makedirs(local_manifests)
+
 def exists_in_tree(lm, repository):
     for child in lm.getchildren():
         if child.attrib['name'].endswith(repository):
@@ -84,7 +87,7 @@ def indent(elem, level=0):
 
 def get_from_manifest(devicename):
     try:
-        lm = ElementTree.parse(".repo/local_manifest.xml")
+        lm = ElementTree.parse(".repo/local_manifests/roomservice.xml")
         lm = lm.getroot()
     except:
         lm = ElementTree.Element("manifest")
@@ -108,7 +111,7 @@ def get_from_manifest(devicename):
 
 def is_in_manifest(projectname):
     try:
-        lm = ElementTree.parse(".repo/local_manifest.xml")
+        lm = ElementTree.parse(".repo/local_manifests/roomservice.xml")
         lm = lm.getroot()
     except:
         lm = ElementTree.Element("manifest")
@@ -121,7 +124,7 @@ def is_in_manifest(projectname):
 
 def add_to_manifest(repositories):
     try:
-        lm = ElementTree.parse(".repo/local_manifest.xml")
+        lm = ElementTree.parse(".repo/local_manifests/roomservice.xml")
         lm = lm.getroot()
     except:
         lm = ElementTree.Element("manifest")
@@ -146,7 +149,7 @@ def add_to_manifest(repositories):
     raw_xml = ElementTree.tostring(lm)
     raw_xml = '<?xml version="1.0" encoding="UTF-8"?>\n' + raw_xml
 
-    f = open('.repo/local_manifest.xml', 'w')
+    f = open('.repo/local_manifests/roomservice.xml', 'w')
     f.write(raw_xml)
     f.close()
 
@@ -205,4 +208,4 @@ else:
             print "Done"
             sys.exit()
 
-print "Repository for %s not found in the CyanogenMod Github repository list. If this is in error, you may need to manually add it to your local_manifest.xml." % device
+print "Repository for %s not found in the CyanogenMod Github repository list. If this is in error, you may need to manually add it to your local_manifests/roomservice.xml." % device
