@@ -795,6 +795,10 @@ ifdef BOARD_CUSTOM_BOOTIMG_MK
 include $(BOARD_CUSTOM_BOOTIMG_MK)
 endif
 
+ifneq ($(TARGET_LK_BOOTLOADER_MK),)
+include $(TARGET_LK_BOOTLOADER_MK)
+endif
+
 # -----------------------------------------------------------------
 # system image
 #
