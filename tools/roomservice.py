@@ -225,7 +225,7 @@ else:
             if not has_branch(result, default_revision):
                 githubreq = urllib2.Request(repository['tags_url'].replace('{/tag}', ''))
                 add_auth(githubreq)
-                result = json.loads(urllib2.urlopen(githubreq).read())
+                result.extend (json.loads(urllib2.urlopen(githubreq).read()))
             
             repo_path = "device/%s/%s" % (manufacturer, device)
             adding = {'repository':repo_name,'target_path':repo_path}
