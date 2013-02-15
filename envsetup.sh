@@ -1764,24 +1764,6 @@ function dopush()
     local func=$1
     shift
 
-    adb start-server # Prevent unexpected starting server message from adb get-state in the next line
-    if [ $(adb get-state) != device -a $(adb shell busybox test -e /sbin/recovery 2> /dev/null; echo $?) != 0 ] ; then
-        echo "No device is online. Waiting for one..."
-        echo "Please connect USB and/or enable USB debugging"
-        until [ $(adb get-state) = device -o $(adb shell busybox test -e /sbin/recovery 2> /dev/null; echo $?) = 0 ];do
-            sleep 1
-        done
-        echo "Device Found."
-    fi
-
-    if (adb shell cat /system/build.prop | grep -q "ro.cm.device=$CM_BUILD");
-    then
-    adb root &> /dev/null
-    sleep 0.3
-    adb wait-for-device &> /dev/null
-    sleep 0.3
-    adb remount &> /dev/null
-
     $func $* | tee $OUT/.log
 
     # Install: <file>
@@ -1798,25 +1780,12 @@ function dopush()
         if ! echo $TARGET | egrep '^system\/' > /dev/null ; then
             continue
         else
-            case $TARGET in
-            system/app/SystemUI.apk|system/framework/*)
-                stop_n_start=true
-            ;;
-            *)
-                stop_n_start=false
-            ;;
-            esac
-            if $stop_n_start ; then adb shell stop ; fi
             echo "Pushing: $TARGET"
-            adb push $FILE $TARGET
-            if $stop_n_start ; then adb shell start ; fi
+            sp $FILE $TARGET
         fi
     done
     rm -f $OUT/.log
     return 0
-    else
-        echo "The connected device does not appear to be $CM_BUILD, run away!"
-    fi
 }
 
 alias mmp='dopush mm'
