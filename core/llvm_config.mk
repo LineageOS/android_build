@@ -37,7 +37,9 @@ ifeq ($(TARGET_ARCH),arm)
     -fno-builtin-sin \
     -fno-strict-volatile-bitfields \
     -fno-align-jumps \
-    -Wa,--noexecstack
+    -Wa,--noexecstack\
+    -mcpu=cortex-a15
+
 endif
 ifeq ($(TARGET_ARCH),mips)
   CLANG_CONFIG_EXTRA_CFLAGS += \
