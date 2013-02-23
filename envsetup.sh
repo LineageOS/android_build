@@ -845,7 +845,7 @@ function mmm()
                 fi
             fi
         done
-        ONE_SHOT_MAKEFILE="$MAKEFILE" make -C $T $DASH_ARGS $MODULES $ARGS
+        ONE_SHOT_MAKEFILE="$MAKEFILE" mka -C $T $DASH_ARGS $MODULES $ARGS
     else
         echo "Couldn't locate the top of the tree.  Try setting TOP."
     fi
