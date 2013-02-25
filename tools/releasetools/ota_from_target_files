@@ -374,6 +374,15 @@ fi
   return Item.Get("system/etc/install-recovery.sh", dir=False)
 
 
+def CopyInstallTools(output_zip):
+  oldcwd = os.getcwd()
+  os.chdir(os.getenv('OUT'))
+  for root, subdirs, files in os.walk("install"):
+    for f in files:
+      p = os.path.join(root, f)
+      output_zip.write(p, p)
+  os.chdir(oldcwd)
+
 def WriteFullOTAPackage(input_zip, output_zip):
   # TODO: how to determine this?  We don't know what version it will
   # be installed on top of.  For now, we expect the API just won't
@@ -405,9 +414,14 @@ def WriteFullOTAPackage(input_zip, output_zip):
   device_specific.FullOTA_Assertions()
   device_specific.FullOTA_InstallBegin()
 
+  CopyInstallTools(output_zip)
+  script.UnpackPackageDir("install", "/tmp/install")
+  script.SetPermissionsRecursive("/tmp/install", 0, 0, 0755, 0644)
+  script.SetPermissionsRecursive("/tmp/install/bin", 0, 0, 0755, 0755)
+
   if OPTIONS.backuptool:
     script.Mount("/system")
-    script.RunBackup("backup")
+    script.RunBackupTool("backup")
     script.Unmount("/system")
 
   script.ShowProgress(0.5, 0)
@@ -441,7 +455,7 @@ def WriteFullOTAPackage(input_zip, output_zip):
 
   if OPTIONS.backuptool:
     script.ShowProgress(0.2, 10)
-    script.RunBackup("restore")
+    script.RunBackupTool("restore")
 
   script.ShowProgress(0.2, 10)
   script.WriteRawImage("/boot", "boot.img")
