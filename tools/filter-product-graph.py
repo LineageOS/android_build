@@ -55,13 +55,13 @@ def main():
     deps = [dep for dep in deps if dep[1] in included]
     infos = [info for info in infos if info[0] in included]
 
-  print "digraph {"
-  print "graph [ ratio=.5 ];"
+  print("digraph {")
+  print("graph [ ratio=.5 ];")
   for dep in deps:
-    print '"%s" -> "%s"' % dep
+    print(('"%s" -> "%s"' % dep))
   for info in infos:
-    print '"%s"%s' % info
-  print "}"
+    print(('"%s"%s' % info))
+  print("}")
 
 
 if __name__ == "__main__":
