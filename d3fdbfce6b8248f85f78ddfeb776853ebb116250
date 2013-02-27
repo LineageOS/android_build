@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAdX//6m8\u003d",
+        "filename": "envsetup.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 696,
+      "author": {
+        "id": 10
+      },
+      "writtenOn": "2013-02-27T06:22:41Z",
+      "side": 1,
+      "message": "stat -c %s $ZIPPATH",
+      "revId": "d3fdbfce6b8248f85f78ddfeb776853ebb116250",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAdX//6m4\u003d",
+        "filename": "envsetup.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 697,
+      "author": {
+        "id": 10
+      },
+      "writtenOn": "2013-02-27T06:22:41Z",
+      "side": 1,
+      "message": "adb shell busybox df -PB1 /cache | grep /cache | tr -s \u0027 \u0027 | cut -d \u0027 \u0027 -f 4",
+      "revId": "d3fdbfce6b8248f85f78ddfeb776853ebb116250",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    }
+  ]
+}
