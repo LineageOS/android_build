@@ -14,6 +14,12 @@
 # limitations under the License.
 #
 
+@echo DroidDoc: $(DISABLE_DROIDDOC)
+
+ifneq ($(DISABLE_DROIDDOC),)
+include $(BUILD_SYSTEM)/clear_vars.mk
+else
+
 ##
 ##
 ## Common to both droiddoc and javadoc
@@ -242,4 +248,5 @@ $(out_zip): $(full_target)
 
 $(call dist-for-goals,docs,$(out_zip))
 
+endif
 endif
