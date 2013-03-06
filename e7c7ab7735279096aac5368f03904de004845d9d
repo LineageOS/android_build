@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAeX///gw\u003d",
+        "filename": "tools/roomservice.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 4884
+      },
+      "writtenOn": "2013-03-06T16:13:13Z",
+      "side": 1,
+      "message": "whitespaces",
+      "revId": "e7c7ab7735279096aac5368f03904de004845d9d",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAeX///go\u003d",
+        "filename": "tools/roomservice.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 77,
+      "author": {
+        "id": 4884
+      },
+      "writtenOn": "2013-03-06T16:13:13Z",
+      "side": 1,
+      "message": "whitespaces",
+      "revId": "e7c7ab7735279096aac5368f03904de004845d9d",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAeX///gk\u003d",
+        "filename": "tools/roomservice.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 94,
+      "author": {
+        "id": 4884
+      },
+      "writtenOn": "2013-03-06T16:13:13Z",
+      "side": 1,
+      "message": "whitespaces",
+      "revId": "e7c7ab7735279096aac5368f03904de004845d9d",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    }
+  ]
+}
