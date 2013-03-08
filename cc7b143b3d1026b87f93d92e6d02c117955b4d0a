@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAeX//+4w\u003d",
+        "filename": "envsetup.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 705,
+      "author": {
+        "id": 1039
+      },
+      "writtenOn": "2013-03-08T02:10:24Z",
+      "side": 1,
+      "message": "white sdcard/0 ? and not sdcard as default ?",
+      "revId": "cc7b143b3d1026b87f93d92e6d02c117955b4d0a",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    }
+  ]
+}
