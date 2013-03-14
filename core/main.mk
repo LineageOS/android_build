@@ -474,7 +474,11 @@ else # ONE_SHOT_MAKEFILE
 subdir_makefiles := \
 	$(shell build/tools/findleaves.py --prune=out --prune=.repo --prune=.git $(subdirs) Android.mk)
 
-include $(subdir_makefiles)
+$(foreach subdir_makefile, $(subdir_makefiles), \
+$(info Including $(subdir_makefile)) \
+$(eval include $(subdir_makefile)) \
+)
+subdir_makefile :=
 
 endif # ONE_SHOT_MAKEFILE
 
@@ -496,7 +500,8 @@ ifneq ($(filter-out $(GRANDFATHERED_ALL_PREBUILT),$(strip $(notdir $(ALL_PREBUIL
   $(warning * build/target/product/core.mk is the product)
   $(warning * definition used in all products.)
   $(warning *)
-  $(foreach bad_prebuilt,$(filter-out $(GRANDFATHERED_ALL_PREBUILT),$(strip $(notdir $(ALL_PREBUILT)))),$(warning * unexpected $(bad_prebuilt) in ALL_PREBUILT))
+  $(foreach bad_prebuilt,$(filter-out $(GRANDFATHERED_ALL_PREBUILT),$(strip $(notdir $(ALL_PREBUILT)))),$(warning * unexpected $(bad_prebuilt) 
+in ALL_PREBUILT))
   $(warning *)
   $(error ALL_PREBUILT contains unexpected files)
 endif
