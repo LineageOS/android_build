@@ -1,0 +1,21 @@
+diff --git a/envsetup.sh b/envsetup.sh
+index 205e3b0..e808f90 100644
+--- a/envsetup.sh
++++ b/envsetup.sh
+@@ -270,13 +270,15 @@ function addcompletions()
+         return
+     fi
+ 
+-    dir="sdk/bash_completion"
++    dirs="sdk/bash_completion vendor/cm"
++    for dir in $dirs; do
+     if [ -d ${dir} ]; then
+         for f in `/bin/ls ${dir}/[a-z]*.bash 2> /dev/null`; do
+             echo "including $f"
+             . $f
+         done
+     fi
++    done
+ }
+ 
+ function choosetype()
