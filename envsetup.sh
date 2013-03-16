@@ -702,7 +702,7 @@ function eat()
         else
             PUSHDIR=/storage/sdcard0/
              # Optional path for sdcard0 in recovery
-             [ -z "$1" ] && DIR=sdcard/0 || DIR=$1
+             [ -z "$1" ] && DIR=sdcard || DIR=$1
         fi
         echo "Pushing $ZIPFILE to $PUSHDIR"
         if adb push $ZIPPATH $PUSHDIR ; then
