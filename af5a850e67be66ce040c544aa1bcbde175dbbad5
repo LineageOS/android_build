@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAeX//7OA\u003d",
+        "filename": "core/tasks/kernel.mk",
+        "patchSetId": 2
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1039
+      },
+      "writtenOn": "2013-03-16T20:05:50Z",
+      "side": 1,
+      "message": "the page doesnt exists ;)",
+      "revId": "af5a850e67be66ce040c544aa1bcbde175dbbad5",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    }
+  ]
+}
