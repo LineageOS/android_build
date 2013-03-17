@@ -16,6 +16,24 @@
       "revId": "af5a850e67be66ce040c544aa1bcbde175dbbad5",
       "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAeX//7AE\u003d",
+        "filename": "core/tasks/kernel.mk",
+        "patchSetId": 2
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 2597
+      },
+      "writtenOn": "2013-03-17T15:23:12Z",
+      "side": 1,
+      "message": "http://wiki.cyanogenmod.org/w/Doc:_integrated_kernel_building",
+      "parentUuid": "AAAAeX//7OA\u003d",
+      "revId": "af5a850e67be66ce040c544aa1bcbde175dbbad5",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
     }
   ]
 }
