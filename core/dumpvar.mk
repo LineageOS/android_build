@@ -30,6 +30,11 @@ print_build_config_vars += \
   PDK_FUSION_PLATFORM_ZIP
 endif
 
+ifneq ($(CM_BUILD),)
+print_build_config_vars += \
+  CM_VERSION
+endif
+
 # ---------------------------------------------------------------
 # the setpath shell function in envsetup.sh uses this to figure out
 # what to add to the path given the config we have chosen.
