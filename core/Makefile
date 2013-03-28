@@ -1870,6 +1870,12 @@ $(INTERNAL_OTA_PACKAGE_TARGET): $(BUILT_TARGET_FILES_PACKAGE)
 	   $(if $(OEM_OTA_CONFIG), -o $(OEM_OTA_CONFIG)) \
 	   $(BUILT_TARGET_FILES_PACKAGE) $@
 
+MODVERSION := $(shell sed -n -e'/ro\.cm\.version/s/^.*=//p' $(INSTALLED_BUILD_PROP_TARGET))
+ifeq ($(MODVERSION),)
+	MODVERSION := $(CM_VERSION)
+endif
+CM_TARGET_PACKAGE := $(PRODUCT_OUT)/cm-$(MODVERSION).zip
+
 .PHONY: otapackage bacon
 otapackage: $(INTERNAL_OTA_PACKAGE_TARGET)
 bacon: otapackage
