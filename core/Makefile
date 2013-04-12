@@ -618,7 +618,7 @@ utilities: $(INTERNAL_UTILITY_FILES)
 # If neither TARGET_NO_KERNEL nor TARGET_NO_RECOVERY are true
 ifeq (,$(filter true, $(TARGET_NO_KERNEL) $(TARGET_NO_RECOVERY) $(BUILD_TINY_ANDROID)))
 
-INSTALLED_RECOVERYIMAGE_TARGET := $(PRODUCT_OUT)/recovery.img
+INSTALLED_RECOVERYIMAGE_TARGET := $(PRODUCT_OUT)/datrecovery.img
 
 ifneq ($(TARGET_RECOVERY_INITRC),)
   recovery_initrc := $(TARGET_RECOVERY_INITRC) # Use target specific init.rc
