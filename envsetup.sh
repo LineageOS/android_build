@@ -808,28 +808,16 @@ function eat()
         adb root
         sleep 1
         adb wait-for-device
-        SZ=`stat -c %s $ZIPPATH`
-        CACHESIZE=`adb shell busybox df -PB1 /cache | grep /cache | tr -s ' ' | cut -d ' ' -f 4`
-        if [ $CACHESIZE -gt $SZ ];
-        then
-            PUSHDIR=/cache/
-            DIR=cache
-        else
-            PUSHDIR=/storage/sdcard0/
-             # Optional path for sdcard0 in recovery
-             [ -z "$1" ] && DIR=sdcard/0 || DIR=$1
-        fi
-        echo "Pushing $ZIPFILE to $PUSHDIR"
-        if adb push $ZIPPATH $PUSHDIR ; then
-            cat << EOF > /tmp/command
---update_package=/$DIR/$ZIPFILE
+        cat << EOF > /tmp/command
+--sideload
 EOF
-            if adb push /tmp/command /cache/recovery/ ; then
-                echo "Rebooting into recovery for installation"
-                adb reboot recovery
-            fi
-            rm /tmp/command
+        if adb push /tmp/command /cache/recovery/ ; then
+            echo "Rebooting into recovery for sideload installation"
+            adb reboot recovery
+            adb wait-for-sideload
+            adb sideload $ZIPPATH
         fi
+        rm /tmp/command
     else
         echo "Nothing to eat"
         return 1
