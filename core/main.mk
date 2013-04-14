@@ -303,6 +303,11 @@ ifneq (,$(user_variant))
   # Target is secure in user builds.
   ADDITIONAL_DEFAULT_PROPERTIES += ro.secure=1
 
+  # Secure adb connections
+  ifneq ($(TARGET_WANTS_UNSECURE_ADB),true)
+  ADDITIONAL_DEFAULT_PROPERTIES += ro.adb.secure=1
+  endif
+
   ifeq ($(user_variant),userdebug)
     # Pick up some extra useful tools
     tags_to_install += debug
