@@ -70,6 +70,13 @@ TARGET_arm_CFLAGS :=    -O2 \
                         -fomit-frame-pointer \
                         -fstrict-aliasing    \
                         -funswitch-loops
+ifdef TARGET_ARM_OPTIMIZATIONS
+TARGET_arm_CFLAGS += -fgcse-after-reload \
+                     -fipa-cp-clone \
+                     -fpredictive-commoning \
+                     -fsched-spec-load \
+                     -fvect-cost-model
+endif
 
 # Modules can choose to compile some source as thumb. As
 # non-thumb enabled targets are supported, this is treated
@@ -80,6 +87,14 @@ TARGET_thumb_CFLAGS :=  -mthumb \
                         -Os \
                         -fomit-frame-pointer \
                         -fno-strict-aliasing
+  ifdef TARGET_ARM_OPTIMIZATIONS
+  TARGET_thumb_CFLAGS += -fgcse-after-reload \
+                         -fipa-cp-clone \
+                         -fpredictive-commoning \
+                         -fsched-spec-load \
+                         -funswitch-loops \
+                         -fvect-cost-model
+  endif
 else
 TARGET_thumb_CFLAGS := $(TARGET_arm_CFLAGS)
 endif
