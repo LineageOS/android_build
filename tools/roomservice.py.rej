@@ -1,0 +1,11 @@
+--- tools/roomservice.py
++++ tools/roomservice.py
+@@ -191,7 +191,7 @@
+ 
+     if os.path.exists(dependencies_path):
+         dependencies_file = open(dependencies_path, 'r')
+-        dependencies = json.loads(dependencies_file.read().decode())
++        dependencies = json.loads(dependencies_file.read())
+         fetch_list = []
+ 
+         for dependency in dependencies:

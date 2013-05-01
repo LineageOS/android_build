@@ -14,6 +14,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+from __future__ import print_function
+
 import os
 import re
 import string
@@ -35,7 +37,7 @@ def CallAddr2Line(lib, addr):
         " -f -e " + symbols_dir + lib + " 0x" + addr
     stream = os.popen(cmd)
     lines = stream.readlines()
-    list = map(string.strip, lines)
+    list = list(map(string.strip, lines))
   else:
     list = []
   if list != []:
@@ -46,7 +48,7 @@ def CallAddr2Line(lib, addr):
     stream = os.popen(cmd)
     list[0] = stream.readline()
     stream.close()
-    list = map(string.strip, list)
+    list = list(map(string.strip, list))
   else:
     list = [ "(unknown)", "(unknown)" ]
   return list
@@ -78,7 +80,7 @@ def CallObjdump(lib, addr):
         + " " + symbols_dir + lib
     stream = os.popen(cmd)
     lines = stream.readlines()
-    map(string.strip, lines)
+    list(map(string.strip, lines))
     stream.close()
   else:
     return unknown
@@ -121,7 +123,7 @@ def FindSymbolsDir():
     path = str.strip()
 
   if (not os.path.exists(path)):
-    print path + " not found!"
+    print(path + " not found!")
     sys.exit(1)
 
   symbols_dir = path
@@ -152,7 +154,7 @@ def SetupToolsPath():
 
     addr2line_cmd = prefix + "arm-linux-androideabi-addr2line"
     if (not os.path.exists(addr2line_cmd)):
-      print addr2line_cmd + " not found!"
+      print(addr2line_cmd + " not found!")
       sys.exit(1)
 
   objdump_cmd = prefix + "arm-linux-androideabi-objdump"
@@ -176,10 +178,10 @@ def SymbolTranslation(groups):
   # address but addr2line will report the callee's address. So the printed
   # format is desgined to be "caller<-callee  file:line"
   if (func_line_pair[0] != caller):
-    print groups[0] + groups[1] + " " + caller + "<-" + \
-          '  '.join(func_line_pair[:]) + " "
+    print(groups[0] + groups[1] + " " + caller + "<-" + \
+          '  '.join(func_line_pair[:]) + " ")
   else:
-    print groups[0] + groups[1] + " " + '  '.join(func_line_pair[:]) + " "
+    print(groups[0] + groups[1] + " " + '  '.join(func_line_pair[:]) + " ")
 
 ###############################################################################
 
@@ -212,7 +214,7 @@ if __name__ == '__main__':
       # translate raw address into symbols
       SymbolTranslation(groups)
     else:
-      print line
+      print(line)
       sys.stdout.flush()
 
   # adb itself aborts
