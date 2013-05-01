@@ -20,6 +20,9 @@ Build image output_image_file from input_directory and properties_file.
 Usage:  build_image input_directory properties_file output_image_file
 
 """
+
+from __future__ import print_function
+
 import os
 import os.path
 import subprocess
@@ -33,7 +36,7 @@ def RunCommand(cmd):
   Returns:
     The exit code.
   """
-  print "Running: ", " ".join(cmd)
+  print("Running: ", " ".join(cmd))
   p = subprocess.Popen(cmd)
   p.communicate()
   return p.returncode
@@ -147,7 +150,7 @@ def LoadGlobalDict(filename):
 
 def main(argv):
   if len(argv) != 3:
-    print __doc__
+    print(__doc__)
     sys.exit(1)
 
   in_dir = argv[0]
@@ -164,12 +167,12 @@ def main(argv):
   elif image_filename == "cache.img":
     mount_point = "cache"
   else:
-    print >> sys.stderr, "error: unknown image file name ", image_filename
+    print("error: unknown image file name ", image_filename, file=sys.stderr)
     exit(1)
 
   image_properties = ImagePropFromGlobalDict(glob_dict, mount_point)
   if not BuildImage(in_dir, image_properties, out_file):
-    print >> sys.stderr, "error: failed to build %s from %s" % (out_file, in_dir)
+    print("error: failed to build %s from %s" % (out_file, in_dir), file=sys.stderr)
     exit(1)
 
 
