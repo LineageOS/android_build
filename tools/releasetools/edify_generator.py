@@ -12,6 +12,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+from __future__ import print_function
+
 import os
 import re
 
@@ -247,7 +249,7 @@ class EdifyGenerator(object):
     for d, l in symlink_list:
       by_dest.setdefault(d, []).append(l)
 
-    for dest, links in sorted(by_dest.iteritems()):
+    for dest, links in sorted(by_dest.items()):
       cmd = ('symlink("%s", ' % (dest,) +
              ",\0".join(['"' + i + '"' for i in sorted(links)]) + ");")
       self.script.append(self._WordWrap(cmd))
@@ -277,4 +279,4 @@ class EdifyGenerator(object):
     else:
       data = open(os.path.join(input_path, "updater")).read()
     common.ZipWriteStr(output_zip, "META-INF/com/google/android/update-binary",
-                       data, perms=0755)
+                       data, perms=0o755)

@@ -24,6 +24,8 @@ and fails if they do.
 -h to display this usage message and exit.
 """
 
+from __future__ import print_function
+
 import cStringIO
 import getopt
 try:
@@ -49,20 +51,20 @@ ASSIGN_LIMIT = 1000000
 try:
   opts, args = getopt.getopt(sys.argv[1:], "ho:m:")
 except getopt.GetoptError, err:
-  print str(err)
-  print __doc__
+  print(str(err))
+  print(__doc__)
   sys.exit(2)
 
 for o, a in opts:
   if o == "-h":
-    print __doc__
+    print(__doc__)
     sys.exit(2)
   elif o == "-o":
     output_file = a
   elif o == "-m":
     pre_merged_file = a
   else:
-    print >> sys.stderr, "unhandled option %s" % (o,)
+    print("unhandled option %s" % (o,), file=sys.stderr)
     sys.exit(1)
 
 # Restrictions on tags:
@@ -133,12 +135,12 @@ for fn in args:
 
 if errors:
   for fn, ln, msg in errors:
-    print >> sys.stderr, "%s:%d: error: %s" % (fn, ln, msg)
+    print("%s:%d: error: %s" % (fn, ln, msg), file=sys.stderr)
   sys.exit(1)
 
 if warnings:
   for fn, ln, msg in warnings:
-    print >> sys.stderr, "%s:%d: warning: %s" % (fn, ln, msg)
+    print("%s:%d: warning: %s" % (fn, ln, msg), file=sys.stderr)
 
 # Python's hash function (a) isn't great and (b) varies between
 # versions of python.  Using md5 is overkill here but is the same from
@@ -160,8 +162,8 @@ for name, t in sorted(by_tagname.iteritems()):
       try:
         t.tagnum = pre_merged_tags[t.tagname]
       except KeyError:
-        print >> sys.stderr, ("Error: Tag number not defined for tag `%s'."
-            +" Have you done a full build?") % t.tagname
+        print(("Error: Tag number not defined for tag `%s'."
+            +" Have you done a full build?") % t.tagname, file=sys.stderr)
         sys.exit(1)
     else:
       while True:

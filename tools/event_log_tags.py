@@ -14,6 +14,8 @@
 
 """A module for reading and parsing event-log-tags files."""
 
+from __future__ import print_function
+
 import re
 import sys
 
@@ -131,5 +133,5 @@ def WriteOutput(output_file, data):
     out.write(data)
     out.close()
   except (IOError, OSError), e:
-    print >> sys.stderr, "failed to write %s: %s" % (output_file, e)
+    print("failed to write %s: %s" % (output_file, e), file=sys.stderr)
     sys.exit(1)
