@@ -55,12 +55,10 @@ endif
 # BUILD_OS is the real host doing the build.
 BUILD_OS := $(HOST_OS)
 
-# Under Linux, if USE_MINGW is set, we change HOST_OS to Windows to build the
+# If USE_MINGW is set, we change HOST_OS to Windows to build the
 # Windows SDK. Only a subset of tools and SDK will manage to build properly.
-ifeq ($(HOST_OS),linux)
 ifneq ($(USE_MINGW),)
 	HOST_OS := windows
-endif
 endif
 
 ifeq ($(HOST_OS),)
