@@ -2126,8 +2126,9 @@ function dopush()
         # Get target file name (i.e. system/bin/adb)
         TARGET=$(echo $FILE | sed "s#$OUT/##")
 
-        # Don't send files that are not in /system.
-        if ! echo $TARGET | egrep '^system\/' > /dev/null ; then
+        # Don't send files that are not under /system or /data
+        if [ ! "echo $TARGET | egrep '^system\/' > /dev/null" -o \
+               "echo $TARGET | egrep '^data\/' > /dev/null" ] ; then
             continue
         else
             case $TARGET in
