@@ -408,7 +408,6 @@ def WriteFullOTAPackage(input_zip, output_zip):
   if OPTIONS.backuptool:
     script.Mount("/system")
     script.RunBackup("backup")
-    script.Unmount("/system")
 
   script.ShowProgress(0.5, 0)
 
@@ -418,8 +417,10 @@ def WriteFullOTAPackage(input_zip, output_zip):
   if "selinux_fc" in OPTIONS.info_dict:
     WritePolicyConfig(OPTIONS.info_dict["selinux_fc"], output_zip)
 
-  script.FormatPartition("/system")
-  script.Mount("/system")
+  if not OPTIONS.backuptool:
+    script.FormatPartition("/system")
+    script.Mount("/system")
+
   #script.UnpackPackageDir("recovery", "/system")
   script.UnpackPackageDir("system", "/system")
 
