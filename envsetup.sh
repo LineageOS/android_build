@@ -329,7 +329,7 @@ function settitle()
             PROMPT_COMMAND="echo -ne \"\033]0;${USER}@${HOSTNAME}: ${PWD}\007\";${PROMPT_COMMAND}"
         fi
         if [ ! -z "$ANDROID_PROMPT_PREFIX" ]; then
-            PROMPT_COMMAND=$(echo $PROMPT_COMMAND | sed -e 's/$ANDROID_PROMPT_PREFIX //g')
+            PROMPT_COMMAND="$(echo $PROMPT_COMMAND | sed -e 's/$ANDROID_PROMPT_PREFIX //g')"
         fi
 
         if [ -z "$apps" ]; then
