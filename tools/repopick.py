@@ -109,6 +109,12 @@ def execute_cmd(cmd):
             print('\nCommand that failed:\n%s' % cmd)
         sys.exit(1)
 
+# Verifies whether pathA is a subdirectory (or the same) as pathB
+def is_pathA_subdir_of_pathB(pathA, pathB):
+    pathA = os.path.realpath(pathA) + '/'
+    pathB = os.path.realpath(pathB) + '/'
+    return(pathB == pathA[:len(pathB)])
+
 # Find the necessary bins - repo
 repo_bin = which('repo')
 if repo_bin == None:
@@ -121,6 +127,19 @@ if repo_bin == None:
 git_bin = which('git')
 if not is_exe(git_bin):
     sys.stderr.write('ERROR: Could not find the git program in $PATH\n')
+    sys.exit(1)
+
+# Change current directory to the top of the tree
+if 'ANDROID_BUILD_TOP' in os.environ:
+    top = os.environ['ANDROID_BUILD_TOP']
+    if not is_pathA_subdir_of_pathB(os.getcwd(), top):
+        sys.stderr.write('ERROR: You must run this tool from within $ANDROID_BUILD_TOP!\n')
+        sys.exit(1)
+    os.chdir(os.environ['ANDROID_BUILD_TOP'])
+
+# Sanity check that we are being run from the top level of the tree
+if not os.path.isdir('.repo'):
+    sys.stderr.write('ERROR: No .repo directory found. Please run this from the top of your tree.\n')
     sys.exit(1)
 
 # If --abandon-first is given, abandon the branch before starting
