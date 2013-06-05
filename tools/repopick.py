@@ -59,11 +59,17 @@ parser.add_argument('change_number', nargs='+', help='change number to cherry pi
 parser.add_argument('-i', '--ignore-missing', action='store_true', help='do not error out if a patch applies to a missing directory')
 parser.add_argument('-s', '--start-branch', nargs=1, help='start the specified branch before cherry picking')
 parser.add_argument('-a', '--abandon-first', action='store_true', help='before cherry picking, abandon the branch specified in --start-branch')
-parser.add_argument('-q', '--quiet', '-q', action='store_true', help='print as little as possible')
-parser.add_argument('-v', '--verbose', '-v', action='store_true', help='print extra information to aid in debug')
+parser.add_argument('-b', '--auto-branch', action='store_true', help='shortcut to "--start-branch auto --abandon-first --ignore-missing"')
+parser.add_argument('-q', '--quiet', action='store_true', help='print as little as possible')
+parser.add_argument('-v', '--verbose', action='store_true', help='print extra information to aid in debug')
 args = parser.parse_args()
 if args.start_branch == None and args.abandon_first:
     parser.error('if --abandon-first is set, you must also give the branch name with --start-branch')
+if args.auto_branch:
+    args.abandon_first = True
+    args.ignore_missing = True
+    if not args.start_branch:
+        args.start_branch = ['auto']
 if args.quiet and args.verbose:
     parser.error('--quiet and --verbose cannot be specified together')
 
