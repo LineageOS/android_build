@@ -129,16 +129,15 @@ if args.abandon_first:
     plist = subprocess.Popen([repo_bin,"info"], stdout=subprocess.PIPE)
     needs_abandon = False
     while(True):
-        retcode = plist.poll()
         pline = plist.stdout.readline().rstrip()
+        if not pline:
+            break
         matchObj = re.match(r'Local Branches.*\[(.*)\]', pline.decode())
         if matchObj:
             local_branches = re.split('\s*,\s*', matchObj.group(1))
             if any(args.start_branch[0] in s for s in local_branches):
                 needs_abandon = True
                 break
-        if(retcode is not None):
-            break
 
     if needs_abandon:
         # Perform the abandon only if the branch already exists
@@ -191,14 +190,16 @@ for change in args.change_number:
     #   - convert the project name to a project path
     plist = subprocess.Popen([repo_bin,"list"], stdout=subprocess.PIPE)
     while(True):
-        retcode = plist.poll()
         pline = plist.stdout.readline().rstrip()
+        if not pline:
+            break
         ppaths = re.split('\s*:\s*', pline.decode())
         if ppaths[1] == project_name:
             project_path = ppaths[0]
             break
-        if(retcode is not None):
-            break
+    if 'project_path' not in locals():
+        sys.stderr.write('ERROR: Could not determine the project path for project %s\n' % project_name)
+        sys.exit(1)
 
     # Check that the project path exists
     if not os.path.isdir(project_path):
