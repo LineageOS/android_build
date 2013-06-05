@@ -123,6 +123,11 @@ if not is_exe(git_bin):
     sys.stderr.write('ERROR: Could not find the git program in $PATH\n')
     sys.exit(1)
 
+# Sanity check that we are being run from the top level of the tree
+if not os.path.isdir('.repo'):
+    sys.stderr.write('ERROR: No .repo directory found. Please run this from the top of your tree.\n')
+    sys.exit(1)
+
 # If --abandon-first is given, abandon the branch before starting
 if args.abandon_first:
     # Determine if the branch already exists; skip the abandon if it does not
