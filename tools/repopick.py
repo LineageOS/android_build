@@ -177,7 +177,7 @@ for change in args.change_number:
     # gerrit returns two lines, a magic string and then valid JSON:
     #   )]}'
     #   [ ... valid JSON ... ]
-    url = 'http://review.cyanogenmod.com/changes/?q=%s&o=CURRENT_REVISION&o=CURRENT_COMMIT&pp=0' % change
+    url = 'http://review.cyanogenmod.org/changes/?q=%s&o=CURRENT_REVISION&o=CURRENT_COMMIT&pp=0' % change
     if args.verbose:
         print('Fetching from: %s\n' % url)
     f = urllib.request.urlopen(url)
