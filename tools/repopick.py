@@ -181,7 +181,7 @@ for change in args.change_number:
     if args.verbose:
         print('Fetching from: %s\n' % url)
     f = urllib.request.urlopen(url)
-    d = f.read().decode()
+    d = f.read().decode("utf-8")
 
     # Parse the result
     if args.verbose:
