@@ -255,8 +255,21 @@ for change in args.change_number:
         print('--> Author:        %s <%s> %s' % (author_name, author_email, author_date))
         print('--> Committer:     %s <%s> %s' % (committer_name, committer_email, committer_date))
 
+    # Try fetching from GitHub first
+    if args.verbose:
+       print('Trying to fetch the change from GitHub')
+    cmd = 'cd %s && git fetch github %s' % (project_path, fetch_ref)
+    execute_cmd(cmd)
+    # Check if it worked
+    FETCH_HEAD = '%s/.git/FETCH_HEAD' % project_path
+    if os.stat(FETCH_HEAD).st_size == 0:
+        # That didn't work, fetch from Gerrit instead
+        if args.verbose:
+          print('Fetching from GitHub didn\'t work, trying to fetch the change from Gerrit')
+        cmd = 'cd %s && git fetch %s %s' % (project_path, fetch_url, fetch_ref)
+        execute_cmd(cmd)
     # Perform the cherry-pick
-    cmd = 'cd %s && git fetch %s %s && git cherry-pick FETCH_HEAD' % (project_path, fetch_url, fetch_ref)
+    cmd = 'cd %s && git cherry-pick FETCH_HEAD' % (project_path)
     execute_cmd(cmd)
     if not args.quiet:
         print('')
