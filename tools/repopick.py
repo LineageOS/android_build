@@ -182,13 +182,25 @@ for change in args.change_number:
         print('Fetching from: %s\n' % url)
     f = urllib.request.urlopen(url)
     d = f.read().decode("utf-8")
-
-    # Parse the result
     if args.verbose:
         print('Result from request:\n' + d)
+
+    # Clean up the result
     d = d.split('\n')[1]
+    matchObj = re.match(r'\[\s*\]', d)
+    if matchObj:
+        sys.stderr.write('ERROR: Change number %s was not found on the server\n' % change)
+        sys.exit(1)
     d = re.sub(r'\[(.*)\]', r'\1', d)
-    data = json.loads(d)
+
+    # Parse the JSON
+    try:
+        data = json.loads(d)
+    except ValueError:
+        sys.stderr.write('ERROR: The response from the server could not be parsed properly\n')
+        if not args.verbose:
+            sys.stderr.write('The malformed response was: %s\n' % d)
+        sys.exit(1)
 
     # Extract information from the JSON response
     project_name     = data['project']
