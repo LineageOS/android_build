@@ -203,6 +203,7 @@ for change in args.change_number:
         sys.exit(1)
 
     # Extract information from the JSON response
+    date_fluff       = '.000000000'
     project_name     = data['project']
     change_number    = data['_number']
     current_revision = data['revisions'][data['current_revision']]
@@ -211,10 +212,10 @@ for change in args.change_number:
     fetch_ref        = current_revision['fetch']['http']['ref']
     author_name      = current_revision['commit']['author']['name']
     author_email     = current_revision['commit']['author']['email']
-    author_date      = current_revision['commit']['author']['date']
+    author_date      = current_revision['commit']['author']['date'].replace(date_fluff, '')
     committer_name   = current_revision['commit']['committer']['name']
     committer_email  = current_revision['commit']['committer']['email']
-    committer_date   = current_revision['commit']['committer']['date']
+    committer_date   = current_revision['commit']['committer']['date'].replace(date_fluff, '')
     subject          = current_revision['commit']['subject']
 
     # Get the list of projects that repo knows about
