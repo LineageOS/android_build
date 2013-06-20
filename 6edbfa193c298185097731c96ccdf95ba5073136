@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "iKW67N8",
+        "filename": "tools/repopick.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 251,
+      "author": {
+        "id": 431
+      },
+      "writtenOn": "2013-06-20T00:01:14Z",
+      "side": 1,
+      "message": "What if FETCH_HEAD existed already from e.g. a user-initiated fetch?",
+      "revId": "6edbfa193c298185097731c96ccdf95ba5073136",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    }
+  ]
+}
