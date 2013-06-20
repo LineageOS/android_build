@@ -16,6 +16,24 @@
       "revId": "6edbfa193c298185097731c96ccdf95ba5073136",
       "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "iAUAeDM",
+        "filename": "tools/repopick.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 251,
+      "author": {
+        "id": 2195
+      },
+      "writtenOn": "2013-06-20T09:05:11Z",
+      "side": 1,
+      "message": "Running git fetch above (line 248) will override that, even if you run git fetch foo bar and foo isn\u0027t reachable or isn\u0027t a remote.",
+      "parentUuid": "iKW67N8",
+      "revId": "6edbfa193c298185097731c96ccdf95ba5073136",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
     }
   ]
 }
