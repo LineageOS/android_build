@@ -1508,6 +1508,40 @@ $(INTERNAL_EMULATOR_PACKAGE_TARGET): $(INTERNAL_EMULATOR_PACKAGE_FILES)
 .PHONY: goldfish
 goldfish: $(INTERNAL_EMULATOR_PACKAGE_TARGET)
 
+GOLDFISH_ADDON_PKG_DIR := $(call intermediates-dir-for,PACKAGING,addon_package)
+GOLDFISH_ADDON := $(PRODUCT_OUT)/addon_cm-$(CM_VERSION).zip
+
+$(GOLDFISH_ADDON_PKG_DIR)/cm-$(CM_VERSION)/source.properties : $(TOPDIR)device/generic/goldfish/tools/source.prop_template
+	$(hide) mkdir -p $(GOLDFISH_ADDON_PKG_DIR)/cm-$(CM_VERSION)
+	@echo Generate $@
+	$(hide) sed -e 's/$${PLATFORM_VERSION}/$(PLATFORM_VERSION)/' \
+		 -e 's/$${PLATFORM_SDK_VERSION}/$(PLATFORM_SDK_VERSION)/' \
+		 -e 's/$${PLATFORM_VERSION_CODENAME}/$(subst REL,,$(PLATFORM_VERSION_CODENAME))/' \
+		 -e 's/$${CM_VERSION}/${CM_VERSION}/' \
+		 $< > $@ && sed -i -e '/^AndroidVersion.CodeName=\s*$$/d' $@
+
+$(PRODUCT_OUT)/repository.xml: $(TOPDIR)device/generic/goldfish/tools/repository.xml_template
+	$(hide) mkdir -p $(GOLDFISH_ADDON_PKG_DIR)
+	@echo Generate $@
+	$(hide) CM_VERSION=$(CM_VERSION) API_LEVEL=$(PLATFORM_SDK_VERSION) GOLDFISH_ADDON=$(GOLDFISH_ADDON) $(TOPDIR)device/generic/goldfish/tools/generate-repository-xml.sh
+
+$(GOLDFISH_ADDON_PKG_DIR)/cm-$(CM_VERSION)/manifest.ini: $(TOPDIR)device/generic/goldfish/tools/manifest.ini_template
+	$(hide) mkdir -p $(GOLDFISH_ADDON_PKG_DIR)/cm-$(CM_VERSION)
+	@echo Generate $@
+	$(hide) sed -e 's/$${CM_VERSION}/$(CM_VERSION)/' \
+		 -e 's/$${PLATFORM_SDK_VERSION}/$(PLATFORM_SDK_VERSION)/' \
+		 $< > $@
+
+.PHONY: goldfish-addon-pkg
+goldfish-addon-pkg: $(GOLDFISH_ADDON)
+
+$(GOLDFISH_ADDON): $(INTERNAL_EMULATOR_PACKAGE_TARGET) $(GOLDFISH_ADDON_PKG_DIR)/cm-$(CM_VERSION)/source.properties $(GOLDFISH_ADDON_PKG_DIR)/cm-$(CM_VERSION)/manifest.ini
+	$(hide) mkdir -p $(GOLDFISH_ADDON_PKG_DIR)/cm-$(CM_VERSION)/images/
+	$(hide) unzip -qo $(INTERNAL_EMULATOR_PACKAGE_TARGET) -d $(GOLDFISH_ADDON_PKG_DIR)/cm-$(CM_VERSION)/images/
+	$(hide) $(ACP) -pr $(ANDROID_BUILD_TOP)/development/tools/emulator/skins $(GOLDFISH_ADDON_PKG_DIR)/cm-$(CM_VERSION)/
+	$(hide) cd $(GOLDFISH_ADDON_PKG_DIR) && zip -rq $(GOLDFISH_ADDON) .
+	$(hide) $(MAKE) $(PRODUCT_OUT)/repository.xml
+
 endif
 # -----------------------------------------------------------------
 # Old PDK stuffs, retired
