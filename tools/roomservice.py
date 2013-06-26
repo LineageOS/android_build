@@ -146,6 +146,17 @@ def is_in_manifest(projectname):
         if localpath.get("name") == projectname:
             return 1
 
+    ## Search in main manifest, too
+    try:
+        lm = ElementTree.parse(".repo/manifest.xml")
+        lm = lm.getroot()
+    except:
+        lm = ElementTree.Element("manifest")
+
+    for localpath in lm.findall("project"):
+        if localpath.get("name") == projectname:
+            return 1
+
     return None
 
 def add_to_manifest(repositories, fallback_branch = None):
