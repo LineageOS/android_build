@@ -33,6 +33,7 @@ pathmap_INCL := \
     dbus:external/dbus \
     frameworks-base:frameworks/base/include \
     frameworks-native:frameworks/native/include \
+    glib:external/bluetooth/glib \
     graphics:external/skia/include/core \
     libc:bionic/libc/include \
     libdrm1:frameworks/base/media/libdrm/mobile1/include \
