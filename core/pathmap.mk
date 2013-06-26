@@ -27,12 +27,14 @@
 # A mapping from shorthand names to include directories.
 #
 pathmap_INCL := \
+    bluedroid:external/bluetooth/bluedroid \
     bootloader:bootable/bootloader/legacy/include \
     camera:system/media/camera/include \
     corecg:external/skia/include/core \
     dbus:external/dbus \
     frameworks-base:frameworks/base/include \
     frameworks-native:frameworks/native/include \
+    glib:external/bluetooth/glib \
     graphics:external/skia/include/core \
     libc:bionic/libc/include \
     libdrm1:frameworks/base/media/libdrm/mobile1/include \
