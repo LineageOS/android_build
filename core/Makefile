@@ -950,6 +950,8 @@ ifneq ($(OTA_PACKAGE_SIGNING_KEY),)
     PRODUCT_EXTRA_RECOVERY_KEYS := $(DEFAULT_SYSTEM_DEV_CERTIFICATE)
 endif
 
+PRODUCT_EXTRA_RECOVERY_KEYS += build/target/product/security/cm
+
 # Generate a file containing the keys that will be read by the
 # recovery binary.
 RECOVERY_INSTALL_OTA_KEYS := \
