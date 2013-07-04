@@ -1,0 +1,39 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dac4157f_6234e7dd",
+        "filename": "envsetup.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 1863,
+      "author": {
+        "id": 1039
+      },
+      "writtenOn": "2013-07-04T05:22:27Z",
+      "side": 1,
+      "message": "why are you removing symlink on normal devices ??? ex: i use this to prevent output to my little SSD",
+      "revId": "4f8802f19e07f514c215b95809c89508b6a6ed52",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dac4157f_0252cb13",
+        "filename": "envsetup.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 1863,
+      "author": {
+        "id": 1039
+      },
+      "writtenOn": "2013-07-04T05:22:27Z",
+      "side": 1,
+      "message": "hmm no in fact i symlink out/ sorry",
+      "parentUuid": "dac4157f_6234e7dd",
+      "revId": "4f8802f19e07f514c215b95809c89508b6a6ed52",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    }
+  ]
+}
