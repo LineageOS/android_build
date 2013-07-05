@@ -163,6 +163,14 @@ function setpaths()
         export ANDROID_EABI_TOOLCHAIN=$gccprebuiltdir/$toolchaindir
     fi
 
+    # Also check for system wide GCC and use it as default if available
+    if [ "$ARCH" == "arm" ];
+    then
+	if [ -x /usr/bin/arm-linux-androideabi-gcc ]; then
+	    export ANDROID_EABI_TOOLCHAIN=/usr/bin
+	fi
+    fi
+
     unset ARM_EABI_TOOLCHAIN ARM_EABI_TOOLCHAIN_PATH
     case $ARCH in
         arm)
@@ -178,6 +186,15 @@ function setpaths()
             # No need to set ARM_EABI_TOOLCHAIN for other ARCHs
             ;;
     esac
+
+    # Also check for system wide GCC and use it as default if available
+    if [ "$ARCH" == "arm" ];
+    then
+	if [ -x /usr/bin/arm-linux-androideabi-gcc ]; then
+	    export ANDROID_EABI_TOOLCHAIN=/usr/bin
+	    ARM_EABI_TOOLCHAIN_PATH=":/usr/bin"
+	fi
+    fi
 
     export ANDROID_TOOLCHAIN=$ANDROID_EABI_TOOLCHAIN
     export ANDROID_QTOOLS=$T/development/emulator/qtools
