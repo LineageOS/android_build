@@ -38,7 +38,7 @@ build_mac_version := $(shell sw_vers -productVersion)
 
 ifneq ($(strip $(BUILD_MAC_SDK_EXPERIMENTAL)),)
 # SDK 10.7 and higher is not fully compatible with Android.
-mac_sdk_versions_supported :=  10.7 10.8
+mac_sdk_versions_supported :=  10.9 10.7 10.8
 else
 mac_sdk_versions_supported :=  10.6
 endif # BUILD_MAC_SDK_EXPERIMENTAL
@@ -75,6 +75,11 @@ HOST_GLOBAL_LDFLAGS += -isysroot $(mac_sdk_root) -Wl,-syslibroot,$(mac_sdk_root)
 
 HOST_GLOBAL_CFLAGS += -fPIC -funwind-tables
 HOST_NO_UNDEFINED_LDFLAGS := -Wl,-undefined,error
+
+ifeq ($(mac_sdk_version),10.9)
+HOST_GLOBAL_CFLAGS += -I$(mac_sdk_root)/usr/include/c++/4.2.1 -arch i386 -Wno-nested-anon-types -Wno-unused-parameter
+HOST_GLOBAL_LDFLAGS += -Wl,-arch,i386,-lstdc++
+endif
 
 HOST_CC := gcc
 HOST_CXX := g++
