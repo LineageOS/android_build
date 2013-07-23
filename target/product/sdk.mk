@@ -169,6 +169,7 @@ PRODUCT_LOCALES = \
 	uk_UA \
 	vi_VN \
 	zh_CN \
+	zh_HK \
 	zh_TW
 
 # include available languages for TTS in the system image
