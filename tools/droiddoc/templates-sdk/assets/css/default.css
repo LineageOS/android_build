@@ -462,7 +462,8 @@ video.with-shadow {
     .next-page-link:after,
     .start-class-link:after,
     .start-course-link:after,
-    .next-class-link:after {
+    .next-class-link:after,
+    .go-link:after {
       content: '';
       background: transparent url(../images/styles/disclosure_right.png) no-repeat scroll 50% 50%;
       width: 10px;
@@ -1089,13 +1090,18 @@ li {
 dd {
   margin:0 0 10px 30px;
 }
-dd p {
-  margin:10px 0 0;
+dd p,
+dd pre,
+dd ul,
+dd ol,
+dd dl {
+  margin-top:10px;
 }
 li p,
 li pre,
 li ul,
-li ol {
+li ol,
+li dl {
   margin-top:5px;
   margin-bottom:5px;
 }
@@ -1104,11 +1110,11 @@ pre strong, pre b, a strong, a b, a code {
 }
 pre, code {
     color: #060;
-    font: 14px/1.5 'courier new', courier, monospace;
+    font: 13px/1.5 monospace;
 }
 code {
     font-weight:bold;
-    font: 14px/14px 'courier new', courier, monospace;
+    font: 13px/14px monospace;
 }
 
 legend {
@@ -1748,8 +1754,12 @@ EndColorStr='#ececec');
 #qv-wrapper {
   float:right;
   clear:right;
-  margin:-27px 0 0 20px; /* negative top-margin to counter the content-header bottom margin */
+  margin:0 0 0 20px; /* negative top-margin to counter the content-header bottom margin */
   padding:0 0 20px;
+}
+
+#tb-wrapper {
+  margin:-27px 0 0 20px; /* negative top-margin to counter the content-header bottom margin */
 }
 
 #tb,
@@ -1778,11 +1788,13 @@ EndColorStr='#ececec');
   font-size:inherit;
 }
 
-#tb .download-box {
+#tb .download-box,
+#qv .download-box {
   padding:0 0 0 15px;
 }
 
-#tb .download-box .filename {
+#tb .download-box .filename,
+#qv .download-box .filename {
   font-size:11px;
   margin:4px 4px 10px;
   color:#666;
@@ -1852,6 +1864,31 @@ EndColorStr='#ececec');
   margin: 0 0 10px;
 }
 
+/* related resources blocks in checklists */
+
+.rel-resources {
+  margin:10px 0px;
+  border:1px solid #ccc;
+  background-color:rgba(0, 0, 0, 0.027451);
+  border:1px solid #ccc;
+  font-size:13px;
+  color:#6f6f6f;
+}
+
+.rel-resources ul {
+padding: .5em 1em 0 1em;
+}
+
+.rel-resources a {
+font-weight:500;
+}
+
+.rel-resources h3 {
+  margin:4px 15px 0px 15px;
+  font-size:13px;
+  font-weight:600;
+  text-transform:uppercase;
+}
 
 /* --------------------------------------------------------------------------
 Form
@@ -2398,6 +2435,30 @@ Lightbox
 }
 
 /* --------------------------------------------------------------------------
+Butterbar
+*/
+#butterbar-wrapper {
+  position:absolute;
+  top:0;
+  left:0;
+  width:100%;
+}
+#butterbar {
+  width:940px;
+  margin:0 auto;
+}
+#butterbar-message {
+  background-color:#f80;
+  float:right;
+  font-size:12px;
+  font-weight:bold;
+  padding:0 10px;
+  border-radius: 0 0 5px 5px;
+}
+#butterbar-message a {color:#fff !important}
+#butterbar-message a:hover {text-decoration:underline;}
+
+/* --------------------------------------------------------------------------
 Misc
 */
 
@@ -2430,6 +2491,12 @@ table.blank th, table.blank td {
   margin-left:15px;
 }
 
+dl.xml>dt {
+  text-transform:uppercase;
+}
+dl.xml dl.attr {
+  margin-top:0;
+}
 
 pre.classic {
   background-color:transparent;
@@ -2443,12 +2510,26 @@ p.img-caption {
   color:#666;
 }
 
-div.figure {
+div.figure,
+div.figure-right {
   float:right;
   clear:right;
   margin:10px 0 0 0;
   padding:0 0 0 20px;
   /* width must be defined w/ an inline style matching the image width */
+}
+
+div.figure-left {
+  float:left;
+  clear:left;
+  margin:10px 0 0 0;
+  padding:0 20px 0 0;
+  /* width must be defined w/ an inline style matching the image width */
+}
+
+img.frame {
+  border:1px solid #DDD;
+  padding:4px;
 }
 
 p.table-caption {
@@ -2459,7 +2540,7 @@ p.table-caption {
 
 p.code-caption {
   margin: 0 0 4px 0;
-  font: 13px/1.5 'courier new', courier, monospace;
+  font: 12px/1.5 monospace;
   color:#666;
 }
 
@@ -2564,7 +2645,104 @@ div.design-announce p {
   background-image: url(../images/styles/disclosure_up.png);
 }
 
+/* notice box for cross links between Design/Develop docs */
+a.notice-developers,
+a.notice-designers {
+  float:right;
+  width:238px;
+  min-height:50px;
+  margin:0 0 20px 20px;
+  border:1px solid #ddd;
+}
+a.notice-developers div,
+a.notice-designers div {
+  min-height:40px;
+  background:url('../images/styles/notice-developers@2x.png') no-repeat 10px 10px;
+  background-size:40px 40px;
+  padding:10px 10px 10px 60px;
+}
+a.notice-designers div {
+  background:url('../images/styles/notice-designers@2x.png') no-repeat 10px 10px;
+  background-size:40px 40px;
+}
+a.notice-developers:hover,
+a.notice-designers:hover {
+  background:#eee;
+}
+a.notice-developers h3,
+a.notice-designers h3 {
+  font-size:14px;
+  font-weight:normal;
+  text-transform:uppercase;
+  color:#000 !important;
+  margin:0;
+}
+a.notice-developers p,
+a.notice-designers p {
+  margin:0;
+  line-height:16px;
+}
+a.notice-developers.left,
+a.notice-designers.left {
+  margin-left:0;
+  float:left;
+}
 
+
+/* hide nested list items; companion to hideNestedLists() */
+.hide-nested li ol,
+.hide-nested li ul {
+  display:none;
+}
+
+a.header-toggle {
+  display:block;
+  float:right;
+  text-transform:uppercase;
+  font-size:.8em !important;
+  font-weight:normal;
+  margin-top:2px;
+}
+
+
+/* -----------------------------------------------
+good/bad example containers 
+*/
+
+div.example-block {
+  background-repeat: no-repeat;
+  background-position:10px 8px; 
+  background-color:#ccc;
+  padding:4px;
+  margin:.8em auto 1.5em 2em;
+  width:260px;
+  float:right;
+}
+/* red container */
+.example-block.bad {
+  background-image: url(/images/example-bad.png);
+  background-color:#f4cccc;
+}
+/* green container */
+.example-block.good {
+  background-image: url(/images/example-good.png);
+  background-color:#d9ead3;
+}
+/* container heading div */
+#jd-content .example-block .heading {
+  font-weight:bold;
+  margin:6px 0 9px 36px;
+  padding:6px auto;
+}
+/* container image (if any) */
+#jd-content .example-block img {
+  margin:0;
+  padding:0px;
+}
+
+.example-block table {
+  margin:0;
+}
 
 /* -----------------------------------------------
 Dialog box for popup messages 
@@ -3141,69 +3319,128 @@ table.jd-tagtable th {
 
 /* SEARCH FILTER */
 
+.menu-container {
+  position:relative;
+}
 #search_autocomplete {
   font-weight:normal;
 }
 
-#search_filtered_wrapper {
+.search_filtered_wrapper.reference {
   width: 193px;
   float: right;
 }
-#search_filtered_div {
+.search_filtered_wrapper.docs {
+  width:875px;
+  float: left;
   position:absolute;
-  z-index:9999;
-  min-width:171px; /* +padding and border makes this match input width */
+  top:26px;
+  right:66px;
+}
+.suggest-card {
+  position:relative;
+  width:170px;
+  min-height:90px;
   padding:5px;
   border: solid 1px #C5C5C5;
   background: white;
-  top: 35px;
+  top: 15px;
+  margin-right:-5px;
   -moz-box-shadow: 0 0 10px rgba(0,0,0,0.2);
   -webkit-box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
 }
-
-ul#search_filtered {
-  min-width:100%;
+.suggest-card.reference {
+  position:absolute;
+  z-index:999;
+  min-width:171px; /* +padding and border makes this match input width */
+  min-height:93px; /* add 3px because this has 1 not 4px top border */
+  width:auto;
+  top:41px;
   margin:0;
+}
+.suggest-card.develop {
+  z-index:997;
+  border-top: solid 4px #F80;
+  float:right;
+}
+.suggest-card.design {
+  z-index:996;
+  border-top: solid 4px #33b5e5;
+  float:right;
+}
+.suggest-card.distribute {
+  z-index:995;
+  border-top: solid 4px #9C0;
+  float:right;
+}
+.child-card {
+  width:100%;
+}
+.suggest-card.dummy {
+  width:172px;
+  float:right;
+  border:0;
+  background:transparent;
+  -moz-box-shadow: none;
+  -webkit-box-shadow: none;
+  box-shadow: none;
+}
+
+ul.search_filtered {
+  min-width:100%;
   list-style: none;
-  margin: 0;
+  margin: 0 0 5px;
   padding: 0;
 }
-
-
-#search_filtered li{
-  line-height:1.5em;
-  margin: 0 0 2px;
-  padding: 0;
-}
-
-#search_filtered li a {
-  padding:0 5px;
-  color:#222 !important;
-}
-
-#search_filtered .jd-selected {
-  background-color: #33B5E5;
+.search_filtered .jd-selected {
+  background:#efefef;
   cursor:pointer;
 }
-#search_filtered .jd-selected,
-#search_filtered .jd-selected a {
-  color:#f7f7f7 !important;
+.search_filtered .jd-selected,
+.search_filtered .jd-selected a {
+    color:#09C !important;
 }
 
 .no-display {
   display: none;
 }
 
-.jd-autocomplete {
-  padding-left: 6px;
-  padding-right: 6px;
-  padding-top: 1px;
-  padding-bottom: 1px;
+.search_filtered li.jd-autocomplete {
   font-size: 0.81em;
   border: none;
-  margin: 0;
-  line-height: 1.05em;
+  margin: 0 0 2px;
+  padding: 0;
+  line-height:1.5em;
+}
+
+.search_filtered li a {
+  padding:0 5px;
+  color:#222 !important;
+  display:inline-block;
+  line-height:12px;
+}
+
+.search_filtered li.header {
+  font-weight:bold;
+  color:#444;
+  border: none;
+  margin: 8px 0 2px;
+  padding:1px 5px;
+  line-height:1.5em;
+}
+.search_filtered li.header.small {
+  font-size:0.85em;
+}
+
+.suggest-card.reference 
+.search_filtered li.header {
+  color:#aaa;
+  font-size: 0.81em;
+}
+
+.search_filtered li.header:first-child {
+  margin: 0 0 2px;
 }
 
 .show-item {
@@ -3768,17 +4005,17 @@ EndColorStr='#ececec');
   -webkit-transition-duration: .25s;
   -webkit-transition-timing-function:ease;
 
-  -moz-transition-property: -webkit-opacity;
+  -moz-transition-property: -moz-opacity;
   -moz-transition-duration: .25s;
   -moz-transition-timing-function:ease;
 
-  -o-transition-property: -webkit-opacity;
+  -o-transition-property: -o-opacity;
   -o-transition-duration: .25s;
   -o-transition-timing-function:ease;
   
-  -transition-property: -webkit-opacity;
-  -transition-duration: .25s;
-  -transition-timing-function:ease;
+  transition-property: opacity;
+  transition-duration: .25s;
+  transition-timing-function:ease;
 }
 
 .morehover:hover,
@@ -3946,7 +4183,7 @@ a.download-sdk {
 .jspPane {
   position: absolute;
   overflow: hidden;
-  width:auto !important; /* to avoid cut-off api names in reference in horiz scroll */
+  width:100% !important; /* to avoid cut-off api names in reference in horiz scroll */
 }
 
 .jspVerticalBar {
@@ -4283,6 +4520,19 @@ a.download-sdk {
   margin-right: 0px;
 }
 
+.distribute-features .distribute-link li a {
+  color:red !important;
+}
+
+.distribute-features .distribute-link li a,
+.distribute-features .distribute-link li a:active {
+  color:#555 !important;
+}
+
+.distribute-features .distribute-link li a:hover,
+.distribute-features .distribute-link li a:hover * {
+  color:#7AA1B0 !important;
+}
 
 
 /************ DEVELOP TOPIC CONTAINERS ************/

@@ -20,9 +20,9 @@ TARGET_ARCH := arm
 # application code generated with the NDK that uses NEON in the emulator.
 #
 TARGET_ARCH_VARIANT := armv7-a
+TARGET_CPU_VARIANT := generic
 TARGET_CPU_ABI := armeabi-v7a
 TARGET_CPU_ABI2 := armeabi
-ARCH_ARM_HAVE_TLS_REGISTER := true
 
 HAVE_HTC_AUDIO_DRIVER := true
 BOARD_USES_GENERIC_AUDIO := true

@@ -24,6 +24,10 @@ LOCAL_IS_HOST_MODULE := true
 LOCAL_BUILT_MODULE_STEM := javalib.jar
 
 ifeq ($(LOCAL_BUILD_HOST_DEX),true)
+ifneq ($(LOCAL_NO_STANDARD_LIBRARIES),true)
+  LOCAL_JAVA_LIBRARIES := $(sort core-hostdex $(LOCAL_JAVA_LIBRARIES))
+endif
+
 intermediates := $(call local-intermediates-dir)
 intermediates.COMMON := $(call local-intermediates-dir,COMMON)
 
@@ -39,9 +43,20 @@ LOCAL_INTERMEDIATE_TARGETS += \
     $(built_dex)
 
 LOCAL_INTERMEDIATE_SOURCE_DIR := $(intermediates.COMMON)/src
+# See comment in java.mk
+java_alternative_checked_module := $(full_classes_compiled_jar)
+
 endif # LOCAL_BUILD_HOST_DEX
 
 include $(BUILD_SYSTEM)/base_rules.mk
+
+$(full_classes_compiled_jar): PRIVATE_JAVAC_DEBUG_FLAGS := -g
+
+java_alternative_checked_module :=
+
+# The layers file allows you to enforce a layering between java packages.
+# Run build/tools/java-layers.py for more details.
+layers_file := $(addprefix $(LOCAL_PATH)/, $(LOCAL_JAVA_LAYERS_FILE))
 
 ifeq ($(LOCAL_BUILD_HOST_DEX),true)
 $(LOCAL_INTERMEDIATE_TARGETS): \
@@ -51,9 +66,11 @@ $(LOCAL_INTERMEDIATE_TARGETS): \
 
 $(cleantarget): PRIVATE_CLEAN_FILES += $(intermediates.COMMON)
 
+$(full_classes_compiled_jar): PRIVATE_JAVA_LAYERS_FILE := $(layers_file)
 $(full_classes_compiled_jar): PRIVATE_JAVACFLAGS := $(LOCAL_JAVACFLAGS)
 $(full_classes_compiled_jar): PRIVATE_JAR_EXCLUDE_FILES :=
-$(full_classes_compiled_jar): $(java_sources) $(java_resource_sources) $(full_java_lib_deps) $(jar_manifest_file)
+$(full_classes_compiled_jar): $(java_sources) $(java_resource_sources) $(full_java_lib_deps) \
+        $(jar_manifest_file) $(LOCAL_ADDITIONAL_DEPENDENCIES)
 	$(transform-host-java-to-package)
 
 # Run jarjar if necessary, otherwise just copy the file.
@@ -90,6 +107,8 @@ endif
 else
 $(LOCAL_BUILT_MODULE): PRIVATE_JAVACFLAGS := $(LOCAL_JAVACFLAGS)
 $(LOCAL_BUILT_MODULE): PRIVATE_JAR_EXCLUDE_FILES :=
-$(LOCAL_BUILT_MODULE): $(java_sources) $(java_resource_sources) $(full_java_lib_deps) $(jar_manifest_file)
+$(LOCAL_BUILT_MODULE): PRIVATE_JAVA_LAYERS_FILE := $(layers_file)
+$(LOCAL_BUILT_MODULE): $(java_sources) $(java_resource_sources) $(full_java_lib_deps) \
+		$(jar_manifest_file) $(LOCAL_ADDITIONAL_DEPENDENCIES)
 	$(transform-host-java-to-package)
 endif  # LOCAL_BUILD_HOST_DEX

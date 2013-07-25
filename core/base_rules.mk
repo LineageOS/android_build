@@ -34,11 +34,11 @@ ifdef LOCAL_IS_HOST_MODULE
   ifneq ($(LOCAL_IS_HOST_MODULE),true)
     $(error $(LOCAL_PATH): LOCAL_IS_HOST_MODULE must be "true" or empty, not "$(LOCAL_IS_HOST_MODULE)")
   endif
-  my_prefix:=HOST_
-  my_host:=host-
+  my_prefix := HOST_
+  my_host := host-
 else
-  my_prefix:=TARGET_
-  my_host:=
+  my_prefix := TARGET_
+  my_host :=
 endif
 
 ###########################################################
@@ -257,7 +257,11 @@ $(proto_java_sources_file_stamp): PRIVATE_PROTO_JAVA_OUTPUT_DIR := $(proto_java_
 ifeq ($(LOCAL_PROTOC_OPTIMIZE_TYPE),micro)
 $(proto_java_sources_file_stamp): PRIVATE_PROTO_JAVA_OUTPUT_OPTION := --javamicro_out
 else
+  ifeq ($(LOCAL_PROTOC_OPTIMIZE_TYPE),nano)
+$(proto_java_sources_file_stamp): PRIVATE_PROTO_JAVA_OUTPUT_OPTION := --javanano_out
+  else
 $(proto_java_sources_file_stamp): PRIVATE_PROTO_JAVA_OUTPUT_OPTION := --java_out
+  endif
 endif
 $(proto_java_sources_file_stamp): PRIVATE_PROTOC_FLAGS := $(LOCAL_PROTOC_FLAGS)
 $(proto_java_sources_file_stamp) : $(proto_sources_fullpath) $(PROTOC)
@@ -398,6 +402,20 @@ endif # !LOCAL_IS_HOST_MODULE
 full_java_libs += $(full_static_java_libs) $(LOCAL_CLASSPATH)
 full_java_lib_deps += $(full_static_java_libs) $(LOCAL_CLASSPATH)
 
+# This is set by packages that are linking to other packages that export
+# shared libraries, allowing them to make use of the code in the linked apk.
+LOCAL_APK_LIBRARIES := $(strip $(LOCAL_APK_LIBRARIES))
+ifdef LOCAL_APK_LIBRARIES
+  link_apk_libraries := \
+      $(foreach lib,$(LOCAL_APK_LIBRARIES), \
+        $(call intermediates-dir-for, \
+              APPS,$(lib),,COMMON)/classes.jar)
+
+  # link against the jar with full original names (before proguard processing).
+  full_java_libs += $(link_apk_libraries)
+  full_java_lib_deps += $(link_apk_libraries)
+endif
+
 # This is set by packages that contain instrumentation, allowing them to
 # link against the package they are instrumenting.  Currently only one such
 # package is allowed.
@@ -435,7 +453,6 @@ endif
 cleantarget := clean-$(LOCAL_MODULE)
 $(cleantarget) : PRIVATE_MODULE := $(LOCAL_MODULE)
 $(cleantarget) : PRIVATE_CLEAN_FILES := \
-    $(PRIVATE_CLEAN_FILES) \
     $(LOCAL_BUILT_MODULE) \
     $(LOCAL_INSTALLED_MODULE) \
     $(intermediates)
@@ -497,10 +514,12 @@ ifndef LOCAL_UNINSTALLABLE_MODULE
   # Define a copy rule to install the module.
   # acp and libraries that it uses can't use acp for
   # installation;  hence, LOCAL_ACP_UNAVAILABLE.
+$(LOCAL_INSTALLED_MODULE): PRIVATE_POST_INSTALL_CMD := $(LOCAL_POST_INSTALL_CMD)
 ifneq ($(LOCAL_ACP_UNAVAILABLE),true)
 $(LOCAL_INSTALLED_MODULE): $(LOCAL_BUILT_MODULE) | $(ACP)
 	@echo -e ${CL_CYN}"Install: $@"${CL_RST}
 	$(copy-file-to-new-target)
+	$(PRIVATE_POST_INSTALL_CMD)
 else
 $(LOCAL_INSTALLED_MODULE): $(LOCAL_BUILT_MODULE)
 	@echo -e ${CL_CYN}"Install: $@"${CL_RST}
@@ -516,17 +535,6 @@ $(installed_odex) : $(built_odex) $(LOCAL_BUILT_MODULE) | $(ACP)
 
 $(LOCAL_INSTALLED_MODULE) : $(installed_odex)
 endif
-
-# All host modules that are not tagged with optional are automatically installed.
-# Save the installed files in ALL_HOST_INSTALLED_FILES.
-ifeq ($(LOCAL_IS_HOST_MODULE),true)
-  ALL_HOST_INSTALLED_FILES += $(LOCAL_INSTALLED_MODULE)
-  ifneq ($(filter debug eng tests, $(LOCAL_MODULE_TAGS)),)
-    $(warning $(LOCAL_MODULE_MAKEFILE): Module "$(LOCAL_MODULE)" has useless module tags: $(filter debug eng tests, $(LOCAL_MODULE_TAGS)). It will be installed anyway.)
-    LOCAL_MODULE_TAGS := $(filter-out debug eng tests, $(LOCAL_MODULE_TAGS))
-  endif
-endif
-
 endif # !LOCAL_UNINSTALLABLE_MODULE
 
 
@@ -535,12 +543,17 @@ endif # !LOCAL_UNINSTALLABLE_MODULE
 ###########################################################
 
 # If nobody has defined a more specific module for the
-# checked modules, use LOCAL_BUILT_MODULE.  This was old
-# behavior, so it should be a safe default.
+# checked modules, use LOCAL_BUILT_MODULE.
 ifndef LOCAL_CHECKED_MODULE
-  ifndef LOCAL_SDK_VERSION
-    LOCAL_CHECKED_MODULE := $(LOCAL_BUILT_MODULE)
-  endif
+  LOCAL_CHECKED_MODULE := $(LOCAL_BUILT_MODULE)
+endif
+
+need_compile_java :=
+ifdef java_alternative_checked_module
+ifneq (,$(strip $(all_java_sources)$(full_static_java_libs))$(filter true,$(LOCAL_SOURCE_FILES_ALL_GENERATED)))
+  need_compile_java := true
+  LOCAL_CHECKED_MODULE := $(java_alternative_checked_module)
+endif
 endif
 
 # If they request that this module not be checked, then don't.
@@ -597,17 +610,41 @@ ALL_MODULE_TAGS := $(sort $(ALL_MODULE_TAGS) $(LOCAL_MODULE_TAGS))
 # it will default to recursive expansion.
 $(foreach tag,$(LOCAL_MODULE_TAGS),\
     $(eval ALL_MODULE_TAGS.$(tag) := \
-	    $(ALL_MODULE_TAGS.$(tag)) \
-	    $(LOCAL_INSTALLED_MODULE)))
+        $(ALL_MODULE_TAGS.$(tag)) \
+        $(LOCAL_INSTALLED_MODULE)))
 
 # Add this module name to the tag list of each specified tag.
 $(foreach tag,$(LOCAL_MODULE_TAGS),\
     $(eval ALL_MODULE_NAME_TAGS.$(tag) += $(LOCAL_MODULE)))
 
 ###########################################################
+## umbrella targets used to verify builds
+###########################################################
+j_or_n :=
+ifneq (,$(filter EXECUTABLES SHARED_LIBRARIES STATIC_LIBRARIES,$(LOCAL_MODULE_CLASS)))
+j_or_n := native
+else
+ifneq (,$(filter JAVA_LIBRARIES APPS,$(LOCAL_MODULE_CLASS)))
+j_or_n := java
+endif
+endif
+ifdef LOCAL_IS_HOST_MODULE
+h_or_t := host
+else
+h_or_t := target
+endif
+
+ifdef j_or_n
+$(j_or_n) $(h_or_t) $(j_or_n)-$(h_or_t) : $(LOCAL_CHECKED_MODULE)
+ifneq (,$(filter $(LOCAL_MODULE_TAGS),tests))
+$(j_or_n)-$(h_or_t)-tests $(j_or_n)-tests $(h_or_t)-tests : $(LOCAL_CHECKED_MODULE)
+endif
+endif
+
+###########################################################
 ## NOTICE files
 ###########################################################
 
-include $(BUILD_SYSTEM)/notice_files.mk
+include $(BUILD_NOTICE_FILE)
 
 #:vi noexpandtab

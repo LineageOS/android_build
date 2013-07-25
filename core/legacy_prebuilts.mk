@@ -23,7 +23,6 @@
 
 GRANDFATHERED_ALL_PREBUILT := \
 	akmd2 \
-	am \
 	ap_gain.bin \
 	AVRCP.kl \
 	batch \
@@ -34,10 +33,8 @@ GRANDFATHERED_ALL_PREBUILT := \
 	bypassfactory \
 	cdt.bin \
 	chat-ril \
-	content \
 	cpcap-key.kl \
 	data \
-	dbus.conf \
 	dev \
 	egl.cfg \
 	firmware_error.565 \

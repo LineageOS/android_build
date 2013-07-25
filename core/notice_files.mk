@@ -4,9 +4,19 @@
 
 notice_file:=$(strip $(wildcard $(LOCAL_PATH)/NOTICE))
 
-ifeq ($(LOCAL_MODULE_CLASS),NONE)
-  # We ignore NOTICE files for modules of type NONE.
+ifeq ($(LOCAL_MODULE_CLASS),GYP)
+  # We ignore NOTICE files for modules of type GYP.
   notice_file :=
+endif
+
+ifeq ($(LOCAL_MODULE_CLASS),NOTICE_FILES)
+# If this is a NOTICE-only module, we don't include base_rule.mk,
+# so my_prefix is not set at this point.
+ifeq ($(LOCAL_IS_HOST_MODULE),true)
+  my_prefix := HOST_
+else
+  my_prefix := TARGET_
+endif
 endif
 
 ifdef notice_file
@@ -54,7 +64,7 @@ $(installed_notice_file): PRIVATE_INSTALLED_MODULE := $(module_installed_filenam
 $(installed_notice_file): $(notice_file)
 	@echo -e ${CL_CYN}Notice file:${CL_RST} $< -- $@
 	$(hide) mkdir -p $(dir $@)
-	$(hide) cat $< >> $@
+	$(hide) cat $< > $@
 
 ifdef LOCAL_INSTALLED_MODULE
 # Make LOCAL_INSTALLED_MODULE depend on NOTICE files if they exist
