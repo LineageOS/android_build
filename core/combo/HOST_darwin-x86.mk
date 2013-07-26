@@ -54,6 +54,7 @@ ifeq ($(mac_sdk_version),)
 mac_sdk_version := $(firstword $(mac_sdk_versions_supported))
 endif
 endif
+endif
 
 mac_sdk_path := $(shell xcode-select -print-path)
 # try /Applications/Xcode*.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.?.sdk
@@ -86,9 +87,7 @@ HOST_CXX := $(HOST_TOOLCHAIN_PREFIX)-g++
 ifeq ($(mac_sdk_version),10.9)
 HOST_GLOBAL_CFLAGS += -I$(mac_sdk_root)/usr/include/c++/4.2.1 -arch i386 -Wno-nested-anon-types -Wno-unused-parameter
 HOST_GLOBAL_LDFLAGS += -Wl,-arch,i386,-lstdc++
-endif
-else
-ifeq ($(mac_sdk_version),10.8)
+elif ($(mac_sdk_version),10.8)
 # Mac SDK 10.8 no longer has stdarg.h, etc
 host_toolchain_header := $(HOST_TOOLCHAIN_ROOT)/lib/gcc/i686-apple-darwin$(gcc_darwin_version)/4.2.1/include
 HOST_GLOBAL_CFLAGS += -isystem $(host_toolchain_header)
