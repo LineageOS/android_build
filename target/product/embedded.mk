@@ -72,6 +72,7 @@ PRODUCT_PACKAGES += \
 
 # SELinux packages
 PRODUCT_PACKAGES += \
+    auditd \
     sepolicy \
     file_contexts \
     seapp_contexts \
