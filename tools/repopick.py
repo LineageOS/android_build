@@ -167,6 +167,18 @@ if args.abandon_first:
         if not args.quiet:
             print('')
 
+# Get the list of projects that repo knows about
+#   - convert the project name to a project path
+project_name_to_path = {}
+plist = subprocess.Popen([repo_bin,"list"], stdout=subprocess.PIPE)
+project_path = None
+while(True):
+    pline = plist.stdout.readline().rstrip()
+    if not pline:
+        break
+    ppaths = re.split('\s*:\s*', pline.decode())
+    project_name_to_path[ppaths[1]] = ppaths[0]
+
 # Iterate through the requested change numbers
 for change in args.change_number:
     if not args.quiet:
@@ -218,29 +230,16 @@ for change in args.change_number:
     committer_date   = current_revision['commit']['committer']['date'].replace(date_fluff, '')
     subject          = current_revision['commit']['subject']
 
-    # Get the list of projects that repo knows about
-    #   - convert the project name to a project path
-    plist = subprocess.Popen([repo_bin,"list"], stdout=subprocess.PIPE)
-    while(True):
-        pline = plist.stdout.readline().rstrip()
-        if not pline:
-            break
-        ppaths = re.split('\s*:\s*', pline.decode())
-        if ppaths[1] == project_name:
-            project_path = ppaths[0]
-            break
-    if 'project_path' not in locals():
-        sys.stderr.write('ERROR: Could not determine the project path for project %s\n' % project_name)
+    # Convert the project name to a project path
+    #   - check that the project path exists
+    if project_name in project_name_to_path:
+        project_path = project_name_to_path[project_name];
+    elif args.ignore_missing:
+        print('WARNING: Skipping %d since there is no project directory for: %s\n' % (change_number, project_name))
+        continue;
+    else:
+        sys.stderr.write('ERROR: For %d, could not determine the project path for project %s\n' % (change_number, project_name))
         sys.exit(1)
-
-    # Check that the project path exists
-    if not os.path.isdir(project_path):
-        if args.ignore_missing:
-            print('WARNING: Skipping %d since there is no project directory: %s\n' % (change_number, project_path))
-            continue;
-        else:
-            sys.stderr.write('ERROR: For %d, there is no project directory: %s\n' % (change_number, project_path))
-            sys.exit(1)
 
     # If --start-branch is given, create the branch (more than once per path is okay; repo ignores gracefully)
     if args.start_branch:
