@@ -70,6 +70,7 @@ PRODUCT_PACKAGES += \
     mms-common \
     requestsync \
     telephony-common \
+    telephony-msim \
     voip-common
 
 # host-only dependencies
