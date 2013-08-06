@@ -25,7 +25,7 @@ endef
 # Previously the prebiult host toolchain is used only for the sdk build,
 # that's why we have "sdk" in the path name.
 ifeq ($(strip $(HOST_TOOLCHAIN_PREFIX)),)
-HOST_TOOLCHAIN_PREFIX := prebuilts/tools/gcc-sdk
+HOST_TOOLCHAIN_PREFIX := /usr/bin
 endif
 # Don't do anything if the toolchain is not there
 ifneq (,$(strip $(wildcard $(HOST_TOOLCHAIN_PREFIX)/gcc)))

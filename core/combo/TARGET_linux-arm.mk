@@ -48,9 +48,14 @@ endif
 include $(TARGET_ARCH_SPECIFIC_MAKEFILE)
 
 # You can set TARGET_TOOLS_PREFIX to get gcc from somewhere else
+ifneq (,$(wildcard /usr/bin/arm-linux-androideabi-*))
+TARGET_TOOLCHAIN_ROOT := /usr/bin
+TARGET_TOOLS_PREFIX := $(TARGET_TOOLCHAIN_ROOT)/arm-linux-androideabi-
+else
 ifeq ($(strip $(TARGET_TOOLS_PREFIX)),)
-TARGET_TOOLCHAIN_ROOT := prebuilts/gcc/$(HOST_PREBUILT_TAG)/arm/arm-linux-androideabi-$(TARGET_GCC_VERSION)
+TARGET_TOOLCHAIN_ROOT := prebuilts/gcc/$(HOST_PREBUILT_TAG)/arm/linaro-4.7.2
 TARGET_TOOLS_PREFIX := $(TARGET_TOOLCHAIN_ROOT)/bin/arm-linux-androideabi-
+endif
 endif
 
 TARGET_CC := $(TARGET_TOOLS_PREFIX)gcc$(HOST_EXECUTABLE_SUFFIX)
