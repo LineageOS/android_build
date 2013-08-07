@@ -5,6 +5,10 @@
 
 # TODO: replace it with device's BOOTCLASSPATH
 DEXPREOPT_BOOT_JARS := core:core-junit:bouncycastle:ext:framework:telephony-common:voip-common:mms-common:android.policy:services:apache-xml
+ifneq ($(strip $(TARGET_ADDITIONAL_BOOTCLASSPATH)),)
+DEXPREOPT_BOOT_JARS := $(DEXPREOPT_BOOT_JARS):$(TARGET_ADDITIONAL_BOOTCLASSPATH)
+endif
+
 DEXPREOPT_BOOT_JARS_MODULES := $(subst :, ,$(DEXPREOPT_BOOT_JARS))
 
 DEXPREOPT_BUILD_DIR := $(OUT_DIR)
