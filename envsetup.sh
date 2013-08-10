@@ -1753,8 +1753,14 @@ function installrecovery()
     PARTITION=`grep "^\/recovery" $OUT/recovery/root/etc/recovery.fstab | awk {'print $3'}`
     if [ -z "$PARTITION" ];
     then
-        echo "Unable to determine recovery partition."
-        return 1
+        # Try for RECOVERY_FSTAB_VERSION = 2
+        PARTITION=`grep "[[:space:]]\/recovery[[:space:]]" $OUT/recovery/root/etc/recovery.fstab | awk {'print $1'}`
+        PARTITION_TYPE=`grep "[[:space:]]\/recovery[[:space:]]" $OUT/recovery/root/etc/recovery.fstab | awk {'print $3'}`
+        if [ -z "$PARTITION" ];
+        then
+            echo "Unable to determine recovery partition."
+            return 1
+        fi
     fi
     adb start-server
     adb root
