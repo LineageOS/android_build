@@ -2122,8 +2122,17 @@ function dopush()
 
     if (adb shell cat /system/build.prop | grep -q "ro.cm.device=$CM_BUILD");
     then
+    # retrieve IP and PORT info if we're using a TCP connection
+    TCPIPPORT=$(adb devices | egrep '^[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+:[0-9]+[^0-9]+' \
+        | head -1 | awk '{print $1}')
     adb root &> /dev/null
     sleep 0.3
+    if [ -n "$TCPIPPORT" ]
+    then
+        # adb root just killed our connection
+        # so reconnect...
+        adb connect "$TCPIPPORT"
+    fi
     adb wait-for-device &> /dev/null
     sleep 0.3
     adb remount &> /dev/null
