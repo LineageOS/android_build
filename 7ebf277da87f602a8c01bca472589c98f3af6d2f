@@ -16,6 +16,24 @@
       "revId": "7ebf277da87f602a8c01bca472589c98f3af6d2f",
       "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dae975fb_a52af62a",
+        "filename": "core/tasks/kernel.mk",
+        "patchSetId": 1
+      },
+      "lineNbr": 138,
+      "author": {
+        "id": 3556
+      },
+      "writtenOn": "2013-08-11T13:02:42Z",
+      "side": 1,
+      "message": "Actually this is used when kernel requires the 4.4.3 toolchain from https://github.com/CyanogenMod/android_prebuilt as we do on the motorola omap4 devices",
+      "parentUuid": "dae975fb_9aecf190",
+      "revId": "7ebf277da87f602a8c01bca472589c98f3af6d2f",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
     }
   ]
 }
