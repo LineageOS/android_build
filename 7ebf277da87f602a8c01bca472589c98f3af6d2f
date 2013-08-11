@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dae975fb_9aecf190",
+        "filename": "core/tasks/kernel.mk",
+        "patchSetId": 1
+      },
+      "lineNbr": 138,
+      "author": {
+        "id": 1039
+      },
+      "writtenOn": "2013-08-11T05:44:27Z",
+      "side": 1,
+      "message": "this old bloc should be removed, prebuilt path is wrong",
+      "revId": "7ebf277da87f602a8c01bca472589c98f3af6d2f",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    }
+  ]
+}
