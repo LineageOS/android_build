@@ -1,6 +1,6 @@
 /* Default linker script, for normal executables */
 OUTPUT_FORMAT("elf32-littlearm", "elf32-bigarm",
-	      "elf32-littlearm")
+              "elf32-littlearm")
 OUTPUT_ARCH(arm)
 ENTRY(_start)
 SEARCH_DIR("/usr/local/armdev/arm-elf/lib");
@@ -11,45 +11,45 @@ SECTIONS
   /* Read-only sections, merged into text segment: */
 /*  PROVIDE (__executable_start = 0x8000); . = 0x8000; */
 . = 0x8000 + SIZEOF_HEADERS; 
-  .interp         : { *(.interp) }
-  .hash           : { *(.hash) }
-  .dynsym         : { *(.dynsym) }
-  .dynstr         : { *(.dynstr) }
-  .gnu.version    : { *(.gnu.version) }
-  .gnu.version_d  : { *(.gnu.version_d) }
-  .gnu.version_r  : { *(.gnu.version_r) }
-  .rel.init       : { *(.rel.init) }
-  .rela.init      : { *(.rela.init) }
-  .rel.text       : { *(.rel.text .rel.text.* .rel.gnu.linkonce.t.*) }
-  .rela.text      : { *(.rela.text .rela.text.* .rela.gnu.linkonce.t.*) }
-  .rel.fini       : { *(.rel.fini) }
-  .rela.fini      : { *(.rela.fini) }
-  .rel.rodata     : { *(.rel.rodata .rel.rodata.* .rel.gnu.linkonce.r.*) }
-  .rela.rodata    : { *(.rela.rodata .rela.rodata.* .rela.gnu.linkonce.r.*) }
-  .rel.data.rel.ro   : { *(.rel.data.rel.ro*) }
-  .rela.data.rel.ro   : { *(.rel.data.rel.ro*) }
-  .rel.data       : { *(.rel.data .rel.data.* .rel.gnu.linkonce.d.*) }
-  .rela.data      : { *(.rela.data .rela.data.* .rela.gnu.linkonce.d.*) }
-  .rel.tdata	  : { *(.rel.tdata .rel.tdata.* .rel.gnu.linkonce.td.*) }
-  .rela.tdata	  : { *(.rela.tdata .rela.tdata.* .rela.gnu.linkonce.td.*) }
-  .rel.tbss	  : { *(.rel.tbss .rel.tbss.* .rel.gnu.linkonce.tb.*) }
-  .rela.tbss	  : { *(.rela.tbss .rela.tbss.* .rela.gnu.linkonce.tb.*) }
-  .rel.ctors      : { *(.rel.ctors) }
-  .rela.ctors     : { *(.rela.ctors) }
-  .rel.dtors      : { *(.rel.dtors) }
-  .rela.dtors     : { *(.rela.dtors) }
-  .rel.got        : { *(.rel.got) }
-  .rela.got       : { *(.rela.got) }
-  .rel.bss        : { *(.rel.bss .rel.bss.* .rel.gnu.linkonce.b.*) }
-  .rela.bss       : { *(.rela.bss .rela.bss.* .rela.gnu.linkonce.b.*) }
-  .rel.plt        : { *(.rel.plt) }
-  .rela.plt       : { *(.rela.plt) }
-  .init           :
+  .interp           : { *(.interp) }
+  .hash             : { *(.hash) }
+  .dynsym           : { *(.dynsym) }
+  .dynstr           : { *(.dynstr) }
+  .gnu.version      : { *(.gnu.version) }
+  .gnu.version_d    : { *(.gnu.version_d) }
+  .gnu.version_r    : { *(.gnu.version_r) }
+  .rel.init         : { *(.rel.init) }
+  .rela.init        : { *(.rela.init) }
+  .rel.text         : { *(.rel.text .rel.text.* .rel.gnu.linkonce.t.*) }
+  .rela.text        : { *(.rela.text .rela.text.* .rela.gnu.linkonce.t.*) }
+  .rel.fini         : { *(.rel.fini) }
+  .rela.fini        : { *(.rela.fini) }
+  .rel.rodata       : { *(.rel.rodata .rel.rodata.* .rel.gnu.linkonce.r.*) }
+  .rela.rodata      : { *(.rela.rodata .rela.rodata.* .rela.gnu.linkonce.r.*) }
+  .rel.data.rel.ro  : { *(.rel.data.rel.ro*) }
+  .rela.data.rel.ro : { *(.rel.data.rel.ro*) }
+  .rel.data         : { *(.rel.data .rel.data.* .rel.gnu.linkonce.d.*) }
+  .rela.data        : { *(.rela.data .rela.data.* .rela.gnu.linkonce.d.*) }
+  .rel.tdata        : { *(.rel.tdata .rel.tdata.* .rel.gnu.linkonce.td.*) }
+  .rela.tdata       : { *(.rela.tdata .rela.tdata.* .rela.gnu.linkonce.td.*) }
+  .rel.tbss         : { *(.rel.tbss .rel.tbss.* .rel.gnu.linkonce.tb.*) }
+  .rela.tbss        : { *(.rela.tbss .rela.tbss.* .rela.gnu.linkonce.tb.*) }
+  .rel.ctors        : { *(.rel.ctors) }
+  .rela.ctors       : { *(.rela.ctors) }
+  .rel.dtors        : { *(.rel.dtors) }
+  .rela.dtors       : { *(.rela.dtors) }
+  .rel.got          : { *(.rel.got) }
+  .rela.got         : { *(.rela.got) }
+  .rel.bss          : { *(.rel.bss .rel.bss.* .rel.gnu.linkonce.b.*) }
+  .rela.bss         : { *(.rela.bss .rela.bss.* .rela.gnu.linkonce.b.*) }
+  .rel.plt          : { *(.rel.plt) }
+  .rela.plt         : { *(.rela.plt) }
+  .init             :
   {
     KEEP (*(.init))
   } =0
-  .plt            : { *(.plt) }
-  .text           :
+  .plt              : { *(.plt) }
+  .text             :
   {
     *(.text .stub .text.* .gnu.linkonce.t.*)
     KEEP (*(.text.*personality*))
@@ -57,15 +57,15 @@ SECTIONS
     *(.gnu.warning)
     *(.glue_7t) *(.glue_7)
   } =0
-  .fini           :
+  .fini             :
   {
     KEEP (*(.fini))
   } =0
   PROVIDE (__etext = .);
   PROVIDE (_etext = .);
   PROVIDE (etext = .);
-  .rodata         : { *(.rodata .rodata.* .gnu.linkonce.r.*) }
-  .rodata1        : { *(.rodata1) }
+  .rodata           : { *(.rodata .rodata.* .gnu.linkonce.r.*) }
+  .rodata1          : { *(.rodata1) }
   /* We have to wrap extab and exidx sections with KEEP because we use
      --gc-sections. */
   .ARM.extab   : { KEEP (*(.ARM.extab* .gnu.linkonce.armextab.*)) }
@@ -82,8 +82,8 @@ SECTIONS
   .eh_frame       : ONLY_IF_RW { KEEP (*(.eh_frame)) }
   .gcc_except_table   : ONLY_IF_RW { KEEP (*(.gcc_except_table)) *(.gcc_except_table.*) }
   /* Thread Local Storage sections  */
-  .tdata	  : { *(.tdata .tdata.* .gnu.linkonce.td.*) }
-  .tbss		  : { *(.tbss .tbss.* .gnu.linkonce.tb.*) *(.tcommon) }
+  .tdata          : { *(.tdata .tdata.* .gnu.linkonce.td.*) }
+  .tbss           : { *(.tbss .tbss.* .gnu.linkonce.tb.*) *(.tcommon) }
   /* Ensure the __preinit_array_start label is properly aligned.  We
      could instead move the label definition inside the section, but
      the linker would then create the section even if it turns out to
@@ -93,12 +93,12 @@ SECTIONS
   .preinit_array     : { KEEP (*(.preinit_array)) }
   PROVIDE (__preinit_array_end = .);
   PROVIDE (__init_array_start = .);
-  .init_array     : { KEEP (*(.init_array)) }
+  .init_array        : { KEEP (*(.init_array)) }
   PROVIDE (__init_array_end = .);
   PROVIDE (__fini_array_start = .);
-  .fini_array     : { KEEP (*(.fini_array)) }
+  .fini_array        : { KEEP (*(.fini_array)) }
   PROVIDE (__fini_array_end = .);
-  .ctors          :
+  .ctors             :
   {
     /* gcc uses crtbegin.o to find the start of
        the constructors, so we make sure it is
@@ -156,33 +156,33 @@ SECTIONS
   _bss_end__ = . ; __bss_end__ = . ; __end__ = . ;
   PROVIDE (end = .);
   /* Stabs debugging sections.  */
-  .stab          0 : { *(.stab) }
-  .stabstr       0 : { *(.stabstr) }
-  .stab.excl     0 : { *(.stab.excl) }
-  .stab.exclstr  0 : { *(.stab.exclstr) }
-  .stab.index    0 : { *(.stab.index) }
-  .stab.indexstr 0 : { *(.stab.indexstr) }
-  .comment       0 : { *(.comment) }
+  .stab            0 : { *(.stab) }
+  .stabstr         0 : { *(.stabstr) }
+  .stab.excl       0 : { *(.stab.excl) }
+  .stab.exclstr    0 : { *(.stab.exclstr) }
+  .stab.index      0 : { *(.stab.index) }
+  .stab.indexstr   0 : { *(.stab.indexstr) }
+  .comment         0 : { *(.comment) }
   /* DWARF debug sections.
      Symbols in the DWARF debugging sections are relative to the beginning
      of the section so we begin them at 0.  */
   /* DWARF 1 */
-  .debug          0 : { *(.debug) }
-  .line           0 : { *(.line) }
+  .debug           0 : { *(.debug) }
+  .line            0 : { *(.line) }
   /* GNU DWARF 1 extensions */
-  .debug_srcinfo  0 : { *(.debug_srcinfo) }
-  .debug_sfnames  0 : { *(.debug_sfnames) }
+  .debug_srcinfo   0 : { *(.debug_srcinfo) }
+  .debug_sfnames   0 : { *(.debug_sfnames) }
   /* DWARF 1.1 and DWARF 2 */
-  .debug_aranges  0 : { *(.debug_aranges) }
-  .debug_pubnames 0 : { *(.debug_pubnames) }
+  .debug_aranges   0 : { *(.debug_aranges) }
+  .debug_pubnames  0 : { *(.debug_pubnames) }
   /* DWARF 2 */
-  .debug_info     0 : { *(.debug_info .gnu.linkonce.wi.*) }
-  .debug_abbrev   0 : { *(.debug_abbrev) }
-  .debug_line     0 : { *(.debug_line) }
-  .debug_frame    0 : { *(.debug_frame) }
-  .debug_str      0 : { *(.debug_str) }
-  .debug_loc      0 : { *(.debug_loc) }
-  .debug_macinfo  0 : { *(.debug_macinfo) }
+  .debug_info      0 : { *(.debug_info .gnu.linkonce.wi.*) }
+  .debug_abbrev    0 : { *(.debug_abbrev) }
+  .debug_line      0 : { *(.debug_line) }
+  .debug_frame     0 : { *(.debug_frame) }
+  .debug_str       0 : { *(.debug_str) }
+  .debug_loc       0 : { *(.debug_loc) }
+  .debug_macinfo   0 : { *(.debug_macinfo) }
   /* SGI/MIPS DWARF 2 extensions */
   .debug_weaknames 0 : { *(.debug_weaknames) }
   .debug_funcnames 0 : { *(.debug_funcnames) }

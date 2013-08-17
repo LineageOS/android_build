@@ -6,4 +6,3 @@
 std::string pseudolocalize_string(const std::string& source);
 
 #endif // HOST_PSEUDOLOCALIZE_H
-

@@ -71,8 +71,8 @@ static bool isSameFile(const struct stat* pSrcStat, const struct stat* pDstStat)
 {
 #ifndef HAVE_VALID_STAT_ST_INO
     /* with MSVCRT.DLL, stat always sets st_ino to 0, and there is no simple way to */
-	/* get the equivalent information with Win32 (Cygwin does some weird stuff in   */
-	/* its winsup/cygwin/fhandler_disk_file.cc to emulate this, too complex for us) */
+    /* get the equivalent information with Win32 (Cygwin does some weird stuff in   */
+    /* its winsup/cygwin/fhandler_disk_file.cc to emulate this, too complex for us) */
 	return 0;
 #else
     return (pSrcStat->st_ino == pDstStat->st_ino);
@@ -244,13 +244,13 @@ static int copyRegular(const char* src, const char* dst, const struct stat* pSrc
         if (options & COPY_FORCE) {
             if (unlink(dst) != 0) {
 #ifdef HAVE_MS_C_RUNTIME
-				/* MSVCRT.DLL unlink will fail with EACCESS if the file is set read-only */
-				/* so try to change its mode, and unlink again                           */
-				if (errno == EACCESS) {
-					if (chmod(dst, S_IWRITE|S_IREAD) == 0 && unlink(dst) == 0)
-						goto Open_File;
-				}
-#endif		
+    /* MSVCRT.DLL unlink will fail with EACCESS if the file is set read-only */
+    /* so try to change its mode, and unlink again                           */
+    if (errno == EACCESS) {
+        if (chmod(dst, S_IWRITE|S_IREAD) == 0 && unlink(dst) == 0)
+        goto Open_File;
+    }
+#endif
                 fprintf(stderr, "acp: unable to remove '%s': %s\n",
                     dst, strerror(errno));
                 (void) close(srcFd);
@@ -319,7 +319,6 @@ static int copyRegular(const char* src, const char* dst, const struct stat* pSrc
     return 0;
 }
 
-
 #ifdef HAVE_SYMLINKS
 /*
  * Copy a symlink.  This only happens if we're in "no derefence" mode,
@@ -342,7 +341,7 @@ static int copySymlink(const char* src, const char* dst, const struct stat* pSrc
     statResult = lstat(dst, &dstStat);
     if (statResult == 0 && !S_ISREG(dstStat.st_mode)
                          && !S_ISLNK(dstStat.st_mode)
-						 )
+    )
     {
         fprintf(stderr,
             "acp: destination '%s' exists and is not regular or symlink\n",
@@ -409,8 +408,7 @@ static int copySymlink(const char* src, const char* dst, const struct stat* pSrc
  * Copy the contents of one directory to another.  Both "src" and "dst"
  * must be directories.  We will create "dst" if it does not exist.
  */
-int copyDirectory(const char* src, const char* dst, const struct stat* pSrcStat, unsigned int options)
-{
+int copyDirectory(const char* src, const char* dst, const struct stat* pSrcStat, unsigned int options) {
     int retVal = 0;
     struct stat dstStat;
     DIR* dir;
@@ -602,7 +600,7 @@ static int copyFileRecursive(const char* src, const char* dst, bool isCmdLine, u
 #ifdef HAVE_SYMLINKS
     } else if (S_ISLNK(srcStat.st_mode)) {
         retVal = copySymlink(src, dst, &srcStat, options);
-#endif		
+#endif
     } else if (S_ISREG(srcStat.st_mode)) {
         retVal = copyRegular(src, dst, &srcStat, options);
     } else {
@@ -622,5 +620,3 @@ int copyFile(const char* src, const char* dst, unsigned int options)
 {
     return copyFileRecursive(src, dst, true, options);
 }
-
-

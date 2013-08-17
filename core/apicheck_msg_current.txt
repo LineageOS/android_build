@@ -14,10 +14,7 @@ To make these errors go away, you have two choices:
       USE OPTION #1.
                     -Koush
 
-
       To submit the revised current.xml to the main Android repository,
       you will need approval.
 ******************************
-
-
 
