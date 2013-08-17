@@ -27,4 +27,3 @@ int copyFile(const char* src, const char* dst, unsigned int options);
 #endif
 
 #endif // _HOST_COPYFILE_H
-

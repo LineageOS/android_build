@@ -460,7 +460,7 @@ function print_lunch_menu()
     echo
     echo "You're building on" $uname
     if [ "$(uname)" = "Darwin" ] ; then
-    	echo "  (ohai, koush!)"
+    echo "  (ohai, koush!)"
     fi
     echo
     if [ "z${CM_DEVICES_ONLY}" != "z" ]; then
@@ -904,7 +904,7 @@ function gdbclient()
                echo ""
                echo "If you haven't done so already, do this first on the device:"
                echo "    gdbserver $PORT /system/bin/$EXE"
-                   echo " or"
+               echo " or"
                echo "    gdbserver $PORT --attach $PID"
                echo ""
        fi
@@ -915,7 +915,7 @@ function gdbclient()
        echo >>"$OUT_ROOT/gdbclient.cmds" ""
 
        arm-eabi-gdb -x "$OUT_ROOT/gdbclient.cmds" "$OUT_EXE_SYMBOLS/$EXE"
-  else
+   else
        echo "Unable to determine build system output dir."
    fi
 
