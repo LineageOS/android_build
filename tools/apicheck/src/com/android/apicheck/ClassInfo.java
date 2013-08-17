@@ -73,7 +73,7 @@ public class ClassInfo {
     public String superclassName() {
         return mSuperClassName;
     }
-    
+
     public SourcePositionInfo position() {
         return mSourcePosition;
     }
@@ -85,14 +85,14 @@ public class ClassInfo {
     public boolean isFinal() {
         return mIsFinal;
     }
-    
+
     // Find a superclass implementation of the given method.  Looking at our superclass
     // instead of at 'this' is unusual, but it fits the point-of-call demands well.
     public MethodInfo overriddenMethod(MethodInfo candidate) {
         if (mSuperClass == null) {
             return null;
         }
-        
+
         // does our immediate superclass have it?
         ClassInfo sup = mSuperClass;
         for (MethodInfo mi : sup.mMethods.values()) {
@@ -106,11 +106,11 @@ public class ClassInfo {
         if (sup.mSuperClass != null) {
             return mSuperClass.overriddenMethod(candidate);
         }
-        
+
         // no parent, so we just don't have it
         return null;
     }
-    
+
     // Find a superinterface declaration of the given method.
     public MethodInfo interfaceMethod(MethodInfo candidate) {
         for (ClassInfo interfaceInfo : mInterfaces) {
@@ -134,6 +134,7 @@ public class ClassInfo {
                     + " changed class/interface declaration");
             consistent = false;
         }
+
         for (String iface : mInterfaceNames) {
             boolean found = false;
             for (ClassInfo c = cl; c != null && !found; c = c.mSuperClass) {
@@ -144,6 +145,7 @@ public class ClassInfo {
                         "Class " + qualifiedName() + " no longer implements " + iface);
             }
         }
+
         for (String iface : cl.mInterfaceNames) {
           if (!mInterfaceNames.contains(iface)) {
               Errors.error(Errors.ADDED_INTERFACE, cl.position(),
@@ -152,7 +154,7 @@ public class ClassInfo {
               consistent = false;
             }
         }
-        
+
         for (MethodInfo mInfo : mMethods.values()) {
             if (cl.mMethods.containsKey(mInfo.getHashableName())) {
                 if (!mInfo.isConsistent(cl.mMethods.get(mInfo.getHashableName()))) {
@@ -174,6 +176,7 @@ public class ClassInfo {
                 }
             }
         }
+
         for (MethodInfo mInfo : cl.mMethods.values()) {
             if (!mInfo.isInBoth()) {
                 /* Similarly to the above, do not fail if this "new" method is
@@ -187,7 +190,7 @@ public class ClassInfo {
                 }
             }
         }
-        
+
         for (ConstructorInfo mInfo : mConstructors.values()) {
           if (cl.mConstructors.containsKey(mInfo.getHashableName())) {
               if (!mInfo.isConsistent(cl.mConstructors.get(mInfo.getHashableName()))) {
@@ -199,6 +202,7 @@ public class ClassInfo {
               consistent = false;
           }
         }
+
         for (ConstructorInfo mInfo : cl.mConstructors.values()) {
             if (!mInfo.isInBoth()) {
                 Errors.error(Errors.ADDED_METHOD, mInfo.position(),
@@ -206,7 +210,7 @@ public class ClassInfo {
                 consistent = false;
             }
         }
-        
+
         for (FieldInfo mInfo : mFields.values()) {
           if (cl.mFields.containsKey(mInfo.name())) {
               if (!mInfo.isConsistent(cl.mFields.get(mInfo.name()))) {
@@ -218,6 +222,7 @@ public class ClassInfo {
               consistent = false;
           }
         }
+
         for (FieldInfo mInfo : cl.mFields.values()) {
             if (!mInfo.isInBoth()) {
                 Errors.error(Errors.ADDED_FIELD, mInfo.position(),
@@ -225,38 +230,38 @@ public class ClassInfo {
                 consistent = false;
             }
         }
-        
+
         if (mIsAbstract != cl.mIsAbstract) {
             consistent = false;
             Errors.error(Errors.CHANGED_ABSTRACT, cl.position(),
                     "Class " + cl.qualifiedName() + " changed abstract qualifier");
         }
-      
+
         if (mIsFinal != cl.mIsFinal) {
             consistent = false;
             Errors.error(Errors.CHANGED_FINAL, cl.position(),
                     "Class " + cl.qualifiedName() + " changed final qualifier");
         }
-      
+
         if (mIsStatic != cl.mIsStatic) {
             consistent = false;
             Errors.error(Errors.CHANGED_STATIC, cl.position(),
                     "Class " + cl.qualifiedName() + " changed static qualifier");
         }
-     
+
         if (!mScope.equals(cl.mScope)) {
             consistent = false;
             Errors.error(Errors.CHANGED_SCOPE, cl.position(),
                     "Class " + cl.qualifiedName() + " scope changed from "
                     + mScope + " to " + cl.mScope);
         }
-        
+
         if (!mDeprecated.equals(cl.mDeprecated)) {
             consistent = false;
             Errors.error(Errors.CHANGED_DEPRECATED, cl.position(),
                     "Class " + cl.qualifiedName() + " has changed deprecation state");
         }
-        
+
         if (mSuperClassName != null) {
             if (cl.mSuperClassName == null || !mSuperClassName.equals(cl.mSuperClassName)) {
                 consistent = false;
@@ -270,7 +275,7 @@ public class ClassInfo {
                     "Class " + qualifiedName() + " superclass changed from "
                     + "null to " + cl.mSuperClassName);
         }
-        
+
         return consistent;
     }
 
@@ -279,29 +284,28 @@ public class ClassInfo {
             mInterfaces.add(apiInfo.findClass(interfaceName));
         }
     }
-    
+
     public void addInterface(String name) {
         mInterfaceNames.add(name);
     }
-    
+
     public void addMethod(MethodInfo mInfo) {
         mMethods.put(mInfo.getHashableName(), mInfo);
     }
-    
+
     public void addConstructor(ConstructorInfo cInfo) {
         mConstructors.put(cInfo.getHashableName(), cInfo);
         
     }
-    
+
     public void addField(FieldInfo fInfo) {
         mFields.put(fInfo.name(), fInfo);
-      
     }
-    
+
     public void setSuperClass(ClassInfo superclass) {
         mSuperClass = superclass;
     }
-    
+
     public boolean isInBoth() {
         return mExistsInBoth;
     }

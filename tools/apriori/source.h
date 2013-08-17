@@ -105,11 +105,11 @@ struct source_t {
 	   at which the library was prelinked. */
     unsigned base;
 #ifdef SUPPORT_ANDROID_PRELINK_TAGS
-	/* When we read in a file, if it has the prelinked tag, we set prelinked
-	   to 1 and the prelink address in the tag to prelink_base.  This address
-	   must match the value of base that we choose. */
-	int prelinked;
-	long prelink_base; /* valid if prelinked != 0 */
+    /* When we read in a file, if it has the prelinked tag, we set prelinked
+       to 1 and the prelink address in the tag to prelink_base.  This address
+       must match the value of base that we choose. */
+    int prelinked;
+    long prelink_base; /* valid if prelinked != 0 */
 #endif/*SUPPORT_ANDROID_PRELINK_TAGS*/
 };
 

@@ -14,4 +14,3 @@ export PREV_LD_LIBRARY_PATH=$LD_LIBRARY_PATH
 export PREV_PATH=$PATH
 
 gnome-terminal -t "Wrapper: $1" --disable-factory -x $2/process_wrapper_gdb.sh "$@"
-

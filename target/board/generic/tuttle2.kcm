@@ -1,7 +1,7 @@
-[type=QWERTY]                                           
-                                                        
+[type=QWERTY]
+
 # keycode       display number  base    caps    fn      caps_fn
-                                                        
+
 A               'A'     '%'     'a'     'A'     '%'     0x00
 B               'B'     '='     'b'     'B'     '='     0x00
 C               'C'     '8'     'c'     'C'     '8'     0x00E7
@@ -28,15 +28,15 @@ W               'W'     '1'     'w'     'W'     '1'     0x00
 X               'X'     '7'     'x'     'X'     '7'     0xEF00
 Y               'Y'     '!'     'y'     'Y'     '!'     0x00A1
 Z               'Z'     '#'     'z'     'Z'     '#'     0x00
-                                                        
+
 COMMA           ','     ','     ','     ';'     ';'     '|'
 PERIOD          '.'     '.'     '.'     ':'     ':'     0x2026
 AT              '@'     '0'     '@'     '0'     '0'     0x2022
 SLASH           '/'     '/'     '/'     '?'     '?'     '\'
-                                                        
+
 SPACE           0x20    0x20    0x20    0x20    0xEF01  0xEF01
-ENTER         0xa     0xa     0xa     0xa     0xa     0xa
-                                                        
+ENTER           0xa     0xa     0xa     0xa     0xa     0xa
+
 # on pc keyboards
 TAB             0x9     0x9     0x9     0x9     0x9     0x9
 0               '0'     '0'     '0'     ')'     ')'     ')'
@@ -49,7 +49,7 @@ TAB             0x9     0x9     0x9     0x9     0x9     0x9
 7               '7'     '7'     '7'     '&'     '&'     '&'
 8               '8'     '8'     '8'     '*'     '*'     '*'
 9               '9'     '9'     '9'     '('     '('     '('
-                                                        
+
 GRAVE           '`'     '`'     '`'     '~'     '`'     '~'
 MINUS           '-'     '-'     '-'     '_'     '-'     '_'
 EQUALS          '='     '='     '='     '+'     '='     '+'
@@ -61,6 +61,3 @@ APOSTROPHE      '''     '''     '''     '"'     '''     '"'
 STAR            '*'     '*'     '*'     '*'     '*'     '*'
 POUND           '#'     '#'     '#'     '#'     '#'     '#'
 PLUS            '+'     '+'     '+'     '+'     '+'     '+'
-                                                        
-                                                        
-                                                        

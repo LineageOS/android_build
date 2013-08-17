@@ -16,7 +16,6 @@ These test keys are used strictly in development, and should never be assumed
 to convey any sort of validity.  When $BUILD_SECURE=true, the code should not
 honor these keys in any context.
 
-
 signing using the openssl commandline (for boot/system images)
 --------------------------------------------------------------
 

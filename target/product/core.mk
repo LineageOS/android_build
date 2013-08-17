@@ -79,4 +79,3 @@ ifeq ($(WITH_HOST_DALVIK),true)
         core-hostdex \
         libjavacore-host
 endif
-

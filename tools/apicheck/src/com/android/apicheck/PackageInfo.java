@@ -22,30 +22,30 @@ public class PackageInfo {
     private HashMap<String, ClassInfo> mClasses;
     private boolean mExistsInBoth;
     private SourcePositionInfo mPosition;
-    
+
     public PackageInfo(String name, SourcePositionInfo position) {
         mName = name;
         mClasses = new HashMap<String, ClassInfo>();
         mExistsInBoth = false;
         mPosition = position;
     }
-    
+
     public void addClass(ClassInfo cl) {
         mClasses.put(cl.name() , cl);
     }
-    
+
     public HashMap<String, ClassInfo> allClasses() {
         return mClasses;
     }
-    
+
     public String name() {
         return mName;
     }
-    
+
     public SourcePositionInfo position() {
         return mPosition;
     }
-    
+
     public boolean isConsistent(PackageInfo pInfo) {
         mExistsInBoth = true;
         pInfo.mExistsInBoth = true;
@@ -71,7 +71,7 @@ public class PackageInfo {
         }
         return consistent;
     }
-    
+
     public boolean isInBoth() {
         return mExistsInBoth;
     }

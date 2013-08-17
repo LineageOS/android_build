@@ -182,7 +182,6 @@ void ZipFile::discardEntries(void)
     mEntries.clear();
 }
 
-
 /*
  * Find the central directory and read the contents.
  *
@@ -318,7 +317,6 @@ status_t ZipFile::readCentralDir(void)
         mEntries.add(pEntry);
     }
 
-
     /*
      * If all went well, we should now be back at the EOCD.
      */
@@ -341,7 +339,6 @@ bail:
     delete[] buf;
     return result;
 }
-
 
 /*
  * Add a new file to the archive.
@@ -1095,7 +1092,6 @@ status_t ZipFile::filemove(FILE* fp, off_t dst, off_t src, size_t n)
     return NO_ERROR;
 }
 
-
 /*
  * Get the modification time from a file descriptor.
  */
@@ -1135,7 +1131,6 @@ int ZipFile::getZipFd(void) const
     return fd;
 }
 #endif
-
 
 #if 0
 /*
@@ -1203,7 +1198,6 @@ bail:
     free(buf);
     return NULL;
 }
-
 
 /*
  * ===========================================================================
@@ -1294,4 +1288,3 @@ void ZipFile::EndOfCentralDir::dump(void) const
     LOGD("  centDirSize=%lu centDirOff=%lu commentLen=%u\n",
         mCentralDirSize, mCentralDirOffset, mCommentLen);
 }
-

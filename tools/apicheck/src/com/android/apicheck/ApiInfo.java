@@ -18,10 +18,10 @@ package com.android.apicheck;
 import java.util.*;
 
 public class ApiInfo {
-  
+
     private HashMap<String, PackageInfo> mPackages;
     private HashMap<String, ClassInfo> mAllClasses;
-    
+
     public ApiInfo() {
         mPackages = new HashMap<String, PackageInfo>();
         mAllClasses = new HashMap<String, ClassInfo>();
@@ -36,7 +36,7 @@ public class ApiInfo {
             c.resolveInterfaces(this);
         }
     }
-    
+
     public boolean isConsistent(ApiInfo otherApi) {
         resolveInterfaces();
         boolean consistent = true;
@@ -60,15 +60,15 @@ public class ApiInfo {
         }
         return consistent;
     }
-    
+
     public HashMap<String, PackageInfo> getPackages() {
         return mPackages;
     }
-    
+
     public void addPackage(PackageInfo pInfo) {
         // track the set of organized packages in the API
         mPackages.put(pInfo.name(), pInfo);
-        
+
         // accumulate a direct map of all the classes in the API
         for (ClassInfo cl: pInfo.allClasses().values()) {
             mAllClasses.put(cl.qualifiedName(), cl);

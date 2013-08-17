@@ -14,7 +14,7 @@ int get_options(int argc, char **argv,
                 char ***defaults,
                 int *num_defaults,
                 int *verbose,
-				char **mapfile,
+                char **mapfile,
                 char **output,
                 char **prelinkmap);
 

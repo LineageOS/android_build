@@ -37,4 +37,3 @@ On most systems it is ignored, but on MinGW/Cygwin it allows "cp foo bar"
 to work when what is actually meant is "cp foo.exe bar.exe".  Unlike the
 default Cygwin cp, "acp foo bar" will not find foo.exe unless you add
 the "-e" flag, avoiding potential ambiguity.
-

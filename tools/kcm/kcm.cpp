@@ -287,7 +287,6 @@ is_whitespace(const char* p)
     return 1;
 }
 
-
 static int
 parse_keycode(const char* filename, int lineno, char* str, int* value)
 {
@@ -418,4 +417,3 @@ write_kr(int fd, const KeyRecord& kr)
 
     return write(fd, &wr, sizeof(WrittenRecord));
 }
-

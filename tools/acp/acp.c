@@ -32,7 +32,6 @@
 
 #define FSSEP '/'       /* filename separator char */
 
-
 /*
  * Process the command-line file arguments.
  *
@@ -249,4 +248,3 @@ int main(int argc, char* const argv[])
     DBUG(("EXIT: %d\n", retVal));
     return retVal;
 }
-

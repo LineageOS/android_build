@@ -33,19 +33,19 @@ int main(int argc, char **argv)
 {
     char **lookup_dirs = NULL;
     int num_lookup_dirs;
-	int print_info;
-	int list_needed_libs;
+    int print_info;
+    int list_needed_libs;
 
-    /* Do not issue INFO() statements before you call get_options() to set 
+    /* Do not issue INFO() statements before you call get_options() to set
        the verbose flag as necessary.
     */
 
     int first = get_options(argc, argv,
-							&list_needed_libs,
-							&print_info,
-                            &lookup_dirs,
-                            &num_lookup_dirs,
-                            &verbose_flag);
+        &list_needed_libs,
+        &print_info,
+        &lookup_dirs,
+        &num_lookup_dirs,
+        &verbose_flag);
 
     if (first == argc) {
         print_help();
@@ -56,12 +56,11 @@ int main(int argc, char **argv)
     FAILIF (elf_version(EV_CURRENT) == EV_NONE, "libelf is out of date!\n");
 
     /* List symbol dependencies... */
-    lsd(&argv[first], argc - first, 
-		list_needed_libs, print_info, 
-		lookup_dirs, num_lookup_dirs);
+    lsd(&argv[first], argc - first,
+    list_needed_libs, print_info,
+    lookup_dirs, num_lookup_dirs);
 
     FREE(lookup_dirs);
 
     return 0;
-} 
-
+}

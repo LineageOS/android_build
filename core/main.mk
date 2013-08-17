@@ -101,7 +101,6 @@ $(warning ************************************************************)
 $(error Directory names containing spaces not supported)
 endif
 
-
 # Check for the correct version of java
 java_version := $(shell java -version 2>&1 | head -n 1 | grep '[ "]1\.6[\. "$$]')
 ifeq ($(strip $(java_version)),)
@@ -185,7 +184,6 @@ is_sdk_build :=
 ifneq ($(filter sdk win_sdk sdk_addon,$(MAKECMDGOALS)),)
 is_sdk_build := true
 endif
-
 
 ## user/userdebug ##
 
@@ -330,7 +328,6 @@ define should-install-to-system
 $(if $(filter samples tests,$(1)),,true)
 endef
 endif
-
 
 # If they only used the modifier goals (showcommands, checkbuild), we'll actually
 # build the default target.
@@ -610,7 +607,6 @@ ifdef is_sdk_build
               $(filter-out $(target_gnu_MODULES),$(modules_to_install))
 endif
 
-
 # build/core/Makefile contains extra stuff that we don't want to pollute this
 # top-level makefile with.  It expects that ALL_DEFAULT_INSTALLED_MODULES
 # contains everything that's built during the current make, but it also further
@@ -738,7 +734,6 @@ else # TARGET_BUILD_APPS
 droid: droidcore dist_libraries
 
 endif
-
 
 .PHONY: droid tests
 tests: droidcore

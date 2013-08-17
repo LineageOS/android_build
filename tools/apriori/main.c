@@ -37,30 +37,29 @@ static off_t s_addr_increment;
 static void report_library_size_in_memory(const char *name, off_t fsize)
 {
     ASSERT(s_next_link_addr != -1UL);
-	INFO("Setting next link address (current is at 0x%08x):\n",
+    INFO("Setting next link address (current is at 0x%08x):\n",
          s_next_link_addr);
-	if (s_addr_increment) {
-		FAILIF(s_addr_increment < fsize,
-			   "Command-line-specified address increment of 0x%08llx (%lld) "
-               "less than file [%s]'s size of %lld bytes!\n",
-			   s_addr_increment, s_addr_increment, name, fsize);
-		FAILIF(s_next_link_addr % 4096,
-			   "User-provided address increment 0x%08lx "
-               "is not page-aligned!\n",
-			   s_addr_increment);
-		INFO("\tignoring file size, adjusting by address increment.\n");
-		s_next_link_addr += s_addr_increment;
-	}
-	else {
-		INFO("\tuser address increment is zero, adjusting by file size.\n");
-		s_next_link_addr += fsize;
-		s_next_link_addr &= ~(4096 - 1);
-	}
-	INFO("\t[%s] file size 0x%08lx\n",
-		 name,
-		 fsize);
-	INFO("\tnext prelink address: 0x%08x\n", s_next_link_addr);
-	ASSERT(!(s_next_link_addr % 4096)); /* New address must be page-aligned */
+    if (s_addr_increment) {
+        FAILIF(s_addr_increment < fsize,
+        "Command-line-specified address increment of 0x%08llx (%lld) "
+        "less than file [%s]'s size of %lld bytes!\n",
+        s_addr_increment, s_addr_increment, name, fsize);
+        FAILIF(s_next_link_addr % 4096,
+        "User-provided address increment 0x%08lx "
+        "is not page-aligned!\n",
+        s_addr_increment);
+        INFO("\tignoring file size, adjusting by address increment.\n");
+        s_next_link_addr += s_addr_increment;
+    } else {
+        INFO("\tuser address increment is zero, adjusting by file size.\n");
+        s_next_link_addr += fsize;
+        s_next_link_addr &= ~(4096 - 1);
+    }
+    INFO("\t[%s] file size 0x%08lx\n",
+    name,
+    fsize);
+    INFO("\tnext prelink address: 0x%08x\n", s_next_link_addr);
+    ASSERT(!(s_next_link_addr % 4096)); /* New address must be page-aligned */
 }
 
 static unsigned get_next_link_address(const char *name) {
@@ -73,8 +72,8 @@ int main(int argc, char **argv) {
     */
 
     char **lookup_dirs, **default_libs;
-	char *mapfile, *output, *prelinkmap;
-    int start_addr, inc_addr, locals_only, num_lookup_dirs, 
+    char *mapfile, *output, *prelinkmap;
+    int start_addr, inc_addr, locals_only, num_lookup_dirs,
         num_default_libs, dry_run;
     int first = get_options(argc, argv,
                             &start_addr, &inc_addr, &locals_only,
@@ -83,7 +82,7 @@ int main(int argc, char **argv) {
                             &lookup_dirs, &num_lookup_dirs,
                             &default_libs, &num_default_libs,
                             &verbose_flag,
-							&mapfile,
+                            &mapfile,
                             &output,
                             &prelinkmap);
 
@@ -174,13 +173,13 @@ int main(int argc, char **argv) {
     /* Check to see whether the ELF library is current. */
     FAILIF (elf_version(EV_CURRENT) == EV_NONE, "libelf is out of date!\n");
 
-	if (inc_addr < 0) {
+        if (inc_addr < 0) {
         if (!locals_only)
             PRINT("User has not provided an increment address, "
                   "will use library size to calculate successive "
                   "prelink addresses.\n");
         inc_addr = 0;
-	}
+        }
 
     void (*func_report_library_size_in_memory)(const char *name, off_t fsize);
     unsigned (*func_get_next_link_address)(const char *name);
@@ -208,22 +207,22 @@ int main(int argc, char **argv) {
             dry_run,
             lookup_dirs, num_lookup_dirs,
             default_libs, num_default_libs,
-			mapfile);
+            mapfile);
 
-	FREEIF(mapfile);
+    FREEIF(mapfile);
     FREEIF(output);
-	if (lookup_dirs) {
-		ASSERT(num_lookup_dirs);
-		while (num_lookup_dirs--)
-			FREE(lookup_dirs[num_lookup_dirs]);
-		FREE(lookup_dirs);
-	}
-	if (default_libs) {
-		ASSERT(num_default_libs);
-		while (num_default_libs--)
-			FREE(default_libs[num_default_libs]);
-		FREE(default_libs);
-	}
+    if (lookup_dirs) {
+        ASSERT(num_lookup_dirs);
+    while (num_lookup_dirs--)
+        FREE(lookup_dirs[num_lookup_dirs]);
+        FREE(lookup_dirs);
+    }
+    if (default_libs) {
+        ASSERT(num_default_libs);
+    while (num_default_libs--)
+        FREE(default_libs[num_default_libs]);
+        FREE(default_libs);
+    }
 
     return 0;
 }

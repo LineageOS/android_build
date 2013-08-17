@@ -19,16 +19,16 @@ package com.android.apicheck;
 public class ParameterInfo {
     private String mType;
     private String mName;
-    
+
     public ParameterInfo(String type, String name) {
         mType = type;
         mName = name;
     }
-    
+
     public String getType() {
         return mType;
     }
-    
+
     public String getName() {
         return mName;
     }

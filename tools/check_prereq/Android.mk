@@ -27,4 +27,3 @@ LOCAL_STATIC_LIBRARIES += libcutils libc
 include $(BUILD_EXECUTABLE)
 
 endif  # !TARGET_SIMULATOR
-

@@ -17,8 +17,7 @@
 package com.android.apicheck;
 
 public interface AbstractMethodInfo {
-  
+
     public void addException(String exec);
     public void addParameter(ParameterInfo p);
-
 }

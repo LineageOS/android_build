@@ -17,4 +17,3 @@ LOCAL_C_INCLUDES := build/libs/host/include
 LOCAL_MODULE := atree
 
 include $(BUILD_HOST_EXECUTABLE)
-

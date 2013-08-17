@@ -21,4 +21,3 @@ LOCAL_SRC_FILES := \
 LOCAL_MODULE := icudata
 
 include $(BUILD_HOST_EXECUTABLE)
-

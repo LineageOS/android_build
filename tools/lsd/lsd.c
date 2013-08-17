@@ -25,7 +25,7 @@ typedef struct {
     Elf_Data *data;
 } section_info_t;
 
-typedef struct next_export_t { 
+typedef struct next_export_t {
     source_t *source;
     int next_idx;
 } next_export_t;
@@ -51,32 +51,32 @@ struct source_t {
     int num_relocations; /* number of relocs (<= relocations_size) */
     int relocations_size; /* sice of array -- NOT number of relocs! */
 
-	/* satisfied_execs: array containing pointers to the libraries or 
-	   executables that this executable satisfies symbol references for. */
-	source_t **satisfied_execs;
+    /* satisfied_execs: array containing pointers to the libraries or
+    executables that this executable satisfies symbol references for. */
+    source_t **satisfied_execs;
     int num_satisfied_execs;
     int satisfied_execs_size;
 
-    /* satisfied: array is parallel to symbol table; for each undefined symbol 
-       in that array, we maintain a flag stating whether that symbol has been 
+    /* satisfied: array is parallel to symbol table; for each undefined symbol
+       in that array, we maintain a flag stating whether that symbol has been
        satisfied, and if so, by which library.  This applies both to executable
        files and libraries.
     */
     source_t **satisfied;
 
-    /* exports: array is parallel to symbol table; for each global symbol 
-       in that array, we maintain a flag stating whether that symbol satisfies 
+    /* exports: array is parallel to symbol table; for each global symbol
+       in that array, we maintain a flag stating whether that symbol satisfies
        a dependency in some other file.  num_syms is the length of the exports
        array, as well as the satisfied array. This applied to libraries only.
 
-       next_exports:  this is a bit tricky.  We use this field to maintain a 
-       linked list of source_t for each global symbol of a shared library. 
+       next_exports:  this is a bit tricky.  We use this field to maintain a
+       linked list of source_t for each global symbol of a shared library.
        For a shared library's global symbol at index N has the property that
        exports[N] is the head of a linked list (threaded through next_export)
-       of all source_t that this symbol resolves a reference to.  For example, 
-       if symbol printf has index 1000 in libc.so, and an executable A and 
+       of all source_t that this symbol resolves a reference to.  For example,
+       if symbol printf has index 1000 in libc.so, and an executable A and
        library L use printf, then the source_t entry corresponding to libc.so
-       will have exports[1000] be a linked list that contains the nodes for 
+       will have exports[1000] be a linked list that contains the nodes for
        application A and library L.
     */
 
@@ -101,15 +101,15 @@ struct source_t {
 
 static source_t *sources = NULL;
 
-static char * find_file(const char *libname, 
-                        char **lib_lookup_dirs, 
+static char * find_file(const char *libname,
+                        char **lib_lookup_dirs,
                         int num_lib_lookup_dirs);
 
 static inline source_t* find_source(const char *name,
-                                    char **lib_lookup_dirs, 
+                                    char **lib_lookup_dirs,
                                     int num_lib_lookup_dirs) {
     source_t *trav = sources;
-	char *full = find_file(name, lib_lookup_dirs, num_lib_lookup_dirs);
+    char *full = find_file(name, lib_lookup_dirs, num_lib_lookup_dirs);
     FAILIF(full == NULL, "Cannot construct full path for file [%s]!\n", name);
     while (trav) {
         if (!strcmp(trav->name, full))
@@ -134,9 +134,9 @@ static source_t* init_source(char *full_path) {
 
     INFO("Opening %s...\n", full_path);
     source->elf_fd = open(full_path, O_RDONLY);
-    FAILIF(source->elf_fd < 0, "open(%s): %s (%d)\n", 
+    FAILIF(source->elf_fd < 0, "open(%s): %s (%d)\n",
            full_path, 
-           strerror(errno), 
+           strerror(errno),
            errno);
     INFO("Calling elf_begin(%s)...\n", full_path);
     source->elf = elf_begin(source->elf_fd, ELF_C_READ, NULL);
@@ -150,19 +150,19 @@ static source_t* init_source(char *full_path) {
 
     /* Make sure this is a shared library or an executable. */
     {
-        INFO("Making sure %s is a shared library or an executable...\n", 
+        INFO("Making sure %s is a shared library or an executable...\n",
              full_path);
         FAILIF_LIBELF(0 == gelf_getehdr(source->elf, &source->elf_hdr), gelf_getehdr);
         FAILIF(source->elf_hdr.e_type != ET_DYN && 
                source->elf_hdr.e_type != ET_EXEC,
-               "%s must be a shared library (elf type is %d, expecting %d).\n", 
+               "%s must be a shared library (elf type is %d, expecting %d).\n",
                full_path,
-               source->elf_hdr.e_type, 
+               source->elf_hdr.e_type,
                ET_DYN);
     }
 
     /* Get the index of the section-header-strings-table section. */
-    FAILIF_LIBELF(elf_getshstrndx (source->elf, &source->shstrndx) < 0, 
+    FAILIF_LIBELF(elf_getshstrndx (source->elf, &source->shstrndx) < 0,
                   elf_getshstrndx);
 
     FAILIF_LIBELF(elf_getshnum (source->elf, &source->shnum) < 0, elf_getshnum);
@@ -241,22 +241,22 @@ static source_t* init_source(char *full_path) {
            source->hash.shdr.sh_link,
            elf_ndxscn(scn));
 
-    /* Now, find out how many symbols we have and allocate the array of 
+    /* Now, find out how many symbols we have and allocate the array of
        satisfied symbols.
 
-       NOTE: We don't count the number of undefined symbols here; we will 
-       iterate over the symbol table later, and count them then, when it is 
-       more convenient. 
+       NOTE: We don't count the number of undefined symbols here; we will
+       iterate over the symbol table later, and count them then, when it is
+       more convenient.
     */
-    size_t symsize = gelf_fsize (source->elf, 
-                                 ELF_T_SYM, 
+    size_t symsize = gelf_fsize (source->elf,
+                                 ELF_T_SYM,
                                  1, source->elf_hdr.e_version);
     ASSERT(symsize);
 
     source->num_syms = source->symtab.data->d_size / symsize;
-    source->satisfied = (source_t **)CALLOC(source->num_syms, 
+    source->satisfied = (source_t **)CALLOC(source->num_syms,
                                             sizeof(source_t *));
-    source->exports = (source_t **)CALLOC(source->num_syms, 
+    source->exports = (source_t **)CALLOC(source->num_syms,
                                           sizeof(next_export_t));
 
     source->num_exported = 0;
@@ -272,10 +272,10 @@ static void destroy_source(source_t *source) {
     FREE(source->satisfied_execs);
     FREE(source->satisfied);
     FREE(source->exports);
-    FREE(source->next_export);    
+    FREE(source->next_export);
     FREE(source->lib_deps); /* list of library dependencies */
     FAILIF_LIBELF(elf_end(source->elf), elf_end);
-    FAILIF(close(source->elf_fd) < 0, "Could not close file %s: %s (%d)!\n", 
+    FAILIF(close(source->elf_fd) < 0, "Could not close file %s: %s (%d)!\n",
            source->name, strerror(errno), errno);
     FREE(source->name);
     FREE(source);
@@ -283,16 +283,16 @@ static void destroy_source(source_t *source) {
 
 static void print_needed_libs(source_t *source)
 {
-	size_t idx;
-	for (idx = 0; idx < source->num_lib_deps; idx++) {
-		PRINT("%s:%s\n", 
-			  source->name, 
-			  source->lib_deps[idx]->name);
-	}
+    size_t idx;
+    for (idx = 0; idx < source->num_lib_deps; idx++) {
+        PRINT("%s:%s\n",
+        source->name,
+        source->lib_deps[idx]->name);
+    }
 }
 
 static int is_symbol_imported(source_t *source,
-                              GElf_Sym *sym, 
+                              GElf_Sym *sym,
                               size_t symidx)
 {
     const char *symname = elf_strptr(source->elf,
@@ -300,7 +300,7 @@ static int is_symbol_imported(source_t *source,
                                      sym->st_name);
 
     /* A symbol is imported by an executable or a library if it is undefined
-       and is either global or weak. There is an additional case for 
+       and is either global or weak. There is an additional case for
        executables that we will check below. */
     if (sym->st_shndx == SHN_UNDEF &&
         (GELF_ST_BIND(sym->st_info) == STB_GLOBAL ||
@@ -312,8 +312,8 @@ static int is_symbol_imported(source_t *source,
     }
 
 #ifdef ARM_SPECIFIC_HACKS
-    /* A symbol is imported by an executable if is marked as an undefined 
-       symbol--this is standard to all ELF formats.  Alternatively, according 
+    /* A symbol is imported by an executable if is marked as an undefined
+       symbol--this is standard to all ELF formats.  Alternatively, according
        to the ARM specifications, a symbol in a BSS section that is also marked
        by an R_ARM_COPY relocation is also imported. */
 
@@ -323,7 +323,7 @@ static int is_symbol_imported(source_t *source,
         return 0;
     }
 
-    /* Is the symbol in the BSS section, and is there a COPY relocation on 
+    /* Is the symbol in the BSS section, and is there a COPY relocation on
        that symbol? */
     INFO("*** [%s:%s] checking further to see if symbol is imported.\n",
          source->name, symname);
@@ -338,7 +338,7 @@ static int is_symbol_imported(source_t *source,
                                        source->shstrndx,
                                        shdr->sh_name)))
         {
-            /* Is there an R_ARM_COPY relocation on this symbol?  Iterate 
+            /* Is there an R_ARM_COPY relocation on this symbol?  Iterate
                over the list of relocation sections and scan each section for
                an entry that matches the symbol. */
             size_t idx;
@@ -357,8 +357,8 @@ static int is_symbol_imported(source_t *source,
                     if (reloc->shdr.sh_type == SHT_REL) {
                         for (newidx = relidx = 0; relidx < nrels; ++relidx) {
                             GElf_Rel rel_mem;
-                            FAILIF_LIBELF(gelf_getrel (reloc->data, 
-                                                       relidx, 
+                            FAILIF_LIBELF(gelf_getrel (reloc->data,
+                                                       relidx,
                                                        &rel_mem) == NULL,
                                           gelf_getrel);
                             if (GELF_R_TYPE(rel_mem.r_info) == R_ARM_COPY &&
@@ -374,8 +374,8 @@ static int is_symbol_imported(source_t *source,
                     } else {
                         for (newidx = relidx = 0; relidx < nrels; ++relidx) {
                             GElf_Rela rel_mem;
-                            FAILIF_LIBELF(gelf_getrela (reloc->data, 
-                                                        relidx, 
+                            FAILIF_LIBELF(gelf_getrela (reloc->data,
+                                                        relidx,
                                                         &rel_mem) == NULL,
                                           gelf_getrela);
                             if (GELF_R_TYPE(rel_mem.r_info) == R_ARM_COPY &&
@@ -388,7 +388,7 @@ static int is_symbol_imported(source_t *source,
                                 return 1;
                             }
                         } /* for each rela entry... */
-                    } /* if rel else rela */
+                    }     /* if rel else rela */
                 }
             }
         }
@@ -399,32 +399,32 @@ static int is_symbol_imported(source_t *source,
 }
 
 static void resolve(source_t *source) {
-    /* Iterate the symbol table.  For each undefined symbol, scan the 
-       list of dependencies till we find a global symbol in one of them that 
-       satisfies the undefined reference.  At this point, we update both the 
-       satisfied[] array of the sources entry, as well as the exports array of 
+    /* Iterate the symbol table.  For each undefined symbol, scan the
+       list of dependencies till we find a global symbol in one of them that
+       satisfies the undefined reference.  At this point, we update both the
+       satisfied[] array of the sources entry, as well as the exports array of
        the dependency where we found the match.
     */
 
     GElf_Sym *sym, sym_mem;
     size_t symidx;
     for (symidx = 0; symidx < source->num_syms; symidx++) {
-        sym = gelf_getsymshndx(source->symtab.data, 
+        sym = gelf_getsymshndx(source->symtab.data,
                                NULL,
                                symidx,
                                &sym_mem,
                                NULL);
         FAILIF_LIBELF(NULL == sym, gelf_getsymshndx);
-        if (is_symbol_imported(source, sym, symidx)) 
-		{
-            /* This is an undefined symbol.  Go over the list of libraries 
+        if (is_symbol_imported(source, sym, symidx))
+        {
+            /* This is an undefined symbol.  Go over the list of libraries
                and look it up. */
             size_t libidx;
-			int found = 0;
-			source_t *last_found = NULL;
-			const char *symname = elf_strptr(source->elf,
-											 elf_ndxscn(source->strtab.scn),
-											 sym->st_name);
+            int found = 0;
+            source_t *last_found = NULL;
+            const char *symname = elf_strptr(source->elf,
+            elf_ndxscn(source->strtab.scn),
+            sym->st_name);
             for (libidx = 0; libidx < source->num_lib_deps; libidx++) {
                 source_t *lib = source->lib_deps[libidx];
                 int lib_symidx = hash_lookup(lib->elf,
@@ -434,27 +434,27 @@ static void resolve(source_t *source) {
                                              symname);
                 if (STN_UNDEF != lib_symidx)
                 {
-					/* We found the symbol--now check to see if it is global 
-					   or weak.  If this is the case, then the symbol satisfies
-					   the dependency. */
-					GElf_Sym *lib_sym, lib_sym_mem;
-					lib_sym = gelf_getsymshndx(lib->symtab.data, 
-											   NULL,
-											   lib_symidx,
-											   &lib_sym_mem,
-											   NULL);
-					FAILIF_LIBELF(NULL == lib_sym, gelf_getsymshndx);
+            /* We found the symbol--now check to see if it is global
+            or weak.  If this is the case, then the symbol satisfies
+            the dependency. */
+            GElf_Sym *lib_sym, lib_sym_mem;
+            lib_sym = gelf_getsymshndx(lib->symtab.data,
+            NULL,
+            lib_symidx,
+            &lib_sym_mem,
+            NULL);
+            FAILIF_LIBELF(NULL == lib_sym, gelf_getsymshndx);
 
-					if(lib_sym->st_shndx != STN_UNDEF &&
-					   (GELF_ST_BIND(lib_sym->st_info) == STB_GLOBAL ||
-						GELF_ST_BIND(lib_sym->st_info) == STB_WEAK))
-					{
-						/* We found the symbol! Update the satisfied array at this
-						   index location. */
-						source->satisfied[symidx] = lib;
-						/* Now, link this structure into the linked list 
-						   corresponding to the found symbol in the library's 
-						   global array. */
+            if(lib_sym->st_shndx != STN_UNDEF &&
+                (GELF_ST_BIND(lib_sym->st_info) == STB_GLOBAL ||
+                GELF_ST_BIND(lib_sym->st_info) == STB_WEAK))
+                {
+                /* We found the symbol! Update the satisfied array at this
+                index location. */
+                source->satisfied[symidx] = lib;
+                /* Now, link this structure into the linked list
+                corresponding to the found symbol in the library's
+                global array. */
                         if (source->num_next_export == source->next_export_size) {
                             source->next_export_size += 30;
                             source->next_export = 
@@ -470,31 +470,31 @@ static void resolve(source_t *source) {
                         lib->num_exported++;
 
                         INFO("[%s:%s (index %d)] satisfied by [%s] (index %d)\n",
-							 source->name,
-							 symname,
-							 symidx,
-							 lib->name,
-							 lib_symidx);
-						if (found) {
-							if (found == 1) {
-								found++;
-								ERROR("ERROR: multiple definitions found for [%s:%s]!\n",
-									  source->name, symname);
-								ERROR("\tthis definition     [%s]\n", lib->name);
-							}
-							ERROR("\tprevious definition [%s]\n", last_found->name);
-						}
+                        source->name,
+                        symname,
+                        symidx,
+                        lib->name,
+                        lib_symidx);
+                        if (found) {
+                            if (found == 1) {
+                                found++;
+                                    ERROR("ERROR: multiple definitions found for [%s:%s]!\n",
+                                    source->name, symname);
+                                    ERROR("\tthis definition     [%s]\n", lib->name);
+                            }
+                            ERROR("\tprevious definition [%s]\n", last_found->name);
+                        }
 
-						last_found = lib;
-						if (!found) found = 1;
-					}
+                        last_found = lib;
+                        if (!found) found = 1;
+                    }
                 }
             }
-			if(found == 0) {
-				ERROR("ERROR: could not find match for %s:%s.\n", 
-					  source->name, 
-					  symname);
-			}
+            if(found == 0) {
+                ERROR("ERROR: could not find match for %s:%s.\n",
+                source->name, 
+                symname);
+            }
         } /* if we found the symbol... */
     } /* for each symbol... */
 } /* resolve() */
@@ -509,10 +509,10 @@ static void print_used_symbols(source_t *source) {
 
     FILE *fp = fopen(filter, "w+");
     FAILIF(NULL == fp, 
-           "Can't open %s: %s (%d)\n", 
-           filter, 
+           "Can't open %s: %s (%d)\n",
+           filter,
            strerror(errno), errno);
-    
+
     /* Is anybody using the symbols defined in source? */
 
     if (source->num_exported > 0) {
@@ -524,7 +524,7 @@ static void print_used_symbols(source_t *source) {
         for (symidx = 0; symidx < source->num_syms; symidx++) {
             if (source->exports[symidx].source != NULL) {
                 GElf_Sym *sym, sym_mem;
-                sym = gelf_getsymshndx(source->symtab.data, 
+                sym = gelf_getsymshndx(source->symtab.data,
                                        NULL,
                                        symidx,
                                        &sym_mem,
@@ -557,7 +557,7 @@ static void print_used_symbols(source_t *source) {
     }
 #endif
 
-	fclose(fp);
+    fclose(fp);
     FREE(filter);
 }
 
@@ -571,7 +571,7 @@ static void print_symbol_references(source_t *source) {
 
     FILE *fp = fopen(filter, "w+");
     FAILIF(NULL == fp, 
-           "Can't open %s: %s (%d)\n", 
+           "Can't open %s: %s (%d)\n",
            filter, 
            strerror(errno), errno);
 
@@ -581,13 +581,13 @@ static void print_symbol_references(source_t *source) {
             if (source->exports[symidx].source != NULL) {
                 const char *symname;
                 GElf_Sym *sym, sym_mem;
-                sym = gelf_getsymshndx(source->symtab.data, 
+                sym = gelf_getsymshndx(source->symtab.data,
                                        NULL,
                                        symidx,
                                        &sym_mem,
                                        NULL);
                 FAILIF_LIBELF(NULL == sym, gelf_getsymshndx);
-                symname = elf_strptr(source->elf, 
+                symname = elf_strptr(source->elf,
                                      elf_ndxscn(source->strtab.scn),
                                      sym->st_name);
                 fprintf(fp, "%s\n", symname);
@@ -601,12 +601,12 @@ static void print_symbol_references(source_t *source) {
         }
     }
 
-	fclose(fp);
+    fclose(fp);
     FREE(filter);
 }
 
-static char * find_file(const char *libname, 
-                        char **lib_lookup_dirs, 
+static char * find_file(const char *libname,
+                        char **lib_lookup_dirs,
                         int num_lib_lookup_dirs) {
     if (libname[0] == '/') {
         /* This is an absolute path name--just return it. */
@@ -621,13 +621,13 @@ static char * find_file(const char *libname,
             return strdup(libname);
         } else {
             /* Iterate over all library paths.  For each path, append the file
-               name and see if there is a file at that place. If that fails, 
+               name and see if there is a file at that place. If that fails,
                bail out. */
 
             char *name;
             while (num_lib_lookup_dirs--) {
                 size_t lib_len = strlen(*lib_lookup_dirs);
-                /* one extra character for the slash, and another for the 
+                /* one extra character for the slash, and another for the
                    terminating NULL. */
                 name = (char *)MALLOC(lib_len + strlen(libname) + 2);
                 strcpy(name, *lib_lookup_dirs);
@@ -647,7 +647,7 @@ static char * find_file(const char *libname,
 }
 
 static source_t* process_library(const char *libname,
-                                 char **lib_lookup_dirs, 
+                                 char **lib_lookup_dirs,
                                  int num_lib_lookup_dirs) {
     source_t *source = find_source(libname, lib_lookup_dirs, num_lib_lookup_dirs);
     if (NULL == source) {
@@ -661,12 +661,12 @@ static source_t* process_library(const char *libname,
             GElf_Dyn *dyn, dyn_mem;
             size_t dynidx;
             size_t numdyn =
-            source->dynamic.shdr.sh_size / 
+            source->dynamic.shdr.sh_size /
             source->dynamic.shdr.sh_entsize;
 
             for (dynidx = 0; dynidx < numdyn; dynidx++) {
-                dyn = gelf_getdyn (source->dynamic.data, 
-                                   dynidx, 
+                dyn = gelf_getdyn (source->dynamic.data,
+                                   dynidx,
                                    &dyn_mem);
                 FAILIF_LIBELF(NULL == dyn, gelf_getdyn);
                 if (dyn->d_tag == DT_NEEDED) {
@@ -683,7 +683,7 @@ static source_t* process_library(const char *libname,
                     /* Tell dep that source depends on it. */
                     if (dep->num_satisfied_execs == dep->satisfied_execs_size) {
                         dep->satisfied_execs_size += 10;
-                        dep->satisfied_execs = 
+                        dep->satisfied_execs =
                             REALLOC(dep->satisfied_execs,
                                     dep->satisfied_execs_size *
                                     sizeof(source_t *));
@@ -693,7 +693,7 @@ static source_t* process_library(const char *libname,
                     /* Add the library to the dependency list. */
                     if (source->num_lib_deps == source->lib_deps_size) {
                         source->lib_deps_size += 10;
-                        source->lib_deps = REALLOC(source->lib_deps, 
+                        source->lib_deps = REALLOC(source->lib_deps,
                                                    source->lib_deps_size *
                                                    sizeof(source_t *));
                     }
@@ -707,9 +707,9 @@ static source_t* process_library(const char *libname,
 }
 
 void lsd(char **execs, int num_execs,
-		 int list_needed_libs,
-		 int print_info,
-         char **lib_lookup_dirs, int num_lib_lookup_dirs) {
+    int list_needed_libs,
+    int print_info,
+    char **lib_lookup_dirs, int num_lib_lookup_dirs) {
 
     source_t *source; /* for general usage */
     int input_idx;
@@ -723,18 +723,18 @@ void lsd(char **execs, int num_execs,
         /* Mark the source as an executable */
     } /* for each input executable... */
 
-	if (list_needed_libs) {
-		source = sources;
-		while (source) {
-			print_needed_libs(source);
-			source = source->next;
-		}
-	}
+    if (list_needed_libs) {
+        source = sources;
+        while (source) {
+            print_needed_libs(source);
+            source = source->next;
+        }
+    }
 
     /* Now, for each entry in the sources array, iterate its symbol table.  For
-       each undefined symbol, scan the list of dependencies till we find a 
-       global symbol in one of them that satisfies the undefined reference.  
-       At this point, we update both the satisfied[] array of the sources entry, 
+       each undefined symbol, scan the list of dependencies till we find a
+       global symbol in one of them that satisfies the undefined reference.
+       At this point, we update both the satisfied[] array of the sources entry,
        as well as the exports array of the dependency where we found the match.
     */
 
@@ -744,10 +744,10 @@ void lsd(char **execs, int num_execs,
         source = source->next;
     }
 
-    /* We are done!  Since the end result of our calculations is a set of 
-       symbols for each library that other libraries or executables link 
+    /* We are done!  Since the end result of our calculations is a set of
+       symbols for each library that other libraries or executables link
        against, we iterate over the set of libraries one last time, and for
-       each symbol that is marked as satisfying some dependence, we emit 
+       each symbol that is marked as satisfying some dependence, we emit
        a line with the symbol's name to a text file derived from the library's
        name by appending the suffix .syms to it. */
 
@@ -755,23 +755,22 @@ void lsd(char **execs, int num_execs,
     while (source) {
         /* If it's a library, print the results. */
         if (source->elf_hdr.e_type == ET_DYN) {
-			print_used_symbols(source);
-			if (print_info) 
-				print_symbol_references(source);
-		}
+            print_used_symbols(source);
+            if (print_info)
+                print_symbol_references(source);
+            }
         source = source->next;
     }
 
-	/* Free the resources--you can't do it in the loop above because function 
-	   print_symbol_references() accesses nodes other than the one being 
-	   iterated over.
-	 */
-	source = sources;
-	while (source) {
-		source_t *old = source;
-		source = source->next;
-		/* Destroy the evidence. */
-		destroy_source(old);
-	}
+    /* Free the resources--you can't do it in the loop above because function
+    print_symbol_references() accesses nodes other than the one being
+    iterated over.
+    */
+    source = sources;
+    while (source) {
+        source_t *old = source;
+        source = source->next;
+        /* Destroy the evidence. */
+        destroy_source(old);
+    }
 }
-

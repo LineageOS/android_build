@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include <ctype.h>
 
-#define NUM_COLS  (32)
+#define NUM_COLS (32)
 
 int dump_hex_buffer(FILE *s, void *b, size_t len, size_t elsize) {
     int num_nonprintable = 0;
@@ -35,4 +35,3 @@ int dump_hex_buffer(FILE *s, void *b, size_t len, size_t elsize) {
     if (i && (i % NUM_COLS)) fputs("\n", s);
     return num_nonprintable;
 }
-

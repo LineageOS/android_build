@@ -87,7 +87,6 @@ def Banner(msg):
   print "  ", msg
   print "-" * 70
 
-
 def GetCertSubject(cert):
   p = common.Run(["openssl", "x509", "-inform", "DER", "-text"],
                  stdin=subprocess.PIPE,
@@ -100,7 +99,6 @@ def GetCertSubject(cert):
     if line.startswith("Subject:"):
       return line[8:].strip()
   return "(unknown cert subject)"
-
 
 class CertDB(object):
   def __init__(self):
@@ -139,7 +137,6 @@ class CertDB(object):
 
 ALL_CERTS = CertDB()
 
-
 def ParseCertificate(data):
   """Parse a PEM-format certificate."""
   cert = []
@@ -153,7 +150,6 @@ def ParseCertificate(data):
       save = True
   cert = "".join(cert).decode('base64')
   return cert
-
 
 def CertFromPKCS7(data, filename):
   """Read the cert out of a PKCS#7-format file (which is what is
@@ -178,7 +174,6 @@ def CertFromPKCS7(data, filename):
     return cert
   finally:
     Pop()
-
 
 class APK(object):
   def __init__(self, full_filename, filename):
@@ -237,7 +232,6 @@ class APK(object):
 
     if self.package is None:
       AddProblem("no package declaration")
-
 
 class TargetFiles(object):
   def __init__(self):
@@ -436,7 +430,6 @@ def main(argv):
     return 1
 
   return 0
-
 
 if __name__ == '__main__':
   try:

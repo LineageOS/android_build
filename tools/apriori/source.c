@@ -1,8 +1,8 @@
 #include <source.h>
 
 void find_section(source_t *source, Elf64_Addr address,
-                  Elf_Scn **scn, 
-                  GElf_Shdr *shdr, 
+                  Elf_Scn **scn,
+                  GElf_Shdr *shdr,
                   Elf_Data **data)
 {
     range_t *range = find_range(source->sorted_sections, address);

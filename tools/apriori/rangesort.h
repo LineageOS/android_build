@@ -27,7 +27,7 @@ range_list_t* init_range_list();
 void destroy_range_list(range_list_t *);
 
 /* Just adds a range to the list. We won't detect whether the range overlaps
-   other ranges or contains them, or is contained by them, till we call 
+   other ranges or contains them, or is contained by them, till we call
    sort_ranges(). */
 void add_unique_range_nosort(range_list_t *ranges, 
                              GElf_Off start, GElf_Off length, 
@@ -45,12 +45,12 @@ int get_num_ranges(const range_list_t *ranges);
 range_t *get_sorted_ranges(const range_list_t *ranges, int *num_ranges);
 GElf_Off get_last_address(const range_list_t *ranges);
 
-/* This returns a range_list_t handle that contains ranges composed of the 
-   adjacent ranges of the input range list.  The user data of each range in 
-   the range list is a structure of the type contiguous_range_info_t. 
-   This structure contains an array of pointers to copies of the original 
-   range_t structures comprising each new contiguous range, as well as the 
-   length of that array.  
+/* This returns a range_list_t handle that contains ranges composed of the
+   adjacent ranges of the input range list.  The user data of each range in
+   the range list is a structure of the type contiguous_range_info_t.
+   This structure contains an array of pointers to copies of the original
+   range_t structures comprising each new contiguous range, as well as the
+   length of that array.
 
    NOTE: The input range must be sorted!
 
@@ -58,10 +58,10 @@ GElf_Off get_last_address(const range_list_t *ranges);
    allocates as a result of calling get_contiguous_ranges().  Do not free that
    data yourself.
 
-   NOTE: the user data of the original range_t structures is simply copied, so 
-   be careful handling it. You can destroy the range_list_t with 
-   destroy_range_list() as usual.  On error, the function does not return--the 
-   program terminates. 
+   NOTE: the user data of the original range_t structures is simply copied, so
+   be careful handling it. You can destroy the range_list_t with
+   destroy_range_list() as usual.  On error, the function does not return--the
+   program terminates.
 
    NOTE: The returned range is not sorted.  You must call sort_ranges() if you
    need to.
@@ -74,7 +74,7 @@ typedef struct {
 
 range_list_t* get_contiguous_ranges(const range_list_t *);
 
-/* The function below takes in two range lists: r and s, and subtracts the 
+/* The function below takes in two range lists: r and s, and subtracts the
    ranges in s from those in r.  For example, if r and s are as follows:
 
    r = { [0, 10) }
@@ -82,18 +82,18 @@ range_list_t* get_contiguous_ranges(const range_list_t *);
 
    Then r - s is { [0, 3), [5, 7), [9, 10) }
 
-   NOTE: Both range lists must be sorted on input.  This is guarded by an 
+   NOTE: Both range lists must be sorted on input.  This is guarded by an
          assertion.
 
    NOTE: Range s must contain ranges, which are fully contained by the span of
          range r (the span being the interval between the start of the lowest
-         range in r, inclusive, and the end of the highest range in r, 
+         range in r, inclusive, and the end of the highest range in r,
          exclusive).
 
-   NOTE: In addition to the requirement above, range s must contain ranges, 
+   NOTE: In addition to the requirement above, range s must contain ranges,
          each of which is a subrange of one of the ranges of r.
 
-   NOTE: There is no user info associated with the resulting range. 
+   NOTE: There is no user info associated with the resulting range.
 
    NOTE: The resulting range is not sorted.
 

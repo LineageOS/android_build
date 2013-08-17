@@ -22,7 +22,7 @@ range_list_t* init_range_list(void) {
 #ifdef DEBUG
     ranges->is_sorted = 0;
 #endif
-    return ranges; 
+    return ranges;
 }
 
 void destroy_range_list(range_list_t *ranges) {
@@ -38,22 +38,22 @@ void destroy_range_list(range_list_t *ranges) {
 }
 
 static inline int CONTAINS(range_t *container, range_t *contained) {
-    return container->start <= contained->start && contained->length && 
-    (container->start + container->length > 
+    return container->start <= contained->start && contained->length &&
+    (container->start + container->length >
      contained->start + contained->length);
 }
 
 static inline int IN_RANGE(range_t *range, GElf_Off point) {
-    return 
-    range->start <= point && 
+    return
+    range->start <= point &&
     point < (range->start + range->length);
 }
 
 static inline int INTERSECT(range_t *left, range_t *right) {
-    return 
-    (IN_RANGE(left, right->start) && 
+    return
+    (IN_RANGE(left, right->start) &&
      IN_RANGE(right, left->start + left->length)) ||
-    (IN_RANGE(right, left->start) && 
+    (IN_RANGE(right, left->start) &&
      IN_RANGE(left, right->start + right->length));
 }
 
@@ -99,16 +99,16 @@ static int range_cmp(const void *l, const void *r) {
 }
 
 void add_unique_range_nosort(
-                            range_list_t *ranges, 
-                            GElf_Off start, 
-                            GElf_Off length, 
+                            range_list_t *ranges,
+                            GElf_Off start,
+                            GElf_Off length,
                             void *user,
                             void (*err_fn)(range_error_t, range_t *, range_t *),
-                            void (*user_dtor)(void * )) 
+                            void (*user_dtor)(void * ))
 {
     if (ranges->num_ranges == ranges->array_length) {
         ranges->array_length += PARALLEL_ARRAY_SIZE;
-        ranges->array = REALLOC(ranges->array, 
+        ranges->array = REALLOC(ranges->array,
                                 ranges->array_length*sizeof(range_t));
     }
     ranges->array[ranges->num_ranges].start  = start;
@@ -130,7 +130,7 @@ range_t *find_range(range_list_t *ranges, GElf_Off value) {
 #if 1
     int i;
     for (i = 0; i < ranges->num_ranges; i++) {
-        if (ranges->array[i].start <= value && 
+        if (ranges->array[i].start <= value &&
             value < ranges->array[i].start + ranges->array[i].length)
             return ranges->array + i;
     }
@@ -140,9 +140,9 @@ range_t *find_range(range_list_t *ranges, GElf_Off value) {
     range_t lookup;
     lookup.start = value;
     lookup.length = 0;
-    return 
-    (range_t *)bsearch(&lookup, 
-                       ranges->array, ranges->num_ranges, sizeof(range_t), 
+    return
+    (range_t *)bsearch(&lookup,
+                       ranges->array, ranges->num_ranges, sizeof(range_t),
                        range_cmp_for_search);
 #endif
 }
@@ -162,12 +162,12 @@ range_t *get_sorted_ranges(const range_list_t *ranges, int *num_ranges) {
 
 GElf_Off get_last_address(const range_list_t *ranges) {
     ASSERT(ranges->num_ranges);
-    return 
+    return
     ranges->array[ranges->num_ranges-1].start +
     ranges->array[ranges->num_ranges-1].length;
 }
 
-static void handle_range_error(range_error_t err, 
+static void handle_range_error(range_error_t err,
                                range_t *left, range_t *right) {
     switch (err) {
     case ERROR_CONTAINS:
@@ -195,14 +195,14 @@ static void destroy_contiguous_range_info(void *user) {
     FREE(info);
 }
 
-static void handle_contiguous_range_error(range_error_t err, 
-                                          range_t *left, 
+static void handle_contiguous_range_error(range_error_t err,
+                                          range_t *left,
                                           range_t *right)
 {
-    contiguous_range_info_t *left_data = 
+    contiguous_range_info_t *left_data =
         (contiguous_range_info_t *)left->user;
     ASSERT(left_data);
-    contiguous_range_info_t *right_data = 
+    contiguous_range_info_t *right_data =
         (contiguous_range_info_t *)right->user;
     ASSERT(right_data);
 
@@ -227,7 +227,7 @@ static void handle_contiguous_range_error(range_error_t err,
 range_list_t* get_contiguous_ranges(const range_list_t *input)
 {
     ASSERT(input);
-    FAILIF(!input->is_sorted, 
+    FAILIF(!input->is_sorted,
            "get_contiguous_ranges(): input range list is not sorted!\n");
 
     range_list_t* ret = init_range_list();
@@ -247,14 +247,14 @@ range_list_t* get_contiguous_ranges(const range_list_t *input)
             total_length += ranges[old_end_idx].length;
         }
 
-        contiguous_range_info_t *user = 
+        contiguous_range_info_t *user =
             (contiguous_range_info_t *)MALLOC(sizeof(contiguous_range_info_t));
         user->num_ranges = end_idx - start_idx;
         user->ranges = (range_t *)MALLOC(user->num_ranges * sizeof(range_t));
         int i;
         for (i = 0; i < end_idx - start_idx; i++)
             user->ranges[i] = ranges[start_idx + i];
-        add_unique_range_nosort(ret, 
+        add_unique_range_nosort(ret,
                                 ranges[start_idx].start,
                                 total_length,
                                 user,
@@ -297,7 +297,7 @@ range_list_t* subtract_ranges(const range_list_t *r, const range_list_t *s)
                      last_start,
                      s_ranges[s_idx].start);
                 add_unique_range_nosort(
-                    result, 
+                    result,
                     last_start,
                     s_ranges[s_idx].start - last_start,
                     NULL,
@@ -313,5 +313,3 @@ range_list_t* subtract_ranges(const range_list_t *r, const range_list_t *s)
 
     return result;
 }
-
-

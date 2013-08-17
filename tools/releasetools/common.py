@@ -42,13 +42,10 @@ OPTIONS.device_specific = None
 OPTIONS.extras = {}
 OPTIONS.info_dict = None
 
-
 # Values for "certificate" in apkcerts that mean special things.
 SPECIAL_CERT_STRINGS = ("PRESIGNED", "EXTERNAL")
 
-
 class ExternalError(RuntimeError): pass
-
 
 def Run(args, **kwargs):
   """Create and return a subprocess.Popen object, printing the command
@@ -56,7 +53,6 @@ def Run(args, **kwargs):
   if OPTIONS.verbose:
     print "  running: ", " ".join(args)
   return subprocess.Popen(args, **kwargs)
-
 
 def CloseInheritedPipes():
   """ Gmake in MAC OS has file descriptor (PIPE) leak. We close those fds
@@ -72,7 +68,6 @@ def CloseInheritedPipes():
           os.close(d)
     except OSError:
       pass
-
 
 def LoadInfoDict(zip):
   """Read and parse the META/misc_info.txt key/value pairs from the
@@ -172,7 +167,6 @@ def LoadRecoveryFSTab(zip):
     d[p.mount_point] = p
   return d
 
-
 def DumpInfoDict(d):
   for k, v in sorted(d.items()):
     print "%-25s = (%s) %s" % (k, type(v).__name__, v)
@@ -261,7 +255,6 @@ def BuildBootableImage(sourcedir):
 
   return data
 
-
 def AddRecovery(output_zip, info_dict):
   BuildAndAddBootableImage(os.path.join(OPTIONS.input_tmp, "RECOVERY"),
                            "recovery.img", output_zip, info_dict)
@@ -284,7 +277,6 @@ def UnzipTemp(filename, pattern=None):
     raise ExternalError("failed to unzip input target-files \"%s\"" %
                         (filename,))
   return tmp
-
 
 def GetKeyPasswords(keylist):
   """Given a list of keys, prompt the user to enter passwords for
@@ -315,7 +307,6 @@ def GetKeyPasswords(keylist):
   key_passwords = PasswordManager().GetPasswords(need_passwords)
   key_passwords.update(dict.fromkeys(no_passwords, None))
   return key_passwords
-
 
 def SignFile(input_name, output_name, key, password, align=None,
              whole_file=False):
@@ -361,7 +352,6 @@ def SignFile(input_name, output_name, key, password, align=None,
       raise ExternalError("zipalign failed: return code %s" % (p.returncode,))
     temp.close()
 
-
 def CheckSize(data, target, info_dict):
   """Check the data string passed against the max size limit, if
   any, for the given target.  Raise exception if the data is too big.
@@ -394,7 +384,6 @@ def CheckSize(data, target, info_dict):
   elif OPTIONS.verbose:
     print "  ", msg
 
-
 def ReadApkCerts(tf_zip):
   """Given a target_files ZipFile, parse the META/apkcerts.txt file
   and return a {package: cert} dict."""
@@ -416,7 +405,6 @@ def ReadApkCerts(tf_zip):
         raise ValueError("failed to parse line from apkcerts.txt:\n" + line)
   return certmap
 
-
 COMMON_DOCSTRING = """
   -p  (--path)  <dir>
       Prepend <dir>/bin to the list of places to search for binaries
@@ -436,11 +424,9 @@ COMMON_DOCSTRING = """
   -h  (--help)
       Display this usage message and exit.
 """
-
 def Usage(docstring):
   print docstring.rstrip("\n")
   print COMMON_DOCSTRING
-
 
 def ParseOptions(argv,
                  docstring,
@@ -486,14 +472,12 @@ def ParseOptions(argv,
 
   return args
 
-
 def Cleanup():
   for i in OPTIONS.tempfiles:
     if os.path.isdir(i):
       shutil.rmtree(i)
     else:
       os.remove(i)
-
 
 class PasswordManager(object):
   def __init__(self):
@@ -593,7 +577,6 @@ class PasswordManager(object):
         print "error reading password file: ", str(e)
     return result
 
-
 def ZipWriteStr(zip, filename, data, perms=0644):
   # use a fixed timestamp so the output is repeatable.
   zinfo = zipfile.ZipInfo(filename=filename,
@@ -601,7 +584,6 @@ def ZipWriteStr(zip, filename, data, perms=0644):
   zinfo.compress_type = zip.compression
   zinfo.external_attr = perms << 16
   zip.writestr(zinfo, data)
-
 
 class DeviceSpecificParams(object):
   module = None
@@ -736,13 +718,11 @@ class Difference(object):
     self.patch = diff
     return self.tf, self.sf, self.patch
 
-
   def GetPatch(self):
     """Return a tuple (target_file, source_file, patch_data).
     patch_data may be None if ComputePatch hasn't been called, or if
     computing the patch failed."""
     return self.tf, self.sf, self.patch
-
 
 def ComputeDifferences(diffs):
   """Call ComputePatch on all the Difference objects in 'diffs'."""
@@ -788,7 +768,6 @@ def ComputeDifferences(diffs):
     th.start()
   while threads:
     threads.pop().join()
-
 
 # map recovery.fstab's fs_types to mount/format "partition types"
 PARTITION_TYPES = { "yaffs2": "MTD", "mtd": "MTD",

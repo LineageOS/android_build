@@ -97,7 +97,6 @@ def GetApkCerts(tf_zip):
 
   return certmap
 
-
 def CheckAllApksSigned(input_tf_zip, apk_key_map):
   """Check that all the APKs we want to sign have keys specified, and
   error out if they don't."""
@@ -114,7 +113,6 @@ def CheckAllApksSigned(input_tf_zip, apk_key_map):
     print "empty string to not sign this apk)."
     sys.exit(1)
 
-
 def SignApk(data, keyname, pw):
   unsigned = tempfile.NamedTemporaryFile()
   unsigned.write(data)
@@ -129,7 +127,6 @@ def SignApk(data, keyname, pw):
   signed.close()
 
   return data
-
 
 def SignApks(input_tf_zip, output_tf_zip, apk_key_map, key_passwords):
   maxsize = max([len(os.path.basename(i.filename))
@@ -159,7 +156,6 @@ def SignApks(input_tf_zip, output_tf_zip, apk_key_map, key_passwords):
       # a non-APK file; copy it verbatim
       output_tf_zip.writestr(out_info, data)
 
-
 def EditTags(tags):
   """Given a string containing comma-separated tags, apply the edits
   specified in OPTIONS.tag_changes and return the updated string."""
@@ -170,7 +166,6 @@ def EditTags(tags):
     elif ch[0] == "+":
       tags.add(ch[1:])
   return ",".join(sorted(tags))
-
 
 def RewriteProps(data):
   output = []
@@ -196,7 +191,6 @@ def RewriteProps(data):
       print "     with: ", line
     output.append(line)
   return "\n".join(output) + "\n"
-
 
 def ReplaceOtaKeys(input_tf_zip, output_tf_zip):
   try:
@@ -242,7 +236,6 @@ def ReplaceOtaKeys(input_tf_zip, output_tf_zip):
   certs_zip.close()
   common.ZipWriteStr(output_tf_zip, "SYSTEM/etc/security/otacerts.zip",
                      tempfile.getvalue())
-
 
 def main(argv):
 
@@ -305,7 +298,6 @@ def main(argv):
   output_zip.close()
 
   print "done."
-
 
 if __name__ == '__main__':
   try:

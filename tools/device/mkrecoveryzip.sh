@@ -60,7 +60,6 @@ then
 fi
 done
 
-
 echo 'ui_print("Replacing stock recovery with ClockworkMod recovery...");' >> $UPDATER_SCRIPT
 
 echo 'delete("sbin/recovery");' >> $UPDATER_SCRIPT
@@ -79,7 +78,7 @@ do
         echo 'set_perm(0, 0, 0755, "'$(echo $file | sed s!\\./!/!g)'");' >> $UPDATER_SCRIPT
     fi
 done
-    
+
 for file in $SYMLINKS
 do
     echo 'symlink("'$(readlink $file)'", "'$(echo $file | sed s!\\./!/!g)'");' >> $UPDATER_SCRIPT

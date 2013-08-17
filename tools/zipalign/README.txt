@@ -32,4 +32,3 @@ By default, zipalign will not overwrite an existing output file.  With the
 "-f" flag, an existing file will be overwritten.
 
 You can use the "-c" flag to test whether a zip archive is properly aligned.
-

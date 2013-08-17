@@ -145,7 +145,6 @@ main(int argc, char* const* argv)
         return usage();
     }
 
-
 #if 0
     for (vector<string>::iterator it=g_listFiles.begin();
                                 it!=g_listFiles.end(); it++) {
@@ -181,9 +180,8 @@ main(int argc, char* const* argv)
     for (vector<FileRecord>::iterator it=files.begin();
                                 it!=files.end(); it++) {
         err |= locate(&(*it), g_inputBases);
-
     }
-    
+
     // expand the directories that we should copy into a list of files
     for (vector<FileRecord>::iterator it=files.begin();
                                 it!=files.end(); it++) {
@@ -191,6 +189,7 @@ main(int argc, char* const* argv)
             err |= list_dir(*it, excludes, &more);
         }
     }
+
     for (vector<FileRecord>::iterator it=more.begin();
                                 it!=more.end(); it++) {
         files.push_back(*it);

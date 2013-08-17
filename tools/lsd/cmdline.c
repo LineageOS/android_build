@@ -10,63 +10,63 @@ extern char *optarg;
 extern int optind, opterr, optopt;
 
 static struct option long_options[] = {
-	{"verbose", no_argument, 0, 'V'},
-	{"help", no_argument, 0, 'h'},
-	{"print-info", no_argument, 0, 'p'},
-	{"list-needed-libs", no_argument, 0, 'n'},
-	{"lookup",     required_argument, 0, 'L'},
-	{0, 0, 0, 0},
+    {"verbose", no_argument, 0, 'V'},
+    {"help", no_argument, 0, 'h'},
+    {"print-info", no_argument, 0, 'p'},
+    {"list-needed-libs", no_argument, 0, 'n'},
+    {"lookup", required_argument, 0, 'L'},
+    {0, 0, 0, 0},
 };
 
 /* This array must parallel long_options[] */
 static const char *descriptions[] = {
-	"print verbose output",
-	"print help screen",
-	"for each file, generate a listing of all dependencies that each symbol "
-	     "satisfies",
-	"print out a list of needed libraries",
-	"provide a directory for library lookup"
+    "print verbose output",
+    "print help screen",
+    "for each file, generate a listing of all dependencies that each symbol "
+    "satisfies",
+    "print out a list of needed libraries",
+    "provide a directory for library lookup"
 };
 
 void print_help(void)
 {
-    fprintf(stdout, 
-			"invokation:\n"
-			"\tlsd file1 [file2 file3 ... fileN] [-Ldir1 -Ldir2 ... -LdirN] "
-			"[-Vpn]\n"
-			"or\n"
-			"\tlsd -h\n\n");
-	fprintf(stdout, "options:\n");
-	struct option *opt = long_options;
-	const char **desc = descriptions;
-	while (opt->name) {
-		fprintf(stdout, "\t-%c\n"
-						"\t--%-15s: %s\n",
-				opt->val,
-				opt->name,
-				*desc);
-		opt++;
-		desc++;
-	}
+    fprintf(stdout,
+    "invokation:\n"
+    "\tlsd file1 [file2 file3 ... fileN] [-Ldir1 -Ldir2 ... -LdirN] "
+    "[-Vpn]\n"
+    "or\n"
+    "\tlsd -h\n\n");
+    fprintf(stdout, "options:\n");
+    struct option *opt = long_options;
+    const char **desc = descriptions;
+    while (opt->name) {
+    fprintf(stdout, "\t-%c\n"
+    "\t--%-15s: %s\n",
+    opt->val,
+    opt->name,
+    *desc);
+    opt++;
+    desc++;
+    }
 }
 
 int get_options(int argc, char **argv,
-				int *list_needed_libs,
-				int *info,
+    int *list_needed_libs,
+    int *info,
                 char ***dirs,
                 int *num_dirs,
                 int *verbose)
 {
     int c;
 
-	ASSERT(list_needed_libs);
-	*list_needed_libs = 0;
-	ASSERT(info);
-	*info = 0;
+    ASSERT(list_needed_libs);
+    *list_needed_libs = 0;
+    ASSERT(info);
+    *info = 0;
     ASSERT(verbose);
     *verbose = 0;
     ASSERT(dirs);
-	*dirs = NULL;
+    *dirs = NULL;
     ASSERT(num_dirs);
     int size = 0;
     *num_dirs = 0;
@@ -102,9 +102,9 @@ int get_options(int argc, char **argv,
             INFO ("\n");
             break;
         case 'h': print_help(); exit(1); break;
-		case 'V': *verbose = 1; break;
-		case 'p': *info = 1; break;
-		case 'n': *list_needed_libs = 1; break;
+        case 'V': *verbose = 1; break;
+        case 'p': *info = 1; break;
+        case 'n': *list_needed_libs = 1; break;
         case 'L': 
             {
                 if (*num_dirs == size) {
@@ -114,7 +114,7 @@ int get_options(int argc, char **argv,
                 SET_STRING_OPTION(((*dirs) + *num_dirs));
                 (*num_dirs)++;
             }
-			break;
+        break;
         case '?':
             /* getopt_long already printed an error message. */
             break;

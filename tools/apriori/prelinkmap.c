@@ -40,7 +40,7 @@ void pm_init(const char *file)
     FILE *fp;
     mapentry *me;
     unsigned last = -1UL;
-    
+
     fp = fopen(file, "r");
     FAILIF(fp == NULL, "Error opening file %s: %s (%d)\n", 
            file, strerror(errno), errno);
@@ -48,7 +48,7 @@ void pm_init(const char *file)
     while(fgets(buf, 256, fp)){
         x = buf;
         line++;
-        
+
         /* eat leading whitespace */
         while(isspace(*x)) x++;
 
@@ -71,7 +71,7 @@ void pm_init(const char *file)
                     file, line);
             continue;
         }
-        
+
         if (isalpha(*x)) {
             /* Assume that this is an alias, and look through the list of
                already-installed libraries.
@@ -152,7 +152,7 @@ void pm_report_library_size_in_memory(const char *name,
             }
         }
     }
-    
+
     FAILIF(1, "library '%s' not in prelink map\n", name);
 }
 
@@ -161,10 +161,10 @@ unsigned pm_get_next_link_address(const char *lookup_name)
     char *x;
     mapentry *me;
     int n;
-    
+
     x = strrchr(lookup_name,'/');
     if(x) lookup_name = x+1;
-    
+
     for(me = maplist; me; me = me->next)
         for (n = 0; n < me->num_names; n++)
             if(!strcmp(lookup_name, me->names[n]))

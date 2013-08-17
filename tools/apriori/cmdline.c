@@ -19,8 +19,8 @@ static struct option long_options[] = {
     {"default",       required_argument, 0, 'D'},
     {"verbose",       no_argument,       0, 'V'},
     {"help",          no_argument,       0, 'h'},
-	{"mapfile",       required_argument, 0, 'M'},
-	{"output",        required_argument, 0, 'o'},
+    {"mapfile",       required_argument, 0, 'M'},
+    {"output",        required_argument, 0, 'o'},
     {"prelinkmap",    required_argument, 0, 'p'},
     {0, 0, 0, 0},
 };
@@ -36,7 +36,7 @@ static const char *descriptions[] = {
     "provide a default library or executable for symbol lookup",
     "print verbose output",
     "print help screen",
-	"print a list of prelink addresses to file (prefix filename with + to append instead of overwrite)",
+    "print a list of prelink addresses to file (prefix filename with + to append instead of overwrite)",
     "specify an output directory (if multiple inputs) or file (is single input)",
     "specify a file with prelink addresses instead of a --start-address/--inc-address combination",
 };
@@ -72,7 +72,7 @@ int get_options(int argc, char **argv,
                 char ***defaults,
                 int *num_defaults,
                 int *verbose,
-				char **mapfile,
+                char **mapfile,
                 char **output,
                 char **prelinkmap) {
     int c;
@@ -87,8 +87,8 @@ int get_options(int argc, char **argv,
     ASSERT(start_addr); *start_addr = -1;
     ASSERT(inc_addr); *inc_addr =   -1;
     ASSERT(locals_only); *locals_only = 0;
-	ASSERT(mapfile); *mapfile = NULL;
-	ASSERT(output); *output = NULL;
+    ASSERT(mapfile); *mapfile = NULL;
+    ASSERT(output); *output = NULL;
     ASSERT(prelinkmap); *prelinkmap = NULL;
     int dirs_size = 0;
     int defaults_size = 0;
@@ -114,23 +114,23 @@ int get_options(int argc, char **argv,
 } while(0)
 
 #define SET_REPEATED_STRING_OPTION(arr, num, size) do {                \
-	if (*num == size) {                                                \
-		size += 10;                                                    \
-		*arr = (char **)REALLOC(*arr, size * sizeof(char *));          \
-	}                                                                  \
-	SET_STRING_OPTION(((*arr) + *num));                                \
-	(*num)++;                                                          \
+    if (*num == size) {                                                \
+        size += 10;                                                    \
+        *arr = (char **)REALLOC(*arr, size * sizeof(char *));          \
+    }                                                                  \
+        SET_STRING_OPTION(((*arr) + *num));                            \
+        (*num)++;                                                      \
 } while(0)
 
 #define SET_INT_OPTION(val) do {                                       \
     ASSERT(optarg);                                                    \
-	if (strlen(optarg) >= 2 && optarg[0] == '0' && optarg[1] == 'x') { \
-			FAILIF(1 != sscanf(optarg+2, "%x", val),                   \
-				   "Expecting a hexadecimal argument!\n");             \
-	} else {                                                           \
-		FAILIF(1 != sscanf(optarg, "%d", val),                         \
-			   "Expecting a decimal argument!\n");                     \
-	}                                                                  \
+    if (strlen(optarg) >= 2 && optarg[0] == '0' && optarg[1] == 'x') { \
+        FAILIF(1 != sscanf(optarg+2, "%x", val),                       \
+        "Expecting a hexadecimal argument!\n");                        \
+    } else {                                                           \
+        FAILIF(1 != sscanf(optarg, "%d", val),                         \
+        "Expecting a decimal argument!\n");                            \
+    }                                                                  \
 } while(0)
 
         switch (c) {
@@ -144,13 +144,13 @@ int get_options(int argc, char **argv,
             INFO ("\n");
             break;
         case 'Q': *quiet = 1; break;
-		case 'n': *dry_run = 1; break;
-		case 'M':
-			SET_STRING_OPTION(mapfile);
-			break;
-		case 'o':
-			SET_STRING_OPTION(output);
-			break;
+        case 'n': *dry_run = 1; break;
+        case 'M':
+            SET_STRING_OPTION(mapfile);
+            break;
+        case 'o':
+            SET_STRING_OPTION(output);
+            break;
         case 'p':
             SET_STRING_OPTION(prelinkmap);
             break;

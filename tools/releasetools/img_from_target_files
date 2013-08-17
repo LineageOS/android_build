@@ -85,7 +85,6 @@ def AddUserdata(output_zip):
   os.rmdir(user_dir)
   os.rmdir(temp_dir)
 
-
 def AddSystem(output_zip):
   """Turn the contents of SYSTEM into a system image and store it in
   output_zip."""
@@ -134,12 +133,10 @@ def AddSystem(output_zip):
   common.CheckSize(data, "system.img", OPTIONS.info_dict)
   common.ZipWriteStr(output_zip, "system.img", data)
 
-
 def CopyInfo(output_zip):
   """Copy the android-info.txt file from the input to the output."""
   output_zip.write(os.path.join(OPTIONS.input_tmp, "OTA", "android-info.txt"),
                    "android-info.txt")
-
 
 def main(argv):
 
@@ -177,7 +174,6 @@ def main(argv):
   shutil.rmtree(OPTIONS.input_tmp)
 
   print "done."
-
 
 if __name__ == '__main__':
   try:

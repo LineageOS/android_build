@@ -1,6 +1,6 @@
 /* Script for --shared -z combreloc: shared library, combine & sort relocs */
 OUTPUT_FORMAT("elf32-littlearm", "elf32-bigarm",
-	      "elf32-littlearm")
+              "elf32-littlearm")
 OUTPUT_ARCH(arm)
 ENTRY(_start)
 SECTIONS
@@ -82,9 +82,9 @@ SECTIONS
   .eh_frame       : ONLY_IF_RW { KEEP (*(.eh_frame)) }
   .gcc_except_table   : ONLY_IF_RW { *(.gcc_except_table .gcc_except_table.*) }
   /* Thread Local Storage sections  */
-  .tdata	  : { *(.tdata .tdata.* .gnu.linkonce.td.*) }
-  .tbss		  : { *(.tbss .tbss.* .gnu.linkonce.tb.*) *(.tcommon) }
-  .preinit_array     :
+  .tdata          : { *(.tdata .tdata.* .gnu.linkonce.td.*) }
+  .tbss           : { *(.tbss .tbss.* .gnu.linkonce.tb.*) *(.tcommon) }
+  .preinit_array  :
   {
     KEEP (*(.preinit_array))
   }

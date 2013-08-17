@@ -3,7 +3,7 @@
 
 #include <source.h>
 
-/* This function will break up the .bss section into multiple subsegments, 
+/* This function will break up the .bss section into multiple subsegments,
    depending on whether the .bss segment contains copy-relocated symbols.  This
    will produce a nonstandard ELF file (with multiple .bss sections), tht the
    linker will need to know how to handle.  The return value is the number of

@@ -202,7 +202,6 @@ endif
 # Assemble the list of targets to create PRIVATE_ variables for.
 LOCAL_INTERMEDIATE_TARGETS += $(LOCAL_BUILT_MODULE)
 
-
 ###########################################################
 ## AIDL: Compile .aidl files to .java
 ###########################################################

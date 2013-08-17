@@ -18,4 +18,3 @@
 #-keep class * extends junit.framework.TestSuite
 #-keep class * extends android.app.Instrumentation
 #-keep class * extends android.test.TestSuiteProvider
-

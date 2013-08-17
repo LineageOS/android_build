@@ -5,7 +5,7 @@
 #include <libelf.h>
 #include <gelf.h>
 
-int hash_lookup(Elf *elf, 
+int hash_lookup(Elf *elf,
                 Elf_Data *hash,
                 Elf_Data *symtab,
                 Elf_Data *symstr,

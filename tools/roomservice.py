@@ -72,13 +72,13 @@ for repository in repositories:
     if repo_name.startswith("android_device_") and repo_name.endswith("_" + device):
         print "Found repository: %s" % repository['name']
         manufacturer = repo_name.replace("android_device_", "").replace("_" + device, "")
-        
+
         try:
             lm = ElementTree.parse(".repo/local_manifests/roomservice.xml")
             lm = lm.getroot()
         except:
             lm = ElementTree.Element("manifest")
-        
+
         for child in lm.getchildren():
             if child.attrib['name'].endswith("_" + device):
                 print "Duplicate device '%s' found in local manifest" % child.attrib['name']
@@ -95,7 +95,7 @@ for repository in repositories:
         f = open('.repo/local_manifests/roomservice.xml', 'w')
         f.write(raw_xml)
         f.close()
-        
+
         print "Syncing repository to retrieve project."
         os.system('repo sync %s' % repo_path)
         print "Done!"

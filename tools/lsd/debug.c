@@ -36,4 +36,3 @@ int dump_hex_buffer(FILE *s, void *b, size_t len, size_t elsize)
     if (i && (i % NUM_COLS)) fputs("\n", s);
     return num_nonprintable;
 }
-

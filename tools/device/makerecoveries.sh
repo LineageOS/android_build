@@ -53,7 +53,6 @@ do
     fi
     mcpguard $OUT/recovery.img recoveries/recovery-clockwork-$VERSION-$DEVICE_NAME.img
     mcpguard $OUT/utilities/update.zip recoveries/recovery-clockwork-$VERSION-$DEVICE_NAME.zip
-    
     if [ -f "ROMManagerManifest/devices.rb" ]
     then
         pushd ROMManagerManifest
@@ -66,4 +65,3 @@ for published_recovery in $PUBLISHED_RECOVERIES
 do
     echo $published_recovery
 done
-

@@ -8,9 +8,8 @@ FILES=`find . \( -iname '*.c' -o -iname '*.cpp' -o -iname '*.h' -o -iname '*.mk'
 
 echo "Converting..."
 for file in $FILES ; do
-	echo $file
-	tr -d \\r < $file > _temp_file
-	mv _temp_file $file
+    echo $file
+    tr -d \\r < $file > _temp_file
+    mv _temp_file $file
 done
 exit 0
-

@@ -18,7 +18,7 @@ package com.android.apicheck;
 import java.util.*;
 
 public class ConstructorInfo implements AbstractMethodInfo {
-    
+
     private String mName;
     private String mType;
     private boolean mIsStatic;
@@ -30,7 +30,7 @@ public class ConstructorInfo implements AbstractMethodInfo {
     private boolean mExistsInBoth;
     private SourcePositionInfo mSourcePosition;
     private ClassInfo mClass;
-    
+
     public ConstructorInfo(String name, String type, boolean isStatic, boolean isFinal,
                            String deprecated, String scope, SourcePositionInfo pos, ClassInfo clazz) {
         mName = name;
@@ -45,15 +45,15 @@ public class ConstructorInfo implements AbstractMethodInfo {
         mSourcePosition = pos;
         mClass = clazz;
     }
-    
+
     public void addParameter(ParameterInfo pInfo) {
         mParameters.add(pInfo);
     }
-    
+
     public void addException(String exec) {
         mExceptions.add(exec);
     }
-    
+
     public String getHashableName() {
       StringBuilder result = new StringBuilder();
       result.append(name());
@@ -62,26 +62,26 @@ public class ConstructorInfo implements AbstractMethodInfo {
       }
       return result.toString();
     }
-    
+
     public boolean isInBoth() {
         return mExistsInBoth;
     }
-    
+
     public SourcePositionInfo position() {
         return mSourcePosition;
     }
-    
+
     public String name() {
         return mName;
     }
-    
+
     public String qualifiedName() {
         String baseName = (mClass != null)
                 ? (mClass.qualifiedName() + ".")
                 : "";
         return baseName + name();
     }
-    
+
     public String prettySignature() {
         String params = "";
         for (ParameterInfo pInfo : mParameters) {
@@ -92,37 +92,37 @@ public class ConstructorInfo implements AbstractMethodInfo {
         }
         return qualifiedName() + '(' + params + ')';
     }
-    
+
     public boolean isConsistent(ConstructorInfo mInfo) {
       mInfo.mExistsInBoth = true;
       mExistsInBoth = true;
       boolean consistent = true;
-      
+
       if (mIsFinal != mInfo.mIsFinal) {
           consistent = false;
           Errors.error(Errors.CHANGED_FINAL, mInfo.position(),
                   "Constructor " + mInfo.qualifiedName() + " has changed 'final' qualifier");
       }
-      
+
       if (mIsStatic != mInfo.mIsStatic) {
           consistent = false;
           Errors.error(Errors.CHANGED_FINAL, mInfo.position(),
                   "Constructor " + mInfo.qualifiedName() + " has changed 'static' qualifier");
       }
-     
+
       if (!mScope.equals(mInfo.mScope)) {
           consistent = false;
           Errors.error(Errors.CHANGED_SCOPE, mInfo.position(),
                   "Constructor " + mInfo.qualifiedName() + " changed scope from "
                   + mScope + " to " + mInfo.mScope);
       }
-      
+
       if (!mDeprecated.equals(mInfo.mDeprecated)) {
           consistent = false;
           Errors.error(Errors.CHANGED_DEPRECATED, mInfo.position(),
                   "Constructor " + mInfo.qualifiedName() + " has changed deprecation state");
       }
-      
+
       for (String exec : mExceptions) {
           if (!mInfo.mExceptions.contains(exec)) {
               Errors.error(Errors.CHANGED_THROWS, mInfo.position(),
@@ -131,7 +131,7 @@ public class ConstructorInfo implements AbstractMethodInfo {
               consistent = false;
           }
       }
-      
+
       for (String exec : mInfo.mExceptions) {
           if (!mExceptions.contains(exec)) {
               Errors.error(Errors.CHANGED_THROWS, mInfo.position(),
@@ -140,9 +140,8 @@ public class ConstructorInfo implements AbstractMethodInfo {
             consistent = false;
           }
       }
-      
+
       return consistent;
   }
-    
 
 }

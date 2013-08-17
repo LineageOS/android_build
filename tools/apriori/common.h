@@ -17,12 +17,12 @@ static inline int is_host_little(void)
 
 static inline long switch_endianness(long val)
 {
-	long newval;
-	((char *)&newval)[3] = ((char *)&val)[0];
-	((char *)&newval)[2] = ((char *)&val)[1];
-	((char *)&newval)[1] = ((char *)&val)[2];
-	((char *)&newval)[0] = ((char *)&val)[3];
-	return newval;
+    long newval;
+    ((char *)&newval)[3] = ((char *)&val)[0];
+    ((char *)&newval)[2] = ((char *)&val)[1];
+    ((char *)&newval)[1] = ((char *)&val)[2];
+    ((char *)&newval)[0] = ((char *)&val)[3];
+    return newval;
 }
 
 #endif/*COMMON_H*/

@@ -134,7 +134,6 @@ public class ApiCheck {
             private AbstractMethodInfo mCurrentMethod;
             private Stack<ClassInfo> mClassScope = new Stack<ClassInfo>();
 
-
             public MakeHandler() {
                 super();
                 mApi = new ApiInfo();

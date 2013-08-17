@@ -432,7 +432,6 @@ def begintable(text, backgroundcolor):
 def endtable():
     output('</table><p>')
 
-
 # dump some stats about total number of warnings and such
 def dumpstats():
     known = 0
@@ -462,7 +461,6 @@ def descriptionfor(cat):
         return cat['description']
     return allpatterns(cat)
 
-
 # show which warnings no longer occur
 def dumpfixed():
     tablestarted = False
@@ -475,7 +473,6 @@ def dumpfixed():
     if tablestarted:
         endtable()
 
-
 # dump a category, provided it is not marked as 'SKIP' and has more than 0 occurrences
 def dumpcategory(cat):
     if cat['severity'] != severity.SKIP and len(cat['members']) != 0:
@@ -487,13 +484,11 @@ def dumpcategory(cat):
             tablerow(i)
         endtable()
 
-
 # dump everything for a given severity
 def dumpseverity(sev):
     for i in warnpatterns:
         if i['severity'] == sev:
             dumpcategory(i)
-
 
 def classifywarning(line):
     for i in warnpatterns:
@@ -549,7 +544,6 @@ for line in infile:
             if m != None:
                 targetvariant = m.group(0)
 
-
 # dump the html output to stdout
 dumphtmlprologue('Warnings for ' + platformversion + ' - ' + targetproduct + ' - ' + targetvariant)
 dumpstats()
@@ -560,4 +554,3 @@ dumpseverity(severity.LOW)
 dumpseverity(severity.HARMLESS)
 dumpseverity(severity.UNKNOWN)
 dumpfixed()
-

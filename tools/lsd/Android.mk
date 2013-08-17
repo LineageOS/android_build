@@ -29,10 +29,10 @@ LOCAL_SRC_FILES := \
         main.c
 
 LOCAL_C_INCLUDES:= \
-	$(LOCAL_PATH)/ \
-	external/elfutils/lib/ \
-	external/elfutils/libelf/ \
-	external/elfutils/libebl/
+        $(LOCAL_PATH)/ \
+        external/elfutils/lib/ \
+        external/elfutils/libelf/ \
+        external/elfutils/libebl/
 
 LOCAL_STATIC_LIBRARIES := libelf libebl libebl_arm #dl
 
@@ -40,4 +40,3 @@ LOCAL_MODULE := lsd
 
 include $(BUILD_HOST_EXECUTABLE)
 endif #TARGET_ARCH==arm
-

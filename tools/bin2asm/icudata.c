@@ -21,7 +21,7 @@ int main(int argc, char *argv[]) {
         fprintf(stderr, "\n");
         return 1;
     }
-    
+
     name = argv[1];
 
     printf("\
@@ -34,13 +34,13 @@ int main(int argc, char *argv[]) {
  * prefixing for you.\n\
  */\n\
 .globl _%s\n\
-	.section .rodata,\n\
-	.align 8\n\
+    .section .rodata,\n\
+    .align 8\n\
 _%s:\n\
 #else\n\
 .globl %s\n\
-	.section .rodata\n\
-	.align 8\n\
+    .section .rodata\n\
+    .align 8\n\
 %s:\n\
 #endif\n\
 ", name, name, name, name);

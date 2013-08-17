@@ -174,10 +174,10 @@ libstagefrighthw.so                0x63300000 # [~1M]
 libstagefright.so                  0x62F00000 # [~4M]
 
 # libraries for specific hardware
-libgsl.so               0x62E00000 # [~1M]
-libhtc_acoustic.so      0x62D00000 # [<64K]
-libhtc_ril.so           0x62C00000 # [~1M]
-liblvmxipc.so           0x62B00000 # [~1M] for vendor/nxp
+libgsl.so                0x62E00000 # [~1M]
+libhtc_acoustic.so       0x62D00000 # [<64K]
+libhtc_ril.so            0x62C00000 # [~1M]
+liblvmxipc.so            0x62B00000 # [~1M] for vendor/nxp
 libreference-cdma-sms.so 0x62A00000 # [<64K] for hardware/ril
 
 # libraries for specific apps or temporary libraries

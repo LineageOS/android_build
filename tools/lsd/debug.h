@@ -8,30 +8,30 @@
 #ifdef DEBUG
 
 #define FAILIF(cond, msg...) do {                        \
-	if (unlikely(cond)) {                                \
+    if (unlikely(cond)) {                                \
         fprintf(stderr, "%s(%d): ", __FILE__, __LINE__); \
-		fprintf(stderr, ##msg);                          \
-		exit(1);                                         \
-	}                                                    \
+        fprintf(stderr, ##msg);                          \
+        exit(1);                                         \
+    }                                                    \
 } while(0)
 
 /* Debug enabled */
-#define ASSERT(x) do {                                \
-	if (unlikely(!(x))) {                             \
-		fprintf(stderr,                               \
-				"ASSERTION FAILURE %s:%d: [%s]\n",    \
-				__FILE__, __LINE__, #x);              \
-		exit(1);                                      \
-	}                                                 \
+#define ASSERT(x) do {                                   \
+    if (unlikely(!(x))) {                                \
+        fprintf(stderr,                                  \
+        "ASSERTION FAILURE %s:%d: [%s]\n",               \
+        __FILE__, __LINE__, #x);                         \
+        exit(1);                                         \
+    }                                                    \
 } while(0)
 
 #else
 
 #define FAILIF(cond, msg...) do { \
-	if (unlikely(cond)) {         \
-		fprintf(stderr, ##msg);   \
-		exit(1);                  \
-	}                             \
+    if (unlikely(cond)) {         \
+        fprintf(stderr, ##msg);   \
+        exit(1);                  \
+    }                             \
 } while(0)
 
 /* No debug */
@@ -42,21 +42,21 @@
 #define FAILIF_LIBELF(cond, function) \
     FAILIF(cond, "%s(): %s\n", #function, elf_errmsg(elf_errno()));
 
-static inline void *MALLOC(unsigned int size) 
+static inline void *MALLOC(unsigned int size)
 {
     void *m = malloc(size);
     FAILIF(NULL == m, "malloc(%d) failed!\n", size);
     return m;
 }
 
-static inline void *CALLOC(unsigned int num_entries, unsigned int entry_size) 
+static inline void *CALLOC(unsigned int num_entries, unsigned int entry_size)
 {
     void *m = calloc(num_entries, entry_size);
     FAILIF(NULL == m, "calloc(%d, %d) failed!\n", num_entries, entry_size);
     return m;
 }
 
-static inline void *REALLOC(void *ptr, unsigned int size) 
+static inline void *REALLOC(void *ptr, unsigned int size)
 {
     void *m = realloc(ptr, size);
     FAILIF(NULL == m, "realloc(%p, %d) failed!\n", ptr, size);

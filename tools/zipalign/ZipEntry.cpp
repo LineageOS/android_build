@@ -386,7 +386,6 @@ void ZipEntry::setModWhen(time_t when)
     mCDE.mLastModFileDate = mLFH.mLastModFileDate = zdate;
 }
 
-
 /*
  * ===========================================================================
  *      ZipEntry::LocalFileHeader
@@ -500,7 +499,6 @@ status_t ZipEntry::LocalFileHeader::write(FILE* fp)
     return NO_ERROR;
 }
 
-
 /*
  * Dump the contents of a LocalFileHeader object.
  */
@@ -518,7 +516,6 @@ void ZipEntry::LocalFileHeader::dump(void) const
     if (mFileName != NULL)
         LOGD("  filename: '%s'\n", mFileName);
 }
-
 
 /*
  * ===========================================================================
@@ -600,7 +597,6 @@ status_t ZipEntry::CentralDirEntry::read(FILE* fp)
         }
         mExtraField[mExtraFieldLength] = '\0';
     }
-
 
     /* grab comment, if any */
     if (mFileCommentLength != 0) {
@@ -693,4 +689,3 @@ void ZipEntry::CentralDirEntry::dump(void) const
     if (mFileComment != NULL)
         LOGD("  comment: '%s'\n", mFileComment);
 }
-

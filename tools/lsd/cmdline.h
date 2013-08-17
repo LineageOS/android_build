@@ -4,8 +4,8 @@
 void print_help(void);
 
 int get_options(int argc, char **argv,
-				int *list_needed_libs,
-				int *info,
+int *list_needed_libs,
+int *info,
                 char ***dirs,
                 int *num_dirs,
                 int *verbose);

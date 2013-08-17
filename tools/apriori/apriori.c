@@ -615,15 +615,15 @@ static source_t* init_source(const char *full_path,
            strerror(errno),
            errno);
 
-	FAILIF(fstat(source->elf_fd, &source->elf_file_info) < 0,
-		   "fstat(%s(fd %d)): %s (%d)\n",
-		   source->name,
-		   source->elf_fd,
-		   strerror(errno),
-		   errno);
-	INFO("File [%s]'s size is %lld bytes!\n",
-		 source->name,
-		 source->elf_file_info.st_size);
+    FAILIF(fstat(source->elf_fd, &source->elf_file_info) < 0,
+        "fstat(%s(fd %d)): %s (%d)\n",
+        source->name,
+        source->elf_fd,
+        strerror(errno),
+        errno);
+    INFO("File [%s]'s size is %lld bytes!\n",
+        source->name,
+        source->elf_file_info.st_size);
 
     INFO("Calling elf_begin(%s)...\n", full_path);
 
@@ -1158,7 +1158,6 @@ static int do_prelink(source_t *source,
         else
           INFO("\t\tno symbol is associated with this relocation\n");
 #endif
-
 
         // We prelink only local symbols when locals_only == 1.
 
@@ -2568,19 +2567,19 @@ void apriori(char **execs, int num_execs,
         }
         else fp = fopen(mapfile_name, "w");
 
-		FAILIF(fp == NULL, "Cannot open file [%s]: %s (%d)!\n",
-			   mapfile_name,
-			   strerror(errno),
-			   errno);
+    FAILIF(fp == NULL, "Cannot open file [%s]: %s (%d)!\n",
+        mapfile_name,
+        strerror(errno),
+        errno);
         source = sources;
         while (source) {
             /* If it's a library, print the results. */
             if (source->elf_hdr.e_type == ET_DYN) {
                 /* Add to the memory map file. */
-				fprintf(fp, "%s 0x%08lx %lld\n",
-						basename(source->name),
-						source->base,
-						source->elf_file_info.st_size);
+                fprintf(fp, "%s 0x%08lx %lld\n",
+                basename(source->name),
+                source->base,
+                source->elf_file_info.st_size);
             }
             source = source->next;
         }

@@ -7,31 +7,31 @@
 
 #ifdef DEBUG
 
-    #define FAILIF(cond, msg...) do {                        \
-	if (unlikely(cond)) {                                \
-        fprintf(stderr, "%s(%d): ", __FILE__, __LINE__); \
-		fprintf(stderr, ##msg);                          \
-		exit(1);                                         \
-	}                                                    \
+    #define FAILIF(cond, msg...) do {                     \
+    if (unlikely(cond)) {                                 \
+        fprintf(stderr, "%s(%d): ", __FILE__, __LINE__);  \
+        fprintf(stderr, ##msg);                           \
+        exit(1);                                          \
+    }                                                     \
 } while(0)
 
 /* Debug enabled */
     #define ASSERT(x) do {                                \
-	if (unlikely(!(x))) {                             \
-		fprintf(stderr,                               \
-				"ASSERTION FAILURE %s:%d: [%s]\n",    \
-				__FILE__, __LINE__, #x);              \
-		exit(1);                                      \
-	}                                                 \
+    if (unlikely(!(x))) {                                 \
+        fprintf(stderr,                                   \
+        "ASSERTION FAILURE %s:%d: [%s]\n",                \
+        __FILE__, __LINE__, #x);                          \
+        exit(1);                                          \
+    }                                                     \
 } while(0)
 
 #else
 
     #define FAILIF(cond, msg...) do { \
-	if (unlikely(cond)) {         \
-		fprintf(stderr, ##msg);   \
-		exit(1);                  \
-	}                             \
+    if (unlikely(cond)) {             \
+        fprintf(stderr, ##msg);       \
+        exit(1);                      \
+    }                                 \
 } while(0)
 
 /* No debug */

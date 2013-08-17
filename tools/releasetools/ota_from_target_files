@@ -93,7 +93,6 @@ def MostPopularKey(d, default):
   x.sort()
   return x[-1][1]
 
-
 def IsSymlink(info):
   """Return true if the zipfile.ZipInfo object passed in represents a
   symlink."""
@@ -248,7 +247,6 @@ class Item:
 
     recurse(self, (-1, -1, -1, -1))
 
-
 def CopySystemFiles(input_zip, output_zip=None,
                     substitute=None):
   """Copies files underneath system/ in the input zip to the output
@@ -286,7 +284,6 @@ def CopySystemFiles(input_zip, output_zip=None,
   symlinks.sort()
   return symlinks
 
-
 def SignOutput(temp_zip_name, output_zip_name):
   key_passwords = common.GetKeyPasswords([OPTIONS.package_key])
   pw = key_passwords[OPTIONS.package_key]
@@ -294,14 +291,12 @@ def SignOutput(temp_zip_name, output_zip_name):
   common.SignFile(temp_zip_name, output_zip_name, OPTIONS.package_key, pw,
                   whole_file=True)
 
-
 def AppendAssertions(script, input_zip):
   if OPTIONS.override_device == "auto":
     device = GetBuildProp("ro.product.device", input_zip)
   else:
     device = OPTIONS.override_device
   script.AssertDevice(device)
-
 
 def MakeRecoveryPatch(output_zip, recovery_img, boot_img):
   """Generate a binary patch that creates the recovery image starting
@@ -351,7 +346,6 @@ fi
         }
   common.ZipWriteStr(output_zip, "recovery/etc/install-recovery.sh", sh)
   return Item.Get("system/etc/install-recovery.sh", dir=False)
-
 
 def WriteFullOTAPackage(input_zip, output_zip):
   # TODO: how to determine this?  We don't know what version it will
@@ -429,14 +423,10 @@ def WriteFullOTAPackage(input_zip, output_zip):
   script.AddToZip(input_zip, output_zip)
   WriteMetadata(metadata, output_zip)
 
-
 def WriteMetadata(metadata, output_zip):
   common.ZipWriteStr(output_zip, "META-INF/com/android/metadata",
                      "".join(["%s=%s\n" % kv
                               for kv in sorted(metadata.iteritems())]))
-
-
-
 
 def LoadSystemFiles(z):
   """Load all the files from SYSTEM/... in a given target-files
@@ -449,7 +439,6 @@ def LoadSystemFiles(z):
       out[fn] = common.File(fn, data)
   return out
 
-
 def GetBuildProp(property, z):
   """Return the fingerprint of the build of a given target-files
   ZipFile object."""
@@ -460,7 +449,6 @@ def GetBuildProp(property, z):
   if not m:
     raise common.ExternalError("couldn't find %s in build.prop" % (property,))
   return m.group(1).strip()
-
 
 def WriteIncrementalOTAPackage(target_zip, source_zip, output_zip):
   source_version = OPTIONS.source_info_dict["recovery_api_version"]
@@ -714,7 +702,6 @@ def WriteIncrementalOTAPackage(target_zip, source_zip, output_zip):
   script.AddToZip(target_zip, output_zip)
   WriteMetadata(metadata, output_zip)
 
-
 def main(argv):
 
   def option_handler(o, a):
@@ -805,7 +792,6 @@ def main(argv):
   common.Cleanup()
 
   print "done."
-
 
 if __name__ == '__main__':
   try:

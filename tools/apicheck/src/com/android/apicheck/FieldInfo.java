@@ -17,7 +17,7 @@
 package com.android.apicheck;
 
 public class FieldInfo {
-  
+
     private String mName;
     private String mType;
     private boolean mIsTransient;
@@ -30,7 +30,7 @@ public class FieldInfo {
     private boolean mExistsInBoth;
     private SourcePositionInfo mSourcePosition;
     private ClassInfo mClass;
-    
+
     public FieldInfo (String name, String type, boolean isTransient, boolean isVolatile,
                        String value, boolean isStatic, boolean isFinal, String deprecated,
                        String scope, SourcePositionInfo source, ClassInfo parent) {
@@ -47,25 +47,26 @@ public class FieldInfo {
         mSourcePosition = source;
         mClass = parent;
     }
-    
+
     public boolean isInBoth() {
         return mExistsInBoth;
     }
+
     public SourcePositionInfo position() {
         return mSourcePosition;
     }
-    
+
     public String name() {
         return mName;
     }
-    
+
     public String qualifiedName() {
         String parentQName = (mClass != null)
                 ? (mClass.qualifiedName() + ".")
                 : "";
         return parentQName + name();
     }
-    
+
     // Check the declared value with a typed comparison, not a string comparison,
     // to accommodate toolchains with different fp -> string conversions.
     public boolean valueEquals(FieldInfo other) {
@@ -96,7 +97,7 @@ public class FieldInfo {
         } catch (NumberFormatException e) {
             // fall through
         }
-        
+
         return mValue.equals(other.mValue);
     }
 
@@ -116,44 +117,44 @@ public class FieldInfo {
                   + mValue + " to " + fInfo.mValue);
           consistent = false;
       }
-      
+
       if (!mScope.equals(fInfo.mScope)) {
           Errors.error(Errors.CHANGED_SCOPE, fInfo.position(),
                   "Method " + fInfo.qualifiedName() + " changed scope from "
                   + mScope + " to " + fInfo.mScope);
           consistent = false;
       }
-      
+
       if (mIsStatic != fInfo.mIsStatic) {
           Errors.error(Errors.CHANGED_STATIC, fInfo.position(),
                   "Field " + fInfo.qualifiedName() + " has changed 'static' qualifier");
           consistent = false;
       }
-      
+
       if (mIsFinal != fInfo.mIsFinal) {
           Errors.error(Errors.CHANGED_FINAL, fInfo.position(),
                   "Field " + fInfo.qualifiedName() + " has changed 'final' qualifier");
           consistent = false;
       }
-      
+
       if (mIsTransient != fInfo.mIsTransient) {
           Errors.error(Errors.CHANGED_TRANSIENT, fInfo.position(),
                   "Field " + fInfo.qualifiedName() + " has changed 'transient' qualifier");
           consistent = false;
       }
-      
+
       if (mIsVolatile != fInfo.mIsVolatile) {
           Errors.error(Errors.CHANGED_VOLATILE, fInfo.position(),
                   "Field " + fInfo.qualifiedName() + " has changed 'volatile' qualifier");
           consistent = false;
       }
-      
+
       if (!mDeprecated.equals(fInfo.mDeprecated)) {
           Errors.error(Errors.CHANGED_DEPRECATED, fInfo.position(),
                   "Field " + fInfo.qualifiedName() + " has changed deprecation state");
           consistent = false;
       }
-      
+
       return consistent;
     }
 

@@ -141,7 +141,6 @@ for t in tagfile.tags:
   buffer.write("\n    android.util.EventLog.writeEvent(%s%s);" % (t.tagname.upper(), argNames))
   buffer.write("\n  }\n")
 
-
 buffer.write("}\n");
 
 event_log_tags.WriteOutput(output_file, buffer)

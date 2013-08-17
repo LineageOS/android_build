@@ -23,13 +23,13 @@ int main(int argc, char *argv[]) {
  * prefixing for you.\n\
  */\n\
 .globl _%s\n\
-	.section .rodata,\n\
-	.align 8\n\
+    .section .rodata,\n\
+    .align 8\n\
 _%s:\n\
 #else\n\
 .globl %s\n\
-	.section .rodata\n\
-	.align 8\n\
+    .section .rodata\n\
+    .align 8\n\
 %s:\n\
 #endif\n\
 ", name, name, name, name);

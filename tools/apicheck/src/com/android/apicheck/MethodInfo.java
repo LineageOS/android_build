@@ -18,7 +18,7 @@ package com.android.apicheck;
 import java.util.*;
 
 public class MethodInfo implements AbstractMethodInfo {
-  
+
     private String mName;
     private String mReturn;
     private boolean mIsAbstract;
@@ -33,11 +33,11 @@ public class MethodInfo implements AbstractMethodInfo {
     private List<String> mExceptions;
     private SourcePositionInfo mSourcePosition;
     private ClassInfo mClass;
-    
+
     public MethodInfo (String name, String returnType, boolean isAbstract, boolean isNative,
                         boolean isSynchronized, boolean isStatic, boolean isFinal, String deprecated
                         , String scope, SourcePositionInfo source, ClassInfo parent) {
-        
+
         mName = name;
         mReturn = returnType;
         mIsAbstract = isAbstract;
@@ -53,19 +53,18 @@ public class MethodInfo implements AbstractMethodInfo {
         mSourcePosition = source;
         mClass = parent;
     }
-    
-    
+
     public String name() {
         return mName;
     }
-    
+
     public String qualifiedName() {
         String parentQName = (mClass != null)
                 ? (mClass.qualifiedName() + ".")
                 : "";
         return parentQName + name();
     }
-    
+
     public String prettySignature() {
         String params = "";
         for (ParameterInfo pInfo : mParameters) {
@@ -76,11 +75,11 @@ public class MethodInfo implements AbstractMethodInfo {
         }
         return qualifiedName() + '(' + params + ')';
     }
-    
+
     public SourcePositionInfo position() {
         return mSourcePosition;
     }
-    
+
     public ClassInfo containingClass() {
         return mClass;
     }
@@ -88,7 +87,7 @@ public class MethodInfo implements AbstractMethodInfo {
     public boolean matches(MethodInfo other) {
         return getSignature().equals(other.getSignature());
     }
-    
+
     public boolean isConsistent(MethodInfo mInfo) {
         mInfo.mExistsInBoth = true;
         mExistsInBoth = true;
@@ -99,19 +98,19 @@ public class MethodInfo implements AbstractMethodInfo {
                     "Method " + mInfo.qualifiedName() + " has changed return type from "
                     + mReturn + " to " + mInfo.mReturn);
         }
-        
+
         if (mIsAbstract != mInfo.mIsAbstract) {
             consistent = false;
             Errors.error(Errors.CHANGED_ABSTRACT, mInfo.position(),
                     "Method " + mInfo.qualifiedName() + " has changed 'abstract' qualifier");
         }
-        
+
         if (mIsNative != mInfo.mIsNative) {
             consistent = false;
             Errors.error(Errors.CHANGED_NATIVE, mInfo.position(),
                     "Method " + mInfo.qualifiedName() + " has changed 'native' qualifier");
         }
-        
+
         if (mIsFinal != mInfo.mIsFinal) {
             // Compiler-generated methods vary in their 'final' qual between versions of
             // the compiler, so this check needs to be quite narrow.  A change in 'final'
@@ -125,32 +124,32 @@ public class MethodInfo implements AbstractMethodInfo {
                 }
             }
         }
-        
+
         if (mIsStatic != mInfo.mIsStatic) {
             consistent = false;
             Errors.error(Errors.CHANGED_STATIC, mInfo.position(),
                     "Method " + mInfo.qualifiedName() + " has changed 'static' qualifier");
         }
-       
+
         if (!mScope.equals(mInfo.mScope)) {
             consistent = false;
             Errors.error(Errors.CHANGED_SCOPE, mInfo.position(),
                     "Method " + mInfo.qualifiedName() + " changed scope from "
                     + mScope + " to " + mInfo.mScope);
         }
-        
+
         if (!mDeprecated.equals(mInfo.mDeprecated)) {
             Errors.error(Errors.CHANGED_DEPRECATED, mInfo.position(),
                     "Method " + mInfo.qualifiedName() + " has changed deprecation state");
             consistent = false;
         }
-        
+
         if (mIsSynchronized != mInfo.mIsSynchronized) {
             Errors.error(Errors.CHANGED_SYNCHRONIZED, mInfo.position(),
                     "Method " + mInfo.qualifiedName() + " has changed 'synchronized' qualifier from " + mIsSynchronized + " to " + mInfo.mIsSynchronized);
             consistent = false;
         }
-        
+
         for (String exec : mExceptions) {
             if (!mInfo.mExceptions.contains(exec)) {
                 // exclude 'throws' changes to finalize() overrides with no arguments
@@ -162,7 +161,7 @@ public class MethodInfo implements AbstractMethodInfo {
                 }
             }
         }
-        
+
         for (String exec : mInfo.mExceptions) {
             // exclude 'throws' changes to finalize() overrides with no arguments
             if (!mExceptions.contains(exec)) {
@@ -174,18 +173,18 @@ public class MethodInfo implements AbstractMethodInfo {
                 }
             }
         }
-        
+
         return consistent;
     }
-    
+
     public void addParameter(ParameterInfo pInfo) {
         mParameters.add(pInfo);
     }
-    
+
     public void addException(String exc) {
         mExceptions.add(exc);
     }
-    
+
     public String getParameterHash() {
         String hash = "";
         for (ParameterInfo pInfo : mParameters) {
@@ -193,15 +192,15 @@ public class MethodInfo implements AbstractMethodInfo {
         }
         return hash;
     }
-    
+
     public String getHashableName() {
         return name() + getParameterHash();
     }
-    
+
     public String getSignature() {
         return name() + getParameterHash();
     }
-    
+
     public boolean isInBoth() {
         return mExistsInBoth;
     }

@@ -57,7 +57,7 @@ int main(int argc, char **argv) {
         INFO("Processing file [%s]\n", filename);
 
         fd = open(filename, O_RDONLY);
-        FAILIF(fd < 0, "open(%d): %s (%d).\n", 
+        FAILIF(fd < 0, "open(%d): %s (%d).\n",
                filename,
                strerror(errno),
                errno);
@@ -65,11 +65,11 @@ int main(int argc, char **argv) {
         elf = elf_begin(fd, ELF_C_READ_MMAP_PRIVATE, NULL);
         FAILIF_LIBELF(elf == NULL, elf_begin);
 
-        FAILIF_LIBELF(0 == gelf_getehdr(elf, &elf_hdr), 
+        FAILIF_LIBELF(0 == gelf_getehdr(elf, &elf_hdr),
                       gelf_getehdr);
 
 #ifdef SUPPORT_ANDROID_PRELINK_TAGS
-        prelinked = check_prelinked(filename, elf_hdr.e_ident[EI_DATA] == ELFDATA2LSB, 
+        prelinked = check_prelinked(filename, elf_hdr.e_ident[EI_DATA] == ELFDATA2LSB,
                                     &prelink_addr);
 #else
         #error 'SUPPORT_ANDROID_PRELINK_TAGS is not defined!'
@@ -83,7 +83,6 @@ int main(int argc, char **argv) {
         FAILIF_LIBELF(elf_end(elf), elf_end);
         close(fd);
     }
-    
+
     return 0;
 } 
-

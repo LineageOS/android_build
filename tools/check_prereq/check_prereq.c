@@ -25,7 +25,7 @@
 // timestamps are the same).
 int main(int argc, char** argv) {
   if (argc != 2) {
- usage:
+  usage:
     fprintf(stderr, "usage: %s <timestamp>\n", argv[0]);
     return 2;
   }

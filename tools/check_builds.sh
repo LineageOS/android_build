@@ -89,4 +89,3 @@ function diff_builds
     done
     build/tools/compare_fileslist.py $inputs > $TEST_BUILD_DIR/sizes.html
 }
-

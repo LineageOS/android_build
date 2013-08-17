@@ -51,7 +51,6 @@ def CallAddr2Line(lib, addr):
     list = [ "(unknown)", "(unknown)" ]
   return list
 
-
 ###############################################################################
 # similar to CallAddr2Line, but using objdump to find out the name of the
 # containing function of the specified address

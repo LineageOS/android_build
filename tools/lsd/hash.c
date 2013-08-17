@@ -4,7 +4,7 @@
 #include <hash.h>
 #include <string.h>
 
-int hash_lookup(Elf *elf, 
+int hash_lookup(Elf *elf,
                 Elf_Data *hash,
                 Elf_Data *symtab,
                 Elf_Data *symstr,
@@ -18,7 +18,7 @@ int hash_lookup(Elf *elf,
 
     index = buckets[elf_hash(symname) % nbuckets];
     while(index != STN_UNDEF &&
-          strcmp((char *)symstr->d_buf + 
+          strcmp((char *)symstr->d_buf +
                  ((Elf32_Sym *)symtab->d_buf)[index].st_name,
                  symname))
     {
