@@ -16,6 +16,24 @@
       "revId": "88488756df7296d18ab481a99bc6b045eb3cba0a",
       "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baee8101_36908095",
+        "filename": "envsetup.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 1923,
+      "author": {
+        "id": 3075
+      },
+      "writtenOn": "2013-08-18T18:41:50Z",
+      "side": 1,
+      "message": "If we were adb root already then the adb connect below doesn\u0027t actually do anything.\n\nWhat have I missed ?",
+      "parentUuid": "dae975fb_403458dd",
+      "revId": "88488756df7296d18ab481a99bc6b045eb3cba0a",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
     }
   ]
 }
