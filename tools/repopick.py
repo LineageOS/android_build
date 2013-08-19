@@ -156,7 +156,6 @@ if args.abandon_first:
             local_branches = re.split('\s*,\s*', matchObj.group(1))
             if any(args.start_branch[0] in s for s in local_branches):
                 needs_abandon = True
-                break
 
     if needs_abandon:
         # Perform the abandon only if the branch already exists
