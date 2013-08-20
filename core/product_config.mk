@@ -337,7 +337,8 @@ endif
 # The rules for these copy steps are defined in build/core/Makefile.
 # The optional :<owner> is used to indicate the owner of a vendor file.
 PRODUCT_COPY_FILES := \
-    $(strip $(PRODUCTS.$(INTERNAL_PRODUCT).PRODUCT_COPY_FILES))
+    $(strip $(PRODUCTS.$(INTERNAL_PRODUCT).PRODUCT_COPY_FILES)) \
+    $(lastword $(PRODUCTS.$(INTERNAL_PRODUCT).PRODUCT_BOOTANIMATION)):system/media/bootanimation.zip
 
 # A list of property assignments, like "key = value", with zero or more
 # whitespace characters on either side of the '='.
