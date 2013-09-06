@@ -336,10 +336,11 @@ endif
 # $(PRODUCT_OUT), so it should look like, e.g., "system/etc/file.xml".
 # The rules for these copy steps are defined in build/core/Makefile.
 # The optional :<owner> is used to indicate the owner of a vendor file.
+PRODUCT_COPY_FILES := \
+    $(strip $(PRODUCTS.$(INTERNAL_PRODUCT).PRODUCT_COPY_FILES))
 _boot_animation := $(strip $(lastword $(PRODUCTS.$(INTERNAL_PRODUCT).PRODUCT_BOOTANIMATION)))
 ifneq ($(_boot_animation),)
-PRODUCT_COPY_FILES := \
-    $(strip $(PRODUCTS.$(INTERNAL_PRODUCT).PRODUCT_COPY_FILES)) \
+PRODUCT_COPY_FILES += \
     $(_boot_animation):system/media/bootanimation.zip
 endif
 _boot_animation :=
