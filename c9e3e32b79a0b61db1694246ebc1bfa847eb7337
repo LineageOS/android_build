@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba076199_717cca20",
+        "filename": "core/product_config.mk",
+        "patchSetId": 2
+      },
+      "lineNbr": 340,
+      "author": {
+        "id": 6763
+      },
+      "writtenOn": "2013-09-06T21:58:15Z",
+      "side": 1,
+      "message": "Need to strip before checking on NULL. if someone does PRODUCT_BOOTANIMATION :\u003d        \n(note spaces)\nWe don\u0027t want to enter the conditional",
+      "revId": "c9e3e32b79a0b61db1694246ebc1bfa847eb7337",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba076199_11734e4f",
+        "filename": "core/product_config.mk",
+        "patchSetId": 2
+      },
+      "lineNbr": 342,
+      "author": {
+        "id": 6763
+      },
+      "writtenOn": "2013-09-06T21:58:15Z",
+      "side": 1,
+      "message": "stripping here (he he) following convention of everyone else in this file.",
+      "revId": "c9e3e32b79a0b61db1694246ebc1bfa847eb7337",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    }
+  ]
+}
