@@ -277,6 +277,13 @@ function check_bash_version()
     return 0
 }
 
+from_top()
+{
+    pushd $(gettop) > /dev/null
+    eval $@
+    popd > /dev/null
+}
+
 function choosetype()
 {
     echo "Build type choices are:"
@@ -573,13 +580,10 @@ function lunch()
     if [ $? -ne 0 ]
     then
         # if we can't find a product, try to grab it off the CM github
-        T=$(gettop)
-        pushd $T > /dev/null
-        build/tools/roomservice.py $product
-        popd > /dev/null
+        from_top build/tools/roomservice.py $product
         check_product $product
     else
-        build/tools/roomservice.py $product true
+        from_top build/tools/roomservice.py $product true
     fi
     if [ $? -ne 0 ]
     then
@@ -1836,12 +1840,13 @@ function cmrebase() {
 }
 
 function mka() {
+    T=$(gettop)
     case `uname -s` in
         Darwin)
-            make -j `sysctl hw.ncpu|cut -d" " -f2` "$@"
+            make -C "$T" -j `sysctl hw.ncpu|cut -d" " -f2` "$@"
             ;;
         *)
-            schedtool -B -n 1 -e ionice -n 1 make -j$(cat /proc/cpuinfo | grep "^processor" | wc -l) "$@"
+            schedtool -B -n 1 -e ionice -n 1 make -C "$T" -j$(cat /proc/cpuinfo | grep "^processor" | wc -l) "$@"
             ;;
     esac
 }
