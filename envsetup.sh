@@ -72,6 +72,11 @@ function check_product()
 
     if (echo -n $1 | grep -q -e "^cm_") ; then
        CM_BUILD=$(echo -n $1 | sed -e 's/^cm_//g')
+       if [ `uname` == "Darwin" ]; then
+           export BUILD_NUMBER=$((date +%s%N ; echo $CM_BUILD; hostname) | openssl sha1 | cut -c1-10)
+       else
+           export BUILD_NUMBER=$((date +%s%N ; echo $CM_BUILD; hostname) | sha1sum | cut -c1-10)
+       fi
     else
        CM_BUILD=
     fi
