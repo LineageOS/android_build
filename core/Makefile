@@ -1359,6 +1359,10 @@ ifeq ($(TARGET_USE_DISKINSTALLER),true)
 include bootable/diskinstaller/config.mk
 endif
 
+ifeq ($(strip $(TARGET_USE_USERFASTBOOT)),true)
+include bootable/userfastboot/ramdisk.mk
+endif
+
 # -----------------------------------------------------------------
 # host tools needed to build dist and OTA packages
 
