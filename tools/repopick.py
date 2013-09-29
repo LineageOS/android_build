@@ -62,6 +62,7 @@ parser.add_argument('-a', '--abandon-first', action='store_true', help='before c
 parser.add_argument('-b', '--auto-branch', action='store_true', help='shortcut to "--start-branch auto --abandon-first --ignore-missing"')
 parser.add_argument('-q', '--quiet', action='store_true', help='print as little as possible')
 parser.add_argument('-v', '--verbose', action='store_true', help='print extra information to aid in debug')
+parser.add_argument('-f', '--force', action='store_true', help='force cherry pick even if commit has been merged')
 args = parser.parse_args()
 if args.start_branch == None and args.abandon_first:
     parser.error('if --abandon-first is set, you must also give the branch name with --start-branch')
@@ -217,10 +218,11 @@ for change in args.change_number:
     date_fluff       = '.000000000'
     project_name     = data['project']
     change_number    = data['_number']
+    status           = data['status']
     current_revision = data['revisions'][data['current_revision']]
     patch_number     = current_revision['_number']
-    fetch_url        = current_revision['fetch']['http']['url']
-    fetch_ref        = current_revision['fetch']['http']['ref']
+    fetch_url        = current_revision['fetch']['anonymous http']['url']
+    fetch_ref        = current_revision['fetch']['anonymous http']['ref']
     author_name      = current_revision['commit']['author']['name']
     author_email     = current_revision['commit']['author']['email']
     author_date      = current_revision['commit']['author']['date'].replace(date_fluff, '')
@@ -228,6 +230,14 @@ for change in args.change_number:
     committer_email  = current_revision['commit']['committer']['email']
     committer_date   = current_revision['commit']['committer']['date'].replace(date_fluff, '')
     subject          = current_revision['commit']['subject']
+
+    # Check if commit has already been merged and exit if it has, unless -f is specified
+    if status == "MERGED":
+        if args.force:
+            print("!! Force-picking a merged commit !!\n")
+        else:
+            print("Commit already merged. Skipping the cherry pick.\nUse -f to force this pick.")
+            continue;
 
     # Convert the project name to a project path
     #   - check that the project path exists
