@@ -695,13 +695,20 @@ function eat()
         adb root
         sleep 1
         adb wait-for-device
+        # CWM command
         cat << EOF > /tmp/command
 --sideload
 EOF
-        if adb push /tmp/command /cache/recovery/ ; then
+        # TWRP command
+        cat << EOF > /tmp/openrecoveryscript
+sideload
+EOF
+        if adb push /tmp/command /cache/recovery/ && adb push /tmp/openrecoveryscript /cache/recovery/; then
             echo "Rebooting into recovery for sideload installation"
             adb reboot recovery
+            adb kill-server
             adb wait-for-sideload
+            echo "Device back online, trying to sideload"
             adb sideload $ZIPPATH
         fi
         rm /tmp/command
