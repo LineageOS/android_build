@@ -55,9 +55,9 @@ pathmap_INCL := \
     speex:external/speex/include
 
 ifeq ($(WITH_SIMPLE_RECOVERY),true)
-    pathmap_INCL += recovery:bootable/recovery
-else
     pathmap_INCL += recovery:bootable/simplerecovery
+else
+    pathmap_INCL += recovery:bootable/recovery
 endif
 
 #
