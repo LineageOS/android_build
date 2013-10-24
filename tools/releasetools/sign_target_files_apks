@@ -185,16 +185,17 @@ def RewriteProps(data):
     original_line = line
     if line and line[0] != '#':
       key, value = line.split("=", 1)
-      if key == "ro.build.fingerprint":
-        pieces = value.split("/")
-        pieces[-1] = EditTags(pieces[-1])
-        value = "/".join(pieces)
-      elif key == "ro.build.description":
-        pieces = value.split(" ")
-        assert len(pieces) == 5
-        pieces[-1] = EditTags(pieces[-1])
-        value = " ".join(pieces)
-      elif key == "ro.build.tags":
+      #if key == "ro.build.fingerprint":
+      #  pieces = value.split("/")
+      #  pieces[-1] = EditTags(pieces[-1])
+      #  value = "/".join(pieces)
+      #elif key == "ro.build.description":
+      #  pieces = value.split(" ")
+      #  assert len(pieces) == 5
+      #  pieces[-1] = EditTags(pieces[-1])
+      #  value = " ".join(pieces)
+      #elif key == "ro.build.tags":
+      if key == "ro.build.tags":
         value = EditTags(value)
       line = key + "=" + value
     if line != original_line:
