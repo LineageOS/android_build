@@ -23,70 +23,14 @@ PRODUCT_PACKAGES += \
     BasicDreams \
     Browser \
     Contacts \
-    ContactsProvider \
-    DefaultContainerService \
-    Home \
+    DocumentsUI \
+    DownloadProviderUi \
+    ExternalStorageProvider \
     KeyChain \
     PicoTts \
+    PacProcessor \
+    ProxyHandler \
     SharedStorageBackup \
-    TelephonyProvider \
-    UserDictionaryProvider \
-    VpnDialogs \
-    atrace \
-    libandroidfw \
-    libaudiopreprocessing \
-    libaudioutils \
-    libbcc \
-    libfilterpack_imageproc \
-    libgabi++ \
-    libanalogradiobroadcasting \
-    libkeystore \
-    libmdnssd \
-    libnfc_ndef \
-    libportable \
-    libpowermanager \
-    libspeexresampler \
-    libstagefright_chromium_http \
-    libstagefright_soft_aacdec \
-    libstagefright_soft_aacenc \
-    libstagefright_soft_amrdec \
-    libstagefright_soft_amrnbenc \
-    libstagefright_soft_amrwbenc \
-    libstagefright_soft_flacenc \
-    libstagefright_soft_g711dec \
-    libstagefright_soft_gsmdec \
-    libstagefright_soft_h264dec \
-    libstagefright_soft_h264enc \
-    libstagefright_soft_mp3dec \
-    libstagefright_soft_mpeg4dec \
-    libstagefright_soft_mpeg4enc \
-    libstagefright_soft_rawdec \
-    libstagefright_soft_vorbisdec \
-    libstagefright_soft_vpxdec \
-    libstagefright_soft_vpxenc \
-    libvariablespeed \
-    libwebrtc_audio_preprocessing \
-    mdnsd \
-    mms-common \
-    requestsync \
-    telephony-common \
-    telephony-msim \
-    voip-common
+    VpnDialogs
 
-# host-only dependencies
-ifeq ($(WITH_HOST_DALVIK),true)
-    PRODUCT_PACKAGES += \
-        apache-xml-hostdex \
-        bouncycastle-hostdex \
-        core-hostdex \
-        libcrypto \
-        libexpat \
-        libicui18n \
-        libicuuc \
-        libjavacore \
-        libssl \
-        libz-host \
-        dalvik
-endif
-
-$(call inherit-product, $(SRC_TARGET_DIR)/product/core_minimal.mk)
+$(call inherit-product, $(SRC_TARGET_DIR)/product/core_base.mk)
