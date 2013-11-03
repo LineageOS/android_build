@@ -734,7 +734,7 @@ function _lunch()
     COMPREPLY=( $(compgen -W "${LUNCH_MENU_CHOICES[*]}" -- ${cur}) )
     return 0
 }
-complete -F _lunch lunch
+complete -F _lunch lunch 2>/dev/null
 
 # Configures the build to build unbundled apps.
 # Run tapas with one or more app names (from LOCAL_PACKAGE_NAME)
