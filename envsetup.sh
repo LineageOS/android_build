@@ -1663,8 +1663,10 @@ if [ "x$SHELL" != "x/bin/bash" ]; then
     case `ps -o command -p $$` in
         *bash*)
             ;;
+        *zsh*)
+            ;;
         *)
-            echo "WARNING: Only bash is supported, use of other shell would lead to erroneous results"
+            echo "WARNING: Only bash and zsh are supported, use of other shell may lead to erroneous results"
             ;;
     esac
 fi
