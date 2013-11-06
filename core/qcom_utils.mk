@@ -173,6 +173,7 @@ GINGERBREAD_SDK_VERSIONS := 9 10
 HONEYCOMB_SDK_VERSIONS := 11 12 13
 ICECREAM_SANDWICH_SDK_VERSIONS := 14 15
 JELLY_BEAN_SDK_VERSIONS := 16 17 18
+KITKAT_SDK_VERSIONS := 19
 
 # $(call is-platform-sdk-version-at-least,version)
 # version is a numeric SDK_VERSION defined above
