@@ -94,9 +94,8 @@ class EdifyGenerator(object):
     """Assert that the device identifier is the given string."""
     cmd = ('assert(' +
            ' || \0'.join(['getprop("ro.product.device") == "%s" || getprop("ro.build.product") == "%s" || '
-           'abort("This package is for \\"%s\\" devices; '
-           'this is a \\"" + getprop("ro.product.device") + "\\".");'
-                         % (i, i, i) for i in device.split(",")]) +
+                         % (i, i) for i in device.split(",")]) +
+           'abort("This package is not for device: \\"" + getprop("ro.product.device") + "\\".");'
            ');')
     self.script.append(self._WordWrap(cmd))
 
