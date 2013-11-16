@@ -707,7 +707,6 @@ EOF
         if adb push /tmp/command /cache/recovery/ && adb push /tmp/openrecoveryscript /cache/recovery/; then
             echo "Rebooting into recovery for sideload installation"
             adb reboot recovery
-            adb kill-server
             adb wait-for-sideload
             echo "Device back online, trying to sideload"
             adb sideload $ZIPPATH
@@ -2132,5 +2131,7 @@ check_bash_version && {
     fi
     done
 }
+
+adb kill-server 2>&1 > /dev/null && adb start-server 2>&1 > /dev/null
 
 export ANDROID_BUILD_TOP=$(gettop)
