@@ -16,6 +16,24 @@
       "revId": "ea91e2f615d3e3fa089b3decfe658684b8e89920",
       "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da20952f_b8b5707f",
+        "filename": "core/Makefile",
+        "patchSetId": 1
+      },
+      "lineNbr": 1375,
+      "author": {
+        "id": 3556
+      },
+      "writtenOn": "2013-11-19T02:38:23Z",
+      "side": 1,
+      "message": "I believe it\u0027s reversed because this should be the default behaviour unless you specifically opt out due to device specific issues. Most devices can use this with an updated recovery. However some devices have EMMC quirks which just don\u0027t work with this.",
+      "parentUuid": "da20952f_45c8ed74",
+      "revId": "ea91e2f615d3e3fa089b3decfe658684b8e89920",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
     }
   ]
 }
