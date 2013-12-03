@@ -405,9 +405,9 @@ def WriteFullOTAPackage(input_zip, output_zip):
 
   metadata["ota-type"] = "BLOCK"
 
-  ts = GetBuildProp("ro.build.date.utc", OPTIONS.info_dict)
-  ts_text = GetBuildProp("ro.build.date", OPTIONS.info_dict)
-  script.AssertOlderBuild(ts, ts_text)
+  #ts = GetBuildProp("ro.build.date.utc", OPTIONS.info_dict)
+  #ts_text = GetBuildProp("ro.build.date", OPTIONS.info_dict)
+  #script.AssertOlderBuild(ts, ts_text)
 
   AppendAssertions(script, OPTIONS.info_dict, oem_dicts)
   device_specific.FullOTA_Assertions()
