@@ -143,9 +143,9 @@ def WriteFullOTAPackage(input_zip, output_file):
   assert HasRecoveryPatch(input_zip, info_dict=OPTIONS.info_dict)
 
   # Assertions (e.g. downgrade check, device properties check).
-  ts = target_info.GetBuildProp("ro.build.date.utc")
-  ts_text = target_info.GetBuildProp("ro.build.date")
-  script.AssertOlderBuild(ts, ts_text)
+  #ts = target_info.GetBuildProp("ro.build.date.utc")
+  #ts_text = target_info.GetBuildProp("ro.build.date")
+  #script.AssertOlderBuild(ts, ts_text)
 
   target_info.WriteDeviceAssertions(script, OPTIONS.oem_no_mount)
   device_specific.FullOTA_Assertions()
