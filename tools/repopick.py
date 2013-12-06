@@ -238,7 +238,7 @@ for change in args.change_number:
             print("!! Force-picking a merged commit !!\n")
         else:
             print("Commit already merged. Skipping the cherry pick.\nUse -f to force this pick.")
-            sys.exit(1)
+            continue;
 
     # Convert the project name to a project path
     #   - check that the project path exists
