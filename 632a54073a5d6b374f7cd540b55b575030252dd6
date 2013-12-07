@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa80f949_be569e04",
+        "filename": "tools/repopick.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 241,
+      "author": {
+        "id": 3671
+      },
+      "writtenOn": "2013-12-07T08:13:12Z",
+      "side": 1,
+      "message": "probably want a semicolon here\n\nhttp://review.cyanogenmod.org/#/c/52876/\n\n\u003dD",
+      "revId": "632a54073a5d6b374f7cd540b55b575030252dd6",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    }
+  ]
+}
