@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a68dd71_dc7369b3",
+        "filename": "core/main.mk",
+        "patchSetId": 3
+      },
+      "lineNbr": 305,
+      "author": {
+        "id": 5589
+      },
+      "writtenOn": "2013-12-27T10:02:39Z",
+      "side": 1,
+      "message": "You need to merge your if below with the statement above, perhaps using an else",
+      "revId": "4db3571274f6ae5dcc6cdad8475e955e1a116b46",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    }
+  ]
+}
