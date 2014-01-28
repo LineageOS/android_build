@@ -26,10 +26,8 @@ fi
 if [ -n "$AB_OTA_UPDATER" ] ; then
   echo "ro.build.ab_update=$AB_OTA_UPDATER"
 fi
-echo "ro.product.model=$PRODUCT_MODEL"
 echo "ro.product.brand=$PRODUCT_BRAND"
 echo "ro.product.name=$PRODUCT_NAME"
-echo "ro.product.device=$TARGET_DEVICE"
 echo "ro.product.board=$TARGET_BOOTLOADER_BOARD_NAME"
 
 # These values are deprecated, use "ro.product.cpu.abilist"
@@ -54,11 +52,15 @@ echo "ro.board.platform=$TARGET_BOARD_PLATFORM"
 echo "# ro.build.product is obsolete; use ro.product.device"
 echo "ro.build.product=$TARGET_DEVICE"
 
-echo "# Do not try to parse description, fingerprint, or thumbprint"
-echo "ro.build.description=$PRIVATE_BUILD_DESC"
-echo "ro.build.fingerprint=$BUILD_FINGERPRINT"
-if [ -n "$BUILD_THUMBPRINT" ] ; then
-  echo "ro.build.thumbprint=$BUILD_THUMBPRINT"
+if [ "$TARGET_UNIFIED_DEVICE" == "" ] ; then
+  echo "ro.product.model=$PRODUCT_MODEL"
+  echo "ro.product.device=$TARGET_DEVICE"
+  echo "# Do not try to parse description, fingerprint, or thumbprint"
+  echo "ro.build.description=$PRIVATE_BUILD_DESC"
+  echo "ro.build.fingerprint=$BUILD_FINGERPRINT"
+  if [ -n "$BUILD_THUMBPRINT" ] ; then
+    echo "ro.build.thumbprint=$BUILD_THUMBPRINT"
+  fi
 fi
 echo "ro.build.characteristics=$TARGET_AAPT_CHARACTERISTICS"
 
