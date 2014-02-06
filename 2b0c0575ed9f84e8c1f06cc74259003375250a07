@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fade3982_9d5274dc",
+        "filename": "tools/releasetools/ota_from_target_files",
+        "patchSetId": 3
+      },
+      "lineNbr": 428,
+      "author": {
+        "id": 4615
+      },
+      "writtenOn": "2014-02-06T21:22:18Z",
+      "side": 1,
+      "message": "Boolean variable at it\u0027s root. Don\u0027t check it like a string\n\nif OPTION.override_prop:",
+      "revId": "2b0c0575ed9f84e8c1f06cc74259003375250a07",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    }
+  ]
+}
