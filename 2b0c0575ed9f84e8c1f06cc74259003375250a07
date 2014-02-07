@@ -16,6 +16,41 @@
       "revId": "2b0c0575ed9f84e8c1f06cc74259003375250a07",
       "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fade3982_7df8507d",
+        "filename": "tools/releasetools/ota_from_target_files",
+        "patchSetId": 3
+      },
+      "lineNbr": 428,
+      "author": {
+        "id": 8640
+      },
+      "writtenOn": "2014-02-07T04:46:05Z",
+      "side": 1,
+      "message": "I\u0027ll change it to non boolean since the later statement is only executed if it equals false",
+      "parentUuid": "fade3982_9d5274dc",
+      "revId": "2b0c0575ed9f84e8c1f06cc74259003375250a07",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fade3982_5df58c81",
+        "filename": "tools/releasetools/ota_from_target_files",
+        "patchSetId": 3
+      },
+      "lineNbr": 638,
+      "author": {
+        "id": 8640
+      },
+      "writtenOn": "2014-02-07T04:46:05Z",
+      "side": 1,
+      "message": "Evaluating it as a boolean wouldn\u0027t work here.",
+      "revId": "2b0c0575ed9f84e8c1f06cc74259003375250a07",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
     }
   ]
 }
