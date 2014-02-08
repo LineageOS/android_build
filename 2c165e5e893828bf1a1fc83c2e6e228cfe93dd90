@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "fade3982_13edb38b",
+        "filename": "tools/releasetools/ota_from_target_files",
+        "patchSetId": 6
+      },
+      "lineNbr": 439,
+      "author": {
+        "id": 4615
+      },
+      "writtenOn": "2014-02-08T12:47:36Z",
+      "side": 1,
+      "message": "ah yeah that makes sense. I forget that aosp needs tracking",
+      "parentUuid": "fade3982_53d8dbef",
+      "revId": "2c165e5e893828bf1a1fc83c2e6e228cfe93dd90",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fade3982_533c5b2f",
         "filename": "tools/releasetools/ota_from_target_files",
         "patchSetId": 6
