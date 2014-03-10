@@ -50,6 +50,17 @@ try:
 except:
     device = product
 
+crfile = open('build/tools/consol-repos/cm-consol-repos.json')
+crarray = json.load(crfile)
+crfile.close()
+
+try:
+    devicerepo = crarray[device]
+    if devicerepo:
+        device = devicerepo
+except:
+    pass
+
 if not depsonly:
     print("Device %s not found. Attempting to retrieve device repository from CyanogenMod Github (http://github.com/CyanogenMod)." % device)
 

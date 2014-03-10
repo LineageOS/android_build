@@ -145,12 +145,22 @@ include $(BUILD_SYSTEM)/linaro_compilerchecks.mk
 # or under vendor/*/$(TARGET_DEVICE).  Search in both places, but
 # make sure only one exists.
 # Real boards should always be associated with an OEM vendor.
-board_config_mk := \
-	$(strip $(wildcard \
-		$(SRC_TARGET_DIR)/board/$(TARGET_DEVICE)/BoardConfig.mk \
-		$(shell test -d device && find device -maxdepth 4 -path '*/$(TARGET_DEVICE)/BoardConfig.mk') \
-		$(shell test -d vendor && find vendor -maxdepth 4 -path '*/$(TARGET_DEVICE)/BoardConfig.mk') \
-	))
+ifneq ($(wildcard device/*/*/cm-$(CM_BUILD).mk),)
+  cm_mk_dir := $(shell dirname device/*/*/cm-$(CM_BUILD).mk)
+  board_config_mk := \
+    $(strip $(wildcard \
+      $(SRC_TARGET_DIR)/board/$(TARGET_DEVICE)/BoardConfig.mk \
+      $(shell test -d device && find device -maxdepth 4 -path '$(cm_mk_dir)/BoardConfig.mk') \
+      $(shell test -d vendor && find vendor -maxdepth 4 -path '*/$(TARGET_DEVICE)/BoardConfig.mk') \
+    ))
+else
+  board_config_mk := \
+    $(strip $(wildcard \
+      $(SRC_TARGET_DIR)/board/$(TARGET_DEVICE)/BoardConfig.mk \
+      $(shell test -d device && find device -maxdepth 4 -path '*/$(TARGET_DEVICE)/BoardConfig.mk') \
+      $(shell test -d vendor && find vendor -maxdepth 4 -path '*/$(TARGET_DEVICE)/BoardConfig.mk') \
+    ))
+endif
 ifeq ($(board_config_mk),)
   $(error No config file found for TARGET_DEVICE $(TARGET_DEVICE))
 endif
