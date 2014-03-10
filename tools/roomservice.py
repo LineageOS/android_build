@@ -50,6 +50,17 @@ try:
 except:
     device = product
 
+gitrequest = urllib.request.urlopen("https://raw.githubusercontent.com/CyanogenMod/hudson/master/cm-consol-devices.json")
+gitresult = json.load(gitrequest)
+gitrequest.close()
+
+try:
+    devicerepo = gitresult[device]
+    if devicerepo:
+        device = devicerepo
+except:
+    pass
+
 if not depsonly:
     print("Device %s not found. Attempting to retrieve device repository from CyanogenMod Github (http://github.com/CyanogenMod)." % device)
 
