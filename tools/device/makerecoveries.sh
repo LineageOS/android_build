@@ -30,7 +30,7 @@ function mcpguard () {
     fi
 }
 
-VERSION=$(cat bootable/recovery/Android.mk | grep RECOVERY_VERSION | grep RECOVERY_NAME | awk '{ print $4 }' | sed s/v//g)
+VERSION=$(cat bootable/recovery/Android.mk | grep -m 1 CWM_VERSION | awk '{ print $3 }')
 RELEASE_VERSION=$VERSION
 if [ ! -z "$BOARD_TOUCH_RECOVERY" ]
 then
