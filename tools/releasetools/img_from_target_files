@@ -201,6 +201,12 @@ def CopyInfo(output_zip):
   output_zip.write(os.path.join(OPTIONS.input_tmp, "OTA", "android-info.txt"),
                    "android-info.txt")
 
+def AddRadio(output_zip):
+  """If they exist, add RADIO files to the output."""
+  if os.path.exists(os.path.join(OPTIONS.input_tmp, "RADIO")):
+    for radio_root, radio_dirs, radio_files in os.walk(os.path.join(OPTIONS.input_tmp, "RADIO")):
+      for radio_file in radio_files:
+        output_zip.write(os.path.join(radio_root, radio_file), radio_file)
 
 def main(argv):
   bootable_only = [False]
@@ -251,6 +257,7 @@ def main(argv):
     AddUserdata(output_zip)
     AddCache(output_zip)
     CopyInfo(output_zip)
+    AddRadio(output_zip)
 
   print "cleaning up..."
   output_zip.close()
