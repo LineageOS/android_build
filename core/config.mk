@@ -23,6 +23,7 @@ comma := ,
 # only has an effect on python 2.6 and above.
 export PYTHONDONTWRITEBYTECODE := 1
 
+-include $(TOPDIR)vendor/cm/config/extra.mk
 -include $(TOPDIR)vendor/extra/extra_config.mk
 
 # Standard source directories.
