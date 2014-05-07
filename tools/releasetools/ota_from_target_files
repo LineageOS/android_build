@@ -664,6 +664,8 @@ endif;
   script.AddToZip(input_zip, output_zip, input_path=OPTIONS.updater_binary)
   WriteMetadata(metadata, output_zip)
 
+  common.ZipWriteStr(output_zip, "META-INF/org/cyanogenmod/releasekey",
+                     ""+input_zip.read("META/releasekey.txt"))
 
 def WritePolicyConfig(file_context, output_zip):
   f = open(file_context, 'r');
@@ -1402,7 +1404,6 @@ endif;
   script.AddToZip(target_zip, output_zip, input_path=OPTIONS.updater_binary)
 
   WriteMetadata(metadata, output_zip)
-
 
 def main(argv):
 
