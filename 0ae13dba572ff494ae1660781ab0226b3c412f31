@@ -1,0 +1,106 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da0c15f0_c27898fb",
+        "filename": "core/Makefile",
+        "patchSetId": 1
+      },
+      "lineNbr": 673,
+      "author": {
+        "id": 6949
+      },
+      "writtenOn": "2014-05-11T07:57:00Z",
+      "side": 1,
+      "message": "ifeq ($(RECOVERY_VARIANT),) || ($(RECOVERY_VARIANT),cwm)",
+      "revId": "0ae13dba572ff494ae1660781ab0226b3c412f31",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da0c15f0_a27da4e9",
+        "filename": "core/Makefile",
+        "patchSetId": 1
+      },
+      "lineNbr": 674,
+      "author": {
+        "id": 6949
+      },
+      "writtenOn": "2014-05-11T07:57:00Z",
+      "side": 1,
+      "message": "recovery_initrc :\u003d bootable/recovery/etc/init.rc",
+      "revId": "0ae13dba572ff494ae1660781ab0226b3c412f31",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da0c15f0_0283b0cd",
+        "filename": "core/Makefile",
+        "patchSetId": 1
+      },
+      "lineNbr": 676,
+      "author": {
+        "id": 6949
+      },
+      "writtenOn": "2014-05-11T07:57:00Z",
+      "side": 1,
+      "message": "recovery_initrc :\u003d bootable/recovery-$(RECOVERY_VARIANT)/etc/init.rc",
+      "revId": "0ae13dba572ff494ae1660781ab0226b3c412f31",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da0c15f0_426da831",
+        "filename": "core/Makefile",
+        "patchSetId": 1
+      },
+      "lineNbr": 689,
+      "author": {
+        "id": 6949
+      },
+      "writtenOn": "2014-05-11T07:57:00Z",
+      "side": 1,
+      "message": "ifeq ($(RECOVERY_VARIANT),) || ($(RECOVERY_VARIANT),cwm)",
+      "revId": "0ae13dba572ff494ae1660781ab0226b3c412f31",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da0c15f0_226a341b",
+        "filename": "core/Makefile",
+        "patchSetId": 1
+      },
+      "lineNbr": 690,
+      "author": {
+        "id": 6949
+      },
+      "writtenOn": "2014-05-11T07:57:00Z",
+      "side": 1,
+      "message": "recovery_resources_common :\u003d bootable/recovery/res",
+      "revId": "0ae13dba572ff494ae1660781ab0226b3c412f31",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da0c15f0_8277c001",
+        "filename": "core/Makefile",
+        "patchSetId": 1
+      },
+      "lineNbr": 692,
+      "author": {
+        "id": 6949
+      },
+      "writtenOn": "2014-05-11T07:57:00Z",
+      "side": 1,
+      "message": "recovery_resources_common :\u003d bootable/recovery-$(RECOVERY_VARIANT)/res",
+      "revId": "0ae13dba572ff494ae1660781ab0226b3c412f31",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    }
+  ]
+}
