@@ -2051,10 +2051,12 @@ $(hide) if [ -s $(PRIVATE_CLASS_INTERMEDIATES_DIR)/java-source-list-uniq ] ; the
     $(PRIVATE_JAVACFLAGS) \
     \@$(PRIVATE_CLASS_INTERMEDIATES_DIR)/java-source-list-uniq \
     2>$(PRIVATE_CLASS_INTERMEDIATES_DIR)/stderr \
-    && rm -f $(PRIVATE_CLASS_INTERMEDIATES_DIR)/stderr \
-    || ( if [ -e $(PRIVATE_CLASS_INTERMEDIATES_DIR)/stderr ]; then \
+    && ( [ -s $(PRIVATE_CLASS_INTERMEDIATES_DIR)/stderr ] && \
+    echo -e ${CL_YLW}"`cat $(PRIVATE_CLASS_INTERMEDIATES_DIR)/stderr`"${CL_RST} 1>&2; \
+    rm -f $(PRIVATE_CLASS_INTERMEDIATES_DIR)/stderr ) \
+    || ( [ -s $(PRIVATE_CLASS_INTERMEDIATES_DIR)/stderr ] && \
     echo -e ${CL_RED}"`cat $(PRIVATE_CLASS_INTERMEDIATES_DIR)/stderr`"${CL_RST} 1>&2; \
-    fi; rm -rf $(PRIVATE_CLASS_INTERMEDIATES_DIR); exit 41 ) \
+    rm -rf $(PRIVATE_CLASS_INTERMEDIATES_DIR); exit 41 ) \
 fi
 $(if $(PRIVATE_JAVA_LAYERS_FILE), $(hide) build/tools/java-layers.py \
     $(PRIVATE_JAVA_LAYERS_FILE) \@$(PRIVATE_CLASS_INTERMEDIATES_DIR)/java-source-list-uniq,)
