@@ -25,6 +25,12 @@ print_build_config_vars := \
   BUILD_ID \
   OUT_DIR
 
+ifeq ($(CYNGN_TARGET),true)
+print_build_config_vars += \
+  CYNGN_TARGET \
+  CYNGN_FEATURES
+endif
+
 ifeq ($(TARGET_BUILD_PDK),true)
 print_build_config_vars += \
   TARGET_BUILD_PDK \
