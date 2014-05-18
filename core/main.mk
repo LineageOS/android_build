@@ -142,6 +142,9 @@ endif
 # be generated correctly
 include $(BUILD_SYSTEM)/cleanbuild.mk
 
+# Bring in Qualcomm helper macros
+include $(BUILD_SYSTEM)/qcom_utils.mk
+
 # Include the google-specific config
 -include vendor/google/build/config.mk
 
@@ -294,9 +297,6 @@ endif
 
 # Bring in standard build system definitions.
 include $(BUILD_SYSTEM)/definitions.mk
-
-# Bring in Qualcomm helper macros
-include $(BUILD_SYSTEM)/qcom_utils.mk
 
 # Bring in dex_preopt.mk
 include $(BUILD_SYSTEM)/dex_preopt.mk
