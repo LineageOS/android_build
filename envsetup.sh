@@ -2012,37 +2012,68 @@ function dopush()
     sleep 0.3
     adb remount &> /dev/null
 
+    mkdir -p $OUT
     $func $* | tee $OUT/.log
 
     # Install: <file>
-    LOC=$(cat $OUT/.log | sed -r 's/\x1B\[([0-9]{1,2}(;[0-9]{1,2})?)?[m|K]//g' | grep 'Install' | cut -d ':' -f 2)
+    LOC="$(cat $OUT/.log | sed -r 's/\x1B\[([0-9]{1,2}(;[0-9]{1,2})?)?[m|K]//g' | grep '^Install: ' | cut -d ':' -f 2)"
 
     # Copy: <file>
-    LOC=$LOC $(cat $OUT/.log | sed -r 's/\x1B\[([0-9]{1,2}(;[0-9]{1,2})?)?[m|K]//g' | grep 'Copy' | cut -d ':' -f 2)
+    LOC="$LOC $(cat $OUT/.log | sed -r 's/\x1B\[([0-9]{1,2}(;[0-9]{1,2})?)?[m|K]//g' | grep '^Copy: ' | cut -d ':' -f 2)"
 
+    # Push an octal file permissions reader to device
+    if [ -n "$(echo $LOC | tr -d ' ')" ]; then
+        CHKPERM="/data/local/tmp/chkfileperm.sh"
+(
+cat <<'EOF'
+#!/system/xbin/sh
+FILE=$@
+if [ -e $FILE ]; then
+    ls -l $FILE | awk '{k=0;for(i=0;i<=8;i++)k+=((substr($1,i+2,1)~/[rwx]/)*2^(8-i));if(k)printf("%0o ",k);print}' | cut -d ' ' -f1
+fi
+EOF
+) > $OUT/.chkfileperm.sh
+        echo "Pushing file permissions checker to device"
+        adb push $OUT/.chkfileperm.sh $CHKPERM
+        adb shell chmod 755 $CHKPERM
+        rm -f $OUT/.chkfileperm.sh
+    fi
+
+    stop_n_start=false
     for FILE in $LOC; do
-        # Get target file name (i.e. system/bin/adb)
-        TARGET=$(echo $FILE | sed "s#$OUT/##")
+        # Make sure file is in $OUT/system or $OUT/data
+        case $FILE in
+            $OUT/system/*|$OUT/data/*)
+                # Get target file name (i.e. system/bin/adb)
+                TARGET=$(echo $FILE | sed "s#$OUT/##")
+            ;;
+            *) continue ;;
+        esac
 
-        # Don't send files that are not under /system or /data
-        if [ ! "echo $TARGET | egrep '^system\/' > /dev/null" -o \
-               "echo $TARGET | egrep '^data\/' > /dev/null" ] ; then
-            continue
-        else
-            case $TARGET in
+        OLDPERM=$(adb shell $CHKPERM $TARGET)
+        OLDPERM=$(echo $OLDPERM|tr -d '\r'|tr -d '\n')
+        case $TARGET in
             system/app/SystemUI.apk|system/framework/*)
                 stop_n_start=true
             ;;
             *)
                 stop_n_start=false
             ;;
-            esac
-            if $stop_n_start ; then adb shell stop ; fi
-            echo "Pushing: $TARGET"
-            adb push $FILE $TARGET
-            if $stop_n_start ; then adb shell start ; fi
+        esac
+        if $stop_n_start ; then adb shell stop ; fi
+        echo "Pushing: $TARGET"
+        adb push $FILE $TARGET
+        if [ -n "$OLDPERM" ]; then
+            echo "Setting file permissions: $OLDPERM"
+            adb shell chmod $OLDPERM $TARGET
+        else
+            echo "$TARGET did not exist previously, you should set file permissions manually"
         fi
     done
+    if [ -n "$(echo $LOC | tr -d ' ')" ]; then
+        adb shell rm $CHKPERM
+    fi
+    if $stop_n_start ; then adb shell start ; fi
     rm -f $OUT/.log
     return 0
     else
