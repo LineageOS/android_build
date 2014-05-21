@@ -75,7 +75,9 @@ ifneq ($(USE_CCACHE),)
   # We don't really use system headers much so the rootdir is
   # fine; ensures these paths are relative for all Android trees
   # on a workstation.
-  export CCACHE_BASEDIR := /
+  ifeq ($(CCACHE_BASEDIR),)
+    export CCACHE_BASEDIR := $(ANDROID_BUILD_TOP)
+  endif
 
   CCACHE_HOST_TAG := $(HOST_PREBUILT_TAG)
   # If we are cross-compiling Windows binaries on Linux
