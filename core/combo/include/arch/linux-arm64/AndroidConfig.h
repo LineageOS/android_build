@@ -337,4 +337,11 @@
  */
 #define HAVE_GNU_QSORT_R 0
 
+/*
+ * Define CONFIG_64BIT based on __LP64__
+ */
+#ifdef __LP64__
+#define  CONFIG_64BIT
+#endif
+
 #endif /* _ANDROID_CONFIG_H */
