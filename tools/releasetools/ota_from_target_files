@@ -222,7 +222,7 @@ class Item:
     i = cls.ITEMS.get("system/recovery-from-boot.p", None)
     if i: i.uid, i.gid, i.mode, i.selabel, i.capabilities = 0, 0, 0644, None, None
     i = cls.ITEMS.get("system/etc/install-recovery.sh", None)
-    if i: i.uid, i.gid, i.mode, i.selabel, i.capabilities = 0, 0, 0544, None, None
+    if i: i.uid, i.gid, i.mode, i.selabel, i.capabilities = 0, 0, 0444, None, None
 
   def CountChildMetadata(self):
     """Count up the (uid, gid, mode, selabel, capabilities) tuples for
