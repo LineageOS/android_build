@@ -12,7 +12,7 @@ ifeq ($(BOARD_USES_QCOM_HARDWARE),true)
     endif
 
     # Enable DirectTrack for legacy targets
-    ifneq ($(filter caf bfam,$(TARGET_QCOM_AUDIO_VARIANT)),)
+    ifneq ($(filter caf caf%,$(TARGET_QCOM_AUDIO_VARIANT)),)
         ifeq ($(BOARD_USES_LEGACY_ALSA_AUDIO),true)
             TARGET_GLOBAL_CFLAGS += -DQCOM_DIRECTTRACK
             TARGET_GLOBAL_CPPFLAGS += -DQCOM_DIRECTTRACK
