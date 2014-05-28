@@ -625,6 +625,7 @@ def WriteIncrementalOTAPackage(target_zip, source_zip, output_zip):
       # patch is almost as big as the file; don't bother patching
       tf.AddToZip(output_zip)
       verbatim_targets.append((tf.name, tf.size))
+      renames.pop(sf.name, None)
     else:
       common.ZipWriteStr(output_zip, "patch/" + sf.name + ".p", d)
       patch_list.append((sf.name, tf, sf, tf.size, common.sha1(d).hexdigest()))
