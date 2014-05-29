@@ -16,6 +16,24 @@
       "revId": "dcb663e828e46e11f00422a959886d4b02019392",
       "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da0c15f0_491496f4",
+        "filename": "core/Makefile",
+        "patchSetId": 1
+      },
+      "lineNbr": 1452,
+      "author": {
+        "id": 2936
+      },
+      "writtenOn": "2014-05-29T10:37:28Z",
+      "side": 1,
+      "message": "AFAIK there isn\u0027t, I\u0027m looking at sony and they use the BOARD_CUSTOM_BOOTIMG_MK to generate the combined recovery without flagging anything else.",
+      "parentUuid": "da0c15f0_a9c45292",
+      "revId": "dcb663e828e46e11f00422a959886d4b02019392",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
     }
   ]
 }
