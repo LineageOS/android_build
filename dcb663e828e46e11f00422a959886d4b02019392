@@ -69,6 +69,24 @@
       "revId": "dcb663e828e46e11f00422a959886d4b02019392",
       "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da0c15f0_09a61ec1",
+        "filename": "core/Makefile",
+        "patchSetId": 1
+      },
+      "lineNbr": 1469,
+      "author": {
+        "id": 8640
+      },
+      "writtenOn": "2014-05-29T11:04:10Z",
+      "side": 1,
+      "message": "if you pass this into ota_from_target_files as is This device and all others like it https://github.com/CyanogenMod/android_device_motorola_omap4-common/blob/cm-11.0/releasetools/common_ota_from_target_files would fail to build as they would get error saying unknown flag no_seperate_recovery, or something like that.\nif instead you:\n\nifneq ($(TARGET_NO_SEPARATE_RECOVERY),)\n$(INTERNAL_OTA_PACKAGE_TARGET): seperate_recovery :\u003d --separate_recovery :\u003d true\nendif\n..\n..\n--override_device\u003d$(override_device) $(override_prop) $(seperate_recovery) \\\n\nthen it will not pass anything into ota_from_target_files on devices without the board flag.",
+      "parentUuid": "da0c15f0_69dd1a42",
+      "revId": "dcb663e828e46e11f00422a959886d4b02019392",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
     }
   ]
 }
