@@ -34,6 +34,23 @@
       "revId": "dcb663e828e46e11f00422a959886d4b02019392",
       "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da0c15f0_492bf630",
+        "filename": "core/Makefile",
+        "patchSetId": 1
+      },
+      "lineNbr": 1469,
+      "author": {
+        "id": 8640
+      },
+      "writtenOn": "2014-05-29T10:54:44Z",
+      "side": 1,
+      "message": "Just as an FYI arcee force pushed over my commit for override_prop to do it with the $(override_prop) so that it wouldn\u0027t break all devices using custom release tools. See like 1448 and 1568.  Otherwise all custom ota_from_target_files have to be updated.",
+      "revId": "dcb663e828e46e11f00422a959886d4b02019392",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
     }
   ]
 }
