@@ -237,8 +237,12 @@ def BuildImage(in_dir, prop_dict, out_file,
     if "extfs_sparse_flag" in prop_dict:
       build_command.append(prop_dict["extfs_sparse_flag"])
       #run_fsck = True
-    build_command.extend([in_dir, out_file, fs_type,
-                          prop_dict["mount_point"]])
+    if "is_userdataextra" in prop_dict:
+      build_command.extend([in_dir, out_file, fs_type,
+                           "data"])
+    else:
+      build_command.extend([in_dir, out_file, fs_type,
+                            prop_dict["mount_point"]])
     build_command.append(prop_dict["partition_size"])
     if "timestamp" in prop_dict:
       build_command.extend(["-T", str(prop_dict["timestamp"])])
@@ -325,6 +329,11 @@ def ImagePropFromGlobalDict(glob_dict, mount_point):
     copy_prop("fs_type", "fs_type")
     copy_prop("userdata_fs_type", "fs_type")
     copy_prop("userdata_size", "partition_size")
+  elif mount_point == "data_extra":
+    copy_prop("fs_type", "fs_type")
+    copy_prop("userdataextra_size", "partition_size")
+    copy_prop("userdataextra_name", "partition_name")
+    d["is_userdataextra"] = True
   elif mount_point == "cache":
     copy_prop("cache_fs_type", "fs_type")
     copy_prop("cache_size", "partition_size")
