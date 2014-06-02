@@ -140,6 +140,31 @@ endif
 
 
 #----------------------------------------------------------------------
+# Generate 64GB userdata image if necessary
+#----------------------------------------------------------------------
+ifneq ($(BOARD_USERDATAIMAGE_64G_PARTITION_SIZE),)
+
+BUILT_USERDATAIMAGE_64G_TARGET := $(PRODUCT_OUT)/userdata_64g.img
+
+define build-64g-userdataimage-target
+    $(call pretty,"Target 64G userdata fs image: $(INSTALLED_USERDATAIMAGE_64G_TARGET)")
+    @mkdir -p $(TARGET_OUT_DATA)
+    $(hide) $(MKEXTUSERIMG) -s $(TARGET_OUT_DATA) $@ ext4 data $(BOARD_USERDATAIMAGE_64G_PARTITION_SIZE)
+    $(hide) chmod a+r $@
+    $(hide) $(call assert-max-image-size,$@,$(BOARD_USERDATAIMAGE_64G_PARTITION_SIZE),yaffs)
+endef
+
+INSTALLED_USERDATAIMAGE_64G_TARGET := $(BUILT_USERDATAIMAGE_64G_TARGET)
+$(INSTALLED_USERDATAIMAGE_64G_TARGET):
+	$(build-64g-userdataimage-target)
+
+ALL_DEFAULT_INSTALLED_MODULES += $(INSTALLED_USERDATAIMAGE_64G_TARGET)
+ALL_MODULES.$(LOCAL_MODULE).INSTALLED += $(INSTALLED_USERDATAIMAGE_64G_TARGET)
+
+endif
+
+
+#----------------------------------------------------------------------
 # Generate NAND images
 #----------------------------------------------------------------------
 ifeq ($(call is-board-platform-in-list,msm7x27a msm7x30),true)
