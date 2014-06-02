@@ -140,6 +140,31 @@ endif
 
 
 #----------------------------------------------------------------------
+# Generate extra userdata images (for variants with multiple mmc sizes)
+#----------------------------------------------------------------------
+ifneq ($(BOARD_USERDATAIMAGE_EXTRA_PARTITION_SIZE),)
+
+BUILT_USERDATAIMAGE_EXTRA_TARGET := $(PRODUCT_OUT)/userdata_extra.img
+
+define build-extra-userdataimage-target
+    $(call pretty,"Target EXTRA userdata fs image: $(INSTALLED_USERDATAIMAGE_EXTRA_TARGET)")
+    @mkdir -p $(TARGET_OUT_DATA)
+    $(hide) $(MKEXTUSERIMG) -s $(TARGET_OUT_DATA) $@ ext4 data $(BOARD_USERDATAIMAGE_EXTRA_PARTITION_SIZE)
+    $(hide) chmod a+r $@
+    $(hide) $(call assert-max-image-size,$@,$(BOARD_USERDATAIMAGE_EXTRA_PARTITION_SIZE),yaffs)
+endef
+
+INSTALLED_USERDATAIMAGE_EXTRA_TARGET := $(BUILT_USERDATAIMAGE_EXTRA_TARGET)
+$(INSTALLED_USERDATAIMAGE_EXTRA_TARGET):
+	$(build-extra-userdataimage-target)
+
+ALL_DEFAULT_INSTALLED_MODULES += $(INSTALLED_USERDATAIMAGE_EXTRA_TARGET)
+ALL_MODULES.$(LOCAL_MODULE).INSTALLED += $(INSTALLED_USERDATAIMAGE_EXTRA_TARGET)
+
+endif
+
+
+#----------------------------------------------------------------------
 # Generate NAND images
 #----------------------------------------------------------------------
 ifeq ($(call is-board-platform-in-list,msm7x27a msm7x30),true)
