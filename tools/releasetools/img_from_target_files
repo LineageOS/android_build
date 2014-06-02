@@ -164,6 +164,42 @@ def AddUserdata(output_zip):
   os.rmdir(temp_dir)
 
 
+def AddUserdataExtra(output_zip):
+  """Create extra userdata image and store it in output_zip."""
+
+  image_props = build_image.ImagePropFromGlobalDict(OPTIONS.info_dict,
+                                                    "data_extra")
+  # If no userdataextra_size is provided for extfs, skip userdata_extra.img.
+  if (image_props.get("fs_type", "").startswith("ext") and
+      not image_props.get("partition_size")):
+    return
+
+  extra_name = image_props.get("partition_name", "extra")
+
+  print "creating userdata_%s.img..." % extra_name
+
+  # The name of the directory it is making an image out of matters to
+  # mkyaffs2image.  So we create a temp dir, and within it we create an
+  # empty dir named "data", and build the image from that.
+  temp_dir = tempfile.mkdtemp()
+  user_dir = os.path.join(temp_dir, "data")
+  os.mkdir(user_dir)
+  img = tempfile.NamedTemporaryFile()
+
+  fstab = OPTIONS.info_dict["fstab"]
+  if fstab:
+    image_props["fs_type" ] = fstab["/data"].fs_type
+  succ = build_image.BuildImage(user_dir, image_props, img.name)
+  assert succ, "build userdata_%s.img image failed" % extra_name
+
+  # Disable size check since this fetches original data partition size
+  #common.CheckSize(img.name, "userdata_extra.img", OPTIONS.info_dict)
+  output_zip.write(img.name, "userdata_%s.img" % extra_name)
+  img.close()
+  os.rmdir(user_dir)
+  os.rmdir(temp_dir)
+
+
 def AddCache(output_zip):
   """Create an empty cache image and store it in output_zip."""
 
@@ -273,6 +309,7 @@ def main(argv):
     AddSystem(output_zip)
     AddVendor(output_zip)
     AddUserdata(output_zip)
+    AddUserdataExtra(output_zip)
     AddCache(output_zip)
     CopyInfo(output_zip)
     AddRadio(output_zip)
