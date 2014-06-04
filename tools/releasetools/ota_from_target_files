@@ -1046,7 +1046,7 @@ def main(argv):
                                               "backup=",
                                               "override_device=",
                                               "override_prop=",
-                                              "no_separate_recovery="],
+                                              "no_separate_recovery=",
                                               ],
                              extra_option_handler=option_handler)
 
