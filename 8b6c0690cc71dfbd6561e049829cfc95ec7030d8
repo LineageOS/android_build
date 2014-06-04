@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da0c15f0_7b883be8",
+        "filename": "envsetup.sh",
+        "patchSetId": 5
+      },
+      "lineNbr": 2024,
+      "author": {
+        "id": 2195
+      },
+      "writtenOn": "2014-06-04T21:56:33Z",
+      "side": 1,
+      "message": "This isn\u0027t needed for /system after system/core 439728adc2af299f877b26951778eb604d74c3f8 \"adb: configure /system file permission with fs_config\"",
+      "revId": "8b6c0690cc71dfbd6561e049829cfc95ec7030d8",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    }
+  ]
+}
