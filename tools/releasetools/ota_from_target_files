@@ -740,7 +740,9 @@ def WriteIncrementalOTAPackage(target_zip, source_zip, output_zip):
         OPTIONS.source_info_dict)
     target_recovery = common.GetBootableImage(
         "/tmp/recovery.img", "recovery.img", OPTIONS.target_tmp, "RECOVERY")
-  updating_recovery = (source_recovery.data != target_recovery.data)
+    updating_recovery = (source_recovery.data != target_recovery.data)
+  else:
+    updating_recovery = False
 
   # Here's how we divide up the progress bar:
   #  0.1 for verifying the start state (PatchCheck calls)
