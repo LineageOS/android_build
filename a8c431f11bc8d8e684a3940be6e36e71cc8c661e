@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba0121b8_fb98eb6c",
+        "filename": "envsetup.sh",
+        "patchSetId": 7
+      },
+      "lineNbr": 2055,
+      "author": {
+        "id": 2195
+      },
+      "writtenOn": "2014-06-11T23:23:05Z",
+      "side": 1,
+      "message": "I would prefer http://review.cyanogenmod.org/65165 over this.",
+      "revId": "a8c431f11bc8d8e684a3940be6e36e71cc8c661e",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba0121b8_3ba383a0",
+        "filename": "envsetup.sh",
+        "patchSetId": 7
+      },
+      "lineNbr": 2057,
+      "author": {
+        "id": 2195
+      },
+      "writtenOn": "2014-06-11T23:23:05Z",
+      "side": 1,
+      "message": "This won\u0027t always work, as it could be the first time that the files are being pushed.",
+      "revId": "a8c431f11bc8d8e684a3940be6e36e71cc8c661e",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba0121b8_1ba03f90",
+        "filename": "envsetup.sh",
+        "patchSetId": 7
+      },
+      "lineNbr": 2073,
+      "author": {
+        "id": 2195
+      },
+      "writtenOn": "2014-06-11T23:23:05Z",
+      "side": 1,
+      "message": "SystemUI is in priv-app now.",
+      "revId": "a8c431f11bc8d8e684a3940be6e36e71cc8c661e",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    }
+  ]
+}
