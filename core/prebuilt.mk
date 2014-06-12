@@ -25,6 +25,9 @@ else
 my_prebuilt_src_file := $(LOCAL_PATH)/$(LOCAL_SRC_FILES)
 endif
 
+# add dependencies for binaries
+LOCAL_SHARED_LIBRARIES += $(shell build/tools/get_elf_deps.sh $(my_prebuilt_src_file))
+
 ifdef LOCAL_IS_HOST_MODULE
   my_prefix := HOST_
 else
