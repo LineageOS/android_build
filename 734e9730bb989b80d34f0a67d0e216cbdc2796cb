@@ -16,6 +16,24 @@
       "revId": "734e9730bb989b80d34f0a67d0e216cbdc2796cb",
       "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba0121b8_2e35f845",
+        "filename": "tools/releasetools/ota_from_target_files",
+        "patchSetId": 1
+      },
+      "lineNbr": 487,
+      "author": {
+        "id": 116
+      },
+      "writtenOn": "2014-06-20T08:34:58Z",
+      "side": 1,
+      "message": "Is that really needed here? I think the errors only occur during MakeRecoveryPatch, which is already wrapped in that if.\n\nThis patch is already in mainline (from the 4.4.3 merge) - the only difference is it didn\u0027t remove the duplicate GetBootableImage call - which I will remedy.",
+      "parentUuid": "ba0121b8_4ec78c45",
+      "revId": "734e9730bb989b80d34f0a67d0e216cbdc2796cb",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
     }
   ]
 }
