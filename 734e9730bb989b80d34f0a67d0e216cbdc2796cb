@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba0121b8_4ec78c45",
+        "filename": "tools/releasetools/ota_from_target_files",
+        "patchSetId": 1
+      },
+      "lineNbr": 487,
+      "author": {
+        "id": 8640
+      },
+      "writtenOn": "2014-06-20T07:39:57Z",
+      "side": 1,
+      "message": "if not OPTIONS.no_separate_recovery:",
+      "revId": "734e9730bb989b80d34f0a67d0e216cbdc2796cb",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    }
+  ]
+}
