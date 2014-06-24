@@ -166,7 +166,9 @@ board_config_mk :=
 
 ## Rebuild the pathmap if there's a recovery variant. Its path probably changed
 ifneq ($(RECOVERY_VARIANT),)
+ifneq ($(RECOVERY_VARIANT),cwm)
 include $(BUILD_SYSTEM)/pathmap.mk
+endif
 endif
 
 # Perhaps we should move this block to build/core/Makefile,
