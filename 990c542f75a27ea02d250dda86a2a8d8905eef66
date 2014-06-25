@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba0121b8_a40000ac",
+        "filename": "CleanSpec.mk",
+        "patchSetId": 1
+      },
+      "lineNbr": 218,
+      "author": {
+        "id": 1039
+      },
+      "writtenOn": "2014-06-25T07:11:30Z",
+      "side": 1,
+      "message": "is that normal ??? duplicated lines",
+      "revId": "990c542f75a27ea02d250dda86a2a8d8905eef66",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    }
+  ]
+}
