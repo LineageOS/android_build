@@ -16,6 +16,24 @@
       "revId": "990c542f75a27ea02d250dda86a2a8d8905eef66",
       "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba0121b8_44264469",
+        "filename": "CleanSpec.mk",
+        "patchSetId": 1
+      },
+      "lineNbr": 218,
+      "author": {
+        "id": 9199
+      },
+      "writtenOn": "2014-06-25T07:13:18Z",
+      "side": 1,
+      "message": "Yep, just look at AOSP https://android.googlesource.com/platform/build/+/android-4.4.4_r1/CleanSpec.mk",
+      "parentUuid": "ba0121b8_a40000ac",
+      "revId": "990c542f75a27ea02d250dda86a2a8d8905eef66",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
     }
   ]
 }
