@@ -536,8 +536,6 @@ else if get_stage("%(bcb_dev)s", "stage") == "3/3" then
   boot_img = common.GetBootableImage("boot.img", "boot.img",
                                      OPTIONS.input_tmp, "BOOT")
   if not OPTIONS.no_separate_recovery:
-    recovery_img = common.GetBootableImage("recovery.img", "recovery.img",
-                                           OPTIONS.input_tmp, "RECOVERY")
     MakeRecoveryPatch(OPTIONS.input_tmp, output_zip, recovery_img, boot_img)
 
   Item.GetMetadata(input_zip)
