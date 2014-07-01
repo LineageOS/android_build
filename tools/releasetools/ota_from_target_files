@@ -410,6 +410,10 @@ def MakeRecoveryPatch(input_tmp, output_zip, recovery_img, boot_img):
   recovery_type, recovery_device = common.GetTypeAndDevice("/recovery", OPTIONS.info_dict)
 
   sh = """#!/system/bin/sh
+if [ -f /system/etc/recovery-transform.sh ]; then
+  exec sh /system/etc/recovery-transform.sh %(recovery_size)d %(recovery_sha1)s %(boot_size)d %(boot_sha1)s
+fi
+
 if ! applypatch -c %(recovery_type)s:%(recovery_device)s:%(recovery_size)d:%(recovery_sha1)s; then
   log -t recovery "Installing new recovery image"
   applypatch %(bonus_args)s %(boot_type)s:%(boot_device)s:%(boot_size)d:%(boot_sha1)s %(recovery_type)s:%(recovery_device)s %(recovery_sha1)s %(recovery_size)d %(boot_sha1)s:/system/recovery-from-boot.p
@@ -605,6 +609,16 @@ def GetBuildProp(prop, info_dict):
   except KeyError:
     raise common.ExternalError("couldn't find %s in build.prop" % (property,))
 
+def AddToKnownPaths(filename, known_paths):
+  if filename[-1] == "/":
+    return
+  dirs = filename.split("/")[:-1]
+  while len(dirs) > 0:
+    path = "/".join(dirs)
+    if path in known_paths:
+      break;
+    known_paths.add(path)
+    dirs.pop()
 
 def WriteIncrementalOTAPackage(target_zip, source_zip, output_zip):
   source_version = OPTIONS.source_info_dict["recovery_api_version"]
@@ -646,14 +660,16 @@ def WriteIncrementalOTAPackage(target_zip, source_zip, output_zip):
   patch_list = []
   diffs = []
   renames = {}
+  known_paths = set()
   largest_source_size = 0
 
   matching_file_cache = {}
-  for fn in source_data.keys():
-    sf = source_data[fn]
+  for fn, sf in source_data.items():
     assert fn == sf.name
     matching_file_cache["path:" + fn] = sf
-    # Only allow eligability for filename/sha matching
+    if fn in target_data.keys():
+      AddToKnownPaths(fn, known_paths)
+    # Only allow eligibility for filename/sha matching
     # if there isn't a perfect path match.
     if target_data.get(sf.name) is None:
       matching_file_cache["file:" + fn.split("/")[-1]] = sf
@@ -674,6 +690,8 @@ def WriteIncrementalOTAPackage(target_zip, source_zip, output_zip):
       print "send", fn, "verbatim"
       tf.AddToZip(output_zip)
       verbatim_targets.append((fn, tf.size))
+      if fn in target_data.keys():
+        AddToKnownPaths(fn, known_paths)
     elif tf.sha1 != sf.sha1:
       # File is different; consider sending as a patch
       diffs.append(common.Difference(tf, sf))
@@ -685,13 +703,20 @@ def WriteIncrementalOTAPackage(target_zip, source_zip, output_zip):
 
   for diff in diffs:
     tf, sf, d = diff.GetPatch()
-    if d is None or len(d) > tf.size * OPTIONS.patch_threshold:
+    path = "/".join(tf.name.split("/")[:-1])
+    if d is None or len(d) > tf.size * OPTIONS.patch_threshold or \
+        path not in known_paths:
       # patch is almost as big as the file; don't bother patching
+      # or a patch + rename cannot take place due to the target 
+      # directory not existing
       tf.AddToZip(output_zip)
       verbatim_targets.append((tf.name, tf.size))
+      if sf.name in renames:
+        del renames[sf.name]
+      AddToKnownPaths(tf.name, known_paths)
     else:
       common.ZipWriteStr(output_zip, "patch/" + sf.name + ".p", d)
-      patch_list.append((sf.name, tf, sf, tf.size, common.sha1(d).hexdigest()))
+      patch_list.append((tf, sf, tf.size, common.sha1(d).hexdigest()))
       largest_source_size = max(largest_source_size, sf.size)
 
   if not OPTIONS.override_prop:
@@ -717,7 +742,9 @@ def WriteIncrementalOTAPackage(target_zip, source_zip, output_zip):
         OPTIONS.source_info_dict)
     target_recovery = common.GetBootableImage(
         "/tmp/recovery.img", "recovery.img", OPTIONS.target_tmp, "RECOVERY")
-  updating_recovery = (source_recovery.data != target_recovery.data)
+    updating_recovery = (source_recovery.data != target_recovery.data)
+  else:
+    updating_recovery = False
 
   # Here's how we divide up the progress bar:
   #  0.1 for verifying the start state (PatchCheck calls)
@@ -773,13 +800,15 @@ else if get_stage("%(bcb_dev)s", "stage") != "3/3" then
   device_specific.IncrementalOTA_VerifyBegin()
 
   script.ShowProgress(0.1, 0)
-  total_verify_size = float(sum([i[2].size for i in patch_list]) + 1)
+  total_verify_size = float(sum([i[1].size for i in patch_list]) + 1)
   if updating_boot:
     total_verify_size += source_boot.size
   so_far = 0
 
-  for fn, tf, sf, size, patch_sha in patch_list:
-    script.PatchCheck("/"+fn, tf.sha1, sf.sha1)
+  for tf, sf, size, patch_sha in patch_list:
+    if tf.name != sf.name:
+      script.SkipNextActionIfTargetExists(tf.name, tf.sha1)
+    script.PatchCheck("/"+sf.name, tf.sha1, sf.sha1)
     so_far += sf.size
     script.SetProgress(so_far / total_verify_size)
 
@@ -842,11 +871,13 @@ else
   script.Print("Patching system files...")
   deferred_patch_list = []
   for item in patch_list:
-    fn, tf, sf, size, _ = item
+    tf, sf, size, _ = item
     if tf.name == "system/build.prop":
       deferred_patch_list.append(item)
       continue
-    script.ApplyPatch("/"+fn, "-", tf.size, tf.sha1, sf.sha1, "patch/"+fn+".p")
+    if (sf.name != tf.name):
+      script.SkipNextActionIfTargetExists(tf.name, tf.sha1)
+    script.ApplyPatch("/"+sf.name, "-", tf.size, tf.sha1, sf.sha1, "patch/"+sf.name+".p")
     so_far += tf.size
     script.SetProgress(so_far / total_patch_size)
 
@@ -955,8 +986,8 @@ else
   # get set the OTA package again to retry.
   script.Print("Patching remaining system files...")
   for item in deferred_patch_list:
-    fn, tf, sf, size, _ = item
-    script.ApplyPatch("/"+fn, "-", tf.size, tf.sha1, sf.sha1, "patch/"+fn+".p")
+    tf, sf, size, _ = item
+    script.ApplyPatch("/"+sf.name, "-", tf.size, tf.sha1, sf.sha1, "patch/"+sf.name+".p")
   script.SetPermissions("/system/build.prop", 0, 0, 0644, None, None)
 
   if OPTIONS.two_step:

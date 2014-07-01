@@ -211,6 +211,12 @@ $(call add-clean-step, rm -rf $(PRODUCT_OUT)/system/build.prop)
 # 4.4.2
 $(call add-clean-step, rm -rf $(PRODUCT_OUT)/system/build.prop)
 
+# 4.4.3
+$(call add-clean-step, rm -rf $(PRODUCT_OUT)/system/build.prop)
+
+# 4.4.4
+$(call add-clean-step, rm -rf $(PRODUCT_OUT)/system/build.prop)
+
 # ************************************************
 # NEWER CLEAN STEPS MUST BE AT THE END OF THE LIST
 # ************************************************

@@ -61,7 +61,8 @@ PRODUCT_PACKAGES := \
 	Calendar \
 	SmokeTest \
 	SmokeTestApp \
-	rild
+	rild \
+	Dialer
 
 # Define the host tools and libs that are parts of the SDK.
 -include sdk/build/product_sdk.mk
