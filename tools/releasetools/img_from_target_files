@@ -36,6 +36,7 @@ if sys.hexversion < 0x02040000:
   sys.exit(1)
 
 import errno
+import hashlib
 import os
 import re
 import shutil
@@ -262,6 +263,16 @@ def AddRadio(output_zip):
         print "flash-radio.sh is empty, skipping..."
       tmp_flash_radio.close()
 
+def AddDigest(output_zip):
+  """Generate MD5 hashes of each file in the zip and store the results to the zip."""
+  print "creating md5sum-fastboot.md5..."
+  tmp_md5sum = tempfile.NamedTemporaryFile()
+  for md5_file in output_zip.namelist():
+    tmp_md5sum.write("%s  %s\n" % (hashlib.md5(output_zip.read(md5_file)).hexdigest(), md5_file))
+  tmp_md5sum.flush()
+  output_zip.write(tmp_md5sum.name, "md5sum-fastboot.md5")
+  tmp_md5sum.close()
+
 def main(argv):
   bootable_only = [False]
 
@@ -313,6 +324,9 @@ def main(argv):
     AddCache(output_zip)
     CopyInfo(output_zip)
     AddRadio(output_zip)
+
+  # Generating the md5 hashes should always be the last step
+  AddDigest(output_zip)
 
   print "cleaning up..."
   output_zip.close()
