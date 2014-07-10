@@ -1401,6 +1401,9 @@ endif
 ifdef TARGET_UNIFIED_DEVICE
 	$(hide) echo "override_prop=true" >> $(zip_root)/META/misc_info.txt
 endif
+ifdef BUILD_NO
+	$(hide) echo "build_number=$(BUILD_NO)" >> $(zip_root)/META/misc_info.txt
+endif
 	$(call generate-userimage-prop-dictionary, $(zip_root)/META/misc_info.txt)
 ifdef PRODUCT_DEFAULT_DEV_CERTIFICATE
 	$(hide) build/tools/getb64key.py $(PRODUCT_DEFAULT_DEV_CERTIFICATE).x509.pem > $(zip_root)/META/releasekey.txt
