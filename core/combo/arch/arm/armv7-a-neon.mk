@@ -22,7 +22,7 @@ ifeq ($(strip $(TARGET_CPU_VARIANT)),cortex-a5)
 	arch_variant_cflags := -mcpu=cortex-a5
 else
 ifeq ($(strip $(TARGET_CPU_VARIANT)),krait)
-	arch_variant_cflags := -mcpu=cortex-a9
+	arch_variant_cflags := -mcpu=cortex-a15
 else
 ifeq ($(strip $(TARGET_CPU_VARIANT)),scorpion)
 	arch_variant_cflags := -mcpu=cortex-a8
