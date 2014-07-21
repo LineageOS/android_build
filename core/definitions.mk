@@ -2127,6 +2127,11 @@ define include-if-build-from-source
 $(if $(call if-build-from-source,$(2),$(3)),$(eval include $(1)))
 endef
 
+define publish-to-maven
+	$(hide) mvn install:install-file -Dfile=$(PRIVATE_MAVEN_FILE) -DgroupId=$(PRIVATE_MAVEN_GROUPID) -DartifactId=$(PRIVATE_MAVEN_ARTIFACT) -Dversion=$(PRIVATE_MAVEN_VERSION) -Dpackaging=$(PRIVATE_MAVEN_PACKAGING)
+	$(if $(GLOBAL_MAVEN_REPOSITORY),$(hide) mvn deploy:deploy-file -Dfile=$(PRIVATE_MAVEN_FILE) -DrepositoryId=$(GLOBAL_MAVEN_REPOSITORY) -Durl=$(GLOBAL_MAVEN_URL) -DgroupId=$(PRIVATE_MAVEN_GROUPID) -DartifactId=$(PRIVATE_MAVEN_ARTIFACT) -Dversion=$(PRIVATE_MAVEN_VERSION) -Dpackaging=$(PRIVATE_MAVEN_PACKAGING))
+endef
+
 ###########################################################
 ## Other includes
 ###########################################################

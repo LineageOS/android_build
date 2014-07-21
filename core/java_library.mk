@@ -63,6 +63,24 @@ endif # EMMA_INSTRUMENT
 include $(BUILD_SYSTEM)/java.mk
 #################################
 
+ifneq ($(strip $(LOCAL_MAVEN_ARTIFACT)),)
+  ifeq ($(strip $(LOCAL_MAVEN_GROUPID)),)
+    $(error LOCAL_MAVEN_GROUPID not defined.)
+  endif
+  ifeq ($(strip $(LOCAL_MAVEN_VERSION)),)
+    $(error LOCAL_MAVEN_VERSION not defined.)
+  endif
+  ifeq ($(strip $(LOCAL_MAVEN_PACKAGING)),)
+    LOCAL_MAVEN_PACKAGING := jar
+  endif
+
+  $(common_javalib.jar) : PRIVATE_MAVEN_ARTIFACT := $(LOCAL_MAVEN_ARTIFACT)
+  $(common_javalib.jar) : PRIVATE_MAVEN_GROUPID := $(LOCAL_MAVEN_GROUPID)
+  $(common_javalib.jar) : PRIVATE_MAVEN_VERSION := $(LOCAL_MAVEN_VERSION)
+  $(common_javalib.jar) : PRIVATE_MAVEN_PACKAGING := $(LOCAL_MAVEN_PACKAGING)
+  $(common_javalib.jar) : PRIVATE_MAVEN_FILE := $(full_classes_jar)
+endif
+
 ifeq ($(LOCAL_IS_STATIC_JAVA_LIBRARY),true)
 # No dex; all we want are the .class files with resources.
 $(common_javalib.jar) : $(java_resource_sources)
@@ -75,6 +93,9 @@ endif
 	$(copy-file-to-target)
 ifneq ($(extra_jar_args),)
 	$(add-java-resources-to-package)
+endif
+ifneq ($(strip $(LOCAL_MAVEN_ARTIFACT)),)
+	$(call publish-to-maven)
 endif
 
 $(LOCAL_BUILT_MODULE): $(common_javalib.jar)
@@ -90,6 +111,9 @@ $(common_javalib.jar) : $(built_dex) $(java_resource_sources)
 	$(add-carried-java-resources)
 ifneq ($(extra_jar_args),)
 	$(add-java-resources-to-package)
+endif
+ifneq ($(strip $(LOCAL_MAVEN_ARTIFACT)),)
+	$(call publish-to-maven)
 endif
 
 ifdef LOCAL_DEX_PREOPT
