@@ -174,6 +174,19 @@ function setpaths()
                  export ARM_EABI_TOOLCHAIN="$gccprebuiltdir/$toolchaindir"
                  ARM_EABI_TOOLCHAIN_PATH=":$gccprebuiltdir/$toolchaindir"
             fi
+            custom_toolchain=$(get_build_var TARGET_KERNEL_CUSTOM_TOOLCHAIN)
+	    if [ -z $custom_toolchain ]; then
+		 echo "====> do nothing.."
+            else
+		echo "$custom_toolchain"
+		android_prebuilt=$(get_abs_build_var ANDROID_PREBUILTS)
+                toolchaindir=toolchain/$custom_toolchain/bin
+		echo "=====> $toolchaindir  ===> $android_prebuilt/$toolchaindir"
+                if [ -d "$android_prebuilt/$toolchaindir" ]; then
+                     export ARM_EABI_TOOLCHAIN="$android_prebuilt/$toolchaindir"
+                     ARM_EABI_TOOLCHAIN_PATH=":$android_prebuilt/$toolchaindir"
+                fi
+            fi
             ;;
         mips) toolchaindir=mips/mips-eabi-4.4.3/bin
             ;;
