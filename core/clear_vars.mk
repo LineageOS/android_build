@@ -251,6 +251,12 @@ LOCAL_CLANG_64:=
 
 LOCAL_IGNORE_SUBDIR:=
 
+LOCAL_MAVEN_GROUP:=
+LOCAL_MAVEN_ARTIFACT:=
+LOCAL_MAVEN_VERSION:=
+LOCAL_MAVEN_PACKAGING:=
+LOCAL_MAVEN_REPO:=
+
 # Trim MAKEFILE_LIST so that $(call my-dir) doesn't need to
 # iterate over thousands of entries every time.
 # Leave the current makefile to make sure we don't break anything
