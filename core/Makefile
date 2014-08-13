@@ -1401,6 +1401,9 @@ endif
 ifdef TARGET_UNIFIED_DEVICE
 	$(hide) echo "override_prop=true" >> $(zip_root)/META/misc_info.txt
 endif
+ifdef TARGET_NO_SEPARATE_RECOVERY
+	$(hide) echo "no_separate_recovery=true" >> $(zip_root)/META/misc_info.txt
+endif
 ifdef BUILD_NO
 	$(hide) echo "build_number=$(BUILD_NO)" >> $(zip_root)/META/misc_info.txt
 endif
