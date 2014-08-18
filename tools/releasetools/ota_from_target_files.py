@@ -628,13 +628,6 @@ else if get_stage("%(bcb_dev)s") == "3/3" then
 
   device_specific.FullOTA_InstallBegin()
 
-  if block_based:
-    common.ZipWriteStr(output_zip, "system/bin/otasigcheck.sh",
-                   ""+input_zip.read("SYSTEM/bin/otasigcheck.sh"))
-  script.Mount("/data")
-  script.ValidateSignatures("data")
-  script.Unmount("/data")
-
   if OPTIONS.backuptool:
     if block_based:
       common.ZipWriteStr(output_zip, "system/bin/backuptool.sh",
@@ -649,6 +642,13 @@ else if get_stage("%(bcb_dev)s") == "3/3" then
     system_progress -= 0.1
   if HasVendorPartition(input_zip):
     system_progress -= 0.1
+
+  if block_based:
+    common.ZipWriteStr(output_zip, "system/bin/otasigcheck.sh",
+                   ""+input_zip.read("SYSTEM/bin/otasigcheck.sh"))
+  script.Mount("/data")
+  script.ValidateSignatures("data")
+  script.Unmount("/data")
 
   # Place a copy of file_contexts.bin into the OTA package which will be used
   # by the recovery program.
