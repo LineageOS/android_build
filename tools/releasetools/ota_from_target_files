@@ -511,10 +511,6 @@ else if get_stage("%(bcb_dev)s", "stage") == "3/3" then
 
   device_specific.FullOTA_InstallBegin()
 
-  script.Mount("/data")
-  script.ValidateSignatures("data")
-  script.Unmount("/data")
-
   if OPTIONS.backuptool:
     script.Mount("/system")
     script.RunBackup("backup")
@@ -524,6 +520,10 @@ else if get_stage("%(bcb_dev)s", "stage") == "3/3" then
 
   if OPTIONS.wipe_user_data:
     script.FormatPartition("/data")
+
+  script.Mount("/data")
+  script.ValidateSignatures("data")
+  script.Unmount("/data")
 
   if "selinux_fc" in OPTIONS.info_dict:
     WritePolicyConfig(OPTIONS.info_dict["selinux_fc"], output_zip)
