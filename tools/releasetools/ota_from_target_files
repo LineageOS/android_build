@@ -725,13 +725,14 @@ def WriteIncrementalOTAPackage(target_zip, source_zip, output_zip):
       patch_list.append((tf, sf, tf.size, common.sha1(d).hexdigest()))
       largest_source_size = max(largest_source_size, sf.size)
 
+  script.Mount("/system")
+
   if not OPTIONS.override_prop:
     source_fp = GetBuildProp("ro.build.fingerprint", OPTIONS.source_info_dict)
     target_fp = GetBuildProp("ro.build.fingerprint", OPTIONS.target_info_dict)
     metadata["pre-build"] = source_fp
     metadata["post-build"] = target_fp
 
-    script.Mount("/system")
     script.AssertSomeFingerprint(source_fp, target_fp)
 
   source_boot = common.GetBootableImage(
