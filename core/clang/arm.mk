@@ -28,5 +28,6 @@ define subst-clang-incompatible-arm-flags
   $(subst -march=armv5te,-march=armv5t,\
   $(subst -march=armv5e,-march=armv5,\
   $(subst -mcpu=cortex-a15,-march=armv7-a,\
-  $(1))))
+  $(subst -mfpu=neon-vfpv4,-mfpu=neon,\
+  $(1)))))
 endef
