@@ -40,5 +40,6 @@ CLANG_CONFIG_arm_UNKNOWN_CFLAGS := \
 define subst-clang-incompatible-arm-flags
   $(subst -march=armv5te,-march=armv5t,\
   $(subst -march=armv5e,-march=armv5,\
-  $(1)))
+  $(subst -mfpu=neon-vfpv4,-mfpu=neon,\
+  $(1))))
 endef
