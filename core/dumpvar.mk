@@ -35,6 +35,12 @@ print_build_config_vars += \
   CM_VERSION
 endif
 
+ifeq ($(CYNGN_TARGET),true)
+print_build_config_vars += \
+  CYNGN_TARGET \
+  CYNGN_FEATURES
+endif
+
 # ---------------------------------------------------------------
 # the setpath shell function in envsetup.sh uses this to figure out
 # what to add to the path given the config we have chosen.
