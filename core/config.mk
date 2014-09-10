@@ -23,8 +23,6 @@ comma := ,
 # only has an effect on python 2.6 and above.
 export PYTHONDONTWRITEBYTECODE := 1
 
--include $(TOPDIR)vendor/extra/extra_config.mk
-
 # Standard source directories.
 SRC_DOCS:= $(TOPDIR)docs
 # TODO: Enforce some kind of layering; only add include paths
@@ -163,6 +161,10 @@ ifeq ($(TARGET_ARCH),)
 endif
 TARGET_DEVICE_DIR := $(patsubst %/,%,$(dir $(board_config_mk)))
 board_config_mk :=
+
+# Include extra vendor-specific bits
+TARGET_BOARD_PLATFORM := $(strip $(TARGET_BOARD_PLATFORM))
+-include vendor/extra/extra_config.mk
 
 ## Rebuild the pathmap if there's a recovery variant. Its path probably changed
 ifneq ($(RECOVERY_VARIANT),)
