@@ -107,9 +107,6 @@ include $(BUILD_SYSTEM)/qcom_utils.mk
 # Include the google-specific config
 -include vendor/google/build/config.mk
 
-# Include the extra device config
--include vendor/extra/device.mk
-
 VERSION_CHECK_SEQUENCE_NUMBER := 3
 -include $(OUT_DIR)/versions_checked.mk
 ifneq ($(VERSION_CHECK_SEQUENCE_NUMBER),$(VERSIONS_CHECKED))
@@ -486,7 +483,6 @@ GET-INSTALL-PATH:
 		echo 'INSTALL-PATH: $(m) $(ALL_MODULES.$(m).INSTALLED)';))
 
 else # ONE_SHOT_MAKEFILE
-
 ifneq ($(dont_bother),true)
 #
 # Include all of the makefiles in the system
