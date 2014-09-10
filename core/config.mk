@@ -169,6 +169,9 @@ ifneq ($(RECOVERY_VARIANT),)
 include $(BUILD_SYSTEM)/pathmap.mk
 endif
 
+## Load extra device configurations
+-include $(TOPDIR)vendor/extra/devices.mk
+
 # Perhaps we should move this block to build/core/Makefile,
 # once we don't have TARGET_NO_KERNEL reference in AndroidBoard.mk/Android.mk.
 ifneq ($(strip $(TARGET_NO_BOOTLOADER)),true)
