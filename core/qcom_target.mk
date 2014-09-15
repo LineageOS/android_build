@@ -11,6 +11,11 @@ ifeq ($(BOARD_USES_QCOM_HARDWARE),true)
         TARGET_GLOBAL_CPPFLAGS += -DQCOM_BSP
     endif
 
+    ifneq ($(TARGET_HAVE_NEW_GRALLOC),true)
+        TARGET_GLOBAL_CFLAGS += -DCOMPAT_GRALLOC_PERFORM
+        TARGET_GLOBAL_CPPFLAGS += -DCOMPAT_GRALLOC_PERFORM
+    endif
+
     # Enable DirectTrack for legacy targets
     ifneq ($(filter caf bfam,$(TARGET_QCOM_AUDIO_VARIANT)),)
         ifeq ($(BOARD_USES_LEGACY_ALSA_AUDIO),true)
