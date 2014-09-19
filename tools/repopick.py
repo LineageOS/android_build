@@ -213,6 +213,18 @@ if args.topic:
     # Reverse the array as we want to pick the lowest one first
     args.change_number = reversed(changelist)
 
+# Check for range of commits and rebuild array
+changelist = []
+for change in args.change_number:
+    if '-' in change:
+        templist = change.split('-')
+        for i in range(int(templist[0]), int(templist[1]) + 1):
+            changelist.append(str(i))
+    else:
+        changelist.append(change)
+
+args.change_number = changelist
+
 # Iterate through the requested change numbers
 for change in args.change_number:
     if not args.quiet:
