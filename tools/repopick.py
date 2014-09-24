@@ -55,7 +55,7 @@ parser = argparse.ArgumentParser(formatter_class=argparse.RawDescriptionHelpForm
     The --abandon-first argument, when used in conjuction with the
     --start-branch option, will cause repopick to abandon the specified
     branch in all repos first before performing any cherry picks.'''))
-parser.add_argument('change_number', nargs='+', help='change number to cherry pick')
+parser.add_argument('change_number', nargs='*', help='change number to cherry pick')
 parser.add_argument('-i', '--ignore-missing', action='store_true', help='do not error out if a patch applies to a missing directory')
 parser.add_argument('-s', '--start-branch', nargs=1, help='start the specified branch before cherry picking')
 parser.add_argument('-a', '--abandon-first', action='store_true', help='before cherry picking, abandon the branch specified in --start-branch')
@@ -64,6 +64,7 @@ parser.add_argument('-q', '--quiet', action='store_true', help='print as little 
 parser.add_argument('-v', '--verbose', action='store_true', help='print extra information to aid in debug')
 parser.add_argument('-f', '--force', action='store_true', help='force cherry pick even if commit has been merged')
 parser.add_argument('-p', '--pull', action='store_true', help='execute pull instead of cherry-pick')
+parser.add_argument('-t', '--topic', help='pick all commits from a specified topic')
 args = parser.parse_args()
 if args.start_branch == None and args.abandon_first:
     parser.error('if --abandon-first is set, you must also give the branch name with --start-branch')
@@ -74,6 +75,10 @@ if args.auto_branch:
         args.start_branch = ['auto']
 if args.quiet and args.verbose:
     parser.error('--quiet and --verbose cannot be specified together')
+if len(args.change_number) > 0 and args.topic:
+    parser.error('cannot specify a topic and change number(s) together')
+if len(args.change_number) == 0 and not args.topic:
+    parser.error('must specify at least one commit id or a topic')
 
 # Helper function to determine whether a path is an executable file
 def is_exe(fpath):
@@ -179,6 +184,34 @@ while(True):
         break
     ppaths = re.split('\s*:\s*', pline.decode())
     project_name_to_path[ppaths[1]] = ppaths[0]
+
+# Get all commits for a specified topic
+if args.topic:
+    url = 'http://review.cyanogenmod.org/changes/?q=topic:%s' % args.topic
+    if args.verbose:
+        print('Fetching all commits from topic: %s\n' % args.topic)
+    f = urllib.request.urlopen(url)
+    d = f.read().decode("utf-8")
+    if args.verbose:
+        print('Result from request:\n' + d)
+
+    # Clean up the result
+    d = d.split(')]}\'\n')[1]
+    matchObj = re.match(r'\[\s*\]', d)
+    if matchObj:
+        sys.stderr.write('ERROR: Topic %s was not found on the server\n' % args.topic)
+        sys.exit(1)
+    d = re.sub(r'\[(.*)\]', r'\1', d)
+    if args.verbose:
+        print('Result from request:\n' + d)
+
+    data = json.loads(d)
+    changelist = []
+    for c in xrange(0, len(data)):
+        changelist.append(data[c]['_number'])
+
+    # Reverse the array as we want to pick the lowest one first
+    args.change_number = reversed(changelist)
 
 # Iterate through the requested change numbers
 for change in args.change_number:
