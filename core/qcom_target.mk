@@ -19,22 +19,16 @@ ifeq ($(BOARD_USES_QCOM_HARDWARE),true)
         endif
     endif
 
-    # This is the list of all supported QCOM variants.
-    qcom_variant_list := audio camera display gps media sensors
+# This is the list of all supported QCOM variants.
+QCOM_VARIANTS := audio camera display gps media sensors
 
-    # Set the QCOM_*_PATH variables for each variant.
-    #   $1 = Upper case name for variable name
-    #   $2 = Lower case name for variable value (pathname)
-    define qcom_variant_path
-    $(strip \
-        $(if $(TARGET_QCOM_$(1)_VARIANT), \
-            hardware/qcom/$(2)-$(TARGET_QCOM_$(1)_VARIANT), \
-            hardware/qcom/$(2)))
-    endef
-    $(foreach variant, \
-        $(qcom_variant_list), \
-        $(eval ln:=$(shell echo $(variant) | tr [A-Z] [a-z])) \
-        $(eval un:=$(shell echo $(variant) | tr [a-z] [A-Z])) \
-        $(eval QCOM_$(un)_PATH:=$(call qcom_variant_path,$(un),$(ln))))
+# Set QCOM_XX_PATH values based on variant
+$(strip \
+    $(foreach v, $(QCOM_VARIANTS), \
+        $(eval _uv := $(call uppercase, $(v))) \
+        $(eval QCOM_$(_uv)_PATH := \
+            $(if $(TARGET_QCOM_$(_uv)_VARIANT), \
+                hardware/qcom/$(v)-$(TARGET_QCOM_$(_uv)_VARIANT), \
+                hardware/qcom/$(v)))))
 
 endif
