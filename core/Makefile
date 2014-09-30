@@ -772,9 +772,9 @@ $(TARGET_RECOVERY_ROOT_TIMESTAMP): $(INTERNAL_RECOVERY_FILES) \
 	@echo -e ${CL_CYN}"Copying baseline ramdisk..."${CL_RST}
 	$(hide) cp -R $(TARGET_ROOT_OUT) $(TARGET_RECOVERY_OUT)
 	@echo -e ${CL_CYN}"Modifying ramdisk contents..."${CL_RST}
-	$(hide) rm -f $(TARGET_RECOVERY_ROOT_OUT)/init*.rc
+	$(hide) rm -f $(call find-subdir-subdir-files, $(TARGET_RECOVERY_ROOT_OUT), \
+	  init*.rc, $(notdir $(wildcard $(TARGET_RECOVERY_ROOT_OUT)/init.recovery.*.rc)))
 	$(hide) cp -f $(recovery_initrc) $(TARGET_RECOVERY_ROOT_OUT)/init.rc
-
 	$(hide) -cp $(TARGET_ROOT_OUT)/init.recovery.*.rc $(TARGET_RECOVERY_ROOT_OUT)/
 	$(hide) cp -f $(recovery_binary) $(TARGET_RECOVERY_ROOT_OUT)/sbin/
 	mkdir -p $(TARGET_RECOVERY_ROOT_OUT)/system/bin
@@ -791,7 +791,7 @@ $(TARGET_RECOVERY_ROOT_TIMESTAMP): $(INTERNAL_RECOVERY_FILES) \
 	@echo -e ${CL_YLW}"Modifying default.prop"${CL_RST}
 	$(SED_INPLACE) 's/ro.build.date.utc=.*/ro.build.date.utc=0/g' $(TARGET_RECOVERY_ROOT_OUT)/default.prop
 	$(SED_INPLACE) 's/ro.adb.secure=1//g' $(TARGET_RECOVERY_ROOT_OUT)/default.prop
-	@echo -e ${CL_CYN}"----- Made recovery filesystem --------"$(TARGET_RECOVERY_ROOT_OUT)${CL_RST}
+	@echo -e ${CL_CYN}"----- Made recovery filesystem --------"${CL_RST}
 	@touch $(TARGET_RECOVERY_ROOT_TIMESTAMP)
 
 $(recovery_uncompressed_ramdisk): $(MINIGZIP) \
