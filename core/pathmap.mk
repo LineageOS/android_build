@@ -53,12 +53,6 @@ pathmap_INCL := \
     wilhelm-ut:frameworks/wilhelm/src/ut \
     speex:external/speex/include
 
-ifneq ($(RECOVERY_VARIANT),)
-    pathmap_INCL += recovery:bootable/recovery-$(RECOVERY_VARIANT)
-else
-    pathmap_INCL += recovery:bootable/recovery
-endif
-
 #
 # Returns the path to the requested module's include directory,
 # relative to the root of the source tree.  Does not handle external
