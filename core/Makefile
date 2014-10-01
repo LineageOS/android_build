@@ -1081,7 +1081,7 @@ ifneq (,$(INSTALLED_RECOVERYIMAGE_TARGET)$(filter true,$(BOARD_USES_RECOVERY_AS_
 INTERNAL_RECOVERYIMAGE_FILES := $(filter $(TARGET_RECOVERY_OUT)/%, \
     $(ALL_DEFAULT_INSTALLED_MODULES))
 
-recovery_initrc := $(call include-path-for, recovery)/etc/init.rc
+recovery_initrc := $(call project-path-for,recovery)/etc/init.rc
 recovery_sepolicy := \
     $(TARGET_RECOVERY_ROOT_OUT)/sepolicy \
     $(TARGET_RECOVERY_ROOT_OUT)/plat_file_contexts \
@@ -1099,7 +1099,7 @@ recovery_build_props := $(intermediate_system_build_prop)
 ifdef property_overrides_split_enabled
 recovery_build_props += $(INSTALLED_VENDOR_BUILD_PROP_TARGET)
 endif
-recovery_resources_common := $(call include-path-for, recovery)/res
+recovery_resources_common := $(call project-path-for,recovery)/res
 
 # Set recovery_density to the density bucket of the device.
 recovery_density := unknown
@@ -1123,9 +1123,9 @@ endif
 # its private recovery resources.
 
 ifneq (,$(filter xxxhdpi 560dpi xxhdpi 400dpi xhdpi,$(recovery_density)))
-recovery_font := $(call include-path-for, recovery)/fonts/18x32.png
+recovery_font := $(call project-path-for,recovery)/fonts/18x32.png
 else
-recovery_font := $(call include-path-for, recovery)/fonts/12x22.png
+recovery_font := $(call project-path-for,recovery)/fonts/12x22.png
 endif
 
 ifndef TARGET_PRIVATE_RES_DIRS
