@@ -90,7 +90,7 @@ include device/qcom/common/dtbtool/Android.mk
 endif
 
 ifeq ($(strip $(TARGET_CUSTOM_DTBTOOL)),)
-DTBTOOL_NAME := dtbTool
+DTBTOOL_NAME := dtbToolCM
 else
 DTBTOOL_NAME := $(TARGET_CUSTOM_DTBTOOL)
 endif
