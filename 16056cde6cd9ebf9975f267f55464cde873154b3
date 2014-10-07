@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7a1b2928_72682a88",
+        "filename": "core/config.mk",
+        "patchSetId": 2
+      },
+      "lineNbr": 167,
+      "author": {
+        "id": 2936
+      },
+      "writtenOn": "2014-10-07T08:30:02Z",
+      "side": 1,
+      "message": "independent",
+      "revId": "16056cde6cd9ebf9975f267f55464cde873154b3",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    }
+  ]
+}
