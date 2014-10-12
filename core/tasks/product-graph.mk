@@ -70,7 +70,7 @@ $(products_graph): PRIVATE_PRODUCTS := $(really_all_products)
 $(products_graph): PRIVATE_PRODUCTS_FILTER := $(products_list)
 
 $(products_graph): $(this_makefile)
-	@echo Product graph DOT:"${CL_RST}" $@ for $(PRIVATE_PRODUCTS_FILTER)
+	@echo -e ${CL_GRN}"Product graph DOT:"${CL_RST}" $@ for $(PRIVATE_PRODUCTS_FILTER)"
 	$(hide) echo 'digraph {' > $@.in
 	$(hide) echo 'graph [ ratio=.5 ];' >> $@.in
 	$(hide) $(foreach p,$(PRIVATE_PRODUCTS), \
@@ -89,7 +89,7 @@ endef
 # $(1) product file
 define transform-product-debug
 $(OUT_DIR)/products/$(strip $(1)).txt: $(this_makefile)
-	@echo Product debug info file: $$@
+	@echo -e ${CL_GRN}"Product debug info file:"${CL_RST}" $$@"
 	$(hide) rm -f $$@
 	$(hide) mkdir -p $$(dir $$@)
 	$(hide) echo 'FILE=$(strip $(1))' >> $$@
@@ -125,7 +125,7 @@ $(call product-debug-filename, $(p)): \
 			$(OUT_DIR)/products/$(strip $(1)).txt \
 			build/tools/product_debug.py \
 			$(this_makefile)
-	@echo Product debug html file: $$@
+	@echo -e ${CL_GRN}"Product debug html file:"${CL_RST}" $$@"
 	$(hide) mkdir -p $$(dir $$@)
 	$(hide) cat $$< | build/tools/product_debug.py > $$@
 endef
@@ -141,7 +141,7 @@ $(products_pdf): $(products_graph)
 	dot -Tpdf -Nshape=box -o $@ $<
 
 $(products_svg): $(products_graph) $(product_debug_files)
-	@echo Product graph SVG: $@
+	@echo -e ${CL_GRN}"Product graph SVG:"${CL_RST}" $@"
 	dot -Tsvg -Nshape=box -o $@ $<
 
 product-graph: $(products_pdf) $(products_svg)
