@@ -1,3 +1,4 @@
+# DNM test!
 function hmm() {
 cat <<EOF
 Invoke ". build/envsetup.sh" from your shell to add the following functions to your environment:
