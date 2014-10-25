@@ -881,20 +881,28 @@ function mmm()
 
 function mma()
 {
+    local MMA_MAKE=make
+    local ARG=
+    for ARG in $@ ; do
+        if [ "$ARG" = mka ]; then
+            MMA_MAKE=mka
+        fi
+    done
   if [ -f build/core/envsetup.mk -a -f Makefile ]; then
-    make $@
+    $MMA_MAKE $@
   else
     T=$(gettop)
     if [ ! "$T" ]; then
       echo "Couldn't locate the top of the tree.  Try setting TOP."
     fi
     local MY_PWD=`PWD= /bin/pwd|sed 's:'$T'/::'`
-    make -C $T -f build/core/main.mk $@ all_modules BUILD_MODULES_IN_PATHS="$MY_PWD"
+    $MMA_MAKE -C $T -f build/core/main.mk $@ all_modules BUILD_MODULES_IN_PATHS="$MY_PWD"
   fi
 }
 
 function mmma()
 {
+  local MMMA_MAKE=make
   T=$(gettop)
   if [ "$T" ]; then
     local DASH_ARGS=$(echo "$@" | awk -v RS=" " -v ORS=" " '/^-.*$/')
@@ -917,12 +925,13 @@ function mmma()
         fi
       else
         case $DIR in
+          mka) MMM_MAKE=mka;;
           showcommands | snod | dist | incrementaljavac) ARGS="$ARGS $DIR";;
           *) echo "Couldn't find directory $DIR"; return 1;;
         esac
       fi
     done
-    make -C $T -f build/core/main.mk $DASH_ARGS $ARGS all_modules BUILD_MODULES_IN_PATHS="$MODULE_PATHS"
+    $MMMA_MAKE -C $T -f build/core/main.mk $DASH_ARGS $ARGS all_modules BUILD_MODULES_IN_PATHS="$MODULE_PATHS"
   else
     echo "Couldn't locate the top of the tree.  Try setting TOP."
   fi
