@@ -695,8 +695,9 @@ recovery_resources_common := $(call project-path-for,recovery)/res
 recovery_resources_extra := $(call project-path-for,recovery)/res-$(TARGET_RECOVERY_SCREEN_WIDTH)
 recovery_resources_private := $(strip $(wildcard $(TARGET_DEVICE_DIR)/recovery/res))
 recovery_root_private := $(strip $(wildcard $(TARGET_DEVICE_DIR)/recovery/root))
+recovery_device_extra := $(TARGET_RECOVERY_DEVICE_DIR)
 recovery_resource_deps := $(shell find $(recovery_resources_common) $(recovery_resources_extra) \
-  $(recovery_resources_private) $(recovery_root_private) -type f)
+  $(recovery_resources_private) $(recovery_root_private) $(recovery_device_extra) -type f)
 ifneq ($(TARGET_RECOVERY_FSTAB),)
   recovery_fstab := $(strip $(wildcard $(TARGET_RECOVERY_FSTAB)))
 else
@@ -789,6 +790,7 @@ $(TARGET_RECOVERY_ROOT_TIMESTAMP): \
 	  cp -rf $(item) $(TARGET_RECOVERY_ROOT_OUT)/)
 	$(foreach item,$(recovery_root_private), \
 	  cp -rf $(item) $(TARGET_RECOVERY_OUT)/)
+	$(hide) cp -rf $(recovery_device_extra)/* $(TARGET_RECOVERY_ROOT_OUT)/
 	$(hide) $(foreach item,$(recovery_fstab), \
 	  cp -f $(item) $(TARGET_RECOVERY_ROOT_OUT)/etc/recovery.fstab)
 	$(hide) cp $(RECOVERY_INSTALL_OTA_KEYS) $(TARGET_RECOVERY_ROOT_OUT)/res/keys
