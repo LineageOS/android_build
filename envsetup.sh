@@ -1478,25 +1478,26 @@ function cmremote()
     if [ ! -d .git ]
     then
         echo .git directory not found. Please run this from the root directory of the Android repository you wish to set up.
-    fi
-    GERRIT_REMOTE=$(cat .git/config  | grep git://github.com | awk '{ print $NF }' | sed s#git://github.com/##g)
-    if [ -z "$GERRIT_REMOTE" ]
-    then
-        GERRIT_REMOTE=$(cat .git/config  | grep http://github.com | awk '{ print $NF }' | sed s#http://github.com/##g)
+    else
+        GERRIT_REMOTE=$(cat .git/config  | grep git://github.com | awk '{ print $NF }' | sed s#git://github.com/##g)
         if [ -z "$GERRIT_REMOTE" ]
         then
-          echo Unable to set up the git remote, are you in the root of the repo?
-          return 0
+            GERRIT_REMOTE=$(cat .git/config  | grep http://github.com | awk '{ print $NF }' | sed s#http://github.com/##g)
+            if [ -z "$GERRIT_REMOTE" ]
+            then
+              echo Unable to set up the git remote, are you in the root of the repo?
+              return 0
+           fi
         fi
+        CMUSER=`git config --get review.review.cyanogenmod.org.username`
+        if [ -z "$CMUSER" ]
+        then
+            git remote add cmremote ssh://review.cyanogenmod.org:29418/$GERRIT_REMOTE
+        else
+            git remote add cmremote ssh://$CMUSER@review.cyanogenmod.org:29418/$GERRIT_REMOTE
+        fi
+        echo You can now push to "cmremote".
     fi
-    CMUSER=`git config --get review.review.cyanogenmod.org.username`
-    if [ -z "$CMUSER" ]
-    then
-        git remote add cmremote ssh://review.cyanogenmod.org:29418/$GERRIT_REMOTE
-    else
-        git remote add cmremote ssh://$CMUSER@review.cyanogenmod.org:29418/$GERRIT_REMOTE
-    fi
-    echo You can now push to "cmremote".
 }
 
 function aospremote()
@@ -1505,14 +1506,15 @@ function aospremote()
     if [ ! -d .git ]
     then
         echo .git directory not found. Please run this from the root directory of the Android repository you wish to set up.
+    else
+        PROJECT=`pwd -P | sed s#$ANDROID_BUILD_TOP/##g`
+        if (echo $PROJECT | grep -qv "^device")
+        then
+            PFX="platform/"
+        fi
+        git remote add aosp https://android.googlesource.com/$PFX$PROJECT
+        echo "Remote 'aosp' created"
     fi
-    PROJECT=`pwd -P | sed s#$ANDROID_BUILD_TOP/##g`
-    if (echo $PROJECT | grep -qv "^device")
-    then
-        PFX="platform/"
-    fi
-    git remote add aosp https://android.googlesource.com/$PFX$PROJECT
-    echo "Remote 'aosp' created"
 }
 
 function cafremote()
@@ -1521,14 +1523,15 @@ function cafremote()
     if [ ! -d .git ]
     then
         echo .git directory not found. Please run this from the root directory of the Android repository you wish to set up.
+    else
+        PROJECT=`pwd -P | sed s#$ANDROID_BUILD_TOP/##g`
+        if (echo $PROJECT | grep -qv "^device")
+        then
+            PFX="platform/"
+        fi
+        git remote add caf git://codeaurora.org/$PFX$PROJECT
+        echo "Remote 'caf' created"
     fi
-    PROJECT=`pwd -P | sed s#$ANDROID_BUILD_TOP/##g`
-    if (echo $PROJECT | grep -qv "^device")
-    then
-        PFX="platform/"
-    fi
-    git remote add caf git://codeaurora.org/$PFX$PROJECT
-    echo "Remote 'caf' created"
 }
 
 function installboot()
