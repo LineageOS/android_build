@@ -247,7 +247,9 @@ endef
 
 define transform-o-to-executable-inner
 $(hide) $(PRIVATE_CXX) -nostdlib -Bdynamic -fPIE -pie \
-	-Wl,-dynamic-linker,/system/bin/linker \
+	$(if $(RECOVERY_USE_SBIN_LINKER), \
+		-Wl$(comma)-dynamic-linker$(comma)/sbin/linker, \
+		-Wl$(comma)-dynamic-linker$(comma)/system/bin/linker) \
 	-Wl,--gc-sections \
 	-Wl,-z,nocopyreloc \
 	$(PRIVATE_TARGET_GLOBAL_LD_DIRS) \
