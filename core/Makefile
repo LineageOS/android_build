@@ -830,6 +830,7 @@ RECOVERY_RESOURCE_ZIP :=
 endif
 
 .PHONY: recoveryimage
+recoveryimage: RECOVERY_USE_SBIN_LINKER := true
 recoveryimage: $(INSTALLED_RECOVERYIMAGE_TARGET) $(RECOVERY_RESOURCE_ZIP)
 
 INSTALLED_RECOVERYZIP_TARGET := $(PRODUCT_OUT)/utilities/update.zip

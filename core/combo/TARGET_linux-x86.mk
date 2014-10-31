@@ -202,7 +202,9 @@ define transform-o-to-executable-inner
 $(hide) $(PRIVATE_CXX) \
 	$(PRIVATE_TARGET_GLOBAL_LDFLAGS) \
 	-nostdlib -Bdynamic \
-	-Wl,-dynamic-linker,/system/bin/linker \
+	$(if $(RECOVERY_USE_SBIN_LINKER), \
+		-Wl$(comma)-dynamic-linker$(comma)/sbin/linker, \
+		-Wl$(comma)-dynamic-linker$(comma)/system/bin/linker) \
 	-Wl,-z,nocopyreloc \
 	-fPIE -pie \
 	$(PRIVATE_TARGET_GLOBAL_LD_DIRS) \
