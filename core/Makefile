@@ -691,6 +691,7 @@ recovery_uncompressed_ramdisk := $(PRODUCT_OUT)/ramdisk-recovery.cpio
 recovery_ramdisk := $(PRODUCT_OUT)/ramdisk-recovery.img
 recovery_build_prop := $(INSTALLED_BUILD_PROP_TARGET)
 recovery_binary := $(call intermediates-dir-for,EXECUTABLES,recovery)/recovery
+recovery_device_modules := $(TARGET_RECOVERY_DEVICE_MODULES)
 recovery_resources_common := $(call project-path-for,recovery)/res
 recovery_resources_extra := $(call project-path-for,recovery)/res-$(TARGET_RECOVERY_SCREEN_WIDTH)
 recovery_resources_private := $(strip $(wildcard $(TARGET_DEVICE_DIR)/recovery/res))
@@ -770,6 +771,7 @@ $(TARGET_RECOVERY_ROOT_TIMESTAMP): \
 		$(INSTALLED_2NDBOOTLOADER_TARGET) \
 		$(recovery_build_prop) $(recovery_resource_deps) \
 		$(recovery_fstab) \
+		$(recovery_device_modules) \
 		$(RECOVERY_INSTALL_OTA_KEYS)
 	@echo -e ${CL_CYN}"----- Making recovery filesystem ------"${CL_RST}
 	$(hide) mkdir -p $(TARGET_RECOVERY_OUT)
