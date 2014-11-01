@@ -697,6 +697,11 @@ recovery_resources_private := $(strip $(wildcard $(TARGET_DEVICE_DIR)/recovery/r
 recovery_root_private := $(strip $(wildcard $(TARGET_DEVICE_DIR)/recovery/root))
 recovery_resource_deps := $(shell find $(recovery_resources_common) $(recovery_resources_extra) \
   $(recovery_resources_private) $(recovery_root_private) -type f)
+ifneq ($(TARGET_RECOVERY_DEVICE_MODULES),)
+  recovery_device_modules := $(TARGET_RECOVERY_DEVICE_MODULES)
+else
+  recovery_device_modules :=
+endif
 ifneq ($(TARGET_RECOVERY_FSTAB),)
   recovery_fstab := $(strip $(wildcard $(TARGET_RECOVERY_FSTAB)))
 else
@@ -770,6 +775,7 @@ $(TARGET_RECOVERY_ROOT_TIMESTAMP): \
 		$(INSTALLED_2NDBOOTLOADER_TARGET) \
 		$(recovery_build_prop) $(recovery_resource_deps) \
 		$(recovery_fstab) \
+		$(recovery_device_modules) \
 		$(RECOVERY_INSTALL_OTA_KEYS)
 	@echo -e ${CL_CYN}"----- Making recovery filesystem ------"${CL_RST}
 	$(hide) mkdir -p $(TARGET_RECOVERY_OUT)
