@@ -18,23 +18,15 @@ ifeq ($(BOARD_USES_QCOM_HARDWARE),true)
             TARGET_GLOBAL_CPPFLAGS += -DQCOM_DIRECTTRACK
         endif
     endif
-
-    # This is the list of all supported QCOM variants.
-    qcom_variant_list := audio camera display gps media sensors
-
-    # Set the QCOM_*_PATH variables for each variant.
-    #   $1 = Upper case name for variable name
-    #   $2 = Lower case name for variable value (pathname)
-    define qcom_variant_path
-    $(strip \
-        $(if $(TARGET_QCOM_$(1)_VARIANT), \
-            hardware/qcom/$(2)-$(TARGET_QCOM_$(1)_VARIANT), \
-            hardware/qcom/$(2)))
-    endef
-    $(foreach variant, \
-        $(qcom_variant_list), \
-        $(eval ln:=$(shell echo $(variant) | tr [A-Z] [a-z])) \
-        $(eval un:=$(shell echo $(variant) | tr [a-z] [A-Z])) \
-        $(eval QCOM_$(un)_PATH:=$(call qcom_variant_path,$(un),$(ln))))
-
 endif
+
+# Populate the qcom hardware variants in the project pathmap.
+define qcom-set-path-variant
+$(call project-set-path-variant,qcom-$(2),TARGET_QCOM_$(1)_VARIANT,hardware/qcom/$(2))
+endef
+$(call qcom-set-path-variant,AUDIO,audio)
+$(call qcom-set-path-variant,CAMERA,camera)
+$(call qcom-set-path-variant,DISPLAY,display)
+$(call qcom-set-path-variant,GPS,gps)
+$(call qcom-set-path-variant,MEDIA,media)
+$(call qcom-set-path-variant,SENSORS,sensors)
