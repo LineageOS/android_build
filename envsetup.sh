@@ -196,6 +196,11 @@ function setpaths()
         export PATH=$ANDROID_PRE_BUILD_PATHS$PATH
     fi
 
+    # use sdk tools if defined
+    if [ -n "$ANDROID_HOME" ]; then
+        export PATH=$ANDROID_HOME/tools:$ANDROID_HOME/platform-tools:$PATH
+    fi
+
     unset ANDROID_PRODUCT_OUT
     export ANDROID_PRODUCT_OUT=$(get_abs_build_var PRODUCT_OUT)
     export OUT=$ANDROID_PRODUCT_OUT
