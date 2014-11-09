@@ -112,12 +112,19 @@ KERNEL_HEADERS_INSTALL := $(KERNEL_OUT)/usr
 KERNEL_MODULES_INSTALL := system
 KERNEL_MODULES_OUT := $(TARGET_OUT)/lib/modules
 
+ifeq ($(KERNEL_TOOLCHAIN),)
+KERNEL_TOOLCHAIN := $(ARM_EABI_TOOLCHAIN)
+endif
+ifeq ($(KERNEL_TOOLCHAIN_PREFIX),)
+KERNEL_TOOLCHAIN_PREFIX := arm-eabi-
+endif
+
 define mv-modules
     mdpath=`find $(KERNEL_MODULES_OUT) -type f -name modules.order`;\
     if [ "$$mdpath" != "" ];then\
         mpath=`dirname $$mdpath`;\
         ko=`find $$mpath/kernel -type f -name *.ko`;\
-        for i in $$ko; do $(ARM_EABI_TOOLCHAIN)/arm-eabi-strip --strip-unneeded $$i;\
+        for i in $$ko; do $(KERNEL_TOOLCHAIN)/$(KERNEL_TOOLCHAIN_PREFIX)strip --strip-unneeded $$i;\
         mv $$i $(KERNEL_MODULES_OUT)/; done;\
     fi
 endef
@@ -135,7 +142,7 @@ ifeq ($(TARGET_ARCH),arm)
       # Check that the executable is here.
       ccache := $(strip $(wildcard $(ccache)))
     endif
-    ARM_CROSS_COMPILE:=CROSS_COMPILE="$(ccache) $(ARM_EABI_TOOLCHAIN)/arm-eabi-"
+    ARM_CROSS_COMPILE:=CROSS_COMPILE="$(ccache) $(KERNEL_TOOLCHAIN)/$(KERNEL_TOOLCHAIN_PREFIX)"
     ccache = 
 endif
 
