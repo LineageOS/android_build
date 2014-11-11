@@ -28,6 +28,7 @@ import subprocess
 import re
 import argparse
 import textwrap
+import fnmatch
 
 try:
   # For python3
@@ -264,6 +265,7 @@ for change in args.change_number:
     # Extract information from the JSON response
     date_fluff       = '.000000000'
     project_name     = data['project']
+    project_branch   = data['branch']
     change_number    = data['_number']
     status           = data['status']
     current_revision = data['revisions'][data['current_revision']]
@@ -290,6 +292,18 @@ for change in args.change_number:
     #   - check that the project path exists
     if project_name in project_name_to_path:
         project_path = project_name_to_path[project_name];
+        variant_repos = ['android_hardware_qcom_audio', 'android_hardware_qcom_display', 'android_hardware_qcom_media']
+        if project_name.split('CyanogenMod/')[1] in variant_repos:
+            if fnmatch.fnmatch(project_branch, 'cm-*-caf-*'):
+                variant_path = project_branch.split('cm-')[1].split('caf-')[1]
+                if project_name.split('CyanogenMod/')[1] == 'android_hardware_qcom_audio':
+                    if variant_path == '8960':
+                        variant_path = 'legacy'
+                    else:
+                        variant_path = 'default'
+                else:
+                    variant_path = 'msm' + variant_path
+                project_path = project_path.split('/default')[0] + '-caf/' + variant_path
     elif args.ignore_missing:
         print('WARNING: Skipping %d since there is no project directory for: %s\n' % (change_number, project_name))
         continue;
