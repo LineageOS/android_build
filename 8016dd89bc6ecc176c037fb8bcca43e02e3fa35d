@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a122d0e_271d2210",
+        "filename": "core/Makefile",
+        "patchSetId": 1
+      },
+      "lineNbr": 788,
+      "author": {
+        "id": 5503
+      },
+      "writtenOn": "2014-11-11T08:49:55Z",
+      "side": 1,
+      "message": "Shouldn\u0027t need this line, it appears recovery_resources_private is already set below.",
+      "revId": "8016dd89bc6ecc176c037fb8bcca43e02e3fa35d",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    }
+  ]
+}
