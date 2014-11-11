@@ -53,6 +53,7 @@ PRODUCT_PACKAGES += \
     ip-up-vpn \
     ip6tables \
     iptables \
+    javax.btobex \
     keystore \
     keystore.default \
     libOpenMAXAL \
