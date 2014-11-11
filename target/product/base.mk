@@ -37,6 +37,7 @@ PRODUCT_PACKAGES += \
     fsck_msdos \
     ime \
     input \
+    javax.btobex \
     javax.obex \
     libandroid \
     libandroid_runtime \
