@@ -16,6 +16,23 @@
       "revId": "fcf793bca528fbb30e1334ec0c7c78f71bd71a4b",
       "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a122d0e_a22f60f5",
+        "filename": "core/qcom_target.mk",
+        "patchSetId": 1
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 4550
+      },
+      "writtenOn": "2014-11-11T15:55:30Z",
+      "side": 1,
+      "message": "sensors can go too since we removed them from manifest",
+      "revId": "fcf793bca528fbb30e1334ec0c7c78f71bd71a4b",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
     }
   ]
 }
