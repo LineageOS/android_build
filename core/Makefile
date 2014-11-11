@@ -1663,9 +1663,6 @@ CM_TARGET_PACKAGE := $(PRODUCT_OUT)/cm-$(CM_VERSION).zip
 .PHONY: otapackage bacon
 otapackage: $(INTERNAL_OTA_PACKAGE_TARGET)
 bacon: otapackage
-ifneq ($(TARGET_CUSTOM_RELEASETOOL),)
-	$(error TARGET_CUSTOM_RELEASETOOL is deprecated)
-endif
 	$(hide) ln -f $(INTERNAL_OTA_PACKAGE_TARGET) $(CM_TARGET_PACKAGE)
 	$(hide) $(MD5SUM) $(CM_TARGET_PACKAGE) > $(CM_TARGET_PACKAGE).md5sum
 	@echo -e ${CL_CYN}"Package Complete: $(CM_TARGET_PACKAGE)"${CL_RST}
