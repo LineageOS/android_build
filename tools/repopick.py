@@ -28,6 +28,7 @@ import subprocess
 import re
 import argparse
 import textwrap
+import fnmatch
 
 try:
   # For python3
@@ -264,6 +265,7 @@ for change in args.change_number:
     # Extract information from the JSON response
     date_fluff       = '.000000000'
     project_name     = data['project']
+    project_branch   = data['branch']
     change_number    = data['_number']
     status           = data['status']
     current_revision = data['revisions'][data['current_revision']]
@@ -290,6 +292,8 @@ for change in args.change_number:
     #   - check that the project path exists
     if project_name in project_name_to_path:
         project_path = project_name_to_path[project_name];
+        if project_path.rsplit('/', 1)[0] in ['hardware/qcom/audio', 'hardware/qcom/display', 'hardware/qcom/media']:
+            project_path = project_path.rsplit('/', 1)[0] + '-caf/' + 'msm' + project_branch.rsplit('-', 1)[1]
     elif args.ignore_missing:
         print('WARNING: Skipping %d since there is no project directory for: %s\n' % (change_number, project_name))
         continue;
