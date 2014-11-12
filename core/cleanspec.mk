@@ -63,7 +63,7 @@ INTERNAL_CLEAN_BUILD_VERSION := 6
 # NEWER CLEAN STEPS MUST BE AT THE END OF THE LIST
 # ************************************************
 
-subdir_cleanspecs := \
-    $(shell build/tools/findleaves.py --prune=$(OUT_DIR) --prune=.repo --prune=.git . CleanSpec.mk)
-include $(subdir_cleanspecs)
-subdir_cleanspecs :=
+#subdir_cleanspecs := \
+#    $(shell build/tools/findleaves.py --prune=$(OUT_DIR) --prune=.repo --prune=.git . CleanSpec.mk)
+#include $(subdir_cleanspecs)
+#subdir_cleanspecs :=
