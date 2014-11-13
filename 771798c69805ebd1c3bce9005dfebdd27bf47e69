@@ -16,6 +16,24 @@
       "revId": "771798c69805ebd1c3bce9005dfebdd27bf47e69",
       "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a122d0e_323ef9b8",
+        "filename": "tools/repopick.py",
+        "patchSetId": 6
+      },
+      "lineNbr": 295,
+      "author": {
+        "id": 3671
+      },
+      "writtenOn": "2014-11-13T11:09:39Z",
+      "side": 1,
+      "message": "it sure looks like it would, i\u0027ll give it a shot to be sure and upload a patchset",
+      "parentUuid": "1a122d0e_12093d2d",
+      "revId": "771798c69805ebd1c3bce9005dfebdd27bf47e69",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
     }
   ]
 }
