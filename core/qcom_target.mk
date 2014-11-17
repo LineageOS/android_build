@@ -25,17 +25,51 @@ ifeq ($(BOARD_USES_QCOM_HARDWARE),true)
     endif
     endif
 
-$(call project-set-path,qcom-audio,hardware/qcom/audio-caf)
+define qcom-hardware-variant
+  $(strip \
+    $(if $(QCOM_HARDWARE_VARIANT),\
+      $(QCOM_HARDWARE_VARIANT),\
+      $(if $(filter msm8084,$(TARGET_BOARD_PLATFORM)),\
+        msm8084,\
+        $(if $(filter msm8974 msm8226 msm8610,$(TARGET_BOARD_PLATFORM)),\
+          msm8974,\
+          msm8960\
+        )\
+      )\
+    )\
+  )
+endef
+
+$(call project-set-path,qcom-audio,hardware/qcom/audio-caf/$(qcom-hardware-variant))
 $(call qcom-set-path-variant,CAMERA,camera)
-$(call project-set-path,qcom-display,hardware/qcom/display-caf)
+$(call project-set-path,qcom-display,hardware/qcom/display-caf/$(qcom-hardware-variant))
 $(call qcom-set-path-variant,GPS,gps)
-$(call project-set-path,qcom-media,hardware/qcom/media-caf)
+$(call project-set-path,qcom-media,hardware/qcom/media-caf/$(qcom-hardware-variant))
 $(call qcom-set-path-variant,SENSORS,sensors)
 else
-$(call project-set-path,qcom-audio,hardware/qcom/audio)
+
+define qcom-hardware-variant
+  $(strip \
+    $(if $(QCOM_HARDWARE_VARIANT),\
+      $(QCOM_HARDWARE_VARIANT),\
+      $(if $(filter msm8084 msm8x84,$(TARGET_BOARD_PLATFORM)),\
+        msm8084,\
+        $(if $(filter msm8974 msm8x74,$(TARGET_BOARD_PLATFORM)),\
+          msm8974,\
+          $(if $(filter msm8226 msm8x26,$(TARGET_BOARD_PLATFORM)),\
+            msm8226,\
+            msm8960\
+          )\
+        )\
+      )\
+    )\
+  )
+endef
+
+$(call project-set-path,qcom-audio,hardware/qcom/audio/default)
 $(call qcom-set-path-variant,CAMERA,camera)
-$(call project-set-path,qcom-display,hardware/qcom/display)
+$(call project-set-path,qcom-display,hardware/qcom/display/$(qcom-hardware-variant))
 $(call qcom-set-path-variant,GPS,gps)
-$(call project-set-path,qcom-media,hardware/qcom/media)
+$(call project-set-path,qcom-media,hardware/qcom/media/default)
 $(call qcom-set-path-variant,SENSORS,sensors)
 endif
