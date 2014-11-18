@@ -25,17 +25,32 @@ ifeq ($(BOARD_USES_QCOM_HARDWARE),true)
     endif
     endif
 
-$(call project-set-path,qcom-audio,hardware/qcom/audio-caf)
+    # Allow TARGET_PLATFORM to be overridden
+    ifeq ($(TARGET_USE_QCOM_VARIANT),)
+        TARGET_USE_QCOM_VARIANT := $(TARGET_BOARD_PLATFORM)
+    else
+        TARGET_USE_QCOM_VARIANT := $(TARGET_USE_QCOM_PLATFORM)
+    endif
+
+$(call project-set-path,qcom-audio,hardware/qcom/audio-caf/$(TARGET_USE_QCOM_VARIANT))
 $(call qcom-set-path-variant,CAMERA,camera)
-$(call project-set-path,qcom-display,hardware/qcom/display-caf)
+$(call project-set-path,qcom-display,hardware/qcom/display-caf/$(TARGET_USE_QCOM_VARIANT))
 $(call qcom-set-path-variant,GPS,gps)
-$(call project-set-path,qcom-media,hardware/qcom/media-caf)
+$(call project-set-path,qcom-media,hardware/qcom/media-caf/$(TARGET_USE_QCOM_VARIANT))
 $(call qcom-set-path-variant,SENSORS,sensors)
 else
-$(call project-set-path,qcom-audio,hardware/qcom/audio)
+
+    # Allow TARGET_PLATFORM to be overridden
+    ifeq ($(TARGET_USE_QCOM_VARIANT),)
+        TARGET_USE_QCOM_VARIANT := $(TARGET_BOARD_PLATFORM)
+    else
+        TARGET_USE_QCOM_VARIANT := $(TARGET_USE_QCOM_PLATFORM)
+    endif
+
+$(call project-set-path,qcom-audio,hardware/qcom/audio/default)
 $(call qcom-set-path-variant,CAMERA,camera)
-$(call project-set-path,qcom-display,hardware/qcom/display)
+$(call project-set-path,qcom-display,hardware/qcom/display/$(TARGET_USE_QCOM_VARIANT))
 $(call qcom-set-path-variant,GPS,gps)
-$(call project-set-path,qcom-media,hardware/qcom/media)
+$(call project-set-path,qcom-media,hardware/qcom/media/default)
 $(call qcom-set-path-variant,SENSORS,sensors)
 endif
