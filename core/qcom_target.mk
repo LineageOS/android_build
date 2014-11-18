@@ -25,11 +25,19 @@ ifeq ($(BOARD_USES_QCOM_HARDWARE),true)
     endif
     endif
 
-$(call project-set-path,qcom-audio,hardware/qcom/audio-caf/$(TARGET_BOARD_PLATFORM))
+ifeq ($(QCOM_HARDWARE_VARIANT),)
+    ifneq ($(filter msm8610 msm8226 msm8974,$(TARGET_BOARD_PLATFORM)),)
+        QCOM_HARDWARE_VARIANT := msm8974
+    else
+        QCOM_HARDWARE_VARIANT := $(TARGET_BOARD_PLATFORM)
+    endif
+endif
+
+$(call project-set-path,qcom-audio,hardware/qcom/audio-caf/$(QCOM_HARDWARE_VARIANT))
 $(call qcom-set-path-variant,CAMERA,camera)
-$(call project-set-path,qcom-display,hardware/qcom/display-caf/$(TARGET_BOARD_PLATFORM))
+$(call project-set-path,qcom-display,hardware/qcom/display-caf/$(QCOM_HARDWARE_VARIANT))
 $(call qcom-set-path-variant,GPS,gps)
-$(call project-set-path,qcom-media,hardware/qcom/media-caf/$(TARGET_BOARD_PLATFORM))
+$(call project-set-path,qcom-media,hardware/qcom/media-caf/$(QCOM_HARDWARE_VARIANT))
 $(call qcom-set-path-variant,SENSORS,sensors)
 else
 $(call project-set-path,qcom-audio,hardware/qcom/audio/default)
