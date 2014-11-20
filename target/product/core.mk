@@ -39,7 +39,8 @@ PRODUCT_PACKAGES += \
     KeyChain \
     Keyguard \
     LatinIME \
-    Launcher2 \
+    Trebuchet \
+    CMFileManager \
     ManagedProvisioning \
     PicoTts \
     PacProcessor \
