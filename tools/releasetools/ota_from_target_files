@@ -568,6 +568,7 @@ else if get_stage("%(bcb_dev)s") == "3/3" then
 """ % bcb_dev)
 
   device_specific.FullOTA_InstallBegin()
+  script.AppendExtra("ifelse(is_mounted(\"/system\"), unmount(\"/system\"));")
 
   if OPTIONS.backuptool:
     if block_based:
