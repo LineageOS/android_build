@@ -17,8 +17,10 @@ ifeq ($(BOARD_USES_QCOM_HARDWARE),true)
 
     TARGET_ENABLE_QC_AV_ENHANCEMENTS := true
 
-    # Enable DirectTrack for legacy targets
+    # Enable DirectTrack and BSP for legacy targets
     ifneq ($(filter msm7x30 msm8660 msm8960,$(TARGET_BOARD_PLATFORM)),)
+        TARGET_GLOBAL_CFLAGS += -DQCOM_BSP_LEGACY
+        TARGET_GLOBAL_CPPFLAGS += -DQCOM_BSP_LEGACY
     ifeq ($(BOARD_USES_LEGACY_ALSA_AUDIO),true)
         TARGET_GLOBAL_CFLAGS += -DQCOM_DIRECTTRACK
         TARGET_GLOBAL_CPPFLAGS += -DQCOM_DIRECTTRACK
