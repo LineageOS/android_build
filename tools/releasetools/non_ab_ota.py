@@ -267,6 +267,8 @@ else if get_stage("%(bcb_dev)s") == "3/3" then
     script.ShowProgress(0.02, 10)
     script.RunBackup("restore", target_info.get('use_dynamic_partitions') == "true")
 
+  device_specific.FullOTA_PostValidate()
+
   script.WriteRawImage("/boot", "boot.img")
 
   script.ShowProgress(0.1, 10)
