@@ -545,6 +545,8 @@ else if get_stage("%(bcb_dev)s") == "3/3" then
 
   device_specific.FullOTA_PostValidate()
 
+  device_specific.FullOTA_PostValidate()
+
   if OPTIONS.backuptool:
     script.ShowProgress(0.02, 10)
     if block_based:
