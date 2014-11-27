@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bab6814e_eb5f6a73",
+        "filename": "tools/releasetools/ota_from_target_files",
+        "patchSetId": 1
+      },
+      "lineNbr": 571,
+      "author": {
+        "id": 10
+      },
+      "writtenOn": "2014-11-27T13:00:18Z",
+      "side": 1,
+      "message": "If /system is mounted here, that mount came from InstallBegin(). Nothing else mounts it. InstallBegin() should also have unmounted",
+      "revId": "44c2779d25e3b3ddc42f0eb8a6cac78e3ee8681e",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bab6814e_2b5a1284",
+        "filename": "tools/releasetools/ota_from_target_files",
+        "patchSetId": 1
+      },
+      "lineNbr": 582,
+      "author": {
+        "id": 10
+      },
+      "writtenOn": "2014-11-27T13:00:18Z",
+      "side": 1,
+      "message": "If backuptool is disabled, this Unmount never happens",
+      "revId": "44c2779d25e3b3ddc42f0eb8a6cac78e3ee8681e",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bab6814e_0b5f4e73",
+        "filename": "tools/releasetools/ota_from_target_files",
+        "patchSetId": 1
+      },
+      "lineNbr": 617,
+      "author": {
+        "id": 10
+      },
+      "writtenOn": "2014-11-27T13:00:18Z",
+      "side": 1,
+      "message": "If you get here with the /system mounted from InstallBegin(), and bypassed the backuptool block, things will go boom",
+      "revId": "44c2779d25e3b3ddc42f0eb8a6cac78e3ee8681e",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    }
+  ]
+}
