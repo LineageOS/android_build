@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bab6814e_c167e523",
+        "filename": "tools/releasetools/ota_from_target_files",
+        "patchSetId": 2
+      },
+      "lineNbr": 572,
+      "author": {
+        "id": 10
+      },
+      "writtenOn": "2014-11-28T09:34:11Z",
+      "side": 1,
+      "message": "Do it before the device\u0027s Begin. we\u0027re trying to compensate for manual mounting, not for broken scripts :)",
+      "revId": "252794e9373f57efe42db9e4ae150094c9a5b395",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    }
+  ]
+}
