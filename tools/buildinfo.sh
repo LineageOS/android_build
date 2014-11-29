@@ -49,10 +49,9 @@ fi
 echo "ro.wifi.channels=$PRODUCT_DEFAULT_WIFI_CHANNELS"
 echo "ro.board.platform=$TARGET_BOARD_PLATFORM"
 
-echo "# ro.build.product is obsolete; use ro.product.device"
-echo "ro.build.product=$TARGET_DEVICE"
-
 if [ "$TARGET_UNIFIED_DEVICE" == "" ] ; then
+  echo "# ro.build.product is obsolete; use ro.product.device"
+  echo "ro.build.product=$TARGET_DEVICE"
   echo "ro.product.model=$PRODUCT_MODEL"
   echo "ro.product.device=$TARGET_DEVICE"
   echo "# Do not try to parse description, fingerprint, or thumbprint"
