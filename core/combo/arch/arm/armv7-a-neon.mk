@@ -19,6 +19,9 @@ ifneq (,$(filter cortex-a15 krait denver,$(TARGET_$(combo_2nd_arch_prefix)CPU_VA
 	arch_variant_ldflags := \
 		-Wl,--no-fix-cortex-a8
 else
+ifeq ($(strip $(TARGET_$(combo_2nd_arch_prefix)CPU_VARIANT)),cortex-a9)
+	arch_variant_cflags := -mcpu=cortex-a9
+else
 ifneq (,$(filter cortex-a8 scorpion,$(TARGET_$(combo_2nd_arch_prefix)CPU_VARIANT)))
 	arch_variant_cflags := -mcpu=cortex-a8
 	arch_variant_ldflags := \
@@ -35,6 +38,7 @@ else
 	# Generic ARM might be a Cortex A8 -- better safe than sorry
 	arch_variant_ldflags := \
 		-Wl,--fix-cortex-a8
+endif
 endif
 endif
 endif
