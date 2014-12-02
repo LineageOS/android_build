@@ -400,9 +400,7 @@ def AppendAssertions(script, info_dict, oem_dict = None):
   oem_props = info_dict.get("oem_fingerprint_properties")
   if oem_props is None or len(oem_props) == 0:
     if OPTIONS.override_device == "auto":
-      if OPTIONS.override_prop:
-        device = GetBuildProp("ro.build.product", info_dict)
-      else:
+      if not OPTIONS.override_prop:
         device = GetBuildProp("ro.product.device", info_dict)
     else:
       device = OPTIONS.override_device
