@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bab6814e_8c6a2a19",
+        "filename": "tools/releasetools/ota_from_target_files",
+        "patchSetId": 2
+      },
+      "lineNbr": 441,
+      "author": {
+        "id": 4615
+      },
+      "writtenOn": "2014-12-03T02:40:23Z",
+      "side": 1,
+      "message": "Not enough args for substitution",
+      "revId": "6f79246ed4ec59f6e237b155e387539d6efad89a",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    }
+  ]
+}
