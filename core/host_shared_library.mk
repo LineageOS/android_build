@@ -1,3 +1,5 @@
+LOCAL_CFLAGS += -DHOST_BUILD
+
 my_prefix := HOST_
 include $(BUILD_SYSTEM)/multilib.mk
 
