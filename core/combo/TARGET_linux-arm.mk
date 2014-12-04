@@ -92,10 +92,18 @@ ifeq ($(FORCE_ARM_DEBUGGING),true)
   $(combo_2nd_arch_prefix)TARGET_thumb_CFLAGS += -marm -fno-omit-frame-pointer
 endif
 
+ifeq ($(TARGET_DISABLE_ARM_PIE),true)
+PIE_GLOBAL_CFLAGS :=
+PIE_EXECUTABLE_TRANSFORM :=
+else
+PIE_GLOBAL_CFLAGS := -fPIE
+PIE_EXECUTABLE_TRANSFORM := -fPIE -pie
+endif
+
 android_config_h := $(call select-android-config-h,linux-arm)
 
 $(combo_2nd_arch_prefix)TARGET_GLOBAL_CFLAGS += \
-			-msoft-float \
+			-msoft-float -fpic $(PIE_GLOBAL_CFLAGS) \
 			-ffunction-sections \
 			-fdata-sections \
 			-funwind-tables \
@@ -219,7 +227,7 @@ $(hide) $(PRIVATE_CXX) \
 endef
 
 define $(combo_2nd_arch_prefix)transform-o-to-executable-inner
-$(hide) $(PRIVATE_CXX) -nostdlib -Bdynamic -pie \
+$(hide) $(PRIVATE_CXX) -nostdlib -Bdynamic $(PIE_EXECUTABLE_TRANSFORM) \
 	-Wl,-dynamic-linker,/system/bin/linker \
 	-Wl,--gc-sections \
 	-Wl,-z,nocopyreloc \
