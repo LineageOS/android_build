@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bab6814e_983f0025",
+        "filename": "core/combo/TARGET_linux-arm.mk",
+        "patchSetId": 1
+      },
+      "lineNbr": 99,
+      "author": {
+        "id": 4550
+      },
+      "writtenOn": "2014-12-04T20:18:31Z",
+      "side": 1,
+      "message": "you are adding things that didn\u0027t previously exist here",
+      "revId": "664a0ba3de17c178187d3da4b6401298fcc4d9ae",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bab6814e_783cdc2f",
+        "filename": "core/combo/TARGET_linux-arm.mk",
+        "patchSetId": 1
+      },
+      "lineNbr": 106,
+      "author": {
+        "id": 4550
+      },
+      "writtenOn": "2014-12-04T20:18:31Z",
+      "side": 1,
+      "message": "same as above",
+      "revId": "664a0ba3de17c178187d3da4b6401298fcc4d9ae",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    }
+  ]
+}
