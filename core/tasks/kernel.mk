@@ -142,7 +142,15 @@ ifeq ($(TARGET_ARCH),arm)
       # Check that the executable is here.
       ccache := $(strip $(wildcard $(ccache)))
     endif
-    ARM_CROSS_COMPILE:=CROSS_COMPILE="$(ccache) $(KERNEL_TOOLCHAIN)/$(KERNEL_TOOLCHAIN_PREFIX)"
+    ifneq ($(TARGET_GCC_VERSION_ARM),)
+      ifeq ($(HOST_OS),darwin)
+        ARM_CROSS_COMPILE:=CROSS_COMPILE="$(ccache) $(ANDROID_BUILD_TOP)/prebuilts/gcc/darwin-x86/arm/arm-eabi-$(TARGET_GCC_VERSION_ARM)/bin/arm-eabi-"
+      else
+        ARM_CROSS_COMPILE:=CROSS_COMPILE="$(ccache) $(ANDROID_BUILD_TOP)/prebuilts/gcc/linux-x86/arm/arm-eabi-$(TARGET_GCC_VERSION_ARM)/bin/arm-eabi-"
+      endif
+    else
+      ARM_CROSS_COMPILE:=CROSS_COMPILE="$(ccache) $(KERNEL_TOOLCHAIN)/$(KERNEL_TOOLCHAIN_PREFIX)"
+    endif
     ccache = 
 endif
 
