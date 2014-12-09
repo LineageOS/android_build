@@ -5,7 +5,6 @@ define qcom-set-path-variant
 $(call project-set-path-variant,qcom-$(2),TARGET_QCOM_$(1)_VARIANT,hardware/qcom/$(2))
 endef
 
-# Enable DirectTrack on QCOM legacy boards
 ifeq ($(BOARD_USES_QCOM_HARDWARE),true)
 
     TARGET_GLOBAL_CFLAGS += -DQCOM_HARDWARE
@@ -23,9 +22,9 @@ ifeq ($(BOARD_USES_QCOM_HARDWARE),true)
         TARGET_GLOBAL_CFLAGS += -DQCOM_DIRECTTRACK
         TARGET_GLOBAL_CPPFLAGS += -DQCOM_DIRECTTRACK
     endif
-	# Enable legacy graphics functions
-    LOCAL_GLOBAL_CFLAGS += -DQCOM_BSP_LEGACY
-    LOCAL_GLOBAL_CPPFLAGS += -DQCOM_BSP_LEGACY
+    # Enable legacy graphics functions
+    TARGET_GLOBAL_CFLAGS += -DQCOM_BSP_LEGACY
+    TARGET_GLOBAL_CPPFLAGS += -DQCOM_BSP_LEGACY
     endif
 
 $(call project-set-path,qcom-audio,hardware/qcom/audio-caf/$(TARGET_BOARD_PLATFORM))
