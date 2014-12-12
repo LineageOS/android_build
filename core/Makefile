@@ -4522,6 +4522,7 @@ endif
 ifdef BOARD_GKI_SIGNING_SIGNATURE_ARGS
 	$(hide) echo 'gki_signing_signature_args=$(BOARD_GKI_SIGNING_SIGNATURE_ARGS)' >> $@
 endif
+	$(hide) echo "use_set_metadata=1" >> $@
 	$(hide) echo "multistage_support=1" >> $@
 	$(hide) echo "blockimgdiff_versions=3,4" >> $@
 ifeq ($(PRODUCT_BUILD_GENERIC_OTA_PACKAGE),true)
@@ -4973,6 +4974,9 @@ ifneq (true,$(BOARD_INCLUDE_RECOVERY_RAMDISK_IN_VENDOR_BOOT))
 	$(hide) $(call package_files-copy-root, \
 	    $(TARGET_RECOVERY_ROOT_OUT),$(zip_root)/$(PRIVATE_RECOVERY_OUT)/RAMDISK)
 endif
+	@# OTA install helpers
+	$(hide) $(call package_files-copy-root, \
+	    $(PRODUCT_OUT)/install,$(zip_root)/INSTALL)
 ifdef INSTALLED_KERNEL_TARGET
 ifneq (,$(filter true,$(BOARD_USES_RECOVERY_AS_BOOT)))
 	cp $(INSTALLED_KERNEL_TARGET) $(zip_root)/$(PRIVATE_RECOVERY_OUT)/
