@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7aa08908_c2625216",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 2195
+      },
+      "writtenOn": "2014-12-14T01:09:03Z",
+      "side": 1,
+      "message": "using 12345/9 would be better, as that\u0027s what is used everywhere else (in the URLs, repo download, etc)",
+      "revId": "6b6265f4d5389721ad2a351a362d365216c44f74",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7aa08908_a2674624",
+        "filename": "tools/repopick.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 3,
+      "author": {
+        "id": 2195
+      },
+      "writtenOn": "2014-12-14T01:09:03Z",
+      "side": 1,
+      "message": "Don\u0027t change the year, add it\nMake it 2013-14",
+      "revId": "6b6265f4d5389721ad2a351a362d365216c44f74",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7aa08908_026d7a04",
+        "filename": "tools/repopick.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 243,
+      "author": {
+        "id": 2195
+      },
+      "writtenOn": "2014-12-14T01:09:03Z",
+      "side": 1,
+      "message": "\u0027using\u0027 isn\u0027t really the correct word here. could drop it.",
+      "revId": "6b6265f4d5389721ad2a351a362d365216c44f74",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    }
+  ]
+}
