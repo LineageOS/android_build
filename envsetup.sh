@@ -1647,21 +1647,13 @@ function godir () {
 function cmremote()
 {
     git remote rm cmremote 2> /dev/null
-    if [ ! -d .git ]
-    then
-        echo .git directory not found. Please run this from the root directory of the Android repository you wish to set up.
-    fi
-    GERRIT_REMOTE=$(cat .git/config  | grep git://github.com | awk '{ print $NF }' | sed s#git://github.com/##g)
+    GERRIT_REMOTE=$(git config --get remote.github.projectname)
     if [ -z "$GERRIT_REMOTE" ]
     then
-        GERRIT_REMOTE=$(cat .git/config  | grep http://github.com | awk '{ print $NF }' | sed s#http://github.com/##g)
-        if [ -z "$GERRIT_REMOTE" ]
-        then
-          echo Unable to set up the git remote, are you in the root of the repo?
-          return 0
-        fi
+        echo Unable to set up the git remote, are you under a git repo?
+        return 0
     fi
-    CMUSER=`git config --get review.review.cyanogenmod.org.username`
+    CMUSER=$(git config --get review.review.cyanogenmod.org.username)
     if [ -z "$CMUSER" ]
     then
         git remote add cmremote ssh://review.cyanogenmod.org:29418/$GERRIT_REMOTE
