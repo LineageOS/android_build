@@ -7,26 +7,24 @@ endef
 
 ifeq ($(BOARD_USES_QCOM_HARDWARE),true)
 
-    TARGET_GLOBAL_CFLAGS += -DQCOM_HARDWARE
-    TARGET_GLOBAL_CPPFLAGS += -DQCOM_HARDWARE
+    qcom_flags := -DQCOM_HARDWARE
+    qcom_flags += -DQCOM_BSP
 
     TARGET_USES_QCOM_BSP := true
-    TARGET_GLOBAL_CFLAGS += -DQCOM_BSP
-    TARGET_GLOBAL_CPPFLAGS += -DQCOM_BSP
-
     TARGET_ENABLE_QC_AV_ENHANCEMENTS := true
 
     # Enable DirectTrack for legacy targets
     ifneq ($(filter msm7x30 msm8660 msm8960,$(TARGET_BOARD_PLATFORM)),)
-    ifeq ($(BOARD_USES_LEGACY_ALSA_AUDIO),true)
-        TARGET_GLOBAL_CFLAGS += -DQCOM_DIRECTTRACK
-        TARGET_GLOBAL_CPPFLAGS += -DQCOM_DIRECTTRACK
-    endif
+        ifeq ($(BOARD_USES_LEGACY_ALSA_AUDIO),true)
+            qcom_flags += -DQCOM_DIRECTTRACK
+        endif
         # Enable legacy graphics functions
         TARGET_USES_QCOM_BSP_LEGACY := true
-        TARGET_GLOBAL_CFLAGS += -DQCOM_BSP_LEGACY
-        TARGET_GLOBAL_CPPFLAGS += -DQCOM_BSP_LEGACY
+        qcom_flags += -DQCOM_BSP_LEGACY
     endif
+
+    TARGET_GLOBAL_CFLAGS += $(qcom_flags)
+    TARGET_GLOBAL_CPPFLAGS += $(qcom_flags)
 
 $(call project-set-path,qcom-audio,hardware/qcom/audio-caf/$(TARGET_BOARD_PLATFORM))
 $(call qcom-set-path-variant,CAMERA,camera)
