@@ -368,10 +368,10 @@ class EdifyGenerator(object):
     if not self.info.get("use_set_metadata", False):
       self.script.append('set_perm(%d, %d, 0%o, "%s");' % (uid, gid, mode, fn))
     else:
-      if capabilities is None:
-        capabilities = "0x0"
-      cmd = 'set_metadata("%s", "uid", %d, "gid", %d, "mode", 0%o, ' \
-          '"capabilities", %s' % (fn, uid, gid, mode, capabilities)
+      cmd = 'set_metadata("%s", "uid", %d, "gid", %d, "mode", 0%o' \
+          % (fn, uid, gid, mode)
+      if capabilities is not None:
+        cmd += ', "capabilities", %s' % ( capabilities )
       if selabel is not None:
         cmd += ', "selabel", "%s"' % selabel
       cmd += ');'
@@ -384,11 +384,11 @@ class EdifyGenerator(object):
       self.script.append('set_perm_recursive(%d, %d, 0%o, 0%o, "%s");'
                          % (uid, gid, dmode, fmode, fn))
     else:
-      if capabilities is None:
-        capabilities = "0x0"
       cmd = 'set_metadata_recursive("%s", "uid", %d, "gid", %d, ' \
-          '"dmode", 0%o, "fmode", 0%o, "capabilities", %s' \
-          % (fn, uid, gid, dmode, fmode, capabilities)
+          '"dmode", 0%o, "fmode", 0%o' \
+          % (fn, uid, gid, dmode, fmode)
+      if capabilities is not None:
+        cmd += ', "capabilities", "%s"' % ( capabilities )
       if selabel is not None:
         cmd += ', "selabel", "%s"' % selabel
       cmd += ');'
