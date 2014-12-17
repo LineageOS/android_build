@@ -33,7 +33,12 @@ endif
 
 # start of image reserved address space
 LIBART_IMG_HOST_BASE_ADDRESS   := 0x60000000
+
+ifneq ($(LIBART_IMG_BASE),)
+LIBART_IMG_TARGET_BASE_ADDRESS := $(LIBART_IMG_BASE)
+else
 LIBART_IMG_TARGET_BASE_ADDRESS := 0x70000000
+endif
 
 define get-product-default-property
 $(strip $(patsubst $(1)=%,%,$(filter $(1)=%,$(PRODUCT_DEFAULT_PROPERTY_OVERRIDES))))
