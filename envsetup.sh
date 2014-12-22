@@ -2161,7 +2161,7 @@ function dopush()
         esac
 
         case $TARGET in
-            /system/priv-app/SystemUI.apk|/system/framework/*)
+            /system/priv-app/SystemUI/SystemUI.apk|/system/framework/*)
                 # Only need to stop services once
                 if ! $stop_n_start; then
                     adb shell stop
