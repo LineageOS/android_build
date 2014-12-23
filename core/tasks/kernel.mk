@@ -116,7 +116,11 @@ ifeq ($(KERNEL_TOOLCHAIN),)
 KERNEL_TOOLCHAIN := $(ARM_EABI_TOOLCHAIN)
 endif
 ifeq ($(KERNEL_TOOLCHAIN_PREFIX),)
+ifeq ($(TARGET_ARCH),arm64)
+KERNEL_TOOLCHAIN_PREFIX := aarch64-linux-android-
+else
 KERNEL_TOOLCHAIN_PREFIX := arm-eabi-
+endif
 endif
 
 define mv-modules
@@ -136,7 +140,7 @@ define clean-module-folder
     fi
 endef
 
-ifeq ($(TARGET_ARCH),arm)
+ifneq ($(filter $(TARGET_ARCH),arm arm64),)
     ifneq ($(USE_CCACHE),)
       ccache := $(ANDROID_BUILD_TOP)/prebuilts/misc/$(HOST_PREBUILT_TAG)/ccache/ccache
       # Check that the executable is here.
