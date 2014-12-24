@@ -16,6 +16,24 @@
       "revId": "e4442a2385e80df42dda9b17ffc15605f7f2c72f",
       "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7aa08908_d5af92e1",
+        "filename": "envsetup.sh",
+        "patchSetId": 3
+      },
+      "lineNbr": 185,
+      "author": {
+        "id": 11895
+      },
+      "writtenOn": "2014-12-24T15:58:37Z",
+      "side": 1,
+      "message": "Yes, I miss that. But it does work well in my build, because kernel.mk will pass full path ($(KERNEL_TOOLCHAIN)/$(KERNEL_TOOLCHAIN_PREFIX)) to make command. \n\nAnyway I will add that line back for consistency.",
+      "parentUuid": "7aa08908_559ba2c9",
+      "revId": "e4442a2385e80df42dda9b17ffc15605f7f2c72f",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
     }
   ]
 }
