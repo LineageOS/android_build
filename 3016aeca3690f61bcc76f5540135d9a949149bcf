@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7aa08908_b53e46b6",
+        "filename": "envsetup.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 188,
+      "author": {
+        "id": 2936
+      },
+      "writtenOn": "2014-12-24T15:15:08Z",
+      "side": 1,
+      "message": "don\u0027t use tabs for indentation here",
+      "revId": "3016aeca3690f61bcc76f5540135d9a949149bcf",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    }
+  ]
+}
