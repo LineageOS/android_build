@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7aa08908_35c1b6e5",
+        "filename": "core/tasks/kernel.mk",
+        "patchSetId": 1
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 2195
+      },
+      "writtenOn": "2014-12-25T03:06:00Z",
+      "side": 1,
+      "message": "Shouldn\u0027t this be TARGET_ARCH?",
+      "revId": "c6eb4d9360c05839b7c03954a71e386a0749348e",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7aa08908_b5ada633",
+        "filename": "core/tasks/kernel.mk",
+        "patchSetId": 1
+      },
+      "lineNbr": 154,
+      "author": {
+        "id": 2195
+      },
+      "writtenOn": "2014-12-25T03:06:00Z",
+      "side": 1,
+      "message": "Could set saner defaults here according to $(KERNEL_ARCH)\n\nSomething like:\n \nifeq ($(TARGET_KERNEL_CROSS_COMPILE_PREFIX),)\nifeq ($(KERNEL_ARCH),arm)\nKERNEL_TOOLCHAIN_PREFIX :\u003d arm-eabi-\nendif\n# Other architectures here\nelse\nKERNEL_TOOLCHAIN_PREFIX :\u003d $(TARGET_KERNEL_CROSS_COMPILE_PREFIX)\nendif",
+      "revId": "c6eb4d9360c05839b7c03954a71e386a0749348e",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7aa08908_15abda1e",
+        "filename": "core/tasks/kernel.mk",
+        "patchSetId": 1
+      },
+      "lineNbr": 170,
+      "author": {
+        "id": 2195
+      },
+      "writtenOn": "2014-12-25T03:06:00Z",
+      "side": 1,
+      "message": "I think this check can be removed as KERNEL_TOOLCHAIN_PATH would never be empty.",
+      "revId": "c6eb4d9360c05839b7c03954a71e386a0749348e",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    }
+  ]
+}
