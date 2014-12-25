@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7aa08908_f873a54b",
+        "filename": "core/tasks/kernel.mk",
+        "patchSetId": 3
+      },
+      "lineNbr": 116,
+      "author": {
+        "id": 11895
+      },
+      "writtenOn": "2014-12-25T12:38:55Z",
+      "side": 0,
+      "message": "If we remove this, we don\u0027t have one default toolchain path. Where shall we set KERNEL_TOOLCHAIN?",
+      "revId": "8443d6dfc570d19977a60d95beed415d92691642",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    }
+  ]
+}
