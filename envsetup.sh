@@ -2001,7 +2001,13 @@ function mka() {
             make -j `sysctl hw.ncpu|cut -d" " -f2` "$@"
             ;;
         *)
-            schedtool -B -n 1 -e ionice -n 1 make -j$(cat /proc/cpuinfo | grep "^processor" | wc -l) "$@"
+            ht=$(cat /proc/cpuinfo | grep ht | wc -l)
+
+            if [ ht > 0 ]; then
+                schedtool -B -n 1 -e ionice -n 1 make -j$(($(cat /proc/cpuinfo | grep "^processor" | wc -l)/2)) "$@"
+            else                
+                schedtool -B -n 1 -e ionice -n 1 make -j$(cat /proc/cpuinfo | grep "^processor" | wc -l) "$@"
+            fi
             ;;
     esac
 }
