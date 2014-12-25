@@ -1996,12 +1996,28 @@ function cmrebase() {
 }
 
 function mka() {
+    if [ ! -z "$BUILD_WORKER_COUNT" ]
+    then
+        case `uname -s` in
+            Darwin)
+                BUILD_WORKER_COUNT = $(sysctl hw.ncpu|cut -d" " -f2)
+                ;;
+            *)
+                BUILD_WORKER_COUNT = $(cat /proc/cpuinfo | grep "^processor" | wc -l)
+                ;;
+        esac
+    fi
+    if [ ! -z "$BUILD_NICE_LEVEL" ]
+    then
+        BUILD_NICE_LEVEL = 1
+    fi
+
     case `uname -s` in
         Darwin)
-            make -j `sysctl hw.ncpu|cut -d" " -f2` "$@"
+            make -j "$BUILD_WORKER_COUNT" "$@"
             ;;
         *)
-            schedtool -B -n 1 -e ionice -n 1 make -j$(cat /proc/cpuinfo | grep "^processor" | wc -l) "$@"
+            schedtool -B -n "$BUILD_NICE_LEVEL" -e ionice -n 1 make -j"$BUILD_WORKER_COUNT" "$@"
             ;;
     esac
 }
