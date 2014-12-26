@@ -16,6 +16,24 @@
       "revId": "83bac04f9b0d946856d3469f747eb43c1239ccdf",
       "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7aa08908_1b914b9a",
+        "filename": "core/qcom_target.mk",
+        "patchSetId": 1
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 4820
+      },
+      "writtenOn": "2014-12-26T06:24:47Z",
+      "side": 1,
+      "message": "I\u0027m guessing it was supposed to be cppflags instead.",
+      "parentUuid": "7aa08908_1b4cab6f",
+      "revId": "83bac04f9b0d946856d3469f747eb43c1239ccdf",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
     }
   ]
 }
