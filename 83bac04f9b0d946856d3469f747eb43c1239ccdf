@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7aa08908_1b4cab6f",
+        "filename": "core/qcom_target.mk",
+        "patchSetId": 1
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 9215
+      },
+      "writtenOn": "2014-12-26T03:09:41Z",
+      "side": 1,
+      "message": "Duplicate 2ND_CLANG flags",
+      "revId": "83bac04f9b0d946856d3469f747eb43c1239ccdf",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    }
+  ]
+}
