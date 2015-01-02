@@ -37,7 +37,11 @@ ifeq ($(BOARD_USES_QCOM_HARDWARE),true)
     2ND_CLANG_TARGET_GLOBAL_CPPFLAGS += $(qcom_flags)
 
 $(call project-set-path,qcom-audio,hardware/qcom/audio-caf/$(TARGET_BOARD_PLATFORM))
+ifeq ($(USE_DEVICE_SPECIFIC_CAMERA),true)
+$(call project-set-path,qcom-camera,$(TARGET_DEVICE_DIR)/camera)
+else
 $(call qcom-set-path-variant,CAMERA,camera)
+endif
 $(call project-set-path,qcom-display,hardware/qcom/display-caf/$(TARGET_BOARD_PLATFORM))
 $(call qcom-set-path-variant,GPS,gps)
 $(call project-set-path,qcom-media,hardware/qcom/media-caf/$(TARGET_BOARD_PLATFORM))
