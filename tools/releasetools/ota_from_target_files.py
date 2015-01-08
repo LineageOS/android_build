@@ -277,10 +277,14 @@ METADATA_NAME = 'META-INF/com/android/metadata'
 POSTINSTALL_CONFIG = 'META/postinstall_config.txt'
 DYNAMIC_PARTITION_INFO = 'META/dynamic_partitions_info.txt'
 AB_PARTITIONS = 'META/ab_partitions.txt'
+<<<<<<< HEAD   (963b17 Merge tag 'android-11.0.0_r4' into staging/lineage-18.0_merg)
 UNZIP_PATTERN = ['IMAGES/*', 'INSTALL/*', 'META/*', 'OTA/*', 'RADIO/*']
 # Files to be unzipped for target diffing purpose.
 TARGET_DIFFING_UNZIP_PATTERN = ['BOOT', 'RECOVERY', 'SYSTEM/*', 'VENDOR/*',
                                 'PRODUCT/*', 'SYSTEM_EXT/*', 'ODM/*']
+=======
+UNZIP_PATTERN = ['IMAGES/*', 'INSTALL/*', 'META/*', 'RADIO/*', 'SYSTEM/build.prop']
+>>>>>>> CHANGE (7924d0 releasetools: Store the build.prop file in the OTA zip)
 RETROFIT_DAP_UNZIP_PATTERN = ['OTA/super_*.img', AB_PARTITIONS]
 
 # Images to be excluded from secondary payload. We essentially only keep
@@ -908,6 +912,9 @@ endif;
   script.SetProgress(1)
   script.AddToZip(input_zip, output_zip, input_path=OPTIONS.updater_binary)
   metadata["ota-required-cache"] = str(script.required_cache)
+
+  common.ZipWriteStr(output_zip, "system/build.prop",
+                     ""+input_zip.read("SYSTEM/build.prop"))
 
   # We haven't written the metadata entry, which will be done in
   # FinalizeMetadata.
@@ -1644,6 +1651,9 @@ endif;
     script.AddToZip(target_zip, output_zip, input_path=OPTIONS.updater_binary)
   metadata["ota-required-cache"] = str(script.required_cache)
 
+  common.ZipWriteStr(output_zip, "system/build.prop",
+                     ""+target_zip.read("SYSTEM/build.prop"))
+
   # We haven't written the metadata entry yet, which will be handled in
   # FinalizeMetadata().
   common.ZipClose(output_zip)
@@ -1932,6 +1942,11 @@ def GenerateAbOtaPackage(target_file, output_file, source_file=None):
                                additional_args=additional_args)
     secondary_payload.Sign(payload_signer)
     secondary_payload.WriteToZip(output_zip)
+
+  target_zip = zipfile.ZipFile(target_file, "r")
+  common.ZipWriteStr(output_zip, "system/build.prop",
+                     target_zip.read("SYSTEM/build.prop"))
+  common.ZipClose(target_zip)
 
   # If dm-verity is supported for the device, copy contents of care_map
   # into A/B OTA package.
