@@ -2,6 +2,57 @@
   "comments": [
     {
       "key": {
+        "uuid": "7aa08908_0c861313",
+        "filename": "core/tasks/kernel.mk",
+        "patchSetId": 5
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 9690
+      },
+      "writtenOn": "2015-01-08T08:09:18Z",
+      "side": 1,
+      "message": "the default toolchain, prefix and arch could be handled easier if this is changed to a bool flag, TARGET_KERNEL_USE_2ND_ARCH.\n\nA device isn\u0027t going to defined a kernel arch that isn\u0027t defined by the system.\n\nIt will also allow us to use TARGET_TOOLS_PREFIX and $(combo_2nd_arch_prefix)TARGET_TOOLS_PREFIX\n\nthough these are android specific toolchains, it will provide a base that is more standard with the rest of the build system",
+      "revId": "34adee7a3afe0f7c1622ae5c797d988fd956ad08",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7aa08908_4c781b2c",
+        "filename": "core/tasks/kernel.mk",
+        "patchSetId": 5
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 9690
+      },
+      "writtenOn": "2015-01-08T08:09:18Z",
+      "side": 1,
+      "message": "see above",
+      "revId": "34adee7a3afe0f7c1622ae5c797d988fd956ad08",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7aa08908_8c1683ef",
+        "filename": "core/tasks/kernel.mk",
+        "patchSetId": 5
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 9690
+      },
+      "writtenOn": "2015-01-08T08:09:18Z",
+      "side": 1,
+      "message": "for this, just set TARGET_PREBUILT_INT_KERNEL_TYPE within the if statements, then set TARGET_PREBUILT_INT_KERNEL afterwards, since they\u0027re common.",
+      "revId": "34adee7a3afe0f7c1622ae5c797d988fd956ad08",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7aa08908_0c457316",
         "filename": "core/tasks/kernel.mk",
         "patchSetId": 5
@@ -13,6 +64,125 @@
       "writtenOn": "2015-01-08T06:41:16Z",
       "side": 1,
       "message": "CONFIG_ANDROID_BINDER_IPC_32BIT can\u0027t be set when the kernel is built as 64bit\n\nhttps://github.com/Flinny/kernel_htc_flounder/blob/lp5.0/drivers/staging/android/Kconfig#L22\n\nThis will be cleaned out as soon as you call make oldconfig",
+      "revId": "34adee7a3afe0f7c1622ae5c797d988fd956ad08",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7aa08908_cc924b4b",
+        "filename": "core/tasks/kernel.mk",
+        "patchSetId": 5
+      },
+      "lineNbr": 82,
+      "author": {
+        "id": 9690
+      },
+      "writtenOn": "2015-01-08T08:09:18Z",
+      "side": 1,
+      "message": "This should match with the rest of the file..\n\nifeq ($(wildcard $(KERNEL_SRC)),)",
+      "revId": "34adee7a3afe0f7c1622ae5c797d988fd956ad08",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7aa08908_8ca9637e",
+        "filename": "core/tasks/kernel.mk",
+        "patchSetId": 5
+      },
+      "lineNbr": 146,
+      "author": {
+        "id": 9690
+      },
+      "writtenOn": "2015-01-08T08:09:18Z",
+      "side": 1,
+      "message": "see above about taking advantage of TARGET_TOOLS_PREFIX.\n\nif it\u0027s standardised, then it would be simple enough to strip the android out",
+      "revId": "34adee7a3afe0f7c1622ae5c797d988fd956ad08",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7aa08908_0cb8d3e4",
+        "filename": "core/tasks/kernel.mk",
+        "patchSetId": 5
+      },
+      "lineNbr": 155,
+      "author": {
+        "id": 9690
+      },
+      "writtenOn": "2015-01-08T08:09:18Z",
+      "side": 1,
+      "message": "This check isn\u0027t needed. \n\nat this point, KERNEL_TOOLCHAIN_PREFIX is set no matter what",
+      "revId": "34adee7a3afe0f7c1622ae5c797d988fd956ad08",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7aa08908_0caf3395",
+        "filename": "core/tasks/kernel.mk",
+        "patchSetId": 5
+      },
+      "lineNbr": 200,
+      "author": {
+        "id": 9690
+      },
+      "writtenOn": "2015-01-08T08:09:18Z",
+      "side": 1,
+      "message": "see above.. and below RE definition",
+      "revId": "34adee7a3afe0f7c1622ae5c797d988fd956ad08",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7aa08908_cca40bbb",
+        "filename": "core/tasks/kernel.mk",
+        "patchSetId": 5
+      },
+      "lineNbr": 219,
+      "author": {
+        "id": 9690
+      },
+      "writtenOn": "2015-01-08T08:09:18Z",
+      "side": 1,
+      "message": "should consider taking HEADERS_INSTALL outside of FULL_KERNEL_BUILD\n\nthere are devices that either don\u0027t have kernel source, or it isn\u0027t released immediately. It\u0027s useful to be able to do a build with a standard caf kernel for access to the headers, while still using a prebuilt kernel",
+      "revId": "34adee7a3afe0f7c1622ae5c797d988fd956ad08",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7aa08908_2cde6f3f",
+        "filename": "core/tasks/kernel.mk",
+        "patchSetId": 5
+      },
+      "lineNbr": 220,
+      "author": {
+        "id": 9690
+      },
+      "writtenOn": "2015-01-08T08:09:18Z",
+      "side": 1,
+      "message": "KERNEL_HEADER_DEFCONFIG defaults to KERNEL_DEFCONFIG. it\u0027s always set.\n\nit\u0027s better to check if the defconfigs are different, and if they are, then set the new defconfig. Finally you can install the headers, and check if the defconfig needs swapping back.",
+      "revId": "34adee7a3afe0f7c1622ae5c797d988fd956ad08",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7aa08908_6ce877e3",
+        "filename": "core/tasks/kernel.mk",
+        "patchSetId": 5
+      },
+      "lineNbr": 228,
+      "author": {
+        "id": 9690
+      },
+      "writtenOn": "2015-01-08T08:09:18Z",
+      "side": 1,
+      "message": "See above.\n\nIf this wants keeping, a definition should be made so you don\u0027t have the same routine written down twice",
       "revId": "34adee7a3afe0f7c1622ae5c797d988fd956ad08",
       "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
       "unresolved": false
