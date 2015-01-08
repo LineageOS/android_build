@@ -783,6 +783,9 @@ endif;
   metadata["ota-required-cache"] = str(script.required_cache)
   WriteMetadata(metadata, output_zip)
 
+  common.ZipWriteStr(output_zip, "system/build.prop",
+                     ""+input_zip.read("SYSTEM/build.prop"))
+
   common.ZipWriteStr(output_zip, "META-INF/org/cyanogenmod/releasekey",
                      ""+input_zip.read("META/releasekey.txt"))
 
