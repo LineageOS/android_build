@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7aa08908_0c457316",
+        "filename": "core/tasks/kernel.mk",
+        "patchSetId": 5
+      },
+      "lineNbr": 68,
+      "author": {
+        "id": 9690
+      },
+      "writtenOn": "2015-01-08T06:41:16Z",
+      "side": 1,
+      "message": "CONFIG_ANDROID_BINDER_IPC_32BIT can\u0027t be set when the kernel is built as 64bit\n\nhttps://github.com/Flinny/kernel_htc_flounder/blob/lp5.0/drivers/staging/android/Kconfig#L22\n\nThis will be cleaned out as soon as you call make oldconfig",
+      "revId": "34adee7a3afe0f7c1622ae5c797d988fd956ad08",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    }
+  ]
+}
