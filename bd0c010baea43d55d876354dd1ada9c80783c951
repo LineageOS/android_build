@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7aa08908_553d3eba",
+        "filename": "tools/roomservice.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 75,
+      "author": {
+        "id": 9690
+      },
+      "writtenOn": "2015-01-09T08:03:16Z",
+      "side": 1,
+      "message": "try:\n    result \u003d json.loads(urllib.request.urlopen(githubreq).read().decode())\nexcept urllib.error.URLError:\n    print(\"Failed to search GitHub\")\n    sys.exit()\nexcept ValueError:\n    print(\"Failed to parse return data from GitHub\")\n    sys.ext()\n\nif int(result.get(\u0027total_count\u0027, 0)):\n    print(\"Could not find device\")\n\n\nBy that stage, it\u0027s safe to assume \u0027total_count\u0027 will be parsable as an integer, or none existent",
+      "revId": "bd0c010baea43d55d876354dd1ada9c80783c951",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7aa08908_9547a64a",
+        "filename": "tools/roomservice.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 84,
+      "author": {
+        "id": 9690
+      },
+      "writtenOn": "2015-01-09T08:03:16Z",
+      "side": 1,
+      "message": "for res in result.get(\u0027items\u0027, {}):",
+      "revId": "bd0c010baea43d55d876354dd1ada9c80783c951",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    }
+  ]
+}
