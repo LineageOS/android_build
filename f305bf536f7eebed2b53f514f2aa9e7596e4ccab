@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7aa08908_a31c25c2",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 9893
+      },
+      "writtenOn": "2015-01-10T21:22:29Z",
+      "side": 1,
+      "message": "Using Xcode 6.0 CLITools to compile cm11 with OSX Mavericks 10.9 was extensively tested at Nextbit, but the patch was never pushed upstream. \u003d)",
+      "range": {
+        "startLine": 13,
+        "startChar": 2,
+        "endLine": 13,
+        "endChar": 40
+      },
+      "revId": "f305bf536f7eebed2b53f514f2aa9e7596e4ccab",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    }
+  ]
+}
