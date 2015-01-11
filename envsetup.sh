@@ -148,6 +148,9 @@ function setpaths()
     targetgccversion2=$(get_build_var 2ND_TARGET_GCC_VERSION)
     export TARGET_GCC_VERSION=$targetgccversion
 
+    targetkernelgccversion=$(get_build_var TARGET_KERNEL_GCC_VERSION)
+    export TARGET_KERNEL_GCC_VERSION=$targetkernelgccversion
+
     # The gcc toolchain does not exists for windows/cygwin. In this case, do not reference it.
     export ANDROID_TOOLCHAIN=
     export ANDROID_TOOLCHAIN_2ND_ARCH=
@@ -181,7 +184,7 @@ function setpaths()
     case $ARCH in
         arm)
             # Legacy toolchain configuration used for ARM kernel compilation
-            toolchaindir=arm/arm-eabi-$targetgccversion/bin
+            toolchaindir=arm/arm-eabi-$targetkernelgccversion/bin
             if [ -d "$gccprebuiltdir/$toolchaindir" ]; then
                  export ARM_EABI_TOOLCHAIN="$gccprebuiltdir/$toolchaindir"
                  ANDROID_KERNEL_TOOLCHAIN_PATH="$ARM_EABI_TOOLCHAIN":

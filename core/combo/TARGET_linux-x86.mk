@@ -31,6 +31,12 @@ else
 $(combo_2nd_arch_prefix)TARGET_GCC_VERSION := $(TARGET_GCC_VERSION_EXP)
 endif
 
+ifeq ($(strip $(TARGET_KERNEL_GCC_VERSION_EXP)),)
+$(combo_2nd_arch_prefix)TARGET_KERNEL_GCC_VERSION := 4.8
+else
+$(combo_2nd_arch_prefix)TARGET_KERNEL_GCC_VERSION := $(TARGET_KERNEL_GCC_VERSION_EXP)
+endif
+
 # Include the arch-variant-specific configuration file.
 # Its role is to define various ARCH_X86_HAVE_XXX feature macros,
 # plus initial values for TARGET_GLOBAL_CFLAGS
