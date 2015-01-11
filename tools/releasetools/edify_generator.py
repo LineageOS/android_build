@@ -220,9 +220,15 @@ class EdifyGenerator(object):
           if "=" in option:
             key, value = option.split("=", 1)
             mount_dict[key] = value
-      self.script.append('mount("%s", "%s", "%s", "%s", "%s");' %
-                         (p.fs_type, common.PARTITION_TYPES[p.fs_type],
-                          p.device, p.mount_point, mount_dict.get(p.fs_type, "")))
+      partition_type = common.PARTITION_TYPES[p.fs_type]
+      if partition_type == "MTD":
+        self.script.append('mount("%s", "%s", "%s", "%s", "%s");' %
+                           (p.fs_type, partition_type, p.device,
+                            p.mount_point, mount_dict.get(p.fs_type, "")))
+      else:
+        self.script.append('mount("auto", "%s", "%s", "%s", "%s");' %
+                           (partition_type, p.device,
+                            p.mount_point, mount_dict.get(p.fs_type, "")))
       self.mounts.add(p.mount_point)
 
   def Unmount(self, mount_point):
