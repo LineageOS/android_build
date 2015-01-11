@@ -31,12 +31,14 @@ import textwrap
 
 try:
   # For python3
+  import urllib.error
   import urllib.request
 except ImportError:
   # For python2
   import imp
   import urllib2
   urllib = imp.new_module('urllib')
+  urllib.error = urllib2
   urllib.request = urllib2
 
 # Parse the command line
@@ -255,7 +257,11 @@ for changeps in args.change_number:
     url = 'http://review.cyanogenmod.org/changes/?q={change}&o={query_revision}&o=CURRENT_COMMIT&pp=0'.format(change=change, query_revision=query_revision)
     if args.verbose:
         print('Fetching from: %s\n' % url)
-    f = urllib.request.urlopen(url)
+    try:
+        f = urllib.request.urlopen(url)
+    except urllib.error.URLError:
+        sys.stderr.write('ERROR: Server reported an error, or cannot be reached\n')
+        sys.exit(1)
     d = f.read().decode("utf-8")
     if args.verbose:
         print('Result from request:\n' + d)
