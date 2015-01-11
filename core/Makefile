@@ -1673,6 +1673,18 @@ bacon: otapackage
 	$(hide) $(MD5SUM) $(CM_TARGET_PACKAGE) > $(CM_TARGET_PACKAGE).md5sum
 	@echo -e ${CL_CYN}"Package Complete: $(CM_TARGET_PACKAGE)"${CL_RST}
 
+###################################################################
+#   set a rule for accepting kernel as a variable with mka
+.PHONY: kernel
+kernel:
+	clear
+	@echo ""
+	@echo "Running kernel tool in $(TOPDIR)build/tools/makekernel.sh"
+	@echo "Building kernel for target device: $(TARGET_DEVICE)..."
+	@echo ""
+	$(hide) . $(TOPDIR)build/tools/makekernel.sh "$(TARGET_DEVICE$)" "$(KERNEL_TOOLCHAIN)" "$(TARGET_KERNEL_SOURCE)" "$(TARGET_KERNEL_CONFIG)"
+###################################################################
+
 endif    # recovery_fstab is defined
 endif    # TARGET_NO_KERNEL != true
 endif    # TARGET_DEVICE != generic*
