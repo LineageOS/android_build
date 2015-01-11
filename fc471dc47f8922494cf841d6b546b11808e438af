@@ -16,6 +16,24 @@
       "revId": "fc471dc47f8922494cf841d6b546b11808e438af",
       "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7aa08908_46362f53",
+        "filename": "core/main.mk",
+        "patchSetId": 2
+      },
+      "lineNbr": 181,
+      "author": {
+        "id": 5574
+      },
+      "writtenOn": "2015-01-11T11:49:33Z",
+      "side": 1,
+      "message": "Whoa, i didnt even git add it. That\u0027s a workaround for building on fedora21 :)",
+      "parentUuid": "7aa08908_66f40b87",
+      "revId": "fc471dc47f8922494cf841d6b546b11808e438af",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
     }
   ]
 }
