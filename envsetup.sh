@@ -2181,7 +2181,7 @@ function dopush()
     adb remount &> /dev/null
 
     mkdir -p $OUT
-    $func $* | tee $OUT/.log
+    ($func $*|tee $OUT/.log;return ${PIPESTATUS[0]})||ret=$?&&rm -f $OUT/.log;return $ret
 
     # Install: <file>
     LOC="$(cat $OUT/.log | sed -r 's/\x1B\[([0-9]{1,2}(;[0-9]{1,2})?)?[m|K]//g' | grep '^Install: ' | cut -d ':' -f 2)"
