@@ -16,6 +16,125 @@
       "revId": "5c4c2799aeb6a5175d558462f81dd34f3ff77126",
       "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7aa08908_54737615",
+        "filename": "tools/makekernel.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 7155
+      },
+      "writtenOn": "2015-01-13T05:18:43Z",
+      "side": 1,
+      "message": "arch/arm should not be hardcoded to support x86, mips, etc. in the future",
+      "revId": "5c4c2799aeb6a5175d558462f81dd34f3ff77126",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7aa08908_1469ee25",
+        "filename": "tools/makekernel.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 7155
+      },
+      "writtenOn": "2015-01-13T05:18:43Z",
+      "side": 1,
+      "message": "\u003cmake mrproper\u003e already cleans the kernel tree, no need to cleanup manually.",
+      "revId": "5c4c2799aeb6a5175d558462f81dd34f3ff77126",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7aa08908_747832f3",
+        "filename": "tools/makekernel.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 7155
+      },
+      "writtenOn": "2015-01-13T05:18:43Z",
+      "side": 1,
+      "message": "ARCH\u003darm should not be hardcoded to support x86, mips, etc. in the future",
+      "revId": "5c4c2799aeb6a5175d558462f81dd34f3ff77126",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7aa08908_b460da36",
+        "filename": "tools/makekernel.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 7155
+      },
+      "writtenOn": "2015-01-13T05:18:43Z",
+      "side": 1,
+      "message": "The formatting with the \"...\" left and right looks awkward.",
+      "revId": "5c4c2799aeb6a5175d558462f81dd34f3ff77126",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7aa08908_94631e41",
+        "filename": "tools/makekernel.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 75,
+      "author": {
+        "id": 7155
+      },
+      "writtenOn": "2015-01-13T05:18:43Z",
+      "side": 1,
+      "message": "arch/arm should not be hardcoded to support x86, mips, etc. in the future",
+      "revId": "5c4c2799aeb6a5175d558462f81dd34f3ff77126",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7aa08908_f45a6282",
+        "filename": "tools/makekernel.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 99,
+      "author": {
+        "id": 7155
+      },
+      "writtenOn": "2015-01-13T05:18:43Z",
+      "side": 1,
+      "message": "OUT_TARGET_HOST should not be hardcoded but rather detected from the environment to be able to build on a BSD derivate or cygwin at some point.",
+      "revId": "5c4c2799aeb6a5175d558462f81dd34f3ff77126",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7aa08908_d45da67a",
+        "filename": "tools/makekernel.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 111,
+      "author": {
+        "id": 7155
+      },
+      "writtenOn": "2015-01-13T05:18:43Z",
+      "side": 1,
+      "message": "Again, I think havin the \"...\" left *and* right looks awkward.",
+      "revId": "5c4c2799aeb6a5175d558462f81dd34f3ff77126",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
     }
   ]
 }
