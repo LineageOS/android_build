@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7aa08908_942f9e3d",
+        "filename": "tools/makekernel.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1211
+      },
+      "writtenOn": "2015-01-13T00:36:47Z",
+      "side": 1,
+      "message": "tools/AnyKernel",
+      "revId": "5c4c2799aeb6a5175d558462f81dd34f3ff77126",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    }
+  ]
+}
