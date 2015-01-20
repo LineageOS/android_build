@@ -22,6 +22,7 @@ TARGET_KERNEL_SOURCE ?= $(TARGET_AUTO_KDIR)
 KERNEL_SRC := $(TARGET_KERNEL_SOURCE)
 # kernel configuration - mandatory
 KERNEL_DEFCONFIG := $(TARGET_KERNEL_CONFIG)
+OVERRIDE_DEFCONFIGS := $(TARGET_KERNEL_OVERRIDE_CONFIGS)
 VARIANT_DEFCONFIG := $(TARGET_KERNEL_VARIANT_CONFIG)
 SELINUX_DEFCONFIG := $(TARGET_KERNEL_SELINUX_CONFIG)
 
@@ -204,6 +205,13 @@ $(KERNEL_CONFIG): $(KERNEL_OUT)
 			echo "Overriding kernel config with '$(KERNEL_CONFIG_OVERRIDE)'"; \
 			echo $(KERNEL_CONFIG_OVERRIDE) >> $(KERNEL_OUT)/.config; \
 			$(MAKE) -C $(KERNEL_SRC) O=$(KERNEL_OUT) ARCH=$(KERNEL_ARCH) $(KERNEL_CROSS_COMPILE) oldconfig; fi
+ifneq($(OVERRIDE_DEFCONFIGS),)
+	$(hide) python -c 'print("Overriding kernel config with contents of:\n##\t%s" % "\n##\t".join("$(OVERRIDE_DEFCONFIGS)".split()))'
+	$(hide) for defconfig in $(OVERRIDE_DEFCONFIGS); do \
+			if [ -f $(KERNEL_SRC)/arch/$(KERNEL_ARCH)/$defconfig ]; then \
+			cat $(KERNEL_SRC)/arch/$(KERNEL_ARCH)/$defconfig >> $(KERNEL_CONFIG); fi; done
+	$(MAKE) -C $(KERNEL_SRC) O=$(KERNEL_OUT) ARCH=$(KERNEL_ARCH) $(KERNEL_CROSS_COMPILE) oldconfig
+endif
 
 TARGET_KERNEL_BINARIES: $(KERNEL_OUT) $(KERNEL_CONFIG) $(KERNEL_HEADERS_INSTALL)
 	$(MAKE) $(MAKE_FLAGS) -C $(KERNEL_SRC) O=$(KERNEL_OUT) ARCH=$(KERNEL_ARCH) $(KERNEL_CROSS_COMPILE) $(TARGET_PREBUILT_INT_KERNEL_TYPE)
@@ -232,6 +240,13 @@ $(KERNEL_HEADERS_INSTALL): $(KERNEL_OUT) $(KERNEL_CONFIG)
 			echo "Overriding kernel config with '$(KERNEL_CONFIG_OVERRIDE)'"; \
 			echo $(KERNEL_CONFIG_OVERRIDE) >> $(KERNEL_OUT)/.config; \
 			$(MAKE) -C $(KERNEL_SRC) O=$(KERNEL_OUT) ARCH=$(KERNEL_ARCH) $(KERNEL_CROSS_COMPILE) oldconfig; fi
+ifneq($(OVERRIDE_DEFCONFIGS),)
+	$(hide) python -c 'print("Overriding kernel config with contents of:\n##\t%s" % "\n##\t".join("$(OVERRIDE_DEFCONFIGS)".split()))'
+	$(hide) for defconfig in $(OVERRIDE_DEFCONFIGS); do \
+			if [ -f $(KERNEL_SRC)/arch/$(KERNEL_ARCH)/$defconfig ]; then \
+			cat $(KERNEL_SRC)/arch/$(KERNEL_ARCH)/$defconfig >> $(KERNEL_CONFIG); fi; done
+	$(MAKE) -C $(KERNEL_SRC) O=$(KERNEL_OUT) ARCH=$(KERNEL_ARCH) $(KERNEL_CROSS_COMPILE) oldconfig
+endif
 
 kerneltags: $(KERNEL_OUT) $(KERNEL_CONFIG)
 	$(MAKE) -C $(KERNEL_SRC) O=$(KERNEL_OUT) ARCH=$(KERNEL_ARCH) $(KERNEL_CROSS_COMPILE) tags
