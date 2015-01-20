@@ -57,7 +57,8 @@ PRODUCT_PACKAGES += \
     make_ext4fs \
     screencap \
     sensorservice \
-    uiautomator
+    uiautomator \
+    uncrypt
 
 PRODUCT_BOOT_JARS := core:conscrypt:okhttp:core-junit:bouncycastle:ext:framework:framework2:android.policy:services:apache-xml:webviewchromium
 
