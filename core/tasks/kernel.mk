@@ -27,6 +27,7 @@ endif
 
 # kernel configuration - mandatory
 KERNEL_DEFCONFIG := $(TARGET_KERNEL_CONFIG)
+OVERRIDE_DEFCONFIGS := $(TARGET_KERNEL_OVERRIDE_CONFIGS)
 VARIANT_DEFCONFIG := $(TARGET_KERNEL_VARIANT_CONFIG)
 SELINUX_DEFCONFIG := $(TARGET_KERNEL_SELINUX_CONFIG)
 
@@ -186,7 +187,20 @@ ifeq ($(FULL_KERNEL_BUILD),true)
         fi
     endef
 
+    define override-defconfig
+        if [ "$(OVERRIDE_DEFCONFIGS)" ]; then\
+            python -c 'print("Overriding kernel config with contents of:\n##\t%s" % "\n##\t".join("$(OVERRIDE_DEFCONFIGS)".split()))'\
+            for defconfig in $(OVERRIDE_DEFCONFIGS); do\
+                if [ -f $(KERNEL_SRC)/arch/$(KERNEL_ARCH)/$defconfig ]; then\
+                    cat $(KERNEL_SRC)/arch/$(KERNEL_ARCH)/$defconfig >> $(KERNEL_CONFIG);\
+                fi;\
+            done;\
+            $(KERNEL_MAKE) oldconfig;\
+        fi
+    endef
+
     define override-config
+        $(call override-defconfig)
         if [ ! -z "$(KERNEL_CONFIG_OVERRIDE)" ]; then\
             echo "Overriding kernel config with '$(KERNEL_CONFIG_OVERRIDE)'";\
             echo $(KERNEL_CONFIG_OVERRIDE) >> $(KERNEL_CONFIG);\
