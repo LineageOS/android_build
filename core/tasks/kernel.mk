@@ -130,12 +130,34 @@ ifeq ($(wildcard $(KERNEL_SRC)),)
 else
     NEEDS_KERNEL_COPY := true
     ifeq ($(TARGET_KERNEL_CONFIG),)
-        $(warning **********************************************************)
-        $(warning * Kernel source found, but no configuration was defined  *)
-        $(warning * Please add the TARGET_KERNEL_CONFIG variable to your   *)
-        $(warning * BoardConfig.mk file                                    *)
-        $(warning **********************************************************)
-        # $(error "NO KERNEL CONFIG")
+        ifneq ($(KERNEL_HEADER_DEFCONFIG),)
+            $(warning **********************************************************)
+            $(warning * Kernel source found, but no configuration was defined. *)
+            $(warning * Header config found. Building in Header Only Mode.     *)
+            $(warning *                                                        *)
+            $(warning * Please add the TARGET_KERNEL_CONFIG Variable to your   *)
+            $(warning * BoardConfig.mk file to stop using Header Only Mode.    *)
+            $(warning **********************************************************)
+            HEADER_ONLY_MODE := true
+            FULL_KERNEL_BUILD := true
+            ifneq ($(TARGET_PREBUILT_KERNEL),)
+                KERNEL_BIN := $(TARGET_PREBUILT_KERNEL)
+            else
+                $(warning **********************************************************)
+                $(warning * When in Header Only Mode, a Prebuilt kernel must be    *)
+                $(warning * defined. Set TARGET_PREBUILT_KERNEL with the path to   *)
+                $(warning * the prebuilt binary kernel image in your BoardConfig   *)
+                $(warning **********************************************************)
+                $(error "NO KERNEL")
+            endif
+        else
+            $(warning **********************************************************)
+            $(warning * Kernel source found, but no configuration was defined. *)
+            $(warning * Please add the TARGET_KERNEL_CONFIG variable to your   *)
+            $(warning * BoardConfig.mk file                                    *)
+            $(warning **********************************************************)
+            # $(error "NO KERNEL CONFIG")
+        endif
     else
         #$(info Kernel source found, building it)
         FULL_KERNEL_BUILD := true
@@ -223,8 +245,10 @@ ifeq ($(FULL_KERNEL_BUILD),true)
 	    mkdir -p $(KERNEL_MODULES_OUT)
 
     $(KERNEL_CONFIG): $(KERNEL_OUT)
-	$(KERNEL_MAKE) VARIANT_DEFCONFIG=$(VARIANT_DEFCONFIG) SELINUX_DEFCONFIG=$(SELINUX_DEFCONFIG) $(KERNEL_DEFCONFIG)
-	$(hide) $(override-config)
+    ifneq ($(HEADER_ONLY_MODE),true)
+	    $(KERNEL_MAKE) VARIANT_DEFCONFIG=$(VARIANT_DEFCONFIG) SELINUX_DEFCONFIG=$(SELINUX_DEFCONFIG) $(KERNEL_DEFCONFIG)
+	    $(hide) $(override-config)
+    endif
 
     TARGET_KERNEL_BINARIES: $(KERNEL_OUT) $(KERNEL_CONFIG) $(KERNEL_HEADERS_INSTALL)
 	$(KERNEL_MAKE) $(TARGET_PREBUILT_INT_KERNEL_TYPE)
@@ -236,23 +260,29 @@ ifeq ($(FULL_KERNEL_BUILD),true)
 
     $(TARGET_KERNEL_MODULES): TARGET_KERNEL_BINARIES
 
+    # This is never called on Header Only builds, so safe to leave unflagged
     $(TARGET_PREBUILT_INT_KERNEL): $(TARGET_KERNEL_MODULES)
 	$(mv-modules)
 	$(clean-module-folder)
 
+    # This is called on full builds, but it's safe to leave unflagged
+    $(KERNEL_BIN): $(KERNEL_HEADERS_INSTALL)
+
     $(KERNEL_HEADERS_INSTALL): $(KERNEL_OUT) $(KERNEL_CONFIG)
     ifneq ($(KERNEL_HEADER_DEFCONFIG),$(KERNEL_DEFCONFIG))
         ifneq ($(KERNEL_HEADER_DEFCONFIG),)
-	$(eval header_changed_config=1)
-	$(KERNEL_MAKE) VARIANT_DEFCONFIG=$(VARIANT_DEFCONFIG) SELINUX_DEFCONFIG=$(SELINUX_DEFCONFIG) $(KERNEL_HEADER_DEFCONFIG)
-	$(override-config)
+	        $(eval header_changed_config=1)
+	        $(KERNEL_MAKE) VARIANT_DEFCONFIG=$(VARIANT_DEFCONFIG) SELINUX_DEFCONFIG=$(SELINUX_DEFCONFIG) $(KERNEL_HEADER_DEFCONFIG)
+	        $(override-config)
         endif
     endif
 	$(KERNEL_MAKE) headers_install
-    ifeq ($(header_changed_config),1)
-	$(hide) echo "Used a different defconfig for header generation"
-	$(KERNEL_MAKE) VARIANT_DEFCONFIG=$(VARIANT_DEFCONFIG) SELINUX_DEFCONFIG=$(SELINUX_DEFCONFIG) $(KERNEL_DEFCONFIG)
-	$(override-config)
+    ifneq ($(HEADER_ONLY_MODE),true)
+        ifeq ($(header_changed_config),1)
+	        $(hide) echo "Used a different defconfig for header generation"
+	        $(KERNEL_MAKE) VARIANT_DEFCONFIG=$(VARIANT_DEFCONFIG) SELINUX_DEFCONFIG=$(SELINUX_DEFCONFIG) $(KERNEL_DEFCONFIG)
+	        $(override-config)
+        endif
     endif
 
 
