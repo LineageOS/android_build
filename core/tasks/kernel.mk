@@ -82,10 +82,9 @@ endif
 ifeq ($(BOARD_KERNEL_IMAGE_NAME),)
     ifeq ($(BOARD_USES_UBOOT),true)
         $(error "Please set BOARD_KERNEL_IMAGE_NAME to uImage")
-    else
-        ifeq ($(BOARD_USES_UNCOMPRESSED_BOOT),true)
-            $(error "Please set BOARD_KERNEL_IMAGE_NAME to Image")
-        endif
+    endif
+    ifeq ($(BOARD_USES_UNCOMPRESSED_BOOT),true)
+        $(error "Please set BOARD_KERNEL_IMAGE_NAME to Image")
     endif
 endif
 
@@ -187,6 +186,14 @@ ifeq ($(FULL_KERNEL_BUILD),true)
         fi
     endef
 
+    define override-config
+        if [ ! -z "$(KERNEL_CONFIG_OVERRIDE)" ]; then\
+            echo "Overriding kernel config with '$(KERNEL_CONFIG_OVERRIDE)'";\
+            echo $(KERNEL_CONFIG_OVERRIDE) >> $(KERNEL_CONFIG);\
+            $(KERNEL_MAKE) oldconfig;\
+        fi
+    endef
+
     ifeq ($(HOST_OS),darwin)
         MAKE_FLAGS += C_INCLUDE_PATH=$(ANDROID_BUILD_TOP)/external/elfutils/0.153/libelf/
     endif
@@ -195,22 +202,21 @@ ifeq ($(FULL_KERNEL_BUILD),true)
         TARGET_KERNEL_MODULES := no-external-modules
     endif
 
+    KERNEL_MAKE := $(MAKE) $(MAKE_FLAGS) -C $(KERNEL_SRC) O=$(KERNEL_OUT) ARCH=$(KERNEL_ARCH) $(KERNEL_CROSS_COMPILE)
+
     $(KERNEL_OUT):
 	    mkdir -p $(KERNEL_OUT)
 	    mkdir -p $(KERNEL_MODULES_OUT)
 
     $(KERNEL_CONFIG): $(KERNEL_OUT)
-	$(MAKE) $(MAKE_FLAGS) -C $(KERNEL_SRC) O=$(KERNEL_OUT) ARCH=$(KERNEL_ARCH) $(KERNEL_CROSS_COMPILE) VARIANT_DEFCONFIG=$(VARIANT_DEFCONFIG) SELINUX_DEFCONFIG=$(SELINUX_DEFCONFIG) $(KERNEL_DEFCONFIG)
-	$(hide) if [ ! -z "$(KERNEL_CONFIG_OVERRIDE)" ]; then \
-	echo "Overriding kernel config with '$(KERNEL_CONFIG_OVERRIDE)'"; \
-	echo $(KERNEL_CONFIG_OVERRIDE) >> $(KERNEL_OUT)/.config; \
-	$(MAKE) -C $(KERNEL_SRC) O=$(KERNEL_OUT) ARCH=$(KERNEL_ARCH) $(KERNEL_CROSS_COMPILE) oldconfig; fi
+	$(KERNEL_MAKE) VARIANT_DEFCONFIG=$(VARIANT_DEFCONFIG) SELINUX_DEFCONFIG=$(SELINUX_DEFCONFIG) $(KERNEL_DEFCONFIG)
+	$(hide) $(override-config)
 
     TARGET_KERNEL_BINARIES: $(KERNEL_OUT) $(KERNEL_CONFIG) $(KERNEL_HEADERS_INSTALL)
-	$(MAKE) $(MAKE_FLAGS) -C $(KERNEL_SRC) O=$(KERNEL_OUT) ARCH=$(KERNEL_ARCH) $(KERNEL_CROSS_COMPILE) $(TARGET_PREBUILT_INT_KERNEL_TYPE)
-	-$(MAKE) $(MAKE_FLAGS) -C $(KERNEL_SRC) O=$(KERNEL_OUT) ARCH=$(KERNEL_ARCH) $(KERNEL_CROSS_COMPILE) dtbs
-	-$(MAKE) $(MAKE_FLAGS) -C $(KERNEL_SRC) O=$(KERNEL_OUT) ARCH=$(KERNEL_ARCH) $(KERNEL_CROSS_COMPILE) modules
-	-$(MAKE) $(MAKE_FLAGS) -C $(KERNEL_SRC) O=$(KERNEL_OUT) INSTALL_MOD_PATH=../../$(KERNEL_MODULES_INSTALL) ARCH=$(KERNEL_ARCH) $(KERNEL_CROSS_COMPILE) modules_install
+	$(KERNEL_MAKE) $(TARGET_PREBUILT_INT_KERNEL_TYPE)
+	-$(KERNEL_MAKE) dtbs
+	-$(KERNEL_MAKE) modules
+	-$(KERNEL_MAKE) INSTALL_MOD_PATH=../../$(KERNEL_MODULES_INSTALL) modules_install
 	$(mv-modules)
 	$(clean-module-folder)
 
@@ -221,27 +227,29 @@ ifeq ($(FULL_KERNEL_BUILD),true)
 	$(clean-module-folder)
 
     $(KERNEL_HEADERS_INSTALL): $(KERNEL_OUT) $(KERNEL_CONFIG)
-	$(hide) if [ ! -z "$(KERNEL_HEADER_DEFCONFIG)" ]; then \
-	    $(hide) rm -f ../$(KERNEL_CONFIG); \
-	    $(MAKE) -C $(KERNEL_SRC) O=$(KERNEL_OUT) ARCH=$(KERNEL_HEADER_ARCH) $(KERNEL_CROSS_COMPILE) $(KERNEL_HEADER_DEFCONFIG); \
-	    $(MAKE) -C $(KERNEL_SRC) O=$(KERNEL_OUT) ARCH=$(KERNEL_HEADER_ARCH) $(KERNEL_CROSS_COMPILE) headers_install; fi
-	$(hide) if [ "$(KERNEL_HEADER_DEFCONFIG)" != "$(KERNEL_DEFCONFIG)" ]; then \
-	    echo "Used a different defconfig for header generation"; \
-	    $(hide) rm -f ../$(KERNEL_CONFIG); \
-	    $(MAKE) -C $(KERNEL_SRC) O=$(KERNEL_OUT) ARCH=$(KERNEL_ARCH) $(KERNEL_CROSS_COMPILE) $(KERNEL_DEFCONFIG); fi
-	$(hide) if [ ! -z "$(KERNEL_CONFIG_OVERRIDE)" ]; then \
-	    echo "Overriding kernel config with '$(KERNEL_CONFIG_OVERRIDE)'"; \
-	    echo $(KERNEL_CONFIG_OVERRIDE) >> $(KERNEL_OUT)/.config; \
-	    $(MAKE) -C $(KERNEL_SRC) O=$(KERNEL_OUT) ARCH=$(KERNEL_ARCH) $(KERNEL_CROSS_COMPILE) oldconfig; fi
+    ifneq ($(KERNEL_HEADER_DEFCONFIG),$(KERNEL_DEFCONFIG))
+        ifneq ($(KERNEL_HEADER_DEFCONFIG),)
+	$(eval header_changed_config=1)
+	$(KERNEL_MAKE) VARIANT_DEFCONFIG=$(VARIANT_DEFCONFIG) SELINUX_DEFCONFIG=$(SELINUX_DEFCONFIG) $(KERNEL_HEADER_DEFCONFIG)
+	$(override-config)
+        endif
+    endif
+	$(KERNEL_MAKE) headers_install
+    ifeq ($(header_changed_config),1)
+	$(hide) echo "Used a different defconfig for header generation"
+	$(KERNEL_MAKE) VARIANT_DEFCONFIG=$(VARIANT_DEFCONFIG) SELINUX_DEFCONFIG=$(SELINUX_DEFCONFIG) $(KERNEL_DEFCONFIG)
+	$(override-config)
+    endif
+
 
     kerneltags: $(KERNEL_OUT) $(KERNEL_CONFIG)
-	$(MAKE) -C $(KERNEL_SRC) O=$(KERNEL_OUT) ARCH=$(KERNEL_ARCH) $(KERNEL_CROSS_COMPILE) tags
+	$(KERNEL_MAKE) tags
 
     kernelconfig: $(KERNEL_OUT) $(KERNEL_CONFIG)
 	env KCONFIG_NOTIMESTAMP=true \
-	    $(MAKE) -C $(KERNEL_SRC) O=$(KERNEL_OUT) ARCH=$(KERNEL_ARCH) $(KERNEL_CROSS_COMPILE) menuconfig
+	    $(KERNEL_MAKE) menuconfig
 	env KCONFIG_NOTIMESTAMP=true \
-	    $(MAKE) -C $(KERNEL_SRC) O=$(KERNEL_OUT) ARCH=$(KERNEL_ARCH) $(KERNEL_CROSS_COMPILE) savedefconfig
+	    $(KERNEL_MAKE) savedefconfig
 	cp $(KERNEL_OUT)/defconfig kernel/arch/$(KERNEL_ARCH)/configs/$(KERNEL_DEFCONFIG)
 
 endif # FULL_KERNEL_BUILD
