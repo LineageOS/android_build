@@ -102,10 +102,10 @@ def which(program):
     return None
 
 # Simple wrapper for os.system() that:
-#   - exits on error
+#   - exits on error if !canFail
 #   - prints out the command if --verbose
 #   - suppresses all output if --quiet
-def execute_cmd(cmd):
+def execute_cmd(cmd, canFail):
     if args.verbose:
         print('Executing: %s' % cmd)
     if args.quiet:
@@ -114,7 +114,8 @@ def execute_cmd(cmd):
     if os.system(cmd):
         if not args.verbose:
             print('\nCommand that failed:\n%s' % cmd)
-        sys.exit(1)
+        if not canFail:
+             sys.exit(1)
 
 # Verifies whether pathA is a subdirectory (or the same) as pathB
 def is_pathA_subdir_of_pathB(pathA, pathB):
@@ -169,7 +170,7 @@ if args.abandon_first:
         if not args.quiet:
             print('Abandoning branch: %s' % args.start_branch[0])
         cmd = '%s abandon %s' % (repo_bin, args.start_branch[0])
-        execute_cmd(cmd)
+        execute_cmd(cmd, False)
         if not args.quiet:
             print('')
 
@@ -359,7 +360,7 @@ for changeps in args.change_number:
     # If --start-branch is given, create the branch (more than once per path is okay; repo ignores gracefully)
     if args.start_branch:
         cmd = '%s start %s %s' % (repo_bin, args.start_branch[0], project_path)
-        execute_cmd(cmd)
+        execute_cmd(cmd. False)
 
     # Print out some useful info
     if not args.quiet:
@@ -376,7 +377,7 @@ for changeps in args.change_number:
       cmd = 'cd %s && git pull --no-edit github %s' % (project_path, fetch_ref)
     else:
       cmd = 'cd %s && git fetch github %s' % (project_path, fetch_ref)
-    execute_cmd(cmd)
+    execute_cmd(cmd, True)
     # Check if it worked
     FETCH_HEAD = '%s/.git/FETCH_HEAD' % project_path
     if os.stat(FETCH_HEAD).st_size == 0:
@@ -387,11 +388,11 @@ for changeps in args.change_number:
           cmd = 'cd %s && git pull --no-edit %s %s' % (project_path, fetch_url, fetch_ref)
         else:
           cmd = 'cd %s && git fetch %s %s' % (project_path, fetch_url, fetch_ref)
-        execute_cmd(cmd)
+        execute_cmd(cmd, False)
     # Perform the cherry-pick
     cmd = 'cd %s && git cherry-pick FETCH_HEAD' % (project_path)
     if not args.pull:
-      execute_cmd(cmd)
+      execute_cmd(cmd, False)
     if not args.quiet:
         print('')
 
