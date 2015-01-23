@@ -108,10 +108,10 @@ def which(program):
     return None
 
 # Simple wrapper for os.system() that:
-#   - exits on error
+#   - exits on error if !can_fail
 #   - prints out the command if --verbose
 #   - suppresses all output if --quiet
-def execute_cmd(cmd):
+def execute_cmd(cmd, can_fail=False):
     if args.verbose:
         print('Executing: %s' % cmd)
     if args.quiet:
@@ -120,7 +120,8 @@ def execute_cmd(cmd):
     if os.system(cmd):
         if not args.verbose:
             print('\nCommand that failed:\n%s' % cmd)
-        sys.exit(1)
+        if not can_fail:
+             sys.exit(1)
 
 # Verifies whether pathA is a subdirectory (or the same) as pathB
 def is_pathA_subdir_of_pathB(pathA, pathB):
@@ -392,7 +393,7 @@ for changeps in args.change_number:
       cmd = 'cd %s && git pull --no-edit github %s' % (project_path, fetch_ref)
     else:
       cmd = 'cd %s && git fetch github %s' % (project_path, fetch_ref)
-    execute_cmd(cmd)
+    execute_cmd(cmd, True)
     # Check if it worked
     FETCH_HEAD = '%s/.git/FETCH_HEAD' % project_path
     if os.stat(FETCH_HEAD).st_size == 0:
