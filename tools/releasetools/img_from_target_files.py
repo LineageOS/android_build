@@ -47,6 +47,31 @@ def CopyInfo(output_zip):
       output_zip, os.path.join(OPTIONS.input_tmp, "OTA", "android-info.txt"),
       "android-info.txt")
 
+def AddRadio(output_zip):
+  """If they exist, add RADIO files to the output."""
+  if os.path.isdir(os.path.join(OPTIONS.input_tmp, "RADIO")):
+    for radio_root, radio_dirs, radio_files in os.walk(os.path.join(OPTIONS.input_tmp, "RADIO")):
+      for radio_file in radio_files:
+        output_zip.write(os.path.join(radio_root, radio_file), radio_file)
+
+    # If a filesmap file exists, create a script to flash the radio images based on it
+    filesmap = os.path.join(OPTIONS.input_tmp, "RADIO/filesmap")
+    if os.path.isfile(filesmap):
+      print "creating flash-radio.sh..."
+      filesmap_data = open(filesmap, "r")
+      filesmap_regex = re.compile(r'^(\S+)\s\S+\/by-name\/(\S+).*')
+      tmp_flash_radio = tempfile.NamedTemporaryFile()
+      tmp_flash_radio.write("#!/bin/sh\n\n")
+      for filesmap_line in filesmap_data:
+        filesmap_entry = filesmap_regex.search(filesmap_line)
+        if filesmap_entry:
+          tmp_flash_radio.write("fastboot flash %s %s\n" % (filesmap_entry.group(2), filesmap_entry.group(1)))
+      tmp_flash_radio.flush()
+      if os.path.getsize(tmp_flash_radio.name) > 0:
+        output_zip.write(tmp_flash_radio.name, "flash-radio.sh")
+      else:
+        print "flash-radio.sh is empty, skipping..."
+      tmp_flash_radio.close()
 
 def main(argv):
   bootable_only = [False]
@@ -72,6 +97,7 @@ def main(argv):
   OPTIONS.input_tmp, input_zip = common.UnzipTemp(args[0])
   output_zip = zipfile.ZipFile(args[1], "w", compression=zipfile.ZIP_DEFLATED)
   CopyInfo(output_zip)
+  AddRadio(output_zip)
 
   try:
     done = False
