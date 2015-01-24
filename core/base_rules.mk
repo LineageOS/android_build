@@ -382,6 +382,11 @@ full_static_java_libs := \
       $(call intermediates-dir-for, \
         JAVA_LIBRARIES,$(lib),$(LOCAL_IS_HOST_MODULE),COMMON)/javalib.jar)
 
+full_static_java_libs += \
+    $(foreach lib,$(LOCAL_STATIC_ANDROID_LIBRARIES), \
+      $(call intermediates-dir-for, \
+        ANDROID_LIBRARIES,$(lib),$(LOCAL_IS_HOST_MODULE),COMMON)/classes.jar)
+
 $(LOCAL_INTERMEDIATE_TARGETS): PRIVATE_INSTALL_DIR := $(dir $(LOCAL_INSTALLED_MODULE))
 $(LOCAL_INTERMEDIATE_TARGETS): PRIVATE_CLASS_INTERMEDIATES_DIR := $(intermediates)/classes
 $(LOCAL_INTERMEDIATE_TARGETS): PRIVATE_SOURCE_INTERMEDIATES_DIR := $(intermediates)/src

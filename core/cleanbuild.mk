@@ -219,6 +219,7 @@ installclean_files := \
 	$(PRODUCT_OUT)/oem \
 	$(PRODUCT_OUT)/dex_bootjars \
 	$(PRODUCT_OUT)/obj/JAVA_LIBRARIES \
+  $(PRODUCT_OUT)/obj/ANDROID_LIBRARIES \
 	$(PRODUCT_OUT)/obj/FAKE \
 	$(PRODUCT_OUT)/obj/EXECUTABLES/adbd_intermediates \
 	$(PRODUCT_OUT)/obj/EXECUTABLES/init_intermediates \

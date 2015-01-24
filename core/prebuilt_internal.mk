@@ -231,7 +231,7 @@ $(built_module) : $(my_prebuilt_src_file)
 	$(transform-prebuilt-to-target-strip-comments)
 else
 $(built_module) : $(my_prebuilt_src_file) | $(ACP)
-	$(transform-prebuilt-to-target)
+  $(transform-prebuilt-to-target)
 ifneq ($(prebuilt_module_is_a_library),)
   ifneq ($(LOCAL_IS_HOST_MODULE),)
 	$(transform-host-ranlib-copy-hack)
@@ -259,6 +259,25 @@ $(common_javalib_jar) : $(common_classes_jar) | $(ACP)
 # make sure the classes.jar and javalib.jar are built before $(LOCAL_BUILT_MODULE)
 $(built_module) : $(common_javalib_jar)
 endif # TARGET JAVA_LIBRARIES
+
+ifeq ($(LOCAL_IS_HOST_MODULE)$(LOCAL_MODULE_CLASS),ANDROID_LIBRARIES)
+# for target java libraries, the LOCAL_BUILT_MODULE is in a product-specific dir,
+# while the deps should be in the common dir, so we make a copy in the common dir.
+# For nonstatic library, $(common_javalib_jar) is the dependency file,
+# while $(common_classes_jar) is used to link.
+common_classes_aar := $(call intermediates-dir-for,ANDROID_LIBRARIES,$(LOCAL_MODULE),,COMMON)/classes.aar
+common_javalib_aar := $(dir $(common_classes_aar))javalib.aar
+
+$(common_classes_aar) : $(my_prebuilt_src_file) | $(ACP)
+  $(transform-prebuilt-to-target)
+
+$(common_javalib_aar) : $(common_classes_aar) | $(ACP)
+  $(transform-prebuilt-to-target)
+
+# make sure the classes.jar and javalib.jar are built before $(LOCAL_BUILT_MODULE)
+$(built_module) : $(common_javalib_aar)
+
+endif # TARGET ANDROID_LIBRARIES
 
 $(built_module) : $(LOCAL_ADDITIONAL_DEPENDENCIES)
 

@@ -1959,6 +1959,14 @@ define transform-prebuilt-to-target-strip-comments
 $(copy-file-to-target-strip-comments)
 endef
 
+# Unzip a prebuilt aar file to a target location
+define transform-prebuilt-aar-to-target
+@echo -e ${CL_CYN}"$(if $(PRIVATE_IS_HOST_MODULE),host,target) Prebuilt:"${CL_RST}" $(PRIVATE_MODULE) $(dir $@)"
+$(copy-file-to-target)
+$(call unzip-jar-files,$@,$(dir $@))
+rm -rf $@
+endef
+
 ###########################################################
 ## On some platforms (MacOS), after copying a static
 ## library, ranlib must be run to update an internal

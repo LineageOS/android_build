@@ -25,6 +25,7 @@ prebuilt_shared_libs := $(filter-out %.a,$(LOCAL_PREBUILT_LIBS))
 prebuilt_executables := $(LOCAL_PREBUILT_EXECUTABLES)
 prebuilt_java_libraries := $(LOCAL_PREBUILT_JAVA_LIBRARIES)
 prebuilt_static_java_libraries := $(LOCAL_PREBUILT_STATIC_JAVA_LIBRARIES)
+prebuilt_static_android_libraries := $(LOCAL_PREBUILT_STATIC_ANDROID_LIBRARIES)
 prebuilt_is_host := $(LOCAL_IS_HOST_MODULE)
 prebuilt_module_tags := $(LOCAL_MODULE_TAGS)
 prebuilt_strip_module := $(LOCAL_STRIP_MODULE)
@@ -127,10 +128,20 @@ $(call auto-prebuilt-boilerplate, \
     true, \
     javalib.jar)
 
+$(call auto-prebuilt-boilerplate, \
+    $(prebuilt_static_android_libraries), \
+    $(prebuilt_is_host), \
+    ANDROID_LIBRARIES, \
+    $(prebuilt_module_tags), \
+    , \
+    true, \
+    javalib.aar)
+
 prebuilt_static_libs :=
 prebuilt_shared_libs :=
 prebuilt_executables :=
 prebuilt_java_libraries :=
 prebuilt_static_java_libraries :=
+prebuilt_static_android_libraries :=
 prebuilt_is_host :=
 prebuilt_module_tags :=
