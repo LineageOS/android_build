@@ -548,8 +548,7 @@ def WriteFullOTAPackage(input_zip, output_zip):
       metadata=metadata,
       info_dict=OPTIONS.info_dict)
 
-  has_recovery_patch = HasRecoveryPatch(input_zip)
-  block_based = OPTIONS.block_based and has_recovery_patch
+  block_based = OPTIONS.block_based
 
   #if not OPTIONS.omit_prereq:
   #  ts = GetBuildProp("ro.build.date.utc", OPTIONS.info_dict)
