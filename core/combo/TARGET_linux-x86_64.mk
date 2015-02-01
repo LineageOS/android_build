@@ -90,7 +90,9 @@ TARGET_GLOBAL_CFLAGS += \
 			-fstack-protector \
 			-m64 \
 			-no-canonical-prefixes \
-			-fno-canonical-system-headers
+			-fno-canonical-system-headers \
+			$(BOARD_GLOBAL_CFLAGS)
+
 
 # Help catch common 32/64-bit errors.
 TARGET_GLOBAL_CFLAGS += \
@@ -121,6 +123,8 @@ endif
 ifeq ($(ARCH_X86_HAVE_AES_NI),true)
     TARGET_GLOBAL_CFLAGS += -maes
 endif
+
+TARGET_GLOBAL_CPPFLAGS += $(BOARD_GLOBAL_CPPFLAGS)
 
 TARGET_GLOBAL_LDFLAGS += -m64
 
