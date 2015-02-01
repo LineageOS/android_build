@@ -93,6 +93,7 @@ $(combo_2nd_arch_prefix)TARGET_GLOBAL_CFLAGS += \
 			-m32 \
 			-no-canonical-prefixes \
 			-fno-canonical-system-headers \
+			$(BOARD_GLOBAL_CFLAGS) \
 			-include $(android_config_h) \
 			-I $(dir $(android_config_h))
 
@@ -116,6 +117,8 @@ endif
 ifeq ($(ARCH_X86_HAVE_AES_NI),true)
     $(combo_2nd_arch_prefix)TARGET_GLOBAL_CFLAGS += -maes
 endif
+
+$(combo_2nd_arch_prefix)TARGET_GLOBAL_CPPFLAGS += $(BOARD_GLOBAL_CPPFLAGS)
 
 $(combo_2nd_arch_prefix)TARGET_GLOBAL_LDFLAGS += -m32
 
