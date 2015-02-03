@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bacf61ea_574bb6b0",
+        "filename": "tools/roomservice.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 4,
+      "author": {
+        "id": 2936
+      },
+      "writtenOn": "2015-02-03T19:13:24Z",
+      "side": 1,
+      "message": "Header?",
+      "revId": "bece94994e2cad907ff70d6f65f499f69cf435de",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bacf61ea_b7c67214",
+        "filename": "tools/roomservice.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 2936
+      },
+      "writtenOn": "2015-02-03T19:13:24Z",
+      "side": 1,
+      "message": "License change?",
+      "revId": "bece94994e2cad907ff70d6f65f499f69cf435de",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    }
+  ]
+}
