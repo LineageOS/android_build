@@ -76,10 +76,24 @@ def AddVendor(output_zip, prefix="IMAGES/"):
     common.ZipWriteStr(output_zip, prefix + "vendor.map", f.read())
 
 
+def AddPersist(output_zip, prefix="IMAGES/"):
+  """Turn the contents of persist into a persist image and store in it
+  output_zip."""
+  imgname = BuildVendor(OPTIONS.input_tmp, OPTIONS.info_dict)
+  with open(imgname, "rb") as f:
+    common.ZipWriteStr(output_zip, prefix + "persist.img", f.read())
+
+
 def BuildVendor(input_dir, info_dict, block_list=None):
   """Build the (sparse) vendor image and return the name of a temp
   file containing it."""
   return CreateImage(input_dir, info_dict, "vendor", block_list=block_list)
+
+
+def BuildPersist(input_dir, info_dict, block_list=None):
+  """Build the persist image and return the name of a temp
+  file containing it."""
+  return CreateImage(input_dir, info_dict, "persist", block_list=block_list)
 
 
 def CreateImage(input_dir, info_dict, what, block_list=None):
@@ -237,6 +251,9 @@ def AddImagesToTargetFiles(filename):
   if has_vendor:
     banner("vendor")
     AddVendor(output_zip)
+
+  banner("persist")
+  AddPersist(output_zip)
   banner("userdata")
   AddUserdata(output_zip)
   banner("cache")
