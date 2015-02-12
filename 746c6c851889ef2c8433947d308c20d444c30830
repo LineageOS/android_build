@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bacf61ea_24051dc2",
+        "filename": "core/Makefile",
+        "patchSetId": 1
+      },
+      "lineNbr": 918,
+      "author": {
+        "id": 11065
+      },
+      "writtenOn": "2015-02-12T15:41:07Z",
+      "side": 1,
+      "message": "nice",
+      "revId": "746c6c851889ef2c8433947d308c20d444c30830",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    }
+  ]
+}
