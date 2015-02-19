@@ -38,9 +38,9 @@ def mangle_default_prop_override(prop):
 # Put the modifications that you need to make into the /system/etc/prop.default into this
 # function. The prop object has get(name) and put(name,value) methods.
 def mangle_default_prop(prop):
-  # If ro.debuggable is 1, then enable adb on USB by default
-  # (this is for userdebug builds)
-  if prop.get("ro.debuggable") == "1":
+  # If ro.adb.secure is not 1, then enable adb on USB by default
+  # (this is for eng builds)
+  if prop.get("ro.adb.secure") != "1":
     val = prop.get("persist.sys.usb.config")
     if "adb" not in val:
       if val == "":
