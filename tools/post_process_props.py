@@ -30,9 +30,9 @@ PROP_VALUE_MAX = 91
 # Put the modifications that you need to make into the */build.prop into this
 # function.
 def mangle_build_prop(prop_list, kernel_version_file_for_uffd_gc):
-  # If ro.debuggable is 1, then enable adb on USB by default
-  # (this is for userdebug builds)
-  if prop_list.get_value("ro.debuggable") == "1":
+  # If ro.adb.secure is 0, then enable adb on USB by default
+  # (this is for eng builds)
+  if prop_list.get_value("ro.adb.secure") == "0":
     val = prop_list.get_value("persist.sys.usb.config")
     if "adb" not in val:
       if val == "":
