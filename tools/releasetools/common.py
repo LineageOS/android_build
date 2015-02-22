@@ -355,10 +355,10 @@ def BuildBootableImage(sourcedir, fs_config_file, info_dict=None):
       cmd.append("--ramdisk_offset")
       cmd.append(open(fn).read().rstrip("\n"))
 
-    fn = os.path.join(sourcedir, "dt_args")
+    fn = os.path.join(sourcedir, "dt")
     if os.access(fn, os.F_OK):
       cmd.append("--dt")
-      cmd.append(open(fn).read().rstrip("\n"))
+      cmd.append(fn)
 
     fn = os.path.join(sourcedir, "pagesize")
     if os.access(fn, os.F_OK):
