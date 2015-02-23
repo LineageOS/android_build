@@ -486,7 +486,7 @@ def _BuildBootableImage(sourcedir, fs_config_file, info_dict=None,
       os.path.basename(sourcedir),)
 
   if bootimg_key and os.path.exists(bootimg_key) and kernel_pagesize > 0:
-    print "Signing bootable image..."
+    print("Signing bootable image...")
     bootimg_key_passwords = {}
     bootimg_key_passwords.update(PasswordManager().GetPasswords(bootimg_key.split()))
     bootimg_key_password = bootimg_key_passwords[bootimg_key]
