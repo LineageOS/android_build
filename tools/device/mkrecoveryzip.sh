@@ -10,8 +10,10 @@ then
 fi
 
 ANDROID_ROOT=$(pwd)
-OUT=$ANDROID_ROOT/$OUT
-SIGNAPK=$ANDROID_ROOT/$SIGNAPK
+#OUT=$ANDROID_ROOT/$OUT
+#fix mkrecoveryzip.sh  to detech the $OUT && $SIGNAPK PATH
+OUT=$OUT
+SIGNAPK=$SIGNAPK
 
 pushd . > /dev/null 2> /dev/null
 
