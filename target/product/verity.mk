@@ -16,7 +16,7 @@
 
 # Provides dependencies necessary for verified boot
 
-PRODUCT_SUPPORTS_VERITY := true
+PRODUCT_SUPPORTS_VERITY := false
 
 # The dev key is used to sign boot and recovery images, and the verity
 # metadata table. Actual product deliverables will be re-signed by hand.
