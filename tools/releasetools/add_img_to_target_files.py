@@ -218,7 +218,7 @@ def AddImagesToTargetFiles(filename):
                                compression=zipfile.ZIP_DEFLATED)
 
   def banner(s):
-    print "\n\n++++ " + s + " ++++\n\n"
+    print "\n++++ " + s + " ++++"
 
   banner("boot")
   boot_image = common.GetBootableImage(
