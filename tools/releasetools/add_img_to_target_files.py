@@ -61,6 +61,18 @@ def AddSystem(output_zip, prefix="IMAGES/"):
 def BuildSystem(input_dir, info_dict, block_list=None):
   """Build the (sparse) system image and return the name of a temp
   file containing it."""
+  compress_supported = info_dict.get("transparent_compression") == "true"
+  if compress_supported:
+    system_dir = "%s/SYSTEM" % (input_dir)
+    apk_paths = ["app", "priv-app"]
+    print "compressing apk files..."
+    for path in apk_paths:
+      cmd = ["build/tools/releasetools/compress_files", "apk", "%s/%s" % (system_dir, path)]
+      p = common.Run(cmd)
+      out, err = p.communicate()
+      print out
+      if p.returncode != 0:
+        raise Runtime("%s failed" % (cmd))
   return CreateImage(input_dir, info_dict, "system", block_list=block_list)
 
 
