@@ -248,6 +248,8 @@ def BuildImage(in_dir, prop_dict, out_file,
       build_command.extend(["-C", fs_config])
     if block_list is not None:
       build_command.extend(["-B", block_list])
+    if "transparent_compression_method" in prop_dict:
+      build_command.extend(["-M", prop_dict["transparent_compression_method"]])
     if fc_config is not None:
       build_command.append(fc_config)
     elif "selinux_fc" in prop_dict:
@@ -312,7 +314,8 @@ def ImagePropFromGlobalDict(glob_dict, mount_point):
       "skip_fsck",
       "verity",
       "verity_key",
-      "verity_signer_cmd"
+      "verity_signer_cmd",
+      "transparent_compression_method"
       )
   for p in common_props:
     copy_prop(p, p)
