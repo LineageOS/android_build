@@ -200,6 +200,7 @@ ifneq ($(PRODUCTS.$(INTERNAL_PRODUCT).PRODUCT_OEM_PROPERTIES),)
 		echo "import /oem/oem.prop $(prop)" >> $@;)
 endif
 	$(hide) TARGET_BUILD_TYPE="$(TARGET_BUILD_VARIANT)" \
+			TARGET_BUILD_FLAVOR="$(TARGET_PRODUCT)-$(TARGET_BUILD_VARIANT)" \
 			TARGET_DEVICE="$(TARGET_DEVICE)" \
 			PRODUCT_NAME="$(TARGET_PRODUCT)" \
 			PRODUCT_BRAND="$(PRODUCT_BRAND)" \
@@ -498,6 +499,11 @@ ifeq ($(TARGET_BOOTIMAGE_USE_EXT2),true)
 tmp_dir_for_image := $(call intermediates-dir-for,EXECUTABLES,boot_img)/bootimg
 INTERNAL_BOOTIMAGE_ARGS += --tmpdir $(tmp_dir_for_image)
 INTERNAL_BOOTIMAGE_ARGS += --genext2fs $(MKEXT2IMG)
+
+ifeq ($(TARGET_BOOTIMAGE_USE_EXTLINUX),true)
+INTERNAL_BOOTIMAGE_ARGS += --extlinuxconf $(TARGET_BOOTIMAGE_EXTLINUX_CONFIG)
+endif
+
 $(INSTALLED_BOOTIMAGE_TARGET): $(MKEXT2IMG) $(INTERNAL_BOOTIMAGE_FILES)
 	$(call pretty,"Target boot image: $@")
 	$(hide) $(MKEXT2BOOTIMG) $(INTERNAL_BOOTIMAGE_ARGS) --output $@
@@ -512,14 +518,14 @@ else ifeq (true,$(PRODUCTS.$(INTERNAL_PRODUCT).PRODUCT_SUPPORTS_VERITY)) # TARGE
 $(INSTALLED_BOOTIMAGE_TARGET): $(MKBOOTIMG) $(INTERNAL_BOOTIMAGE_FILES) $(BOOT_SIGNER) $(BOOTIMAGE_EXTRA_DEPS)
 	$(call pretty,"Target boot image: $@")
 	$(hide) $(MKBOOTIMG) $(INTERNAL_BOOTIMAGE_ARGS) $(BOARD_MKBOOTIMG_ARGS) --output $@
-	$(BOOT_SIGNER) /boot $@ $(PRODUCTS.$(INTERNAL_PRODUCT).PRODUCT_VERITY_SIGNING_KEY) $@
+	$(BOOT_SIGNER) /boot $@ $(PRODUCTS.$(INTERNAL_PRODUCT).PRODUCT_VERITY_SIGNING_KEY).pk8 $(PRODUCTS.$(INTERNAL_PRODUCT).PRODUCT_VERITY_SIGNING_KEY).x509.pem $@
 	$(hide) $(call assert-max-image-size,$@,$(BOARD_BOOTIMAGE_PARTITION_SIZE))
 
 .PHONY: bootimage-nodeps
 bootimage-nodeps: $(MKBOOTIMG) $(BOOT_SIGNER)
 	@echo "make $@: ignoring dependencies"
 	$(hide) $(MKBOOTIMG) $(INTERNAL_BOOTIMAGE_ARGS) $(BOARD_MKBOOTIMG_ARGS) --output $(INSTALLED_BOOTIMAGE_TARGET)
-	$(BOOT_SIGNER) /boot $(INSTALLED_BOOTIMAGE_TARGET) $(PRODUCTS.$(INTERNAL_PRODUCT).PRODUCT_VERITY_SIGNING_KEY) $(INSTALLED_BOOTIMAGE_TARGET)
+	$(BOOT_SIGNER) /boot $(INSTALLED_BOOTIMAGE_TARGET) $(PRODUCTS.$(INTERNAL_PRODUCT).PRODUCT_VERITY_SIGNING_KEY).pk8 $(PRODUCTS.$(INTERNAL_PRODUCT).PRODUCT_VERITY_SIGNING_KEY).x509.pem $(INSTALLED_BOOTIMAGE_TARGET)
 	$(hide) $(call assert-max-image-size,$(INSTALLED_BOOTIMAGE_TARGET),$(BOARD_BOOTIMAGE_PARTITION_SIZE))
 
 else # PRODUCT_SUPPORTS_VERITY != true
@@ -716,13 +722,16 @@ INTERNAL_USERIMAGES_DEPS += $(SELINUX_FC)
 define generate-userimage-prop-dictionary
 $(if $(INTERNAL_USERIMAGES_EXT_VARIANT),$(hide) echo "fs_type=$(INTERNAL_USERIMAGES_EXT_VARIANT)" >> $(1))
 $(if $(BOARD_SYSTEMIMAGE_PARTITION_SIZE),$(hide) echo "system_size=$(BOARD_SYSTEMIMAGE_PARTITION_SIZE)" >> $(1))
+$(if $(BOARD_SYSTEMIMAGE_JOURNAL_SIZE),$(hide) echo "system_journal_size=$(BOARD_SYSTEMIMAGE_JOURNAL_SIZE)" >> $(1))
 $(if $(BOARD_USERDATAIMAGE_FILE_SYSTEM_TYPE),$(hide) echo "userdata_fs_type=$(BOARD_USERDATAIMAGE_FILE_SYSTEM_TYPE)" >> $(1))
 $(if $(BOARD_USERDATAIMAGE_PARTITION_SIZE),$(hide) echo "userdata_size=$(BOARD_USERDATAIMAGE_PARTITION_SIZE)" >> $(1))
 $(if $(BOARD_CACHEIMAGE_FILE_SYSTEM_TYPE),$(hide) echo "cache_fs_type=$(BOARD_CACHEIMAGE_FILE_SYSTEM_TYPE)" >> $(1))
 $(if $(BOARD_CACHEIMAGE_PARTITION_SIZE),$(hide) echo "cache_size=$(BOARD_CACHEIMAGE_PARTITION_SIZE)" >> $(1))
 $(if $(BOARD_VENDORIMAGE_FILE_SYSTEM_TYPE),$(hide) echo "vendor_fs_type=$(BOARD_VENDORIMAGE_FILE_SYSTEM_TYPE)" >> $(1))
 $(if $(BOARD_VENDORIMAGE_PARTITION_SIZE),$(hide) echo "vendor_size=$(BOARD_VENDORIMAGE_PARTITION_SIZE)" >> $(1))
+$(if $(BOARD_VENDORIMAGE_JOURNAL_SIZE),$(hide) echo "vendor_journal_size=$(BOARD_VENDORIMAGE_JOURNAL_SIZE)" >> $(1))
 $(if $(BOARD_OEMIMAGE_PARTITION_SIZE),$(hide) echo "oem_size=$(BOARD_OEMIMAGE_PARTITION_SIZE)" >> $(1))
+$(if $(BOARD_OEMIMAGE_JOURNAL_SIZE),$(hide) echo "oem_journal_size=$(BOARD_OEMIMAGE_JOURNAL_SIZE)" >> $(1))
 $(if $(INTERNAL_USERIMAGES_SPARSE_EXT_FLAG),$(hide) echo "extfs_sparse_flag=$(INTERNAL_USERIMAGES_SPARSE_EXT_FLAG)" >> $(1))
 $(if $(mkyaffs2_extra_flags),$(hide) echo "mkyaffs2_extra_flags=$(mkyaffs2_extra_flags)" >> $(1))
 $(hide) echo "selinux_fc=$(SELINUX_FC)" >> $(1)
@@ -756,12 +765,8 @@ ifneq (,$(PRODUCT_AAPT_PREF_CONFIG))
 # If PRODUCT_AAPT_PREF_CONFIG includes a dpi bucket, then use that value.
 recovery_density := $(filter %dpi,$(PRODUCT_AAPT_PREF_CONFIG))
 else
-# Otherwise, use the highest density that appears in PRODUCT_AAPT_CONFIG.
-# Order is important here; we'll take the first one that's found.
-recovery_densities := $(filter $(PRODUCT_AAPT_CONFIG_SP),xxxhdpi xxhdpi xhdpi hdpi tvdpi mdpi ldpi)
-ifneq (,$(recovery_densities))
-recovery_density := $(word 1,$(recovery_densities))
-endif
+# Otherwise, use the default medium density.
+recovery_densities := mdpi
 endif
 
 ifneq (,$(wildcard $(recovery_resources_common)-$(recovery_density)))
@@ -875,7 +880,7 @@ $(INSTALLED_RECOVERYIMAGE_TARGET): $(MKBOOTFS) $(MKBOOTIMG) $(MINIGZIP) $(RECOVE
 	$(hide) $(MKBOOTFS) $(TARGET_RECOVERY_ROOT_OUT) | $(MINIGZIP) > $(recovery_ramdisk)
 	$(hide) $(MKBOOTIMG) $(INTERNAL_RECOVERYIMAGE_ARGS) $(BOARD_MKBOOTIMG_ARGS) --output $@
 ifeq (true,$(PRODUCTS.$(INTERNAL_PRODUCT).PRODUCT_SUPPORTS_VERITY))
-	$(BOOT_SIGNER) /recovery $@ $(PRODUCTS.$(INTERNAL_PRODUCT).PRODUCT_VERITY_SIGNING_KEY) $@
+	$(BOOT_SIGNER) /recovery $@ $(PRODUCTS.$(INTERNAL_PRODUCT).PRODUCT_VERITY_SIGNING_KEY).pk8 $(PRODUCTS.$(INTERNAL_PRODUCT).PRODUCT_VERITY_SIGNING_KEY).x509.pem $@
 endif
 	$(hide) $(call assert-max-image-size,$@,$(BOARD_RECOVERYIMAGE_PARTITION_SIZE))
 	@echo ----- Made recovery image: $@ --------
@@ -1248,6 +1253,12 @@ vendorimage-nodeps: | $(INTERNAL_USERIMAGES_DEPS)
 endif # BOARD_VENDORIMAGE_FILE_SYSTEM_TYPE
 
 # -----------------------------------------------------------------
+# bring in the installer image generation defines if necessary
+ifeq ($(TARGET_USE_DISKINSTALLER),true)
+include bootable/diskinstaller/config.mk
+endif
+
+# -----------------------------------------------------------------
 # host tools needed to build dist and OTA packages
 
 DISTTOOLS :=  $(HOST_OUT_EXECUTABLES)/minigzip \
@@ -1452,6 +1463,7 @@ endif
 	$(hide) echo "use_set_metadata=1" >> $(zip_root)/META/misc_info.txt
 	$(hide) echo "multistage_support=1" >> $(zip_root)/META/misc_info.txt
 	$(hide) echo "update_rename_support=1" >> $(zip_root)/META/misc_info.txt
+	$(hide) echo "blockimgdiff_versions=1,2" >> $(zip_root)/META/misc_info.txt
 ifneq ($(OEM_THUMBPRINT_PROPERTIES),)
 	# OTA scripts are only interested in fingerprint related properties
 	$(hide) echo "oem_fingerprint_properties=$(OEM_THUMBPRINT_PROPERTIES)" >> $(zip_root)/META/misc_info.txt

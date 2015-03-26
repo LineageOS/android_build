@@ -16,8 +16,12 @@
 
 # Provides dependencies necessary for verified boot
 
-PRODUCT_SUPPORTS_VERITY := true
-PRODUCT_VERITY_SIGNING_KEY := build/target/product/security/verity_private_dev_key
+PRODUCT_SUPPORTS_VERITY := false
+
+# The dev key is used to sign boot and recovery images, and the verity
+# metadata table. Actual product deliverables will be re-signed by hand.
+# We expect this file to exist with the suffixes ".x509.pem" and ".pk8".
+PRODUCT_VERITY_SIGNING_KEY := build/target/product/security/verity
 
 PRODUCT_PACKAGES += \
         verity_key
