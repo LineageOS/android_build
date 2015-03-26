@@ -1438,7 +1438,7 @@ class FileDifference(object):
     so_far = 0
     for tf, sf, _, _ in self.patch_list:
       if tf.name != sf.name:
-        script.SkipNextActionIfTargetExists(tf.name, tf.sha1)
+        script.SkipNextActionIfTargetExists("/" + tf.name, tf.sha1)
       script.PatchCheck("/"+sf.name, tf.sha1, sf.sha1)
       so_far += sf.size
     return so_far
@@ -1470,7 +1470,7 @@ class FileDifference(object):
         deferred_patch_list.append(item)
         continue
       if sf.name != tf.name:
-        script.SkipNextActionIfTargetExists(tf.name, tf.sha1)
+        script.SkipNextActionIfTargetExists("/" + tf.name, tf.sha1)
       script.ApplyPatch("/" + sf.name, "-", tf.size, tf.sha1, sf.sha1,
                         "patch/" + sf.name + ".p")
       so_far += tf.size
