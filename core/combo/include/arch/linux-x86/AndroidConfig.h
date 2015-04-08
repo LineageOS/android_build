@@ -198,7 +198,7 @@
 /*
  * Define if we have <malloc.h> header
  */
-#define HAVE_MALLOC_H
+#define HAVE_MALLOC_H 1
 
 /*
  * Define if we have Linux-style non-filesystem Unix Domain Sockets

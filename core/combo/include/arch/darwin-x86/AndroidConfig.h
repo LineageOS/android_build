@@ -190,7 +190,7 @@
 /*
  * Define if we have <malloc.h> header
  */
-/* #define HAVE_MALLOC_H */
+/* #define HAVE_MALLOC_H 1 */
 
 /*
  * Define if tm struct has tm_gmtoff field
