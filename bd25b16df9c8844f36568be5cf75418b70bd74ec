@@ -52,6 +52,24 @@
       "revId": "bd25b16df9c8844f36568be5cf75418b70bd74ec",
       "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3ac371cc_4eb0448c",
+        "filename": "tools/releasetools/add_img_to_target_files.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 171,
+      "author": {
+        "id": 10984
+      },
+      "writtenOn": "2015-04-09T23:51:27Z",
+      "side": 1,
+      "message": "It is not a question of what fs_type is being used, but the fact that info_dict doesn\u0027t have that info at all (no \"data_extra\" key).",
+      "parentUuid": "3ac371cc_397713d6",
+      "revId": "bd25b16df9c8844f36568be5cf75418b70bd74ec",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
     }
   ]
 }
