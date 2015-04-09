@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3ac371cc_b9b5c3d1",
+        "filename": "tools/releasetools/add_img_to_target_files.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 171,
+      "author": {
+        "id": 2936
+      },
+      "writtenOn": "2015-04-09T06:32:45Z",
+      "side": 1,
+      "message": "I thought this check would bypass actual creation.",
+      "revId": "bd25b16df9c8844f36568be5cf75418b70bd74ec",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    }
+  ]
+}
