@@ -88,6 +88,24 @@
       "revId": "bd25b16df9c8844f36568be5cf75418b70bd74ec",
       "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3ac371cc_61aa7172",
+        "filename": "tools/releasetools/add_img_to_target_files.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 171,
+      "author": {
+        "id": 10984
+      },
+      "writtenOn": "2015-04-10T05:36:28Z",
+      "side": 1,
+      "message": "The difference between tomato and failing devices here is that, for tomato, fs_type exists and starts with ext, so it returns. \n\nFor devices where fs_type doesn\u0027t exist, we don\u0027t ever \"return\" here, and keep going forward, trying to create the extra userdata. That will fail because, later, we actually change the fs_type:\n    image_props[\"fs_type\" ] \u003d fstab[\"/data\"].fs_type\nand call BuildImage, which will now have an ext fs_type (the one from /data), thus assuming we also have a partition_size, which we don\u0027t:\n\n  File \"/home/marado/android/cm12/build/tools/releasetools/build_image.py\", line 246, in BuildImage\n    build_command.append(prop_dict[\"partition_size\"])\nKeyError: \u0027partition_size\u0027",
+      "parentUuid": "3ac371cc_21acf9ec",
+      "revId": "bd25b16df9c8844f36568be5cf75418b70bd74ec",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
     }
   ]
 }
