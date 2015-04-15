@@ -438,6 +438,10 @@ define find-other-java-files
 $(call all-java-files-under,$(1))
 endef
 
+define find-other-aidl-files
+	$(call find-subdir-files,$(1) -name "*.aidl" -and -not -name ".*")
+endef
+
 define find-other-html-files
 $(call all-html-files-under,$(1))
 endef
