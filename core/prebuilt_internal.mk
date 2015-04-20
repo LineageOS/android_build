@@ -212,7 +212,7 @@ $(built_apk_splits) : $(built_module_path)/%.apk : $(my_src_dir)/%.apk | $(ACP)
 
 # Rules to install the split apks.
 $(installed_apk_splits) : $(my_module_path)/%.apk : $(built_module_path)/%.apk | $(ACP)
-	@echo "Install: $@"
+	@echo -e ${CL_CYN}"Install: $@"${CL_RST}
 	$(copy-file-to-new-target)
 
 # Register the additional built and installed files.

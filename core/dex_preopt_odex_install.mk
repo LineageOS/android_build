@@ -99,7 +99,7 @@ ifdef built_odex
 $(installed_odex) : $(dir $(LOCAL_INSTALLED_MODULE))%$(notdir $(word 1,$(installed_odex))) \
                   : $(dir $(LOCAL_BUILT_MODULE))%$(notdir $(word 1,$(built_odex))) \
     | $(ACP)
-	@echo "Install: $@"
+	@echo -e ${CL_CYN}"Install: $@"${CL_RST}
 	$(copy-file-to-target)
 endif
 
