@@ -102,6 +102,12 @@ PRODUCT_SYSTEM_SERVER_JARS := \
     ethernet-service \
     wifi-service
 
+ifeq ($(filter NIGHTLY SNAPSHOT EXPERIMENTAL,$(CM_BUILDTYPE)),)
+# External system server capable jar
+PRODUCT_SYSTEM_SERVER_JARS += \
+    org.cyanogenmod.platform
+endif
+
 PRODUCT_RUNTIMES := runtime_libart_default
 
 PRODUCT_DEFAULT_PROPERTY_OVERRIDES += \
