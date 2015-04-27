@@ -52,6 +52,7 @@ endif
 PRODUCT_SYSTEM_SERVER_JARS := \
     com.android.location.provider \
     services \
+    org.lineageos.platform \
     ethernet-service
 
 PRODUCT_COPY_FILES += \
