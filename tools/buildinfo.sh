@@ -55,8 +55,9 @@ if [ "$TARGET_UNIFIED_DEVICE" == "" ] ; then
     echo "ro.build.thumbprint=$BUILD_THUMBPRINT"
   fi
 fi
+# This is to get CDMA carrier name to display properly when not on LTE
+echo "ro.ril.force_eri_from_xml=true"
 echo "ro.build.characteristics=$TARGET_AAPT_CHARACTERISTICS"
 
 echo "ro.cm.device=$CM_DEVICE"
-
 echo "# end build properties"
