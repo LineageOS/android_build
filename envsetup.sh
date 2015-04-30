@@ -42,12 +42,9 @@ Environemnt options:
 Look at the source to view more functions. The complete list is:
 EOF
     T=$(gettop)
-    local A
-    A=""
     for i in `cat $T/build/envsetup.sh | sed -n "/^[ \t]*function /s/function \([a-z_]*\).*/\1/p" | sort | uniq`; do
-      A="$A $i"
-    done
-    echo $A
+      echo "$i"
+    done | column
 }
 
 # Get the value of a build variable as an absolute path.
