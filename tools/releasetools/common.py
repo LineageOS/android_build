@@ -795,6 +795,46 @@ class PasswordManager(object):
     return result
 
 
+def ZipWrite(zip_file, filename, arcname=None, perms=0o644,
+             compress_type=None):
+  import datetime
+
+  # http://b/18015246
+  # Python 2.7's zipfile implementation wrongly thinks that zip64 is required
+  # for files larger than 2GiB. We can work around this by adjusting their
+  # limit. Note that `zipfile.writestr()` will not work for strings larger than
+  # 2GiB. The Python interpreter sometimes rejects strings that large (though
+  # it isn't clear to me exactly what circumstances cause this).
+  # `zipfile.write()` must be used directly to work around this.
+  #
+  # This mess can be avoided if we port to python3.
+  saved_zip64_limit = zipfile.ZIP64_LIMIT
+  zipfile.ZIP64_LIMIT = (1 << 32) - 1
+
+  if compress_type is None:
+    compress_type = zip_file.compression
+  if arcname is None:
+    arcname = filename
+
+  saved_stat = os.stat(filename)
+
+  try:
+    # `zipfile.write()` doesn't allow us to pass ZipInfo, so just modify the
+    # file to be zipped and reset it when we're done.
+    os.chmod(filename, perms)
+
+    # Use a fixed timestamp so the output is repeatable.
+    epoch = datetime.datetime.fromtimestamp(0)
+    timestamp = (datetime.datetime(2009, 1, 1) - epoch).total_seconds()
+    os.utime(filename, (timestamp, timestamp))
+
+    zip_file.write(filename, arcname=arcname, compress_type=compress_type)
+  finally:
+    os.chmod(filename, saved_stat.st_mode)
+    os.utime(filename, (saved_stat.st_atime, saved_stat.st_mtime))
+    zipfile.ZIP64_LIMIT = saved_zip64_limit
+
+
 def ZipWriteStr(zip, filename, data, perms=0644, compression=None):
   # use a fixed timestamp so the output is repeatable.
   zinfo = zipfile.ZipInfo(filename=filename,
@@ -1070,51 +1110,65 @@ class BlockDifference:
     self._WriteUpdate(script, output_zip)
 
   def WriteVerifyScript(self, script):
+    partition = self.partition
     if not self.src:
-      script.Print("Image %s will be patched unconditionally." % (self.partition,))
+      script.Print("Image %s will be patched unconditionally." % (partition,))
     else:
+      script.AppendExtra(('if block_image_verify("%s", '
+                          'package_extract_file("%s.transfer.list"), '
+                          '"%s.new.dat", "%s.patch.dat") then') %
+                         (self.device, partition, partition, partition))
+      script.Print("Verified %s image..." % (partition,))
+      script.AppendExtra('else');
+
       if self.check_first_block:
         self._CheckFirstBlock(script)
 
-      script.AppendExtra('if range_sha1("%s", "%s") == "%s" then' %
-                         (self.device, self.src.care_map.to_string_raw(),
-                          self.src.TotalSha1()))
-      script.Print("Verified %s image..." % (self.partition,))
-      script.AppendExtra(('else\n'
-                          '  (range_sha1("%s", "%s") == "%s") ||\n'
+      script.AppendExtra(('(range_sha1("%s", "%s") == "%s") ||\n'
                           '  abort("%s partition has unexpected contents");\n'
                           'endif;') %
                          (self.device, self.tgt.care_map.to_string_raw(),
                           self.tgt.TotalSha1(), self.partition))
 
   def _WriteUpdate(self, script, output_zip):
-    partition = self.partition
-    with open(self.path + ".transfer.list", "rb") as f:
-      ZipWriteStr(output_zip, partition + ".transfer.list", f.read())
-    with open(self.path + ".new.dat", "rb") as f:
-      ZipWriteStr(output_zip, partition + ".new.dat", f.read())
-    with open(self.path + ".patch.dat", "rb") as f:
-      ZipWriteStr(output_zip, partition + ".patch.dat", f.read(),
-                         compression=zipfile.ZIP_STORED)
+    ZipWrite(output_zip,
+             '{}.transfer.list'.format(self.path),
+             '{}.transfer.list'.format(self.partition))
+    ZipWrite(output_zip,
+             '{}.new.dat'.format(self.path),
+             '{}.new.dat'.format(self.partition))
+    ZipWrite(output_zip,
+             '{}.patch.dat'.format(self.path),
+             '{}.patch.dat'.format(self.partition),
+             compress_type=zipfile.ZIP_STORED)
 
-    call = (('block_image_update("%s", '
-             'package_extract_file("%s.transfer.list"), '
-             '"%s.new.dat", "%s.patch.dat");\n') %
-            (self.device, partition, partition, partition))
+    call = ('block_image_update("{device}", '
+            'package_extract_file("{partition}.transfer.list"), '
+            '"{partition}.new.dat", "{partition}.patch.dat");\n'.format(
+                device=self.device, partition=self.partition))
     script.AppendExtra(script._WordWrap(call))
+
+  def _HashBlocks(self, source, ranges):
+    data = source.ReadRangeSet(ranges)
+    ctx = sha1()
+
+    for p in data:
+      ctx.update(p)
+
+    return ctx.hexdigest()
 
   def _CheckFirstBlock(self, script):
     r = RangeSet((0, 1))
-    h = sha1()
-    for data in self.src.ReadRangeSet(r):
-      h.update(data)
-    h = h.hexdigest()
+    srchash = self._HashBlocks(self.src, r);
+    tgthash = self._HashBlocks(self.tgt, r);
 
     script.AppendExtra(('(range_sha1("%s", "%s") == "%s") || '
+                        '(range_sha1("%s", "%s") == "%s") || '
                         'abort("%s has been remounted R/W; '
                         'reflash device to reenable OTA updates");')
-                       % (self.device, r.to_string_raw(), h, self.device))
-
+                       % (self.device, r.to_string_raw(), srchash,
+                          self.device, r.to_string_raw(), tgthash,
+                          self.device))
 
 DataImage = blockimgdiff.DataImage
 

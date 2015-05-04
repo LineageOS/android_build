@@ -88,11 +88,13 @@ def main(argv):
       # and all we have to do is copy them to the output zip.
       images = os.listdir(images_path)
       if images:
-        for i in images:
-          if bootable_only and i not in ("boot.img", "recovery.img"): continue
-          if not i.endswith(".img"): continue
-          with open(os.path.join(images_path, i), "r") as f:
-            common.ZipWriteStr(output_zip, i, f.read())
+        for image in images:
+          if bootable_only and image not in ("boot.img", "recovery.img"):
+            continue
+          if not image.endswith(".img"):
+            continue
+          common.ZipWrite(
+              output_zip, os.path.join(images_path, image), image)
         done = True
 
     if not done:
@@ -139,7 +141,13 @@ def main(argv):
 
   finally:
     print "cleaning up..."
+    # http://b/18015246
+    # See common.py for context.  zipfile also refers to ZIP64_LIMIT during
+    # close() when it writes out the central directory.
+    saved_zip64_limit = zipfile.ZIP64_LIMIT
+    zipfile.ZIP64_LIMIT = (1 << 32) - 1
     output_zip.close()
+    zipfile.ZIP64_LIMIT = saved_zip64_limit
     shutil.rmtree(OPTIONS.input_tmp)
 
   print "done."
