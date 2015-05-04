@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "9a89bdaa_9ffe1304",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 3671
+      },
+      "writtenOn": "2015-05-04T13:23:00Z",
+      "side": 1,
+      "message": "Rofl I knew something didn\u0027t look quite right there",
+      "parentUuid": "ba84c18e_46e4c60c",
+      "revId": "c24c172b8adfdb154419cd2ad92ae6852c746c1d",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ba84c18e_06f8fee4",
         "filename": "tools/device/cm.mk.template",
         "patchSetId": 1
