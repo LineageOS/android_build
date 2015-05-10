@@ -265,7 +265,7 @@ kernelconfig: $(KERNEL_OUT) $(KERNEL_CONFIG)
 		 $(MAKE) -C $(KERNEL_SRC) O=$(KERNEL_OUT) ARCH=$(KERNEL_ARCH) $(KERNEL_CROSS_COMPILE) menuconfig
 	env KCONFIG_NOTIMESTAMP=true \
 		 $(MAKE) -C $(KERNEL_SRC) O=$(KERNEL_OUT) ARCH=$(KERNEL_ARCH) $(KERNEL_CROSS_COMPILE) savedefconfig
-	cp $(KERNEL_OUT)/defconfig kernel/arch/$(KERNEL_ARCH)/configs/$(KERNEL_DEFCONFIG)
+	cp $(KERNEL_OUT)/defconfig $(KERNEL_SRC)/arch/$(KERNEL_ARCH)/configs/$(KERNEL_DEFCONFIG)
 
 endif # FULL_KERNEL_BUILD
 
