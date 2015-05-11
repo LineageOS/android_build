@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a89bdaa_e1513d10",
+        "filename": "core/tasks/kernel.mk",
+        "patchSetId": 1
+      },
+      "lineNbr": 268,
+      "author": {
+        "id": 2936
+      },
+      "writtenOn": "2015-05-11T12:25:42Z",
+      "side": 1,
+      "message": "Isn\u0027t this $(KERNEL_OUT)/.config instead of $(KERNEL_OUT)/defconfig?",
+      "revId": "8f52fdf135031cf549e10d95bfe6aa822ca0e188",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    }
+  ]
+}
