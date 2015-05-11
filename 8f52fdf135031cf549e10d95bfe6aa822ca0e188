@@ -16,6 +16,24 @@
       "revId": "8f52fdf135031cf549e10d95bfe6aa822ca0e188",
       "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a89bdaa_41410939",
+        "filename": "core/tasks/kernel.mk",
+        "patchSetId": 1
+      },
+      "lineNbr": 268,
+      "author": {
+        "id": 4550
+      },
+      "writtenOn": "2015-05-11T12:33:02Z",
+      "side": 1,
+      "message": "No, savedefconfig generates a much smaller defconfig based on .config, like all upstream defconfigs",
+      "parentUuid": "9a89bdaa_e1513d10",
+      "revId": "8f52fdf135031cf549e10d95bfe6aa822ca0e188",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
     }
   ]
 }
