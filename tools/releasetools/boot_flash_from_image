@@ -1,0 +1,145 @@
+#!/usr/bin/env python
+#
+# Copyright (C) 2008 The Android Open Source Project
+# Copyright (C) 2013 SlimRoms
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+from sys import argv
+from os import getcwd, environ, remove, path, listdir, makedirs, walk
+from re import search, sub
+from shutil import rmtree, copy2, copytree
+from subprocess import call
+from zipfile import ZipFile, ZipInfo
+from hashlib import md5
+
+# declare all the variables needed
+fstab = open(argv[1], 'r').read()
+out = argv[2]
+device = argv[3]
+defconfig = "%s/obj/KERNEL_OBJ/.config" % out
+source = getcwd() # PWD
+
+try:
+    bootline = search('(\S|\t| )+/boot\s.*\n*', fstab).group(0)
+    boot_partition = search('(/\S+){2,}', bootline).group(0)
+    bpt = search('\s((?!/)\S)+\s', bootline).group(0)
+    boot_partition_type = sub(r'(\s)+', "", bpt)
+
+    sysline = search('(\S|\t| )+/system\s.*\n*', fstab).group(0)
+    system_partition = search('(/\S+){2,}', sysline).group(0)
+    spt = search('\s((?!/)\S)+\s', sysline).group(0)
+    system_partition_type = sub(r'(\s)+', "", spt)
+except:
+    raise ValueError("malformed recovery.fstab")
+
+if path.exists(defconfig):
+    prekernel_version = search('CONFIG_LOCALVERSION=.*\n', open(defconfig, 'r').read())
+    if prekernel_version:
+        kernel_version = sub(r'(CONFIG_LOCALVERSION=)|\"|\n|-', "", prekernel_version.group(0))
+        kernel_version = "%s-%s-kernel" % (kernel_version or "Slim", device)
+    else:
+        kernel_version = "Slim-%s-kernel" % device
+else:
+    kernel_version = "Slim-%s-kernel" % device
+
+updater = "%s/obj/EXECUTABLES/updater_intermediates/updater" % out
+signer = "%s/framework/signapk.jar" % environ['ANDROID_HOST_OUT']
+
+# rm -r $OUT/*kernel*
+for f in listdir(out):
+    if "-kernel" in f:
+        file = "%s/%s" % (out, f)
+        if path.isfile(file):
+            remove(file)
+        else:
+            rmtree(file)
+
+if not path.exists(updater):
+    with open("dump", "w") as dump:
+        silencer = call('make updater'.split(), stdout = dump)
+    remove("dump")
+if not path.exists(signer):
+    with open("dump", "w") as dump:
+        silencer = call('make signapk'.split(), stdout = dump)
+    remove("dump")
+
+zip_dir = "%s/%s" % (out, kernel_version)
+if path.exists(zip_dir):
+    rmtree(zip_dir)
+makedirs(zip_dir)
+
+# updater-script
+updater_dir = "%s/META-INF/com/google/android" % zip_dir
+if not path.exists(updater_dir):
+    makedirs(updater_dir)
+copy2(updater, "%s/update-binary" % updater_dir)
+
+updater_script = "%s/updater-script" % updater_dir
+
+# create the contents
+contents = "ui_print(\"installing Slim Kernel...\");\n"
+if boot_partition_type == "mtd":
+    contents += "package_extract_file(\"boot.img\", \"/tmp/boot.img\");\n"
+    contents += "write_raw_image(\"/tmp/boot.img\", \"%s\");\n" % boot_partition
+elif boot_partition_type == "emmc":
+    contents += "package_extract_file(\"boot.img\", \"%s\");\n" % boot_partition
+elif boot_partition_type == "bml":
+    contents += "assert(package_extract_file(\"boot.img\", \"/tmp/boot.img\")\n"
+    contents += "\twrite_raw_image(\"/tmp/boot.img\", \"%s\")\n" % boot_partition
+    contents += "\tdelete(\"/tmp/boot.img\"));\n"
+contents += "mount(\"%s\", \"EMMC\", \"%s\", \"system\");\n" % (system_partition_type, system_partition)
+contents += "package_extract_dir(\"system\", \"/system\");\n"
+contents += "unmount(\"/system\");\n"
+contents += "ui_print(\" \");\n"
+contents += "ui_print(\"Done!\");"
+with open(updater_script, "w") as f:
+    f.write(contents)
+
+# copy the kernel and libs
+copy2("%s/boot.img" % out, "%s/boot.img" % zip_dir)
+if path.exists("%s/system/lib/modules" % out):
+    if not path.exists("%s/system/lib" % zip_dir):
+        makedirs("%s/system/lib" % zip_dir)
+    copytree("%s/system/lib/modules" % out, "%s/system/lib/modules" % zip_dir, symlinks=True)
+
+# strip kernel modules
+kernel_modules = "%s/system/lib/modules" % zip_dir
+for root, dirs, files in walk(kernel_modules):
+    for file in files:
+        fn = path.join(root, file)
+        if not path.islink(fn):
+            call(['arm-eabi-strip', '--strip-unneeded', fn])
+
+# zip package
+with ZipFile("%s.zip" % zip_dir, "w") as zipper:
+    rootlen = len(zip_dir) + 1
+    for root, dirs, files in walk(zip_dir):
+        for file in files:
+            fn = path.join(root, file)
+            if path.islink(fn):
+                sym = ZipInfo(fn[rootlen:])
+                sym.create_system = 3
+                sym.external_attr = 2716663808L
+                zipper.writestr(sym, fn)
+            else:
+                zipper.write(fn, fn[rootlen:])
+
+# sign it
+testkey_x = "%s/build/target/product/security/testkey.x509.pem" % source
+testkey_p = "%s/build/target/product/security/testkey.pk8" % source
+call(['java', '-jar', signer, testkey_x, testkey_p, "%s.zip" % zip_dir, "%s-signed.zip" % zip_dir])
+remove("%s.zip" % zip_dir)
+#rmtree(zip_dir)
+print md5(open("%s-signed.zip" % zip_dir, "rb").read()).hexdigest() + " %s-signed.zip" % (kernel_version)
+print "kernel saved to %s-signed.zip" % zip_dir
