@@ -97,16 +97,11 @@ PRODUCT_BOOT_JARS := \
 
 # The order of PRODUCT_SYSTEM_SERVER_JARS matters.
 PRODUCT_SYSTEM_SERVER_JARS := \
+    org.cyanogenmod.platform \
     org.cyanogenmod.hardware \
     services \
     ethernet-service \
     wifi-service
-
-ifeq ($(filter NIGHTLY SNAPSHOT EXPERIMENTAL,$(CM_BUILDTYPE)),)
-# External system server capable jar
-PRODUCT_SYSTEM_SERVER_JARS += \
-    org.cyanogenmod.platform
-endif
 
 PRODUCT_RUNTIMES := runtime_libart_default
 
