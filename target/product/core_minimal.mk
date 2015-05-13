@@ -104,16 +104,11 @@ PRODUCT_BOOT_JARS := \
 
 # The order of PRODUCT_SYSTEM_SERVER_JARS matters.
 PRODUCT_SYSTEM_SERVER_JARS := \
+    org.cyanogenmod.platform \
     org.cyanogenmod.hardware \
     services \
     ethernet-service \
     wifi-service
-
-ifeq ($(filter NIGHTLY SNAPSHOT EXPERIMENTAL,$(CM_BUILDTYPE)),)
-# External system server capable jar
-PRODUCT_SYSTEM_SERVER_JARS += \
-    org.cyanogenmod.platform
-endif
 
 # Adoptable external storage supports both ext4 and f2fs
 PRODUCT_PACKAGES += \
