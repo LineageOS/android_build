@@ -256,3 +256,8 @@ LOCAL_IGNORE_SUBDIR:=
 # Leave the current makefile to make sure we don't break anything
 # that expects to be able to find the name of the current makefile.
 MAKEFILE_LIST := $(lastword $(MAKEFILE_LIST))
+
+LOCAL_GRADLE_PROJECT_DIR :=
+LOCAL_GRADLE_BUILD_FILE :=
+LOCAL_GRADLE_SUBPROJECT :=
+LOCAL_GRADLE_FLAVORS :=
