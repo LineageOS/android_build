@@ -2267,3 +2267,18 @@ include $(BUILD_SYSTEM)/distdir.mk
 #	  sed -e 's/#.*//' -e 's/^[^:]*: *//' -e 's/ *\\$$//' \
 #	      -e '/^$$/ d' -e 's/$$/ :/' < $*.d >> $*.P; \
 #	  rm -f $*.d
+
+
+### For Gradle support
+
+define uppercase
+$(shell echo $(1) | tr '[:lower:]' '[:upper:]')
+endef
+
+define lowercase
+$(shell echo $(1) | tr '[:upper:]' '[:lower:]')
+endef
+
+define capitalize
+$(call uppercase,$(shell echo $(1) | head -c 1))$(call lowercase,$(shell echo $(1) | tail -c +2))
+endef
