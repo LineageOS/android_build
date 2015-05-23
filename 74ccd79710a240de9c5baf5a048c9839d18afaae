@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a89bdaa_419572e2",
+        "filename": "core/product_config.mk",
+        "patchSetId": 2
+      },
+      "lineNbr": 185,
+      "author": {
+        "id": 10291
+      },
+      "writtenOn": "2015-05-23T10:16:07Z",
+      "side": 1,
+      "message": "seems like it might be decent future-proofing to simply search for any cm.mk file, under device/ - a la \"find device/ -name cm.mk\". any reason we wouldn\u0027t want to do that?",
+      "revId": "74ccd79710a240de9c5baf5a048c9839d18afaae",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    }
+  ]
+}
