@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a89bdaa_f548fc2f",
+        "filename": "core/maven_artifact.mk",
+        "patchSetId": 4
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 13479
+      },
+      "writtenOn": "2015-05-23T17:34:45Z",
+      "side": 1,
+      "message": "I was actually wondering what license it was under more than the year specifically.",
+      "revId": "13054c5513994ebc8911eb5773ef1d68523781ca",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    }
+  ]
+}
