@@ -99,6 +99,7 @@ $(OUT_DIR)/products/$(strip $(1)).txt: $(this_makefile)
 	$(hide) echo 'PRODUCT_AAPT_CONFIG=$$(PRODUCTS.$(strip $(1)).PRODUCT_AAPT_CONFIG)' >> $$@
 	$(hide) echo 'PRODUCT_AAPT_PREF_CONFIG=$$(PRODUCTS.$(strip $(1)).PRODUCT_AAPT_PREF_CONFIG)' >> $$@
 	$(hide) echo 'PRODUCT_PACKAGES=$$(PRODUCTS.$(strip $(1)).PRODUCT_PACKAGES)' >> $$@
+	$(hide) echo 'PRODUCT_EXCLUDED_PACKAGES=$$(PRODUCTS.$(strip $(1)).PRODUCT_EXCLUDED_PACKAGES)' >> $$@
 	$(hide) echo 'PRODUCT_DEVICE=$$(PRODUCTS.$(strip $(1)).PRODUCT_DEVICE)' >> $$@
 	$(hide) echo 'PRODUCT_MANUFACTURER=$$(PRODUCTS.$(strip $(1)).PRODUCT_MANUFACTURER)' >> $$@
 	$(hide) echo 'PRODUCT_PROPERTY_OVERRIDES=$$(PRODUCTS.$(strip $(1)).PRODUCT_PROPERTY_OVERRIDES)' >> $$@

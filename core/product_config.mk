@@ -397,6 +397,19 @@ listcopies:
 	@echo "Copy files: $(PRODUCT_COPY_FILES)"
 	@echo "Overrides: $(PRODUCT_COPY_FILES_OVERRIDES)"
 
+# We might want to skip items listed in PRODUCT_PACKAGES for
+# various reasons. This should be a list of packages
+PRODUCT_EXCLUDED_PACKAGES := \
+	$(addprefix %:, $(strip $(PRODUCTS.$(INTERNAL_PRODUCT).PRODUCT_EXCLUDED_PACKAGES)))
+
+ifneq ($(PRODUCT_EXCLUDED_PACKAGES),)
+    PRODUCT_PACKAGES := $(filter-out $(PRODUCT_EXCLUDED_PACKAGES), $(PRODUCT_PACKAGES))
+endif
+
+.PHONY: listpackages
+listpackages:
+	@echo "Packages: $(PRODUCT_PACKAGES)"
+	@echo "Excluded: $(PRODUCT_EXCLUDED_PACKAGES)"
 
 # A list of property assignments, like "key = value", with zero or more
 # whitespace characters on either side of the '='.
