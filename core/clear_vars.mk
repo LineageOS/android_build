@@ -249,7 +249,8 @@ LOCAL_MODULE_STEM_64:=
 LOCAL_CLANG_32:=
 LOCAL_CLANG_64:=
 
-LOCAL_IGNORE_SUBDIR:=
+# Include any vendor specific clear_vars.mk file
+-include $(TOPDIR)vendor/*/build/core/clear_vars.mk
 
 # Trim MAKEFILE_LIST so that $(call my-dir) doesn't need to
 # iterate over thousands of entries every time.
