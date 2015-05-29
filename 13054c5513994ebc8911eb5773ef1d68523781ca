@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "7a8ec9b2_270c1842",
+        "filename": "core/clear_vars.mk",
+        "patchSetId": 4
+      },
+      "lineNbr": 258,
+      "author": {
+        "id": 8328
+      },
+      "writtenOn": "2015-05-29T04:14:27Z",
+      "side": 1,
+      "message": "isn\u0027t LOCAL_MAVEN_REPO missing here? if it is set previously and not cleared, it may pick up the old repo url instead.",
+      "revId": "13054c5513994ebc8911eb5773ef1d68523781ca",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9a89bdaa_f548fc2f",
         "filename": "core/maven_artifact.mk",
         "patchSetId": 4
