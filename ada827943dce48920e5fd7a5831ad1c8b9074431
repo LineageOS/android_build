@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7a8ec9b2_8d4b4db0",
+        "filename": "core/config.mk",
+        "patchSetId": 2
+      },
+      "lineNbr": 644,
+      "author": {
+        "id": 2936
+      },
+      "writtenOn": "2015-05-30T06:36:55Z",
+      "side": 1,
+      "message": "You don\u0027t want to specify an exact location?",
+      "revId": "ada827943dce48920e5fd7a5831ad1c8b9074431",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    }
+  ]
+}
