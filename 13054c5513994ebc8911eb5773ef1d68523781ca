@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "7a8ec9b2_ec03e974",
+        "filename": "core/clear_vars.mk",
+        "patchSetId": 4
+      },
+      "lineNbr": 258,
+      "author": {
+        "id": 10291
+      },
+      "writtenOn": "2015-06-05T05:46:51Z",
+      "side": 1,
+      "message": "good catch, thanks",
+      "parentUuid": "7a8ec9b2_270c1842",
+      "revId": "13054c5513994ebc8911eb5773ef1d68523781ca",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9a89bdaa_f548fc2f",
         "filename": "core/maven_artifact.mk",
         "patchSetId": 4
