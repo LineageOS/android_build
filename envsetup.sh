@@ -2380,6 +2380,14 @@ function dopush()
     local func=$1
     shift
 
+    # check host to allow correct sed to be used
+    local host=$(uname -a | grep Darwin)
+    if [ -z "$host" ]; then
+        sed_func=sed
+    else
+        sed_func=gsed
+    fi
+
     adb start-server # Prevent unexpected starting server message from adb get-state in the next line
     if [ $(adb get-state) != device -a $(adb shell busybox test -e /sbin/recovery 2> /dev/null; echo $?) != 0 ] ; then
         echo "No device is online. Waiting for one..."
@@ -2415,10 +2423,10 @@ function dopush()
     fi
 
     # Install: <file>
-    LOC="$(cat $OUT/.log | sed -r 's/\x1B\[([0-9]{1,2}(;[0-9]{1,2})?)?[m|K]//g' | grep '^Install: ' | cut -d ':' -f 2)"
+    LOC="$(cat $OUT/.log | $sed_func -r 's/\x1B\[([0-9]{1,2}(;[0-9]{1,2})?)?[m|K]//g' | grep '^Install: ' | cut -d ':' -f 2)"
 
     # Copy: <file>
-    LOC="$LOC $(cat $OUT/.log | sed -r 's/\x1B\[([0-9]{1,2}(;[0-9]{1,2})?)?[m|K]//g' | grep '^Copy: ' | cut -d ':' -f 2)"
+    LOC="$LOC $(cat $OUT/.log | $sed_func -r 's/\x1B\[([0-9]{1,2}(;[0-9]{1,2})?)?[m|K]//g' | grep '^Copy: ' | cut -d ':' -f 2)"
 
     # If any files are going to /data, push an octal file permissions reader to device
     if [ -n "$(echo $LOC | egrep '(^|\s)/data')" ]; then
@@ -2444,7 +2452,7 @@ EOF
         case $FILE in
             $OUT/system/*|$OUT/data/*)
                 # Get target file name (i.e. /system/bin/adb)
-                TARGET=$(echo $FILE | sed "s#$OUT##")
+                TARGET=$(echo $FILE | $sed_func "s#$OUT##")
             ;;
             *) continue ;;
         esac
