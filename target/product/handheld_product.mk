@@ -29,7 +29,6 @@ PRODUCT_PACKAGES += \
     DeskClock \
     Email \
     Gallery2 \
-    LatinIME \
     Launcher3QuickStep \
     Music \
     OneTimeInitializer \
@@ -41,6 +40,11 @@ PRODUCT_PACKAGES += \
     SystemUI \
     WallpaperCropper \
     frameworks-base-overlays
+
+ifeq ($(LINEAGE_BUILD),)
+PRODUCT_PACKAGES += \
+    LatinIME
+endif
 
 PRODUCT_PACKAGES_DEBUG += \
     frameworks-base-overlays-debug
