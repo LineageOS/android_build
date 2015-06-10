@@ -96,6 +96,12 @@ ifneq ($(USE_CCACHE),)
     ifneq ($(ccache),$(firstword $($(combo_target)CXX)))
       $(combo_target)CXX := $(ccache) $($(combo_target)CXX)
     endif
+    ifeq ($(ANDROID_CCACHE_DIR), $(CCACHE_DIR))
+      ifneq ($(ANDROID_CCACHE_SIZE),)
+        ACCSIZE_RESULT := $(shell $(ccache) -M$(ANDROID_CCACHE_SIZE))
+      endif
+    endif
     ccache =
+    ACCSIZE_RESULT =
   endif
 endif
