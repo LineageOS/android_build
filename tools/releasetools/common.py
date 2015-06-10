@@ -29,6 +29,11 @@ import threading
 import time
 import zipfile
 
+try:
+  from backports import lzma;
+except ImportError:
+  lzma = None
+
 import blockimgdiff
 
 from hashlib import sha1 as sha1
@@ -1467,12 +1472,13 @@ def ComputeDifferences(diffs):
 
 class BlockDifference(object):
   def __init__(self, partition, tgt, src=None, check_first_block=False,
-               version=None, disable_imgdiff=False):
+               version=None, disable_imgdiff=False, use_lzma=False):
     self.tgt = tgt
     self.src = src
     self.partition = partition
     self.check_first_block = check_first_block
     self.disable_imgdiff = disable_imgdiff
+    self.use_lzma = use_lzma
 
     if version is None:
       version = 1
@@ -1484,7 +1490,8 @@ class BlockDifference(object):
 
     b = blockimgdiff.BlockImageDiff(tgt, src, threads=OPTIONS.worker_threads,
                                     version=self.version,
-                                    disable_imgdiff=self.disable_imgdiff)
+                                    disable_imgdiff=self.disable_imgdiff,
+                                    use_lzma=use_lzma)
     tmpdir = tempfile.mkdtemp()
     OPTIONS.tempfiles.append(tmpdir)
     self.path = os.path.join(tmpdir, partition)
@@ -1556,20 +1563,21 @@ class BlockDifference(object):
         return
 
       ranges_str = ranges.to_string_raw()
-      if self.version >= 4:
-        script.AppendExtra(('if (range_sha1("%s", "%s") == "%s" || '
-                            'block_image_verify("%s", '
-                            'package_extract_file("%s.transfer.list"), '
-                            '"%s.new.dat", "%s.patch.dat")) then') % (
-                            self.device, ranges_str, expected_sha1,
-                            self.device, partition, partition, partition))
-      elif self.version == 3:
-        script.AppendExtra(('if (range_sha1("%s", "%s") == "%s" || '
-                            'block_image_verify("%s", '
-                            'package_extract_file("%s.transfer.list"), '
-                            '"%s.new.dat", "%s.patch.dat")) then') % (
-                            self.device, ranges_str, expected_sha1,
-                            self.device, partition, partition, partition))
+      if self.version >= 3:
+        if lzma and self.use_lzma:
+          script.AppendExtra(('if (range_sha1("%s", "%s") == "%s" || '
+                              'block_image_verify("%s", '
+                              'package_extract_file("%s.transfer.list"), '
+                              '"%s.new.dat.xz", "%s.patch.dat")) then') % (
+                              self.device, ranges_str, expected_sha1,
+                              self.device, partition, partition, partition))
+        else:
+          script.AppendExtra(('if (range_sha1("%s", "%s") == "%s" || '
+                              'block_image_verify("%s", '
+                              'package_extract_file("%s.transfer.list"), '
+                              '"%s.new.dat", "%s.patch.dat")) then') % (
+                              self.device, ranges_str, expected_sha1,
+                              self.device, partition, partition, partition))
       else:
         script.AppendExtra('if range_sha1("%s", "%s") == "%s" then' % (
                            self.device, ranges_str, self.src.TotalSha1()))
@@ -1661,7 +1669,13 @@ class BlockDifference(object):
     ZipWrite(output_zip,
              '{}.transfer.list'.format(self.path),
              '{}.transfer.list'.format(self.partition))
-    ZipWrite(output_zip,
+    if lzma and self.use_lzma:
+      ZipWrite(output_zip,
+             '{}.new.dat.xz'.format(self.path),
+             '{}.new.dat.xz'.format(self.partition),
+             compress_type=zipfile.ZIP_STORED)
+    else:
+      ZipWrite(output_zip,
              '{}.new.dat'.format(self.path),
              '{}.new.dat'.format(self.partition))
     ZipWrite(output_zip,
@@ -1674,7 +1688,13 @@ class BlockDifference(object):
     else:
       code = ErrorCode.VENDOR_UPDATE_FAILURE
 
-    call = ('block_image_update("{device}", '
+    if lzma and self.use_lzma:
+      call = ('block_image_update("{device}", '
+            'package_extract_file("{partition}.transfer.list"), '
+            '"{partition}.new.dat.xz", "{partition}.patch.dat");\n'.format(
+                device=self.device, partition=self.partition))
+    else:
+      call = ('block_image_update("{device}", '
             'package_extract_file("{partition}.transfer.list"), '
             '"{partition}.new.dat", "{partition}.patch.dat") ||\n'
             '  abort("E{code}: Failed to update {partition} image.");'.format(

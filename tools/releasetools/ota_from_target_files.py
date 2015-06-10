@@ -93,6 +93,10 @@ Usage:  ota_from_target_files [flags] input_target_files output_ota_package
       file-based OTA if the target_files is older and doesn't support
       block-based OTAs.
 
+  -z  Compress the block-based image using LZMA. Results in substantial
+      space reduction at the cost of longer compress/decompress time.
+      Requires the "backports.lzma" module to be installed.
+
   -b  (--binary)  <file>
       Use the given binary as the update-binary in the output package,
       instead of the binary in the build's target_files.  Use for
@@ -181,6 +185,7 @@ OPTIONS.payload_signer_args = []
 OPTIONS.backuptool = False
 OPTIONS.override_device = 'auto'
 OPTIONS.override_prop = False
+OPTIONS.use_lzma = False
 
 def MostPopularKey(d, default):
   """Given a dict, return the key corresponding to the largest
@@ -699,7 +704,7 @@ else if get_stage("%(bcb_dev)s") == "3/3" then
     # writes incrementals to do it.
     system_tgt = GetImage("system", OPTIONS.input_tmp, OPTIONS.info_dict)
     system_tgt.ResetFileMap()
-    system_diff = common.BlockDifference("system", system_tgt, src=None)
+    system_diff = common.BlockDifference("system", system_tgt, src=None, use_lzma=OPTIONS.use_lzma)
     system_diff.WriteScript(script, output_zip)
   else:
     script.FormatPartition("/system")
@@ -732,7 +737,7 @@ else if get_stage("%(bcb_dev)s") == "3/3" then
     if block_based:
       vendor_tgt = GetImage("vendor", OPTIONS.input_tmp, OPTIONS.info_dict)
       vendor_tgt.ResetFileMap()
-      vendor_diff = common.BlockDifference("vendor", vendor_tgt)
+      vendor_diff = common.BlockDifference("vendor", vendor_tgt, use_lzma=OPTIONS.use_lzma)
       vendor_diff.WriteScript(script, output_zip)
     else:
       script.FormatPartition("/vendor")
@@ -955,7 +960,8 @@ def WriteBlockIncrementalOTAPackage(target_zip, source_zip, output_zip):
   system_diff = common.BlockDifference("system", system_tgt, system_src,
                                        check_first_block,
                                        version=blockimgdiff_version,
-                                       disable_imgdiff=disable_imgdiff)
+                                       disable_imgdiff=disable_imgdiff,
+                                       use_lzma=OPTIONS.use_lzma)
 
   if HasVendorPartition(target_zip):
     if not HasVendorPartition(source_zip):
@@ -973,7 +979,8 @@ def WriteBlockIncrementalOTAPackage(target_zip, source_zip, output_zip):
     vendor_diff = common.BlockDifference("vendor", vendor_tgt, vendor_src,
                                          check_first_block,
                                          version=blockimgdiff_version,
-                                         disable_imgdiff=disable_imgdiff)
+                                         disable_imgdiff=disable_imgdiff,
+                                         use_lzma=OPTIONS.use_lzma)
   else:
     vendor_diff = None
 
@@ -2036,12 +2043,16 @@ def main(argv):
       OPTIONS.payload_signer_args = shlex.split(a)
     elif o in ("--backup"):
       OPTIONS.backuptool = bool(a.lower() == 'true')
+    elif o in ("-z", "--use_lzma"):
+      OPTIONS.use_lzma = True
+      # Import now, and bomb out if backports.lzma isn't installed
+      from backports import lzma
     else:
       return False
     return True
 
   args = common.ParseOptions(argv, __doc__,
-                             extra_opts="b:k:i:d:wne:t:a:2o:",
+                             extra_opts="b:k:i:d:wne:t:a:2o:z",
                              extra_long_opts=[
                                  "board_config=",
                                  "package_key=",
@@ -2067,7 +2078,8 @@ def main(argv):
                                  "log_diff=",
                                  "payload_signer=",
                                  "payload_signer_args=",
-                                 "backup="
+                                 "backup=",
+                                 "use_lzma"
                              ], extra_option_handler=option_handler)
 
   if len(args) != 2:
