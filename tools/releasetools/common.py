@@ -1153,15 +1153,16 @@ class BlockDifference:
     partition = self.partition
     with open(self.path + ".transfer.list", "rb") as f:
       ZipWriteStr(output_zip, partition + ".transfer.list", f.read())
-    with open(self.path + ".new.dat", "rb") as f:
-      ZipWriteStr(output_zip, partition + ".new.dat", f.read())
+    with open(self.path + ".new.dat.xz", "rb") as f:
+      ZipWriteStr(output_zip, partition + ".new.dat.xz", f.read(),
+                         compression=zipfile.ZIP_STORED)
     with open(self.path + ".patch.dat", "rb") as f:
       ZipWriteStr(output_zip, partition + ".patch.dat", f.read(),
                          compression=zipfile.ZIP_STORED)
 
     call = (('block_image_update("%s", '
              'package_extract_file("%s.transfer.list"), '
-             '"%s.new.dat", "%s.patch.dat");\n') %
+             '"%s.new.dat.xz", "%s.patch.dat");\n') %
             (self.device, partition, partition, partition))
     script.AppendExtra(script._WordWrap(call))
 

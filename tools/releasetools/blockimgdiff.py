@@ -27,6 +27,8 @@ import sys
 import threading
 import tempfile
 
+from backports import lzma;
+
 from rangelib import *
 
 __all__ = ["EmptyImage", "DataImage", "BlockImageDiff"]
@@ -409,7 +411,7 @@ class BlockImageDiff(object):
     print("Reticulating splines...")
     diff_q = []
     patch_num = 0
-    with open(prefix + ".new.dat", "wb") as new_f:
+    with lzma.open(prefix + ".new.dat.xz", "wb") as new_f:
       for xf in self.transfers:
         if xf.style == "zero":
           pass
