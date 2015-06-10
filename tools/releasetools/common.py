@@ -29,6 +29,11 @@ import threading
 import time
 import zipfile
 
+try:
+  from backports import lzma;
+except ImportError:
+  lzma = None
+
 import blockimgdiff
 from rangelib import *
 
@@ -1100,11 +1105,12 @@ def ComputeDifferences(diffs):
 
 
 class BlockDifference:
-  def __init__(self, partition, tgt, src=None, check_first_block=False):
+  def __init__(self, partition, tgt, src=None, check_first_block=False, use_lzma=False):
     self.tgt = tgt
     self.src = src
     self.partition = partition
     self.check_first_block = check_first_block
+    self.use_lzma = use_lzma
 
     version = 1
     if OPTIONS.info_dict:
@@ -1113,7 +1119,7 @@ class BlockDifference:
           OPTIONS.info_dict.get("blockimgdiff_versions", "1").split(","))
 
     b = blockimgdiff.BlockImageDiff(tgt, src, threads=OPTIONS.worker_threads,
-                                    version=version)
+                                    version=version, use_lzma=use_lzma)
     tmpdir = tempfile.mkdtemp()
     OPTIONS.tempfiles.append(tmpdir)
     self.path = os.path.join(tmpdir, partition)
@@ -1153,15 +1159,20 @@ class BlockDifference:
     partition = self.partition
     with open(self.path + ".transfer.list", "rb") as f:
       ZipWriteStr(output_zip, partition + ".transfer.list", f.read())
-    with open(self.path + ".new.dat", "rb") as f:
-      ZipWriteStr(output_zip, partition + ".new.dat", f.read())
+    if lzma and self.use_lzma:
+      with open(self.path + ".new.dat.xz", "rb") as f:
+        ZipWriteStr(output_zip, partition + ".new.dat.xz", f.read(),
+                           compression=zipfile.ZIP_STORED)
+    else:
+      with open(self.path + ".new.dat", "rb") as f:
+        ZipWriteStr(output_zip, partition + ".new.dat", f.read())
     with open(self.path + ".patch.dat", "rb") as f:
       ZipWriteStr(output_zip, partition + ".patch.dat", f.read(),
                          compression=zipfile.ZIP_STORED)
 
     call = (('block_image_update("%s", '
              'package_extract_file("%s.transfer.list"), '
-             '"%s.new.dat", "%s.patch.dat");\n') %
+             '"%s.new.dat.xz", "%s.patch.dat");\n') %
             (self.device, partition, partition, partition))
     script.AppendExtra(script._WordWrap(call))
 
