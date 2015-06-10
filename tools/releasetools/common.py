@@ -29,6 +29,11 @@ import threading
 import time
 import zipfile
 
+try:
+  from backports import lzma;
+except ImportError:
+  lzma = None
+
 import blockimgdiff
 import rangelib
 
@@ -1215,11 +1220,12 @@ def ComputeDifferences(diffs):
 
 class BlockDifference(object):
   def __init__(self, partition, tgt, src=None, check_first_block=False,
-               version=None):
+               version=None, use_lzma=False):
     self.tgt = tgt
     self.src = src
     self.partition = partition
     self.check_first_block = check_first_block
+    self.use_lzma = use_lzma
 
     # Due to http://b/20939131, check_first_block is disabled temporarily.
     assert not self.check_first_block
@@ -1233,7 +1239,7 @@ class BlockDifference(object):
     self.version = version
 
     b = blockimgdiff.BlockImageDiff(tgt, src, threads=OPTIONS.worker_threads,
-                                    version=self.version)
+                                    version=self.version, use_lzma=use_lzma)
     tmpdir = tempfile.mkdtemp()
     OPTIONS.tempfiles.append(tmpdir)
     self.path = os.path.join(tmpdir, partition)
@@ -1265,7 +1271,15 @@ class BlockDifference(object):
       ranges = self.src.care_map.subtract(self.src.clobbered_blocks)
       ranges_str = ranges.to_string_raw()
       if self.version >= 3:
-        script.AppendExtra(('if (range_sha1("%s", "%s") == "%s" || '
+        if lzma and self.use_lzma:
+          script.AppendExtra(('if (range_sha1("%s", "%s") == "%s" || '
+                            'block_image_verify("%s", '
+                            'package_extract_file("%s.transfer.list"), '
+                            '"%s.new.dat.xz", "%s.patch.dat")) then') % (
+                            self.device, ranges_str, self.src.TotalSha1(),
+                            self.device, partition, partition, partition))
+        else:
+          script.AppendExtra(('if (range_sha1("%s", "%s") == "%s" || '
                             'block_image_verify("%s", '
                             'package_extract_file("%s.transfer.list"), '
                             '"%s.new.dat", "%s.patch.dat")) then') % (
@@ -1329,7 +1343,13 @@ class BlockDifference(object):
     ZipWrite(output_zip,
              '{}.transfer.list'.format(self.path),
              '{}.transfer.list'.format(self.partition))
-    ZipWrite(output_zip,
+    if lzma and self.use_lzma:
+      ZipWrite(output_zip,
+             '{}.new.dat.xz'.format(self.path),
+             '{}.new.dat.xz'.format(self.partition),
+             compress_type=zipfile.ZIP_STORED)
+    else:
+      ZipWrite(output_zip,
              '{}.new.dat'.format(self.path),
              '{}.new.dat'.format(self.partition))
     ZipWrite(output_zip,
@@ -1337,7 +1357,13 @@ class BlockDifference(object):
              '{}.patch.dat'.format(self.partition),
              compress_type=zipfile.ZIP_STORED)
 
-    call = ('block_image_update("{device}", '
+    if lzma and self.use_lzma:
+      call = ('block_image_update("{device}", '
+            'package_extract_file("{partition}.transfer.list"), '
+            '"{partition}.new.dat.xz", "{partition}.patch.dat");\n'.format(
+                device=self.device, partition=self.partition))
+    else:
+      call = ('block_image_update("{device}", '
             'package_extract_file("{partition}.transfer.list"), '
             '"{partition}.new.dat", "{partition}.patch.dat");\n'.format(
                 device=self.device, partition=self.partition))
