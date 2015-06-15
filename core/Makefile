@@ -890,6 +890,10 @@ ifeq ($(strip $(BOARD_KERNEL_SEPARATED_DT)),true)
   RECOVERYIMAGE_EXTRA_DEPS    := $(INSTALLED_DTIMAGE_TARGET)
 endif
 
+INTERNAL_RECOVERY_FILES := $(filter $(TARGET_RECOVERY_OUT)/%, \
+	$(foreach module, $(ALL_MODULES), $(ALL_MODULES.$(module).INSTALLED)) \
+	$(ALL_DEFAULT_INSTALLED_MODULES))
+
 # Keys authorized to sign OTA packages this build will accept.  The
 # build always uses dev-keys for this; release packaging tools will
 # substitute other keys for this one.
@@ -918,6 +922,7 @@ $(RECOVERY_INSTALL_OTA_KEYS): $(OTA_PUBLIC_KEYS) $(DUMPKEY_JAR) $(extra_keys)
 	java -jar $(DUMPKEY_JAR) $(PRIVATE_OTA_PUBLIC_KEYS) $(extra_keys) > $@
 
 $(recovery_ramdisk): $(MKBOOTFS) $(MINIGZIP) $(RECOVERYIMAGE_EXTRA_DEPS) \
+		$(INTERNAL_RECOVERY_FILES) \
 		$(INSTALLED_RAMDISK_TARGET) \
 		$(INSTALLED_BOOTIMAGE_TARGET) \
 		$(recovery_binary) \
