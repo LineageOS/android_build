@@ -22,5 +22,3 @@ PRODUCT_PACKAGES := \
     InCallUI \
     Mms \
     rild
-
-PRODUCT_COPY_FILES := \
