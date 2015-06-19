@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da36d5c6_6f7e05b0",
+        "filename": "tools/releasetools/sign_target_files_apks",
+        "patchSetId": 1
+      },
+      "lineNbr": 406,
+      "author": {
+        "id": 2936
+      },
+      "writtenOn": "2015-06-19T04:48:28Z",
+      "side": 1,
+      "message": "This is kind of weird because you\u0027ve hacked on file read functionality into a function that doesn\u0027t really say that it does that. Why not just read the key_path file in line 183 instead?",
+      "revId": "a9c8c3833cad814781abb0532be9b99dde9d6b40",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    }
+  ]
+}
