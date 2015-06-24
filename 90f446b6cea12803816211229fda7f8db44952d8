@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bff0334d_8375409b",
+        "filename": "tools/releasetools/blockimgdiff.py",
+        "patchSetId": 6
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 5503
+      },
+      "writtenOn": "2015-06-24T23:01:05Z",
+      "side": 1,
+      "message": "This is apparently not portable/standardized yet.  On Debian 8.0:\n\nPython 2.7.9 (default, Mar  1 2015, 12:57:24) \n[GCC 4.9.2] on linux2\nType \"help\", \"copyright\", \"credits\" or \"license\" for more information.\n\u003e\u003e\u003e from backports import lzma\nTraceback (most recent call last):\n  File \"\u003cstdin\u003e\", line 1, in \u003cmodule\u003e\nImportError: No module named backports\n\u003e\u003e\u003e import lzma\n\u003e\u003e\u003e",
+      "revId": "90f446b6cea12803816211229fda7f8db44952d8",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bff0334d_a35f240d",
+        "filename": "tools/releasetools/common.py",
+        "patchSetId": 6
+      },
+      "lineNbr": 1165,
+      "author": {
+        "id": 5503
+      },
+      "writtenOn": "2015-06-24T23:01:05Z",
+      "side": 1,
+      "message": "What strange magic is this? Automatic compression based on file extension?",
+      "revId": "90f446b6cea12803816211229fda7f8db44952d8",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    }
+  ]
+}
