@@ -185,7 +185,7 @@ def AddUserdata(output_zip, prefix="IMAGES/"):
   assert succ, "build userdata.img image failed"
 
   common.CheckSize(img.name, "userdata.img", OPTIONS.info_dict)
-  output_zip.write(img.name, prefix + "userdata.img")
+  common.ZipWrite(output_zip, img.name, prefix + "userdata.img")
   img.close()
   os.rmdir(user_dir)
   os.rmdir(temp_dir)
@@ -269,7 +269,7 @@ def AddCache(output_zip, prefix="IMAGES/"):
   assert succ, "build cache.img image failed"
 
   common.CheckSize(img.name, "cache.img", OPTIONS.info_dict)
-  output_zip.write(img.name, prefix + "cache.img")
+  common.ZipWrite(output_zip, img.name, prefix + "cache.img")
   img.close()
   os.rmdir(user_dir)
   os.rmdir(temp_dir)
