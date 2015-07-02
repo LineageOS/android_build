@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "7ffa3b31_013b6cd1",
+        "filename": "tools/releasetools/common.py",
+        "patchSetId": 8
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 5503
+      },
+      "writtenOn": "2015-07-02T03:38:59Z",
+      "side": 1,
+      "message": "Don\u0027t think the \u0027pass\u0027 is needed here.",
+      "revId": "1ffe93ee513408e46a0241cc65293935ada2b624",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7ffa3b31_4121749f",
         "filename": "tools/releasetools/ota_from_target_files",
         "patchSetId": 8
