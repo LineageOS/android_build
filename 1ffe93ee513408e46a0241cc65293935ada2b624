@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7ffa3b31_4121749f",
+        "filename": "tools/releasetools/ota_from_target_files",
+        "patchSetId": 8
+      },
+      "lineNbr": 624,
+      "author": {
+        "id": 5503
+      },
+      "writtenOn": "2015-07-02T03:36:24Z",
+      "side": 1,
+      "message": "There are 4 instances of common.BlockDifference().  Two each for system and vendor, and two each for full vs. incremental.  We should probably at least get the full/vendor one about 30-ish lines below here.  Probably should get the incremental ones too, just for good measure.",
+      "revId": "1ffe93ee513408e46a0241cc65293935ada2b624",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    }
+  ]
+}
