@@ -16,6 +16,24 @@
       "revId": "826f15641cd4fa8a885a8ec10eba937c8d751a7a",
       "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7ffa3b31_67a5a0b5",
+        "filename": "core/qcom_target.mk",
+        "patchSetId": 1
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 3962
+      },
+      "writtenOn": "2015-07-03T10:42:05Z",
+      "side": 1,
+      "message": "Anything that declares BOARD_USES_QCOM_HARDWARE should be building it, but the ION flag in it needs needs to be set on everything BUT msm8916. Also if msm8974 is declared but BOARD_USES_QCOM_HARDWARE isn\u0027t, then we don\u0027t need that ION flag too. It\u0027s a nice little mess.",
+      "parentUuid": "7ffa3b31_47b504ee",
+      "revId": "826f15641cd4fa8a885a8ec10eba937c8d751a7a",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
     }
   ]
 }
