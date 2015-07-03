@@ -34,6 +34,24 @@
       "revId": "826f15641cd4fa8a885a8ec10eba937c8d751a7a",
       "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7ffa3b31_07949c43",
+        "filename": "core/qcom_target.mk",
+        "patchSetId": 1
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 6334
+      },
+      "writtenOn": "2015-07-03T10:44:12Z",
+      "side": 1,
+      "message": "so basically this needs to be set for both sides of the coin (QCOM_HARDWARE true and false). Ion flag is still being handled in the key master mkfile",
+      "parentUuid": "7ffa3b31_67a5a0b5",
+      "revId": "826f15641cd4fa8a885a8ec10eba937c8d751a7a",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
     }
   ]
 }
