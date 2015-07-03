@@ -13,6 +13,14 @@ endef
 define loc-api-set-path-variant
 $(call project-set-path-variant,loc-api,TARGET_LOC_API_PATH,$(1))
 endef
+define keymaster-set-path-variant
+$(call project-set-path-variant,keymaster,TARGET_KEYMASTER_PATH,$(1))
+endef
+
+# Handle qcom/keymaster opt-in
+ifneq ($(filter msm8960 msm8974 msm8226 msm8610 msm8084 apq8084 msm8916 msm8992 msm8994,$(TARGET_BOARD_PLATFORM)),)
+TARGET_ENABLE_KEYMASTER := true
+endif
 
 ifeq ($(BOARD_USES_QCOM_HARDWARE),true)
 
@@ -60,6 +68,9 @@ $(call qcom-set-path-variant,SENSORS,sensors)
 $(call ril-set-path-variant,ril)
 $(call loc-api-set-path-variant,vendor/qcom/opensource/location)
 $(call gps-hal-set-path-variant,hardware/qcom/gps)
+ifeq ($(TARGET_ENABLE_KEYMASTER),true)
+$(call keymaster-set-path-variant,hardware/qcom/keymaster)
+endif
 else
 $(call project-set-path,qcom-audio,hardware/qcom/audio/default)
 $(call qcom-set-path-variant,CAMERA,camera)
@@ -70,4 +81,7 @@ $(call qcom-set-path-variant,SENSORS,sensors)
 $(call ril-set-path-variant,ril)
 $(call loc-api-set-path-variant,vendor/qcom/opensource/location)
 $(call gps-hal-set-path-variant,hardware/qcom/gps)
+ifeq ($(TARGET_ENABLE_KEYMASTER),true)
+$(call keymaster-set-path-variant,hardware/qcom/keymaster)
+endif
 endif
