@@ -217,7 +217,8 @@ def AddUserdataExtra(output_zip):
   image_props = build_image.ImagePropFromGlobalDict(OPTIONS.info_dict,
                                                   "data_extra")
   # If no userdataextra_size is provided for extfs, skip userdata_extra.img.
-  if (image_props.get("fs_type", "").startswith("ext") and
+  if ((image_props.get("fs_type", "").startswith("ext") or
+      image_props.get("fs_type", "").startswith("f2fs")) and
       not image_props.get("partition_size")):
     return
 
