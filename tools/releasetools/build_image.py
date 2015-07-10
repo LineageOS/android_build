@@ -327,6 +327,7 @@ def ImagePropFromGlobalDict(glob_dict, mount_point):
   d["mount_point"] = mount_point
   if mount_point == "system":
     copy_prop("fs_type", "fs_type")
+    copy_prop("system_fs_type", "fs_type")
     copy_prop("system_size", "partition_size")
     copy_prop("system_journal_size", "journal_size")
     copy_prop("system_verity_block_device", "verity_block_device")
