@@ -194,7 +194,7 @@ while(True):
 
 # Get all commits for a specified query
 def fetch_query(query):
-    url = 'http://review.cyanogenmod.org/changes/?q=%s' % query
+    url = 'http://review.cyanogenmod.org/#/q/%s' % query
     if args.verbose:
         print('Fetching all commits using query: %s\n' % query)
     f = urllib.request.urlopen(url)
