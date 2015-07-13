@@ -488,6 +488,9 @@ endif
 # Rules for QCOM targets
 include $(BUILD_SYSTEM)/qcom_target.mk
 
+# Rules for aarch64 targets
+include $(BUILD_SYSTEM)/aarch64_target.mk
+
 # ###############################################################
 # Set up final options.
 # ###############################################################
