@@ -36,6 +36,11 @@ ifeq ($(BOARD_USES_QCOM_HARDWARE),true)
         qcom_flags += -DHAS_EXTRA_FLAC_METADATA
     endif
 
+    # msm8994 chips need errata fixes
+    ifneq ($(filter msm8994,$(TARGET_BOARD_PLATFORM)),)
+        TARGET_CPU_CORTEX_A53 := true
+    endif
+
     TARGET_GLOBAL_CFLAGS += $(qcom_flags)
     TARGET_GLOBAL_CPPFLAGS += $(qcom_flags)
     CLANG_TARGET_GLOBAL_CFLAGS += $(qcom_flags)
