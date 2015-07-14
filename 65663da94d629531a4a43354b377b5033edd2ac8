@@ -90,6 +90,24 @@
     },
     {
       "key": {
+        "uuid": "ff0f0b1f_e93741e3",
+        "filename": "core/aarch64_target.mk",
+        "patchSetId": 4
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 3962
+      },
+      "writtenOn": "2015-07-14T15:46:03Z",
+      "side": 1,
+      "message": "Oh yeah, it definitely won\u0027t. Kyro cores.",
+      "parentUuid": "ff0f0b1f_292659b9",
+      "revId": "65663da94d629531a4a43354b377b5033edd2ac8",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ff0f0b1f_290d3937",
         "filename": "core/aarch64_target.mk",
         "patchSetId": 4
