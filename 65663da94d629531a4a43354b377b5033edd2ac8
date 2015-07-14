@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ff0f0b1f_6903310f",
+        "filename": "core/aarch64_target.mk",
+        "patchSetId": 4
+      },
+      "lineNbr": 3,
+      "author": {
+        "id": 2195
+      },
+      "writtenOn": "2015-07-14T15:36:21Z",
+      "side": 1,
+      "message": "true?\n\nGuessing you wanted this to be arm64",
+      "revId": "65663da94d629531a4a43354b377b5033edd2ac8",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ff0f0b1f_49086d27",
+        "filename": "core/aarch64_target.mk",
+        "patchSetId": 4
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 2195
+      },
+      "writtenOn": "2015-07-14T15:36:21Z",
+      "side": 1,
+      "message": "8992/8994 would be more clearer, 8994 might not need it.",
+      "revId": "65663da94d629531a4a43354b377b5033edd2ac8",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ff0f0b1f_290d3937",
+        "filename": "core/aarch64_target.mk",
+        "patchSetId": 4
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 2195
+      },
+      "writtenOn": "2015-07-14T15:36:21Z",
+      "side": 1,
+      "message": "This isn\u0027t a standard build variable, fwiw.",
+      "revId": "65663da94d629531a4a43354b377b5033edd2ac8",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    }
+  ]
+}
