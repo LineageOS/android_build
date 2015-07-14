@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "ff0f0b1f_e90e2131",
+        "filename": "core/aarch64_target.mk",
+        "patchSetId": 4
+      },
+      "lineNbr": 3,
+      "author": {
+        "id": 3962
+      },
+      "writtenOn": "2015-07-14T15:41:24Z",
+      "side": 1,
+      "message": "Wow, was I really that tired when I wrote this? :(",
+      "parentUuid": "ff0f0b1f_6903310f",
+      "revId": "65663da94d629531a4a43354b377b5033edd2ac8",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ff0f0b1f_49086d27",
         "filename": "core/aarch64_target.mk",
         "patchSetId": 4
@@ -36,6 +54,24 @@
     },
     {
       "key": {
+        "uuid": "ff0f0b1f_c91b5d71",
+        "filename": "core/aarch64_target.mk",
+        "patchSetId": 4
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 3962
+      },
+      "writtenOn": "2015-07-14T15:41:24Z",
+      "side": 1,
+      "message": "8994 definitely needs it, more so than 8992 since 8992 chips are newer than 8994. The errata was *technically* fixed in later batches of a53\u0027s.",
+      "parentUuid": "ff0f0b1f_49086d27",
+      "revId": "65663da94d629531a4a43354b377b5033edd2ac8",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ff0f0b1f_290d3937",
         "filename": "core/aarch64_target.mk",
         "patchSetId": 4
@@ -47,6 +83,24 @@
       "writtenOn": "2015-07-14T15:36:21Z",
       "side": 1,
       "message": "This isn\u0027t a standard build variable, fwiw.",
+      "revId": "65663da94d629531a4a43354b377b5033edd2ac8",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ff0f0b1f_a9182975",
+        "filename": "core/aarch64_target.mk",
+        "patchSetId": 4
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 3962
+      },
+      "writtenOn": "2015-07-14T15:41:24Z",
+      "side": 1,
+      "message": "I know, but all the exynos devices that I looked at seem to set it so I just used it.",
+      "parentUuid": "ff0f0b1f_290d3937",
       "revId": "65663da94d629531a4a43354b377b5033edd2ac8",
       "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
       "unresolved": false
