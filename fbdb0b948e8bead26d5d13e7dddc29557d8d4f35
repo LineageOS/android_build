@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ff0f0b1f_090dd53d",
+        "filename": "core/combo/arch/arm64/armv8-a.mk",
+        "patchSetId": 6
+      },
+      "lineNbr": 3,
+      "author": {
+        "id": 6334
+      },
+      "writtenOn": "2015-07-14T23:29:08Z",
+      "side": 1,
+      "message": "According to the commits in gcc these are workarounds, may be better to label it as such for future reference. \u0027Fix\u0027 isn\u0027t technically always a \u0027workaround\u0027",
+      "revId": "fbdb0b948e8bead26d5d13e7dddc29557d8d4f35",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    }
+  ]
+}
