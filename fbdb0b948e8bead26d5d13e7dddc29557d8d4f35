@@ -16,6 +16,29 @@
       "revId": "fbdb0b948e8bead26d5d13e7dddc29557d8d4f35",
       "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ff0f0b1f_8fd1e55a",
+        "filename": "core/combo/arch/arm64/armv8-a.mk",
+        "patchSetId": 6
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 2936
+      },
+      "writtenOn": "2015-07-15T05:44:03Z",
+      "side": 1,
+      "message": "8916 is A53",
+      "range": {
+        "startLine": 10,
+        "startChar": 35,
+        "endLine": 10,
+        "endChar": 38
+      },
+      "revId": "fbdb0b948e8bead26d5d13e7dddc29557d8d4f35",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
     }
   ]
 }
