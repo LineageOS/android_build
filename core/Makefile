@@ -815,6 +815,9 @@ recovery_resources_common := $(call project-path-for,recovery)/res
 
 # Set recovery_density to the density bucket of the device.
 recovery_density := unknown
+ifneq (,$(TARGET_RECOVERY_DENSITY))
+recovery_density := $(filter %dpi,$(TARGET_RECOVERY_DENSITY))
+else
 ifneq (,$(PRODUCT_AAPT_PREF_CONFIG))
 ifeq ($(PRODUCT_AAPT_PREF_CONFIG),560dpi)
 recovery_density := xxxhdpi
@@ -825,6 +828,7 @@ endif
 else
 # Otherwise, use the default medium density.
 recovery_densities := mdpi
+endif
 endif
 
 ifneq (,$(wildcard $(recovery_resources_common)-$(recovery_density)))
