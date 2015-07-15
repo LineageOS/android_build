@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "ff0f0b1f_41a961dd",
+        "filename": "core/combo/arch/arm64/armv8-a.mk",
+        "patchSetId": 8
+      },
+      "lineNbr": 4,
+      "author": {
+        "id": 3962
+      },
+      "writtenOn": "2015-07-15T11:22:29Z",
+      "side": 1,
+      "message": "I\u0027ll add it in a sec, stupid laptop is still trying to sync :/",
+      "parentUuid": "ff0f0b1f_0166c9ee",
+      "revId": "207629ffa7a305f882f68ccf89e32c6d81076341",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ff0f0b1f_afeca9f3",
         "filename": "core/combo/arch/arm64/armv8-a.mk",
         "patchSetId": 8
@@ -48,6 +66,24 @@
       "side": 1,
       "message": "8939 is referred to as 8916 so that is all we need.\n\nEither way, I agree with you and leaving it to CPU variant only would do.\nIf needed, the exynos devices could set this flag to not have any side effects from setting the  cpu variant.",
       "parentUuid": "ff0f0b1f_afeca9f3",
+      "revId": "207629ffa7a305f882f68ccf89e32c6d81076341",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ff0f0b1f_21ae6de7",
+        "filename": "core/combo/arch/arm64/armv8-a.mk",
+        "patchSetId": 8
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 3962
+      },
+      "writtenOn": "2015-07-15T11:22:29Z",
+      "side": 1,
+      "message": "Exynos can already set it without a problem so yeah, lets just remove the fall back, this is getting ugly.",
+      "parentUuid": "ff0f0b1f_2169cdbd",
       "revId": "207629ffa7a305f882f68ccf89e32c6d81076341",
       "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
       "unresolved": false
