@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ff0f0b1f_2f453918",
+        "filename": "core/combo/arch/arm64/armv8-a.mk",
+        "patchSetId": 7
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 6334
+      },
+      "writtenOn": "2015-07-15T05:46:00Z",
+      "side": 1,
+      "message": "8916 and 8939 should go here as well correct?",
+      "revId": "65280d912ba1637f63dee31dab73580f18da3834",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    }
+  ]
+}
