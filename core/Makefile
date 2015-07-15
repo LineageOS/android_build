@@ -1941,6 +1941,9 @@ recovery_ramdisk := $(PRODUCT_OUT)/ramdisk-recovery.img
 recovery_uncompressed_ramdisk := $(PRODUCT_OUT)/ramdisk-recovery.cpio
 recovery_resources_common := $(call include-path-for, recovery)/res
 
+ifneq (,$(TARGET_RECOVERY_DENSITY))
+recovery_density := $(filter %dpi,$(TARGET_RECOVERY_DENSITY))
+else
 # Set recovery_density to a density bucket based on TARGET_SCREEN_DENSITY, PRODUCT_AAPT_PREF_CONFIG,
 # or mdpi, in order of preference. We support both specific buckets (e.g. xdpi) and numbers,
 # which get remapped to a bucket.
@@ -1955,6 +1958,7 @@ recovery_density := $(strip \
        $(if $(filter $(shell echo $$(($(recovery_density_value) >= 400))),1),xxhdpi),\
        $(if $(filter $(shell echo $$(($(recovery_density_value) >= 280))),1),xhdpi),\
        $(if $(filter $(shell echo $$(($(recovery_density_value) >= 200))),1),hdpi,mdpi)))
+endif
 endif
 
 ifneq (,$(wildcard $(recovery_resources_common)-$(recovery_density)))
