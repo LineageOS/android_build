@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ff0f0b1f_64d0f3ca",
+        "filename": "core/main.mk",
+        "patchSetId": 3
+      },
+      "lineNbr": 212,
+      "author": {
+        "id": 2936
+      },
+      "writtenOn": "2015-07-16T00:59:02Z",
+      "side": 0,
+      "message": "This line change doesn\u0027t seem necessary.",
+      "revId": "1e8eaf9d00c4d9db216c8d1dd07d4446a909bae6",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    }
+  ]
+}
