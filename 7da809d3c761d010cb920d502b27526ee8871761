@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ff0f0b1f_f76f1790",
+        "filename": "core/combo/arch/arm64/armv8-a.mk",
+        "patchSetId": 12
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 13409
+      },
+      "writtenOn": "2015-07-16T03:27:50Z",
+      "side": 1,
+      "message": "shouldn\u0027t this be ?\u003d in the case that a device has force set this to false for some reason?",
+      "revId": "7da809d3c761d010cb920d502b27526ee8871761",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    }
+  ]
+}
