@@ -366,6 +366,11 @@ for changeps in args.change_number:
                 # audio and media are different from display
                 elif split_path[2] == 'audio' or split_path[2] == 'media':
                     project_path += '/default'
+        elif project_path.startswith('hardware/ril'):
+            project_path = project_path.rstrip('-caf')
+            if project_branch.split('-')[-1] == 'caf':
+                project_path += '-caf'
+
     elif args.ignore_missing:
         print('WARNING: Skipping %d since there is no project directory for: %s\n' % (change_number, project_name))
         continue;
