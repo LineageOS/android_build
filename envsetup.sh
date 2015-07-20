@@ -2446,13 +2446,16 @@ EOF
         rm -f $OUT/.chkfileperm.sh
     fi
 
+    eval "LOCS=($LOC)"
+
     stop_n_start=false
-    for FILE in $LOC; do
+    for FILE in $LOCS; do
         # Make sure file is in $OUT/system or $OUT/data
         case $FILE in
-            $OUT/system/*|$OUT/data/*)
+            ${OUT}/system/*|/data/*)
                 # Get target file name (i.e. /system/bin/adb)
                 TARGET=$(echo $FILE | sed "s#$OUT##")
+                echo found target: $TARGET
             ;;
             *) continue ;;
         esac
@@ -2477,7 +2480,7 @@ EOF
                 fi
                 adb shell restorecon "$TARGET"
             ;;
-            /system/priv-app/SystemUI/SystemUI.apk|/system/framework/*)
+            {/system/}priv-app/SystemUI/SystemUI.apk|framework/*)
                 # Only need to stop services once
                 if ! $stop_n_start; then
                     adb shell stop
