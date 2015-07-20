@@ -2446,13 +2446,22 @@ EOF
         rm -f $OUT/.chkfileperm.sh
     fi
 
+    # strip new lines
+    LOC=$(printf "${LOC}" | tr -d '\n')
+
+    # strip leading and trailing whitespace
+    LOC="$(printf "${LOC}" | sed -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//')"
+
     stop_n_start=false
     for FILE in $LOC; do
         # Make sure file is in $OUT/system or $OUT/data
         case $FILE in
-            $OUT/system/*|$OUT/data/*)
+            $OUT/system/*)
                 # Get target file name (i.e. /system/bin/adb)
-                TARGET=$(echo $FILE | sed "s#$OUT##")
+                TARGET=$(echo $FILE | sed "#$OUT##")
+            ;;
+            $OUT/data/*)
+                TARGET=$(echo $FILE | sed "#$OUT##")
             ;;
             *) continue ;;
         esac
@@ -2477,7 +2486,8 @@ EOF
                 fi
                 adb shell restorecon "$TARGET"
             ;;
-            /system/priv-app/SystemUI/SystemUI.apk|/system/framework/*)
+
+            /system/priv-app/SystemUI/SystemUI.apk)
                 # Only need to stop services once
                 if ! $stop_n_start; then
                     adb shell stop
@@ -2486,6 +2496,17 @@ EOF
                 echo "Pushing: $TARGET"
                 adb push $FILE $TARGET
             ;;
+
+            /system/framework/*)
+                # Only need to stop services once
+                if ! $stop_n_start; then
+                    adb shell stop
+                    stop_n_start=true
+                fi
+                echo "Pushing: $TARGET"
+                adb push $FILE $TARGET
+            ;;
+
             *)
                 echo "Pushing: $TARGET"
                 adb push $FILE $TARGET
