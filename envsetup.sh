@@ -2446,13 +2446,20 @@ EOF
         rm -f $OUT/.chkfileperm.sh
     fi
 
+    # strip leading and trailing whitespace
+    LOC="$(echo -e "${LOC}" | sed -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//')"
+
     stop_n_start=false
     for FILE in $LOC; do
+
         # Make sure file is in $OUT/system or $OUT/data
         case $FILE in
-            $OUT/system/*|$OUT/data/*)
+            $OUT/system/*)
                 # Get target file name (i.e. /system/bin/adb)
-                TARGET=$(echo $FILE | sed "s#$OUT##")
+                TARGET=$(echo $FILE | sed "#$OUT##")
+            ;;
+            $OUT/data/*)
+                TARGET=$(echo $FILE | sed "#$OUT##")
             ;;
             *) continue ;;
         esac
