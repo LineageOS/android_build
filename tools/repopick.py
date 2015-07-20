@@ -281,6 +281,10 @@ if __name__ == '__main__':
                     # audio and media are different from display
                     elif split_path[2] == 'audio' or split_path[2] == 'media':
                         project_path += '/default'
+            elif project_path.startswith('hardware/ril'):
+                project_path = project_path.rstrip('-caf')
+                if item["branch"].split('-')[-1] == 'caf':
+                    project_path += '-caf'
         elif args.ignore_missing:
             print('WARNING: Skipping {0} since there is no project directory for: {1}\n'.format(item['id'], item['project']))
             continue
