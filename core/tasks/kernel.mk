@@ -55,7 +55,11 @@ else
   ifeq ($(TARGET_USES_UNCOMPRESSED_KERNEL),true)
     TARGET_PREBUILT_INT_KERNEL_TYPE := Image
   else
-    TARGET_PREBUILT_INT_KERNEL_TYPE := zImage
+    ifeq ($(TARGET_KERNEL_ARCH),arm64)
+      TARGET_PREBUILT_INT_KERNEL_TYPE := Image.gz
+    else
+      TARGET_PREBUILT_INT_KERNEL_TYPE := zImage
+    endif
   endif
 endif
 
