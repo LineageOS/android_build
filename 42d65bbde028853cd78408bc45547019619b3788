@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf091321_f83706e3",
+        "filename": "envsetup.sh",
+        "patchSetId": 9
+      },
+      "lineNbr": 2484,
+      "author": {
+        "id": 9528
+      },
+      "writtenOn": "2015-07-30T21:34:36Z",
+      "side": 1,
+      "message": "wildcard*",
+      "range": {
+        "startLine": 2484,
+        "startChar": 52,
+        "endLine": 2484,
+        "endChar": 59
+      },
+      "revId": "42d65bbde028853cd78408bc45547019619b3788",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    }
+  ]
+}
