@@ -208,7 +208,7 @@ def fetch_query(query):
     if matchObj:
         sys.stderr.write('ERROR: Query %s was not found on the server\n' % query)
         sys.exit(1)
-    d = re.sub(r'\[(.*)\]', r'\1', d)
+    #d = re.sub(r'\[(.*)\]', r'\1', d)
     if args.verbose:
         print('Result from request:\n' + d)
 
