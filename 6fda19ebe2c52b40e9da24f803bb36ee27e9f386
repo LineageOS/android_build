@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9f0e0f27_e0f4f8d1",
+        "filename": "tools/repopick.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 9690
+      },
+      "writtenOn": "2015-08-05T04:24:37Z",
+      "side": 1,
+      "message": "edge case: test@test is a valid username.\n\nI suggest using the built in url parser, which *should* already accommodate for it",
+      "revId": "6fda19ebe2c52b40e9da24f803bb36ee27e9f386",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9f0e0f27_40272466",
+        "filename": "tools/repopick.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 9690
+      },
+      "writtenOn": "2015-08-05T04:24:37Z",
+      "side": 1,
+      "message": "ssh config support? don\u0027t know about you, but I don\u0027t put ssh://cybojenix@review.cyanogenmod.org/CyanogenMod/android_build\n\nI use ssh://cyanogenmod_review/CyanogenMod/android_build",
+      "revId": "6fda19ebe2c52b40e9da24f803bb36ee27e9f386",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    }
+  ]
+}
