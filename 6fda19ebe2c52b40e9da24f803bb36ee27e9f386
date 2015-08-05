@@ -33,6 +33,120 @@
       "revId": "6fda19ebe2c52b40e9da24f803bb36ee27e9f386",
       "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9f0e0f27_007dac1b",
+        "filename": "tools/repopick.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 9690
+      },
+      "writtenOn": "2015-08-05T05:21:54Z",
+      "side": 1,
+      "message": "out.splitlines()\n\nwhat kind of fucked up api doesn\u0027t return complete json responses. Oh wait, Google made this.",
+      "revId": "6fda19ebe2c52b40e9da24f803bb36ee27e9f386",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9f0e0f27_00a24c9b",
+        "filename": "tools/repopick.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 9690
+      },
+      "writtenOn": "2015-08-05T05:21:54Z",
+      "side": 1,
+      "message": "since this is a screwed up response, I\u0027d be tempted to catch the possible ValueError that can be raised here, due to malformed input.",
+      "revId": "6fda19ebe2c52b40e9da24f803bb36ee27e9f386",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9f0e0f27_2088b01d",
+        "filename": "tools/repopick.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 9690
+      },
+      "writtenOn": "2015-08-05T05:21:54Z",
+      "side": 1,
+      "message": "you shouldn\u0027t need to mark these as unicode. if you do, there\u0027s a bug elsewhere.",
+      "revId": "6fda19ebe2c52b40e9da24f803bb36ee27e9f386",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9f0e0f27_e09e3853",
+        "filename": "tools/repopick.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 82,
+      "author": {
+        "id": 9690
+      },
+      "writtenOn": "2015-08-05T05:21:54Z",
+      "side": 1,
+      "message": "do not pretend to be something you are not.\n\n\u0027ssh://{0}/{1}\u0027.format(remote_url.lstrip(\u0027ssh://\u0027), data[\u0027project\u0027])",
+      "revId": "6fda19ebe2c52b40e9da24f803bb36ee27e9f386",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9f0e0f27_00cb6c53",
+        "filename": "tools/repopick.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 98,
+      "author": {
+        "id": 9690
+      },
+      "writtenOn": "2015-08-05T05:21:54Z",
+      "side": 1,
+      "message": "debugging",
+      "range": {
+        "startLine": 98,
+        "startChar": 13,
+        "endLine": 98,
+        "endChar": 14
+      },
+      "revId": "6fda19ebe2c52b40e9da24f803bb36ee27e9f386",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9f0e0f27_e0c75845",
+        "filename": "tools/repopick.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 110,
+      "author": {
+        "id": 9690
+      },
+      "writtenOn": "2015-08-05T05:21:54Z",
+      "side": 1,
+      "message": "since \u0027@\u0027 isn\u0027t guaranteed for ssh, add an argument",
+      "range": {
+        "startLine": 110,
+        "startChar": 10,
+        "endLine": 110,
+        "endChar": 11
+      },
+      "revId": "6fda19ebe2c52b40e9da24f803bb36ee27e9f386",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
     }
   ]
 }
