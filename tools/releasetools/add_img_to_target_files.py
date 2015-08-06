@@ -252,7 +252,7 @@ def AddUserdataExtra(output_zip, prefix="IMAGES/"):
 
   # Disable size check since this fetches original data partition size
   #common.CheckSize(img.name, "userdata_extra.img", OPTIONS.info_dict)
-  output_zip.write(img.name, "userdata_%s.img" % extra_name)
+  output_zip.write(img.name, prefix + "userdata_%s.img" % extra_name)
   img.close()
   os.rmdir(user_dir)
   os.rmdir(temp_dir)
