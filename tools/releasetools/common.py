@@ -67,6 +67,10 @@ OPTIONS.device_specific = None
 OPTIONS.extras = {}
 OPTIONS.info_dict = None
 
+# Stash size cannot exceed cache_size * threshold.
+OPTIONS.cache_size = None
+OPTIONS.stash_threshold = 0.8
+
 
 # Values for "certificate" in apkcerts that mean special things.
 SPECIAL_CERT_STRINGS = ("PRESIGNED", "EXTERNAL")
