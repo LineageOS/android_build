@@ -68,6 +68,10 @@ OPTIONS = Options()
 # Values for "certificate" in apkcerts that mean special things.
 SPECIAL_CERT_STRINGS = ("PRESIGNED", "EXTERNAL")
 
+# Stash size cannot exceed cache_size * threshold.
+OPTIONS.cache_size = None
+OPTIONS.stash_threshold = 0.8
+
 
 class ExternalError(RuntimeError):
   pass
