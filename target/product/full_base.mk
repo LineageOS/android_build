@@ -31,6 +31,10 @@ PRODUCT_PROPERTY_OVERRIDES := \
 PRODUCT_LOCALES := en_US
 
 # Get some sounds
+ifeq ($(TARGET_BOARD_PLATFORM),omap4)
+# use 44.1 kHz UI sounds, needs to be called before AllAudio.mk
+$(call inherit-product-if-exists, frameworks/base/data/sounds/AudioPackage13.mk)
+endif
 $(call inherit-product-if-exists, frameworks/base/data/sounds/AllAudio.mk)
 
 # Get the TTS language packs
