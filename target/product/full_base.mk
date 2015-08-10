@@ -31,7 +31,12 @@ PRODUCT_PROPERTY_OVERRIDES := \
 PRODUCT_LOCALES := en_US
 
 # Get some sounds
+ifneq ($(TARGET_BOARD_PLATFORM),omap4)
 $(call inherit-product-if-exists, frameworks/base/data/sounds/AllAudio.mk)
+else
+# use 44.1 kHz UI sounds
+$(call inherit-product-if-exists, frameworks/base/data/sounds/AudioPackage13.mk)
+endif
 
 # Get the TTS language packs
 $(call inherit-product-if-exists, external/svox/pico/lang/all_pico_languages.mk)
