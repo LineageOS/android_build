@@ -100,6 +100,8 @@ elif boot_partition_type == "bml":
     contents += "\tdelete(\"/tmp/boot.img\"));\n"
 contents += "mount(\"%s\", \"EMMC\", \"%s\", \"system\");\n" % (system_partition_type, system_partition)
 contents += "package_extract_dir(\"system\", \"/system\");\n"
+contents += "ui_print(\"Setting permissions...\");\n"
+contents += "set_metadata_recursive(\"/system/lib/modules\", \"uid\", 0, \"gid\", 0, \"dmode\", 0755, \"fmode\",0644, \"capabilities\", 0x0, \"selabel\", \"u:object_r:system_file:s0\");\n"
 contents += "unmount(\"/system\");\n"
 contents += "ui_print(\" \");\n"
 contents += "ui_print(\"Done!\");"
