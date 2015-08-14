@@ -25,10 +25,12 @@ print_build_config_vars := \
   BUILD_ID \
   OUT_DIR
 
+ifneq (,$(filter true, $(CYNGN_TARGET) $(EXTERNAL_CLEAN_TARGET)))
 ifeq ($(CYNGN_TARGET),true)
 print_build_config_vars += \
   CYNGN_TARGET \
   CYNGN_FEATURES
+endif
 endif
 
 ifeq ($(TARGET_BUILD_PDK),true)
