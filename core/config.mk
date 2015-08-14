@@ -488,6 +488,9 @@ endif
 # Rules for QCOM targets
 include $(BUILD_SYSTEM)/qcom_target.mk
 
+# Rules for Exynos targets
+include $(BUILD_SYSTEM)/exynos_target.mk
+
 # ###############################################################
 # Set up final options.
 # ###############################################################
