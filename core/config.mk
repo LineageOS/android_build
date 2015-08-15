@@ -370,7 +370,13 @@ endif
 # ---------------------------------------------------------------
 # Generic tools.
 
+ANDROID_HOST_LEX := $(strip $(ANDROID_HOST_LEX))
+ifeq (,$(ANDROID_HOST_LEX))
 LEX := prebuilts/misc/$(BUILD_OS)-$(HOST_PREBUILT_ARCH)/flex/flex-2.5.39
+else
+LEX := $(ANDROID_HOST_LEX)
+$(warning Using '$(LEX)' instead of prebuilt flex-2.5.39.)
+endif
 # The default PKGDATADIR built in the prebuilt bison is a relative path
 # external/bison/data.
 # To run bison from elsewhere you need to set up enviromental variable
