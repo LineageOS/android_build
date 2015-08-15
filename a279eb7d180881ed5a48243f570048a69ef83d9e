@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7f231b9d_9150eb34",
+        "filename": "core/combo/arch/arm/armv7-a-neon.mk",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 2936
+      },
+      "writtenOn": "2015-08-15T13:12:36Z",
+      "side": 1,
+      "message": "What\u0027s up with the newline here?",
+      "revId": "a279eb7d180881ed5a48243f570048a69ef83d9e",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    }
+  ]
+}
