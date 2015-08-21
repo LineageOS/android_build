@@ -254,6 +254,12 @@ if __name__ == '__main__':
             else:
                 print('Commit already merged. Skipping the cherry pick.\nUse -f to force this pick.')
                 continue
+        if item['status'] == 'ABANDONED':
+            if args.force:
+                print('!! Force-picking an abandoned commit !!\n')
+            else:
+                print('Commit has been abandoned, Skipping the cherry-pick !\nUse -f to force this pick.')
+                continue
 
         # Convert the project name to a project path
         #   - check that the project path exists
