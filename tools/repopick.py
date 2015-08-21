@@ -139,7 +139,7 @@ if __name__ == '__main__':
     parser.add_argument('-b', '--auto-branch', action='store_true', help='shortcut to "--start-branch auto --abandon-first --ignore-missing"')
     parser.add_argument('-q', '--quiet', action='store_true', help='print as little as possible')
     parser.add_argument('-v', '--verbose', action='store_true', help='print extra information to aid in debug')
-    parser.add_argument('-f', '--force', action='store_true', help='force cherry pick even if commit has been merged')
+    parser.add_argument('-f', '--force', action='store_true', help='force cherry pick even if commit has been merged or abandoned')
     parser.add_argument('-p', '--pull', action='store_true', help='execute pull instead of cherry-pick')
     parser.add_argument('-t', '--topic', help='pick all commits from a specified topic')
     parser.add_argument('-Q', '--query', help='pick all commits using the specified query')
@@ -253,6 +253,13 @@ if __name__ == '__main__':
                 print('!! Force-picking a merged commit !!\n')
             else:
                 print('Commit already merged. Skipping the cherry pick.\nUse -f to force this pick.')
+                continue
+        # Check if commit has been abandoned and exit if it has, unless -f is specified
+        if item['status'] == 'ABANDONED':
+            if args.force:
+                print('!! Force-picking an abandoned commit !!\n')
+            else:
+                print('Commit has been abandoned, Skipping the cherry-pick.\nUse -f to force this pick.')
                 continue
 
         # Convert the project name to a project path
