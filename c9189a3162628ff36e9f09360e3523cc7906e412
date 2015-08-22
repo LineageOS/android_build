@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5f201791_c33694b5",
+        "filename": "tools/repopick.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 258,
+      "author": {
+        "id": 2195
+      },
+      "writtenOn": "2015-08-22T10:23:09Z",
+      "side": 1,
+      "message": "I would suggest add a \u0027and not args.query\u0027 here, because that allows you to specify a custom query and it would be perfectly fine to specify \"status:abandoned\" there (and not have to use --force)",
+      "revId": "c9189a3162628ff36e9f09360e3523cc7906e412",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    }
+  ]
+}
