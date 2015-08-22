@@ -16,6 +16,29 @@
       "revId": "c9189a3162628ff36e9f09360e3523cc7906e412",
       "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5f201791_83409c09",
+        "filename": "tools/repopick.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 263,
+      "author": {
+        "id": 2195
+      },
+      "writtenOn": "2015-08-22T10:26:23Z",
+      "side": 1,
+      "message": "Could also make this rather allow only status:open unless --force is specified.\n\nFor a query I would expect to follow the default gerrit behaviour to show only open commits, unless a status:\u003cfoo\u003e is explicitly specified.",
+      "range": {
+        "startLine": 250,
+        "startChar": 0,
+        "endLine": 263,
+        "endChar": 24
+      },
+      "revId": "c9189a3162628ff36e9f09360e3523cc7906e412",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
     }
   ]
 }
