@@ -66,6 +66,7 @@ OPTIONS.tempfiles = []
 OPTIONS.device_specific = None
 OPTIONS.extras = {}
 OPTIONS.info_dict = None
+OPTIONS.recovery_patch_program = "imgdiff"
 
 # Stash size cannot exceed cache_size * threshold.
 OPTIONS.cache_size = None
@@ -700,7 +701,8 @@ def ParseOptions(argv,
         argv, "hvp:s:x:" + extra_opts,
         ["help", "verbose", "path=", "signapk_path=", "extra_signapk_args=",
          "java_path=", "java_args=", "public_key_suffix=",
-         "private_key_suffix=", "device_specific=", "extra="] +
+         "private_key_suffix=", "device_specific=", "extra=",
+         "recovery_patch_program="] +
         list(extra_long_opts))
   except getopt.GetoptError, err:
     Usage(docstring)
@@ -1273,9 +1275,9 @@ def MakeRecoveryPatch(input_dir, output_sink, recovery_img, boot_img,
   if info_dict is None:
     info_dict = OPTIONS.info_dict
 
-  diff_program = ["imgdiff"]
+  diff_program = [OPTIONS.recovery_patch_program]
   path = os.path.join(input_dir, "SYSTEM", "etc", "recovery-resource.dat")
-  if os.path.exists(path):
+  if os.path.exists(path) and "imgdiff" in diff_program:
     diff_program.append("-b")
     diff_program.append(path)
     bonus_args = "-b /system/etc/recovery-resource.dat"

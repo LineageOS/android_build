@@ -26,11 +26,18 @@ import common
 OPTIONS = common.OPTIONS
 
 def main(argv):
-  # def option_handler(o, a):
-  #   return False
+  def option_handler(o, a):
+    if o == "--recovery_patch_program":
+        OPTIONS.recovery_patch_program = a
+    else:
+      return False
+    return True
 
-  args = common.ParseOptions(argv, __doc__)
-  input_dir, output_dir = args
+  args = common.ParseOptions(argv, __doc__,
+                             extra_long_opts=["recovery_patch_program="],
+                             extra_option_handler=option_handler)
+  input_dir = args[0]
+  output_dir = args[1]
 
   OPTIONS.info_dict = common.LoadInfoDict(input_dir)
 
