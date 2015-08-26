@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3f1d235d_91e8eb16",
+        "filename": "core/Makefile",
+        "patchSetId": 2
+      },
+      "lineNbr": 1703,
+      "author": {
+        "id": 11690
+      },
+      "writtenOn": "2015-08-26T09:29:23Z",
+      "side": 1,
+      "message": "Make it cm_kernel_$(DEVICE).zip",
+      "revId": "2183202ddfa807a35cdd7864150e3fd773d86ec3",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    }
+  ]
+}
