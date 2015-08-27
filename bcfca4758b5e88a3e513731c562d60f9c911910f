@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3f1d235d_545b6186",
+        "filename": "core/Makefile",
+        "patchSetId": 2
+      },
+      "lineNbr": 1107,
+      "author": {
+        "id": 2195
+      },
+      "writtenOn": "2015-08-27T21:45:39Z",
+      "side": 0,
+      "message": "This would be handled by the full recovery image.",
+      "revId": "bcfca4758b5e88a3e513731c562d60f9c911910f",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3f1d235d_3460e532",
+        "filename": "core/Makefile",
+        "patchSetId": 2
+      },
+      "lineNbr": 1118,
+      "author": {
+        "id": 2195
+      },
+      "writtenOn": "2015-08-27T21:45:39Z",
+      "side": 0,
+      "message": "Same here.",
+      "revId": "bcfca4758b5e88a3e513731c562d60f9c911910f",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3f1d235d_1455e950",
+        "filename": "core/Makefile",
+        "patchSetId": 2
+      },
+      "lineNbr": 1639,
+      "author": {
+        "id": 2195
+      },
+      "writtenOn": "2015-08-27T21:45:39Z",
+      "side": 0,
+      "message": "The only user I found of this was tenderloin, which replaces it with a dummy script that exits on invocation.\n\n-__-",
+      "revId": "bcfca4758b5e88a3e513731c562d60f9c911910f",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    }
+  ]
+}
