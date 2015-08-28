@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3f1d235d_efabba72",
+        "filename": "tools/releasetools/common.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 1319,
+      "author": {
+        "id": 2195
+      },
+      "writtenOn": "2015-08-28T13:27:34Z",
+      "side": 1,
+      "message": "Looks like this might be needed for the full image too, but after looking at jfltevzw\u0027s script it might need some changes to work with the full image.\n\narcee, invisiblek ^",
+      "range": {
+        "startLine": 1317,
+        "startChar": 0,
+        "endLine": 1319,
+        "endChar": 2
+      },
+      "revId": "e0c0f5c4ebed6a2d42a356c2537beecf3ca3cc5f",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    }
+  ]
+}
