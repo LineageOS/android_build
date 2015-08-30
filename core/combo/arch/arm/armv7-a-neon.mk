@@ -61,3 +61,7 @@ local_arch_has_lpae :=
 
 arch_variant_cflags += \
     -mfloat-abi=softfp
+
+ifneq ($(strip $(TARGET_BIG_LITTLE_VARIANT)),)
+	arch_variant_cflags += -mtune=$(TARGET_BIG_LITTLE_VARIANT)
+endif
