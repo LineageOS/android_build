@@ -6,6 +6,12 @@ ARCH_ARM_HAVE_VFP               := true
 ARCH_ARM_HAVE_VFP_D32           := true
 ARCH_ARM_HAVE_NEON              := true
 
+ifeq ($(strip $(TARGET_$(combo_2nd_arch_prefix)CPU_VARIANT)),cortex-a53)
+	arch_variant_cflags := -mcpu=cortex-a15 -mfpu=neon-vfpv4
+
+	arch_variant_ldflags := \
+		-Wl,--no-fix-cortex-a8
+else
 ifneq (,$(filter cortex-a15 denver krait,$(TARGET_$(combo_2nd_arch_prefix)CPU_VARIANT)))
 	arch_variant_cflags := -mcpu=cortex-a15 -mfpu=neon-vfpv4
 
@@ -39,6 +45,7 @@ else
 	# Generic ARM might be a Cortex A8 -- better safe than sorry
 	arch_variant_ldflags := \
 		-Wl,--fix-cortex-a8
+endif
 endif
 endif
 endif
