@@ -59,3 +59,7 @@ ifeq ($(TARGET_CPU_CORTEX_A53),true)
 arch_variant_ldflags := -Wl,--fix-cortex-a53-843419 \
                         -Wl,--fix-cortex-a53-835769
 endif
+
+ifneq ($(strip $(TARGET_BIG_LITTLE_VARIANT)),)
+	arch_variant_cflags += -mtune=$(TARGET_BIG_LITTLE_VARIANT)
+endif
