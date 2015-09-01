@@ -55,8 +55,10 @@ def fetch_query_via_ssh(remote_url, query):
        We have to get the data, then transform it to match what we're expecting from the HTTP RESET API"""
     if remote_url.count(':') == 2:
         (uri, userhost, port) = remote_url.split(':')
+        userhost = userhost[2:]
     elif remote_url.count(':') == 1:
         (uri, userhost) = remote_url.split(':')
+        userhost = userhost[2:]
         port = 29418
     else:
         raise Exception('Malformed URI: Expecting ssh://[user@]host[:port]')
@@ -88,7 +90,7 @@ def fetch_query_via_ssh(remote_url, query):
                 'status': data['status']
             }
             reviews.append(review)
-        except ValueError:
+        except:
             pass
     print('Found {0} reviews'.format(len(reviews)))
     return reviews
@@ -109,7 +111,7 @@ def fetch_query_via_http(remote_url, query):
 
 def fetch_query(remote_url, query):
     """Wrapper for fetch_query_via_proto functions"""
-    if remote_url[0:2] == 'ssh':
+    if remote_url[0:3] == 'ssh':
         return fetch_query_via_ssh(remote_url, query)
     elif remote_url[0:4] == 'http':
         return fetch_query_via_http(remote_url, query.replace(' ', '+'))
