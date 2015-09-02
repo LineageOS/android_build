@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3f1d235d_601210b4",
+        "filename": "core/qcom_target.mk",
+        "patchSetId": 2
+      },
+      "lineNbr": 82,
+      "author": {
+        "id": 1391
+      },
+      "writtenOn": "2015-09-02T23:22:22Z",
+      "side": 1,
+      "message": "Is this necessary (only Nexus devices use this)? And is QCOM_HARDWARE_VARIANT even defined here how this is ifeq\u0027ed (it\u0027s set on BOARD_USES_QCOM_HARDWARE :\u003d true, this is outside that).",
+      "revId": "ca9542b5f4d1c395e43085531b70e56646c12609",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    }
+  ]
+}
