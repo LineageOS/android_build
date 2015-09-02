@@ -47,15 +47,20 @@ ifeq ($(BOARD_USES_QCOM_HARDWARE),true)
     2ND_CLANG_TARGET_GLOBAL_CFLAGS += $(qcom_flags)
     2ND_CLANG_TARGET_GLOBAL_CPPFLAGS += $(qcom_flags)
 
-$(call project-set-path,qcom-audio,hardware/qcom/audio-caf/$(TARGET_BOARD_PLATFORM))
+TARGET_BOARD_PLATFORM_GENERIC := $(TARGET_BOARD_PLATFORM)
+ifneq ($(filter msm8909,$(TARGET_BOARD_PLATFORM)),)
+    TARGET_BOARD_PLATFORM_GENERIC := msm8916
+endif
+
+$(call project-set-path,qcom-audio,hardware/qcom/audio-caf/$(TARGET_BOARD_PLATFORM_GENERIC))
 ifeq ($(USE_DEVICE_SPECIFIC_CAMERA),true)
 $(call project-set-path,qcom-camera,$(TARGET_DEVICE_DIR)/camera)
 else
 $(call qcom-set-path-variant,CAMERA,camera)
 endif
-$(call project-set-path,qcom-display,hardware/qcom/display-caf/$(TARGET_BOARD_PLATFORM))
+$(call project-set-path,qcom-display,hardware/qcom/display-caf/$(TARGET_BOARD_PLATFORM_GENERIC))
 $(call qcom-set-path-variant,GPS,gps)
-$(call project-set-path,qcom-media,hardware/qcom/media-caf/$(TARGET_BOARD_PLATFORM))
+$(call project-set-path,qcom-media,hardware/qcom/media-caf/$(TARGET_BOARD_PLATFORM_GENERIC))
 $(call qcom-set-path-variant,SENSORS,sensors)
 $(call ril-set-path-variant,ril)
 $(call loc-api-set-path-variant,vendor/qcom/opensource/location)
@@ -63,7 +68,7 @@ $(call gps-hal-set-path-variant,hardware/qcom/gps)
 else
 $(call project-set-path,qcom-audio,hardware/qcom/audio/default)
 $(call qcom-set-path-variant,CAMERA,camera)
-$(call project-set-path,qcom-display,hardware/qcom/display/$(TARGET_BOARD_PLATFORM))
+$(call project-set-path,qcom-display,hardware/qcom/display/$(TARGET_BOARD_PLATFORM_GENERIC))
 $(call qcom-set-path-variant,GPS,gps)
 $(call project-set-path,qcom-media,hardware/qcom/media/default)
 $(call qcom-set-path-variant,SENSORS,sensors)
