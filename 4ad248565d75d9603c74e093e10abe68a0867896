@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3f1d235d_00211cfc",
+        "filename": "core/qcom_target.mk",
+        "patchSetId": 2
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 2936
+      },
+      "writtenOn": "2015-09-02T23:24:32Z",
+      "side": 1,
+      "message": "Just realized that this line breaks all nexus devices. TARGET_BOARD_PLATFORM_GENERIC is only defined if QCOM_HARDWARE flag is set.",
+      "revId": "4ad248565d75d9603c74e093e10abe68a0867896",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    }
+  ]
+}
