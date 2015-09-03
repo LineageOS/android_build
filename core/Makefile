@@ -1400,7 +1400,7 @@ DISTTOOLS :=  $(HOST_OUT_EXECUTABLES)/minigzip \
 	  $(HOST_OUT_EXECUTABLES)/append2simg \
 	  $(HOST_OUT_EXECUTABLES)/boot_signer
 
-ifeq ($(HOST_OS),linux)
+ifneq (,$(filter linux darwin,$(HOST_OS)))
   DISTTOOLS += $(HOST_OUT_EXECUTABLES)/mkf2fsuserimg.sh \
 	$(HOST_OUT_EXECUTABLES)/make_f2fs
 endif
