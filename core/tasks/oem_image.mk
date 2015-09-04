@@ -15,7 +15,16 @@
 #
 
 # We build oem.img only if it's asked for.
+skip_oem_image := true
 ifneq ($(filter $(MAKECMDGOALS),oem_image),)
+    skip_oem_image := false
+endif
+
+ifneq ($(BOARD_OEMIMAGE_FILE_SYSTEM_TYPE),)
+    skip_oem_image := false
+endif
+
+ifneq ($(skip_oem_image),true)
 ifndef BOARD_OEMIMAGE_PARTITION_SIZE
 $(error BOARD_OEMIMAGE_PARTITION_SIZE is not set.)
 endif
@@ -43,4 +52,4 @@ $(INSTALLED_OEMIMAGE_TARGET) : $(INTERNAL_USERIMAGES_DEPS) $(INTERNAL_OEMIMAGE_F
 oem_image : $(INSTALLED_OEMIMAGE_TARGET)
 $(call dist-for-goals, oem_image, $(INSTALLED_OEMIMAGE_TARGET))
 
-endif  # oem_image in $(MAKECMDGOALS)
+endif
