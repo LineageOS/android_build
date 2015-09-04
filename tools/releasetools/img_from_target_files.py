@@ -164,6 +164,12 @@ def main(argv):
         add_img_to_target_files.AddUserdataExtra(output_zip, prefix="")
         banner("AddCache")
         add_img_to_target_files.AddCache(output_zip, prefix="")
+        try:
+          input_zip.getinfo("OEM/")
+          banner("AddOem")
+          add_img_to_target_files.AddOem(output_zip, prefix="")
+        except KeyError:
+          pass   # no oem partition for this device
 
   finally:
     print "cleaning up..."

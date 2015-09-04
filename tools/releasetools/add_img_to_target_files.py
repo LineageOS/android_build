@@ -105,6 +105,29 @@ def BuildVendor(input_dir, info_dict, block_list=None):
   file containing it."""
   return CreateImage(input_dir, info_dict, "vendor", block_list=block_list)
 
+def AddOem(output_zip, prefix="IMAGES/"):
+  """Turn the contents of OEM into a oem image and store in it
+  output_zip."""
+
+  prebuilt_path = os.path.join(OPTIONS.input_tmp, prefix, "oem.img")
+  if os.path.exists(prebuilt_path):
+    print "oem.img already exists in %s, no need to rebuild..." % (prefix,)
+    return
+
+  block_list = common.MakeTempFile(prefix="oem-blocklist-", suffix=".map")
+  imgname = BuildOem(OPTIONS.input_tmp, OPTIONS.info_dict,
+                     block_list=block_list)
+  with open(imgname, "rb") as f:
+    common.ZipWriteStr(output_zip, prefix + "oem.img", f.read())
+  with open(block_list, "rb") as f:
+    common.ZipWriteStr(output_zip, prefix + "oem.map", f.read())
+
+
+def BuildOem(input_dir, info_dict, block_list=None):
+  """Build the (sparse) oem image and return the name of a temp
+  file containing it."""
+  return CreateImage(input_dir, info_dict, "oem", block_list=block_list)
+
 
 def CreateImage(input_dir, info_dict, what, block_list=None):
   print "creating " + what + ".img..."
@@ -290,6 +313,12 @@ def AddImagesToTargetFiles(filename):
   except KeyError:
     has_vendor = False
 
+  try:
+    input_zip.getinfo("OEM/")
+    has_oem = True
+  except KeyError:
+    has_oem = False
+
   OPTIONS.info_dict = common.LoadInfoDict(input_zip)
   if "selinux_fc" in OPTIONS.info_dict:
     OPTIONS.info_dict["selinux_fc"] = os.path.join(
@@ -341,6 +370,10 @@ def AddImagesToTargetFiles(filename):
   AddUserdataExtra(output_zip)
   banner("cache")
   AddCache(output_zip)
+  if has_oem:
+    banner("oem")
+    AddOem(output_zip)
+
 
   output_zip.close()
 
