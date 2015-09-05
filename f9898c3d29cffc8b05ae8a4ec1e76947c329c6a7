@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3f1d235d_7c5bd42d",
+        "filename": "core/Makefile",
+        "patchSetId": 2
+      },
+      "lineNbr": 952,
+      "author": {
+        "id": 8964
+      },
+      "writtenOn": "2015-09-05T23:54:02Z",
+      "side": 1,
+      "message": "there\u0027s a reason for the \"-\" before the \"cp\" ?",
+      "range": {
+        "startLine": 952,
+        "startChar": 9,
+        "endLine": 952,
+        "endChar": 12
+      },
+      "revId": "f9898c3d29cffc8b05ae8a4ec1e76947c329c6a7",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    }
+  ]
+}
