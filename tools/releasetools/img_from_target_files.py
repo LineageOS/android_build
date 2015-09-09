@@ -105,12 +105,15 @@ def main(argv):
     if os.path.exists(images_path):
       # If this is a new target-files, it already contains the images,
       # and all we have to do is copy them to the output zip.
+      # Skip oem.img files since they are not needed in fastboot images.
       images = os.listdir(images_path)
       if images:
         for image in images:
           if bootable_only and image not in ("boot.img", "recovery.img"):
             continue
           if not image.endswith(".img"):
+            continue
+          if i == "oem.img":
             continue
           common.ZipWrite(
               output_zip, os.path.join(images_path, image), image)
@@ -152,12 +155,6 @@ def main(argv):
         add_img_to_target_files.AddUserdataExtra(output_zip, prefix="")
         banner("AddCache")
         add_img_to_target_files.AddCache(output_zip, prefix="")
-        try:
-          input_zip.getinfo("OEM/")
-          banner("AddOem")
-          add_img_to_target_files.AddOem(output_zip, prefix="")
-        except KeyError:
-          pass   # no oem partition for this device
 
   finally:
     print "cleaning up..."
