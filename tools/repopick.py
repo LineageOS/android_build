@@ -254,7 +254,7 @@ if __name__ == '__main__':
             if args.force:
                 print('!! Force-picking a closed change !!\n')
             else:
-                print('Change is closed. Skipping the cherry pick.\nUse -f to force this pick.')
+                print('Change status is ' + item['status'] + '. Skipping the cherry pick.\nUse -f to force this pick.')
                 continue
 
         # Convert the project name to a project path
