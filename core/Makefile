@@ -2056,9 +2056,6 @@ build_ota_package := true
 ifeq ($(TARGET_SKIP_OTA_PACKAGE),true)
 build_ota_package := false
 endif
-ifeq ($(BUILD_OS),darwin)
-build_ota_package := false
-endif
 ifneq ($(strip $(SANITIZE_TARGET)),)
 build_ota_package := false
 endif
