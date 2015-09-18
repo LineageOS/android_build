@@ -27,7 +27,7 @@ ifneq (,$(filter cortex-a8 scorpion,$(TARGET_$(combo_2nd_arch_prefix)CPU_VARIANT
 	arch_variant_ldflags := \
 		-Wl,--fix-cortex-a8
 else
-ifeq ($(strip $(TARGET_$(combo_2nd_arch_prefix)CPU_VARIANT)),cortex-a7)
+ifneq (,$(filter cortex-a7 cortex-a53 cortex-a53.a57,$(TARGET_$(combo_2nd_arch_prefix)CPU_VARIANT)))
 	arch_variant_cflags := -mcpu=cortex-a7 -mfpu=neon-vfpv4
 	arch_variant_ldflags := \
 		-Wl,--no-fix-cortex-a8
