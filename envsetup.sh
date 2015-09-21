@@ -2451,13 +2451,10 @@ EOF
     fi
 
     stop_n_start=false
-    for FILE in $(echo $LOC | xargs -n1 -i echo '{}'); do
+    for FILE in $LOC; do
         # Make sure file is in $OUT/system or $OUT/data
         case $FILE in
-            $OUT/system/*)
-                TARGET=$(echo $FILE | sed "s#$OUT##")
-            ;;
-            $OUT/data/*)
+            $OUT/system/*|$OUT/data/*)
                 # Get target file name (i.e. /system/bin/adb)
                 TARGET=$(echo $FILE | sed "s#$OUT##")
             ;;
@@ -2484,9 +2481,7 @@ EOF
                 fi
                 adb shell restorecon "$TARGET"
             ;;
-
-            # | works here because there's only one wildcard to match
-            {/system/}priv-app/SystemUI/SystemUI.apk|framework/*)
+            /system/priv-app/SystemUI/SystemUI.apk|/system/framework/*)
                 # Only need to stop services once
                 if ! $stop_n_start; then
                     adb shell stop
