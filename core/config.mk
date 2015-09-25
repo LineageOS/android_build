@@ -135,6 +135,10 @@ COMMON_RELEASE_CFLAGS:= -DNDEBUG -UDEBUG
 COMMON_GLOBAL_CPPFLAGS:= $(COMMON_GLOBAL_CFLAGS) -Wsign-promo -std=gnu++11
 COMMON_RELEASE_CPPFLAGS:= $(COMMON_RELEASE_CFLAGS)
 
+# Force gcc to always output color diagnostics.  Ninja will strip the ANSI
+# color codes if it is not running in a terminal.
+COMMON_GLOBAL_CFLAGS += -fdiagnostics-color
+
 GLOBAL_CFLAGS_NO_OVERRIDE :=  \
     -Werror=int-to-pointer-cast \
     -Werror=pointer-to-int-cast \
