@@ -28,6 +28,7 @@ import subprocess
 import re
 import argparse
 import textwrap
+from xml.etree import ElementTree
 
 try:
     # For python3
@@ -200,15 +201,24 @@ if __name__ == '__main__':
 
     # Get the list of projects that repo knows about
     #   - convert the project name to a project path
-    project_name_to_path = {}
-    plist = subprocess.check_output(['repo', 'list']).split('\n')
+    project_name_to_data = {}
+    manifest = subprocess.check_output(['repo', 'manifest'])
+    xml_root = ElementTree.fromstring(manifest)
+    projects = xml_root.findall('project')
+    default_revision = xml_root.findall('default')[0].get('revision').split('/')[-1]
+    '''dump project data into the a list of dicts with the following data:
+    {project: {path, revision}}
+    '''
+    for project in projects:
+        name = project.get('name')
+        path = project.get('path')
+        revision = project.get('revision')
+        if revision is None:
+            revision = default_revision
 
-    for pline in plist:
-        if not pline:
-            break
-        ppaths = pline.split(' : ')
-
-        project_name_to_path[ppaths[1]] = ppaths[0]
+        if not name in project_name_to_data:
+            project_name_to_data[name] = {}
+        project_name_to_data[name][revision] = path
 
     # get data on requested changes
     reviews = []
@@ -263,33 +273,9 @@ if __name__ == '__main__':
         # Convert the project name to a project path
         #   - check that the project path exists
         project_path = None
-        if item['project'] in project_name_to_path:
-            project_path = project_name_to_path[item['project']]
 
-            if project_path.startswith('hardware/qcom/'):
-                split_path = project_path.split('/')
-                # split_path[2] might be display or it might be display-caf, trim the -caf
-                split_path[2] = split_path[2].split('-')[0]
-
-                # Need to treat hardware/qcom/{audio,display,media} specially
-                if split_path[2] == 'audio' or split_path[2] == 'display' or split_path[2] == 'media':
-                    split_branch = item['branch'].split('-')
-
-                    # display is extra special
-                    if split_path[2] == 'display' and len(split_path) == 3:
-                        project_path = '/'.join(split_path)
-                    else:
-                        project_path = '/'.join(split_path[:-1])
-
-                    if len(split_branch) == 4 and split_branch[0] == 'cm' and split_branch[2] == 'caf':
-                        project_path += '-caf/msm' + split_branch[3]
-                    # audio and media are different from display
-                    elif split_path[2] == 'audio' or split_path[2] == 'media':
-                        project_path += '/default'
-            elif project_path.startswith('hardware/ril'):
-                project_path = project_path.rstrip('-caf')
-                if item["branch"].split('-')[-1] == 'caf':
-                    project_path += '-caf'
+        if item['project'] in project_name_to_data and item['branch'] in project_name_to_data[item['project']]:
+            project_path = project_name_to_data[item['project']][item['branch']]
         elif args.path:
             project_path = args.path
         elif args.ignore_missing:
@@ -366,4 +352,3 @@ if __name__ == '__main__':
                 sys.exit(result)
         if not args.quiet:
             print('')
-
