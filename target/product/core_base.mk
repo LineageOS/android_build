@@ -58,3 +58,4 @@ PRODUCT_PACKAGES += \
     wifi-service
 
 $(call inherit-product, $(SRC_TARGET_DIR)/product/core_minimal.mk)
+$(call inherit-product, vendor/cm/config/preempt_core_minimal.mk)
