@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9f436f4f_5567fc26",
+        "filename": "core/package_internal.mk",
+        "patchSetId": 1
+      },
+      "lineNbr": 302,
+      "author": {
+        "id": 9813
+      },
+      "writtenOn": "2015-10-01T00:21:43Z",
+      "side": 1,
+      "message": "LOCAL_IGNORE_SUBDIR is a flag I\u0027m only leveraging in the resource package. May be better to export something more identifiable to the res package.\n\nAlso need to handle the scenario for building against prebuilt blobs.",
+      "revId": "e4279ecd173b99b8130179764181e6872a3b5c12",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    }
+  ]
+}
