@@ -10,6 +10,73 @@ To make these errors go away, you have two choices:
          make update-api
 
       ^^^^^^^^^^^^^^^^^^
+    CONGRATS YOU EARNED A QUAIL STAR!
+
+                                              M                                                                        
+                                               MM                                                                       
+                                              MMM                                                                       
+                                              M.MM                                                                      
+                                             MM  M                                                                      
+                                            7M   MM                                                                     
+                                       MMMMM       MMMMM                                                                
+                                     MMMMM           .MMMMM                                                             
+                                          MMMM   MMMM                                                                   
+                                             MM  M                                                                      
+                          MM                  M .M                                                                      
+                          M+M                 MMMM                                                                      
+                         .M++MM               .MM                                                                       
+                         MM+++MM               MM                                                                       
+               8NNNNN   MM+++++MM                                                                                       
+               NNNN  $Z8. MM+++++MM                                                        MM                           
+               MM   $Z8M7IMNN+++++MM                                                       MM                           
+                  .$$$D ~NNMNN+++++MM                                                     MMMM                          
+                    INNNNM NMNM++++++M                                                    M  M                          
+                      NNO:NI=MM+++++++MM                                                 MM  MM                         
+                      8M$MMMMMD?+++++++MM       .MMMMMMMMMMMMMMM                     MMMMN    MMMMM                     
+                     M$$NMMMMMM$++++++++MMMMMMM=+++++++++++++MM                 MMMMM              MMMMM                
+                    M77$IMMMMMN.,+++++++++++++++++++++++++++MM                      .MMMMM    MMMMM                     
+                   .??I8,?M777OM.?+++++++++++++++++++++++++MM                            MM  MM                         
+                  O==?M7MM$MMI7$.~M+++++++++++++++++++++++MM                             .M  M                          
+              NMMM+~M??MMMMMMMMMMMI$$++++++++++++++++++++MM                               MMMM                          
+          MMMM++++MM~=+I$OMMMOO?7M$Z$$$+++++++++++++++++MM                                 MM                           
+      NMMM++++++++~~MO~7$OM8O8OMZZ$Z$M$$M++++++++++++++MM7MMM                              MM                           
+  MMMM++++++++++++==D~M~:8N88MMOMMZDM$$Z$$M+++++++++++MM77777MMM                                                        
+MMM+++++++++++++++~MM~~M $O,NM88MOMMZ$$MM$$$+++++++++MM777777777MMMM                                                    
+   MMM++++++++++++M~M~IMMMO888NMOMMOZM$ZZDZ$$+++++++MM7777777777777OMMZ                                                 
+     MMM+++++++++++~~M~~MDOOMMO8NOOOOZZ$$Z.Z$$M++++MM77777777777777777MMM                                               
+        MMM++++++++M.Z, D+ 8O88M8D,OOMDZZ$D.$$$N+++M7MMMMMD77777777777777MMM                                            
+          .MM+++++++MM:.D:ZMMM8888OOOOOOZZ$ND$$$M++MM777777MMMM7777777777777MMD                                         
+             MMM+++++~M.$.M~,~7M8?MON MOOZZ$$N$$$M++MD777777777MMMM77777777777MMM                                       
+                MM=+++=ZMZ.MM MMZOOOO88OOZM$M.$$$$+++M7777777777777MMMM7777777777MM                                     
+                  MMM++MM~,,$M.+~M$OOMOOMZMI$$$$$$$++MM7777777777777777MMM777777777MM                                   
+                   MM++++=. ~$$.$.M~M$MZOM7MMZ$$$$$$++MMMMMMD7777777777777MMMI7777777MMM                                
+                   .M++++++MM+OMI$7M??N+OZM8MMMD$$M$$++M77777MMMMN77777777777MMM7777777MMM                              
+                    M++++++++M+=?+++++++++++MNMZN$$N$$+MM777777777MMMM7777777777MMM777777MM,                            
+                    M+++++M=?7$$M+++++++++++++++$NO$$$$+M7777777777777MMMM777777777MMM77777MM                           
+                    M++~M$M$M+++++M++MMM++++++++++M=$$D$MMMMMMMM7777777777MMM$7777777MMM77777MM                         
+                    M+M$$$M+++++++++MM   MMMMM+++++++M$Z$$M     MMMMMI7777777MMMM7777777MM77777MM                       
+                    M++7NMIN++Z++NMM           MMMMM+++N$M$M          MMMM7777777MMM777777MM$777MM                      
+                    M=++8+++++++MM                  MMMMMZ$M$M            MMMM777777MMM77777MMZ777MM                    
+                    MM++++++++MM                          MM$                 MMM77777MMM77777MM7777MM                  
+                    MM++++++MM                                                   MMMM7777MMM7777MM777MM                 
+                    MM++++MMM                                                       .MMM7777MM7777MM77$M                
+                    MM+++MM                                       M                     MMM777MMN777MM77MM              
+                    NM+MM                                         M                        MMM77MMM77NMM7MM             
+                     MM                                          MM                          MMM77MMM77MM77M            
+                                                                .MMM                            MMM7MMM7IMM7MM          
+                                                                MM M                              MMM7MMM7MM7MM         
+                                                                M  MM                                MM7MMN7MMMM        
+                                                             MMMM   MMMM                               MMMMMIMMMM       
+                                                        MMMM.           MMMMM                            MMMMMMMMM      
+                                                          MMMMM       MMMMM                                MMMMMMMM     
+                                                               MM   MM                                       OMMMMMM    
+                                                                M  MM                                          MMMMMM   
+                                                                MM M                                             MMMMM  
+                                                                 MMM                                               MMM  
+                                                                 MM                                                  MM 
+                                                                  M                                                     
+
+
       NO. NO. STOP BEING LAZY. SERIOUSLY.
       DO NOT DO THIS in CM. THIS IS A LIE. IT WILL BREAK THINGS.
 
