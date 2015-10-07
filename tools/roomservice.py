@@ -15,11 +15,19 @@
 
 import os
 import sys
-import urllib2
 import json
 import re
 import netrc, base64
 from xml.etree import ElementTree
+try:
+    # For python3
+    import urllib.request
+except ImportError:
+    # For python2
+    import imp
+    import urllib2
+    urllib = imp.new_module('urllib')
+    urllib.request = urllib2
 
 product = sys.argv[1];
 
