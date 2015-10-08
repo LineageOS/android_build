@@ -1630,7 +1630,7 @@ def main(argv):
                                  "no_fallback_to_full",
                                  "backup=",
                                  "override_device=",
-                                 "override_prop="],
+                                 "override_prop="
                              ], extra_option_handler=option_handler)
 
   if len(args) != 2:
