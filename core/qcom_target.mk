@@ -17,7 +17,10 @@ endef
 ifeq ($(BOARD_USES_QCOM_HARDWARE),true)
 
     qcom_flags := -DQCOM_HARDWARE
+    # In 6.0 and greater HALs CAF renamed QCOM_BSP to QTI_BSP however to
+    # maintain compatibility with older HALs leave QCOM_BSP in anyway
     qcom_flags += -DQCOM_BSP
+    qcom_flags += -DQTI_BSP
 
     TARGET_USES_QCOM_BSP := true
     TARGET_ENABLE_QC_AV_ENHANCEMENTS := true
