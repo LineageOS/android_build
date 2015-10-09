@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7f287b81_ee3cd4c0",
+        "filename": "core/qcom_target.mk",
+        "patchSetId": 1
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 2936
+      },
+      "writtenOn": "2015-10-09T07:24:58Z",
+      "side": 1,
+      "message": "FYI: I\u0027m going to try to get rid of the direct track A-family audio/media stuff this time around.",
+      "revId": "cdac22b61d0a59deea60a082c9e170902ce75b9b",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    }
+  ]
+}
