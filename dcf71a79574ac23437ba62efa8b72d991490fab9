@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7f287b81_3fa32852",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 2195
+      },
+      "writtenOn": "2015-10-10T19:50:29Z",
+      "side": 1,
+      "message": "This doesn\u0027t make sense on it\u0027s own as it\u0027s a new variable you introduced, something like \"kernel gcc version\" might be better.",
+      "range": {
+        "startLine": 7,
+        "startChar": 3,
+        "endLine": 7,
+        "endChar": 26
+      },
+      "revId": "dcf71a79574ac23437ba62efa8b72d991490fab9",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7f287b81_1f886cc4",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 2195
+      },
+      "writtenOn": "2015-10-10T19:50:29Z",
+      "side": 1,
+      "message": "There\u0027s no arm-eabi for x86 and aarch64 :)\n\nIn fact those only seem to have -linux-androideabi-",
+      "revId": "dcf71a79574ac23437ba62efa8b72d991490fab9",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    }
+  ]
+}
