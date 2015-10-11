@@ -759,6 +759,9 @@ ifeq ($(INTERNAL_USERIMAGES_EXT_VARIANT),)
 INTERNAL_USERIMAGES_EXT_VARIANT := f2fs
 endif
 endif
+ifeq ($(TARGET_USERIMAGES_USE_YAFFS),true)
+INTERNAL_USERIMAGES_USE_YAFFS := true
+endif
 
 # These options tell the recovery updater/installer how to mount the partitions writebale.
 # <fstype>=<fstype_opts>[|<fstype_opts>]...
@@ -777,6 +780,9 @@ INTERNAL_USERIMAGES_DEPS += $(MKEXTUSERIMG) $(MAKE_EXT4FS) $(E2FSCK)
 endif
 ifeq ($(INTERNAL_USERIMAGES_USE_F2FS),true)
 INTERNAL_USERIMAGES_DEPS += $(MKF2FSUSERIMG) $(MAKE_F2FS)
+endif
+ifeq ($(INTERNAL_USERIMAGES_USE_YAFFS),true)
+INTERNAL_USERIMAGES_DEPS += $(MKYAFFS2)
 endif
 
 ifneq (true,$(TARGET_USERIMAGES_SPARSE_SQUASHFS_DISABLED))
@@ -831,6 +837,7 @@ $(if $(BOARD_OEMIMAGE_PARTITION_SIZE),$(hide) echo "oem_size=$(BOARD_OEMIMAGE_PA
 $(if $(BOARD_OEMIMAGE_JOURNAL_SIZE),$(hide) echo "oem_journal_size=$(BOARD_OEMIMAGE_JOURNAL_SIZE)" >> $(1))
 $(if $(INTERNAL_USERIMAGES_SPARSE_EXT_FLAG),$(hide) echo "extfs_sparse_flag=$(INTERNAL_USERIMAGES_SPARSE_EXT_FLAG)" >> $(1))
 $(if $(INTERNAL_USERIMAGES_SPARSE_SQUASHFS_FLAG),$(hide) echo "squashfs_sparse_flag=$(INTERNAL_USERIMAGES_SPARSE_SQUASHFS_FLAG)" >> $(1))
+$(if $(mkyaffs2_extra_flags),$(hide) echo "mkyaffs2_extra_flags=$(mkyaffs2_extra_flags)" >> $(1))
 $(hide) echo "selinux_fc=$(SELINUX_FC)" >> $(1)
 $(if $(PRODUCTS.$(INTERNAL_PRODUCT).PRODUCT_SUPPORTS_BOOT_SIGNER),$(hide) echo "boot_signer=$(PRODUCTS.$(INTERNAL_PRODUCT).PRODUCT_SUPPORTS_BOOT_SIGNER)" >> $(1))
 $(if $(PRODUCTS.$(INTERNAL_PRODUCT).PRODUCT_SUPPORTS_VERITY),$(hide) echo "verity=$(PRODUCTS.$(INTERNAL_PRODUCT).PRODUCT_SUPPORTS_VERITY)" >> $(1))
@@ -1084,11 +1091,16 @@ endif
 .PHONY: recoveryimage
 recoveryimage: $(INSTALLED_RECOVERYIMAGE_TARGET) $(RECOVERY_RESOURCE_ZIP)
 
-ifeq ($(BOARD_NAND_PAGE_SIZE),)
+ifneq ($(BOARD_NAND_PAGE_SIZE),)
+mkyaffs2_extra_flags := -c $(BOARD_NAND_PAGE_SIZE)
+else
+mkyaffs2_extra_flags :=
 BOARD_NAND_PAGE_SIZE := 2048
 endif
 
-ifeq ($(BOARD_NAND_SPARE_SIZE),)
+ifneq ($(BOARD_NAND_SPARE_SIZE),)
+mkyaffs2_extra_flags += -s $(BOARD_NAND_SPARE_SIZE)
+else
 BOARD_NAND_SPARE_SIZE := 64
 endif
 
@@ -1543,6 +1555,7 @@ OTATOOLS :=  $(HOST_OUT_EXECUTABLES)/minigzip \
   $(HOST_OUT_EXECUTABLES)/mkbootimg \
   $(HOST_OUT_EXECUTABLES)/unpackbootimg \
   $(HOST_OUT_EXECUTABLES)/fs_config \
+  $(HOST_OUT_EXECUTABLES)/mkyaffs2image \
   $(HOST_OUT_EXECUTABLES)/zipalign \
   $(HOST_OUT_EXECUTABLES)/bsdiff \
   $(HOST_OUT_EXECUTABLES)/imgdiff \
