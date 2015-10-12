@@ -207,7 +207,7 @@ define clean-module-folder
 endef
 
 ifeq ($(HOST_OS),darwin)
-  MAKE_FLAGS += C_INCLUDE_PATH=$(ANDROID_BUILD_TOP)/external/elfutils/src/libelf/
+  MAKE_FLAGS += C_INCLUDE_PATH=$(ANDROID_BUILD_TOP)/build/core/tasks/darwin-include/
 endif
 
 ifeq ($(TARGET_KERNEL_MODULES),)
