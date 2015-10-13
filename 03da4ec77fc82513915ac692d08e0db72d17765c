@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7f287b81_d0a76e4f",
+        "filename": "core/Makefile",
+        "patchSetId": 3
+      },
+      "lineNbr": 991,
+      "author": {
+        "id": 4550
+      },
+      "writtenOn": "2015-10-13T01:07:58Z",
+      "side": 1,
+      "message": "This should be moved back to recovery_ramdisk since mkbootimg is used in build-recoveryimage-target",
+      "range": {
+        "startLine": 991,
+        "startChar": 35,
+        "endLine": 991,
+        "endChar": 47
+      },
+      "revId": "03da4ec77fc82513915ac692d08e0db72d17765c",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    }
+  ]
+}
