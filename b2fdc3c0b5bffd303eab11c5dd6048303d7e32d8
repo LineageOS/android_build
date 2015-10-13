@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7f287b81_16472e20",
+        "filename": "core/qcom_target.mk",
+        "patchSetId": 4
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 848
+      },
+      "writtenOn": "2015-10-13T04:59:52Z",
+      "side": 1,
+      "message": "an",
+      "range": {
+        "startLine": 25,
+        "startChar": 37,
+        "endLine": 25,
+        "endChar": 40
+      },
+      "revId": "b2fdc3c0b5bffd303eab11c5dd6048303d7e32d8",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    }
+  ]
+}
