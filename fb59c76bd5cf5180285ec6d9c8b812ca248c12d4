@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7f287b81_1085f6ad",
+        "filename": "core/Makefile",
+        "patchSetId": 2
+      },
+      "lineNbr": 963,
+      "author": {
+        "id": 4550
+      },
+      "writtenOn": "2015-10-13T00:59:39Z",
+      "side": 1,
+      "message": "No need to change indentation probably",
+      "revId": "fb59c76bd5cf5180285ec6d9c8b812ca248c12d4",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    }
+  ]
+}
