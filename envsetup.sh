@@ -1261,7 +1261,7 @@ function gdbclient() {
     ROOT=`realpath .`
   fi
 
-  local OUT_ROOT="$ROOT/out/target/product/$DEVICE"
+  local OUT_ROOT="$ANDROID_PRODUCT_OUT"
   local SYMBOLS_DIR="$OUT_ROOT/symbols"
 
   if [ ! -d $SYMBOLS_DIR ]; then
