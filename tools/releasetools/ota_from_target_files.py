@@ -451,6 +451,8 @@ def GetOemProperty(name, oem_props, oem_dict, info_dict):
   return GetBuildProp(name, info_dict)
 
 def CalculateFingerprint(oem_props, oem_dict, info_dict):
+  if OPTIONS.override_prop:
+    return GetBuildProp("ro.build.date.utc", info_dict)
   if oem_props is None:
     return GetBuildProp("ro.build.fingerprint", info_dict)
   return "%s/%s/%s:%s" % (
@@ -822,10 +824,11 @@ def WriteBlockIncrementalOTAPackage(target_zip, source_zip, output_zip):
   # devices with thumbprints are all using file-based OTAs. Long term we
   # should factor out the common parts into a shared one to avoid further
   # divergence.
-  source_fp = GetBuildProp("ro.build.fingerprint", OPTIONS.source_info_dict)
-  target_fp = GetBuildProp("ro.build.fingerprint", OPTIONS.target_info_dict)
-  metadata["pre-build"] = source_fp
-  metadata["post-build"] = target_fp
+  if not OPTIONS.override_prop:
+    source_fp = GetBuildProp("ro.build.fingerprint", OPTIONS.source_info_dict)
+    target_fp = GetBuildProp("ro.build.fingerprint", OPTIONS.target_info_dict)
+    metadata["pre-build"] = source_fp
+    metadata["post-build"] = target_fp
 
   source_boot = common.GetBootableImage(
       "/tmp/boot.img", "boot.img", OPTIONS.source_tmp, "BOOT",
