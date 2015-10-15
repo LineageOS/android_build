@@ -492,6 +492,8 @@ def GetOemProperty(name, oem_props, oem_dict, info_dict):
 
 
 def CalculateFingerprint(oem_props, oem_dict, info_dict):
+  if OPTIONS.override_prop:
+    return GetBuildProp("ro.build.date.utc", info_dict)
   if oem_props is None:
     return GetBuildProp("ro.build.fingerprint", info_dict)
   return "%s/%s/%s:%s" % (
