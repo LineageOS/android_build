@@ -2297,9 +2297,9 @@ function pez {
     local retval=$?
     if [ $retval -ne 0 ]
     then
-        echo -e "\e[0;31mFAILURE\e[00m"
+        printf "\e[0;31mFAILURE\e[00m\n"
     else
-        echo -e "\e[0;32mSUCCESS\e[00m"
+        printf "\e[0;32mSUCCESS\e[00m\n"
     fi
     return $retval
 }
