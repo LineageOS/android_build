@@ -907,23 +907,27 @@ function mmm()
                 MODULES=all_modules
             fi
             DIR=`echo $DIR | sed -e 's/:.*//' -e 's:/$::'`
-            if [ -f $DIR/Android.mk ]; then
-                local TO_CHOP=`(\cd -P -- $T && pwd -P) | wc -c | tr -d ' '`
-                local TO_CHOP=`expr $TO_CHOP + 1`
-                local START=`PWD= /bin/pwd`
-                local MFILE=`echo $START | cut -c${TO_CHOP}-`
-                if [ "$MFILE" = "" ] ; then
-                    MFILE=$DIR/Android.mk
+            if [ -d $DIR ]; then
+                if [ -f $DIR/Android.mk ]; then
+                    local TO_CHOP=`(\cd -P -- $T && pwd -P) | wc -c | tr -d ' '`
+                    local TO_CHOP=`expr $TO_CHOP + 1`
+                    local START=`PWD= /bin/pwd`
+                    local MFILE=`echo $START | cut -c${TO_CHOP}-`
+                    if [ "$MFILE" = "" ] ; then
+                        MFILE=$DIR/Android.mk
+                    else
+                        MFILE=$MFILE/$DIR/Android.mk
+                    fi
+                    MAKEFILE="$MAKEFILE $MFILE"
                 else
-                    MFILE=$MFILE/$DIR/Android.mk
+                    case $DIR in
+                      showcommands | snod | dist | incrementaljavac | *=*) ARGS="$ARGS $DIR";;
+                      GET-INSTALL-PATH) GET_INSTALL_PATH=$DIR;;
+                      *) echo "No Android.mk in $DIR."; return 1;;
+                    esac
                 fi
-                MAKEFILE="$MAKEFILE $MFILE"
             else
-                case $DIR in
-                  showcommands | snod | dist | incrementaljavac | *=*) ARGS="$ARGS $DIR";;
-                  GET-INSTALL-PATH) GET_INSTALL_PATH=$DIR;;
-                  *) echo "No Android.mk in $DIR."; return 1;;
-                esac
+                echo "Couldn't locate the supplied directory."; return 1;
             fi
         done
         if [ -n "$GET_INSTALL_PATH" ]; then
