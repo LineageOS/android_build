@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7f287b81_52f6cd91",
+        "filename": "core/main.mk",
+        "patchSetId": 1
+      },
+      "lineNbr": 201,
+      "author": {
+        "id": 7202
+      },
+      "writtenOn": "2015-10-18T15:56:07Z",
+      "side": 1,
+      "message": "Removing Line 201 may be enough?",
+      "range": {
+        "startLine": 201,
+        "startChar": 0,
+        "endLine": 201,
+        "endChar": 13
+      },
+      "revId": "e81cb90cf4d278240e3881d9ba5596cc217948b2",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    }
+  ]
+}
