@@ -276,7 +276,7 @@ class EdifyGenerator(object):
     for name, sha1 in file_list:
       cmd = ('sha1_check(read_file("{name}"), "{sha1}") || '
              'delete("{name}");'.format(name=name, sha1=sha1))
-      self.script.append(self.WordWrap(cmd))
+      self.script.append(self._WordWrap(cmd))
 
   def RenameFile(self, srcfile, tgtfile):
     """Moves a file from one location to another."""
@@ -290,7 +290,7 @@ class EdifyGenerator(object):
        skip the action if the file exists.  Used when a patch
        is later renamed."""
     cmd = ('sha1_check(read_file("%s"), %s) ||' % (tgtfile, tgtsha1))
-    self.script.append(self.WordWrap(cmd))
+    self.script.append(self._WordWrap(cmd))
 
   def ApplyPatch(self, srcfile, tgtfile, tgtsize, tgtsha1, *patchpairs):
     """Apply binary patches (in *patchpairs) to the given srcfile to
