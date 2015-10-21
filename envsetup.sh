@@ -11,6 +11,7 @@ Invoke ". build/envsetup.sh" from your shell to add the following functions to y
            To limit the modules being built use the syntax: mmm dir/:target1,target2.
 - mma:     Builds all of the modules in the current directory, and their dependencies.
 - mmp:     Builds all of the modules in the current directory and pushes them to the device.
+- mmb:     Builds the Kernel/boot.img, all of it's dependencies and kernel modules, also regenerates recovery and system based on boot.img.
 - mmmp:    Builds all of the modules in the supplied directories and pushes them to the device.
 - mmma:    Builds all of the modules in the supplied directories, and their dependencies.
 - cgrep:   Greps on all local C/C++ files.
@@ -2364,6 +2365,30 @@ function cmka() {
         mka
     fi
 }
+
+function mmb() {
+    local T=$(gettop)
+    if [ -z "$T" ]
+    then
+        echo "Couldn't locate the top of the tree.  Try setting TOP."
+        return 1
+    fi
+
+    case `uname -s` in
+        Darwin)
+            local NUM_CPUS=$(sysctl hw.ncpu|cut -d" " -f2)
+            ONE_SHOT_MAKEFILE="__NOPE__" \
+                make -C $T -j $NUM_CPUS "$@"
+            ;;
+        *)
+            local NUM_CPUS=$(cat /proc/cpuinfo | grep "^processor" | wc -l)
+            ONE_SHOT_MAKEFILE="__NOPE__" \
+                mk_timer schedtool -B -n 1 -e ionice -n 1 \
+                make -C $T -j $NUM_CPUS "$@"
+            ;;
+    esac
+}
+
 
 function repolastsync() {
     RLSPATH="$ANDROID_BUILD_TOP/.repo/.repo_fetchtimes.json"
