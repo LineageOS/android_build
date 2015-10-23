@@ -1001,7 +1001,7 @@ endef
 
 $(recovery_uncompressed_ramdisk): $(MINIGZIP) $(recovery_ramdisk)
 	@echo -e ${CL_CYN}"----- Making uncompressed recovery ramdisk ------"${CL_RST}
-	$(MKBOOTFS) $(TARGET_RECOVERY_ROOT_OUT) > $@
+	$(MKBOOTFS) -d $(TARGET_OUT) $(TARGET_RECOVERY_ROOT_OUT) > $@
 
 $(recovery_ramdisk): $(MKBOOTFS) $(MINIGZIP) \
 		$(INSTALLED_RAMDISK_TARGET) \
@@ -1012,11 +1012,11 @@ $(recovery_ramdisk): $(MKBOOTFS) $(MINIGZIP) \
 		$(recovery_build_prop) $(recovery_resource_deps) $(recovery_root_deps) \
 		$(recovery_fstab) \
 		$(RECOVERY_INSTALL_OTA_KEYS)
+	$(call build-recoveryimage-target, $@)
 
 ifndef BOARD_CUSTOM_BOOTIMG_MK
 $(INSTALLED_RECOVERYIMAGE_TARGET): $(MKBOOTIMG) $(recovery_ramdisk) $(recovery_kernel) \
 		$(RECOVERYIMAGE_EXTRA_DEPS)
-	$(call build-recoveryimage-target, $@)
 endif # BOARD_CUSTOM_BOOTIMG_MK
 
 recovery_patch_path := $(call intermediates-dir-for,PACKAGING,recovery_patch)
