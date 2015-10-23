@@ -22,6 +22,30 @@
       "revId": "5e99fbe6eb3bfcb73bf70bd071d28352ccdf69c4",
       "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5f2577a7_8fb78cd9",
+        "filename": "envsetup.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 2381,
+      "author": {
+        "id": 14090
+      },
+      "writtenOn": "2015-10-23T21:56:31Z",
+      "side": 1,
+      "message": "I think it\u0027s useful to pass arguments so you can do something like `mmb showcommands\u0027 or `mmb kernelconfig\u0027 if you needed to.\n\nThere are still some issues with generating system.img if the .kos change. I\u0027ll post an update when I get a chance.",
+      "parentUuid": "5f2577a7_f69ef152",
+      "range": {
+        "startLine": 2381,
+        "startChar": 0,
+        "endLine": 2381,
+        "endChar": 44
+      },
+      "revId": "5e99fbe6eb3bfcb73bf70bd071d28352ccdf69c4",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
     }
   ]
 }
