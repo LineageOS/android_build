@@ -7,12 +7,6 @@ endef
 define ril-set-path-variant
 $(call project-set-path-variant,ril,TARGET_RIL_VARIANT,hardware/$(1))
 endef
-define gps-hal-set-path-variant
-$(call project-set-path-variant,gps-hal,TARGET_GPS_HAL_PATH,$(1))
-endef
-define loc-api-set-path-variant
-$(call project-set-path-variant,loc-api,TARGET_LOC_API_PATH,$(1))
-endef
 
 ifeq ($(BOARD_USES_QCOM_HARDWARE),true)
 
@@ -70,12 +64,19 @@ else
 $(call qcom-set-path-variant,CAMERA,camera)
 endif
 $(call project-set-path,qcom-display,hardware/qcom/display-caf/$(QCOM_HARDWARE_VARIANT))
+ifneq ($(TARGET_GPS_HAL_PATH),)
+$(call project-set-path,qcom-gps,$(TARGET_GPS_HAL_PATH))
+else
 $(call qcom-set-path-variant,GPS,gps)
+endif
 $(call project-set-path,qcom-media,hardware/qcom/media-caf/$(QCOM_HARDWARE_VARIANT))
 $(call qcom-set-path-variant,SENSORS,sensors)
 $(call ril-set-path-variant,ril)
-$(call loc-api-set-path-variant,vendor/qcom/opensource/location)
-$(call gps-hal-set-path-variant,hardware/qcom/gps)
+ifneq ($(TARGET_LOC_API_PATH),)
+$(call project-set-path,loc-api,$(TARGET_LOC_API_PATH))
+else
+$(call project-set-path,loc-api,vendor/qcom/opensource/location)
+endif
 else
 $(call project-set-path,qcom-audio,hardware/qcom/audio/default)
 $(call qcom-set-path-variant,CAMERA,camera)
@@ -84,6 +85,5 @@ $(call qcom-set-path-variant,GPS,gps)
 $(call project-set-path,qcom-media,hardware/qcom/media/default)
 $(call qcom-set-path-variant,SENSORS,sensors)
 $(call ril-set-path-variant,ril)
-$(call loc-api-set-path-variant,vendor/qcom/opensource/location)
-$(call gps-hal-set-path-variant,hardware/qcom/gps)
+$(call project-set-path,loc-api,vendor/qcom/opensource/location)
 endif
