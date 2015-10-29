@@ -1,17 +1,14 @@
 # Target-specific configuration
 
 # Populate the qcom hardware variants in the project pathmap.
-define qcom-set-path-variant
-$(call project-set-path-variant,qcom-$(2),TARGET_QCOM_$(1)_VARIANT,hardware/qcom/$(2))
-endef
 define ril-set-path-variant
 $(call project-set-path-variant,ril,TARGET_RIL_VARIANT,hardware/$(1))
 endef
-define gps-hal-set-path-variant
-$(call project-set-path-variant,gps-hal,TARGET_GPS_HAL_PATH,$(1))
-endef
-define loc-api-set-path-variant
-$(call project-set-path-variant,loc-api,TARGET_LOC_API_PATH,$(1))
+
+# Set device-specific HALs into project pathmap
+define set-device-specific-path
+$(call project-set-path,qcom-$(2),$(strip $(if $(USE_DEVICE_SPECIFIC_$(1)), \
+    $(TARGET_DEVICE_DIR)/$(2), $(3))))
 endef
 
 ifeq ($(BOARD_USES_QCOM_HARDWARE),true)
@@ -64,26 +61,20 @@ ifeq ($(BOARD_USES_QCOM_HARDWARE),true)
     endif
 
 $(call project-set-path,qcom-audio,hardware/qcom/audio-caf/$(QCOM_HARDWARE_VARIANT))
-ifeq ($(USE_DEVICE_SPECIFIC_CAMERA),true)
-$(call project-set-path,qcom-camera,$(TARGET_DEVICE_DIR)/camera)
-else
-$(call qcom-set-path-variant,CAMERA,camera)
-endif
+$(call set-device-specific-path,CAMERA,camera,hardware/qcom/camera)
 $(call project-set-path,qcom-display,hardware/qcom/display-caf/$(QCOM_HARDWARE_VARIANT))
-$(call qcom-set-path-variant,GPS,gps)
+$(call set-device-specific-path,GPS,gps,hardware/qcom/gps)
 $(call project-set-path,qcom-media,hardware/qcom/media-caf/$(QCOM_HARDWARE_VARIANT))
-$(call qcom-set-path-variant,SENSORS,sensors)
+$(call set-device-specific-path,SENSORS,sensors,hardware/qcom/sensors)
 $(call ril-set-path-variant,ril)
-$(call loc-api-set-path-variant,vendor/qcom/opensource/location)
-$(call gps-hal-set-path-variant,hardware/qcom/gps)
+$(call set-device-specific-path,LOC_API,loc-api,vendor/qcom/opensource/location)
 else
 $(call project-set-path,qcom-audio,hardware/qcom/audio/default)
-$(call qcom-set-path-variant,CAMERA,camera)
+$(call project-set-path,qcom-camera,hardware/qcom/camera)
 $(call project-set-path,qcom-display,hardware/qcom/display/$(TARGET_BOARD_PLATFORM))
-$(call qcom-set-path-variant,GPS,gps)
+$(call project-set-path,qcom-gps,hardware/qcom/gps)
 $(call project-set-path,qcom-media,hardware/qcom/media/default)
-$(call qcom-set-path-variant,SENSORS,sensors)
+$(call project-set-path,qcom-sensors,hardware/qcom/sensors)
 $(call ril-set-path-variant,ril)
-$(call loc-api-set-path-variant,vendor/qcom/opensource/location)
-$(call gps-hal-set-path-variant,hardware/qcom/gps)
+$(call project-set-path,loc-api,vendor/qcom/opensource/location)
 endif
