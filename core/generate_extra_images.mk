@@ -104,12 +104,13 @@ dtb_dir = $(firstword $(wildcard $(possible_dtb_dirs)))
 
 define build-dtimage-target
     $(call pretty,"Target dt image: $(INSTALLED_DTIMAGE_TARGET)")
-    $(hide) $(DTBTOOL) -o $@ -s $(BOARD_KERNEL_PAGESIZE) -p $(KERNEL_OUT)/scripts/dtc/ $(dtb_dir)
+    $(hide) $(DTBTOOL) $(BOARD_DTBTOOL_ARGS) -o $@ -s $(BOARD_KERNEL_PAGESIZE) -p $(KERNEL_OUT)/scripts/dtc/ $(dtb_dir)
     $(hide) chmod a+r $@
 endef
 
 $(INSTALLED_DTIMAGE_TARGET): $(DTBTOOL) $(INSTALLED_KERNEL_TARGET)
 	$(build-dtimage-target)
+	@echo -e ${CL_CYN}"Made DT image: $@"${CL_RST}
 
 ALL_DEFAULT_INSTALLED_MODULES += $(INSTALLED_DTIMAGE_TARGET)
 ALL_MODULES.$(LOCAL_MODULE).INSTALLED += $(INSTALLED_DTIMAGE_TARGET)
