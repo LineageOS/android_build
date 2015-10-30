@@ -62,6 +62,14 @@ ifeq ($(LOCAL_MODULE_CLASS),EXECUTABLES)
   my_pack_module_relocations := false
 endif
 
+# Likewise for recovery and utility executables
+ifeq ($(LOCAL_MODULE_CLASS),RECOVERY_EXECUTABLES)
+  my_pack_module_relocations := false
+endif
+ifeq ($(LOCAL_MODULE_CLASS),UTILITY_EXECUTABLES)
+  my_pack_module_relocations := false
+endif
+
 # TODO (dimitry): Relocation packer is not yet available for darwin
 ifneq ($(HOST_OS),linux)
   my_pack_module_relocations := false
