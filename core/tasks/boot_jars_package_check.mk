@@ -16,6 +16,7 @@
 # Rules to check if classes in the boot jars are from the whitelisted packages.
 #
 
+ifneq ($(SKIP_BOOT_JARS_CHECK),)
 ifneq ($(SKIP_BOOT_JARS_CHECK),true)
 ifneq ($(TARGET_BUILD_PDK),true)
 ifdef PRODUCT_BOOT_JARS
@@ -44,3 +45,4 @@ droidcore : check-boot-jars
 endif  # PRODUCT_BOOT_JARS
 endif  # TARGET_BUILD_PDK not true
 endif  # SKIP_BOOT_JARS_CHECK not true
+endif  # SKIP_BOOT_JARS_CHECK not defined
