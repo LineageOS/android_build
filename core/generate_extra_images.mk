@@ -77,32 +77,6 @@ $(INSTALLED_PERSISTIMAGE_TARGET): $(MKEXTUSERIMG) $(MAKE_EXT4FS) $(INTERNAL_PERS
 ALL_DEFAULT_INSTALLED_MODULES += $(INSTALLED_PERSISTIMAGE_TARGET)
 ALL_MODULES.$(LOCAL_MODULE).INSTALLED += $(INSTALLED_PERSISTIMAGE_TARGET)
 
-
-#----------------------------------------------------------------------
-# Generate device tree image (dt.img)
-#----------------------------------------------------------------------
-ifeq ($(strip $(BOARD_KERNEL_SEPARATED_DT)),true)
-ifeq ($(strip $(BUILD_TINY_ANDROID)),true)
-include device/qcom/common/dtbtool/Android.mk
-endif
-
-DTBTOOL := $(HOST_OUT_EXECUTABLES)/dtbTool$(HOST_EXECUTABLE_SUFFIX)
-
-INSTALLED_DTIMAGE_TARGET := $(PRODUCT_OUT)/dt.img
-
-define build-dtimage-target
-    $(call pretty,"Target dt image: $(INSTALLED_DTIMAGE_TARGET)")
-    $(hide) $(DTBTOOL) -o $@ -s $(BOARD_KERNEL_PAGESIZE) -p $(KERNEL_OUT)/scripts/dtc/ $(KERNEL_OUT)/arch/arm/boot/
-    $(hide) chmod a+r $@
-endef
-
-$(INSTALLED_DTIMAGE_TARGET): $(DTBTOOL) $(INSTALLED_KERNEL_TARGET)
-	$(build-dtimage-target)
-
-ALL_DEFAULT_INSTALLED_MODULES += $(INSTALLED_DTIMAGE_TARGET)
-ALL_MODULES.$(LOCAL_MODULE).INSTALLED += $(INSTALLED_DTIMAGE_TARGET)
-endif
-
 #----------------------------------------------------------------------
 # Generate extra userdata images (for variants with multiple mmc sizes)
 #----------------------------------------------------------------------
