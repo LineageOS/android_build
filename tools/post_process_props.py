@@ -16,6 +16,13 @@
 
 import os, sys
 
+
+def iteritems(obj):
+  if hasattr(obj, 'iteritems'):
+    return obj.iteritems()
+  return obj.items()
+
+
 # Usage: post_process_props.py file.prop [blacklist_key, ...]
 # Blacklisted keys are removed from the property file, if present
 
@@ -64,7 +71,7 @@ def validate(prop):
   """
   check_pass = True
   buildprops = prop.to_dict()
-  for key, value in buildprops.iteritems():
+  for key, value in iteritems(buildprops):
     # Check build properties' length.
     if len(key) > PROP_NAME_MAX:
       check_pass = False
