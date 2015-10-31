@@ -15,6 +15,8 @@
 # limitations under the License.
 #
 
+from __future__ import print_function
+
 import operator, os, sys
 
 def get_file_size(path):
@@ -39,7 +41,7 @@ def main(argv):
           pass
   output.sort(key=operator.itemgetter(0), reverse=True)
   for row in output:
-    print "%12d  %s" % row
+    print("%12d  %s" % row)
 
 if __name__ == '__main__':
   main(sys.argv)
