@@ -82,7 +82,7 @@ def fetch_query_via_ssh(remote_url, query):
                     'fetch': {
                         'ssh': {
                             'ref': patch_set['ref'],
-                            'url': u'ssh://{0}:{1}/{2}'.format(userhost, port, data['project'])
+                            'url': 'ssh://{0}:{1}/{2}'.format(userhost, port, data['project'])
                         }
                     }
                 } for patch_set in data['patchSets']},
@@ -105,7 +105,7 @@ def fetch_query_via_http(remote_url, query):
     reviews = json.loads(data[5:])
 
     for review in reviews:
-        review[u'number'] = review.pop('_number')
+        review['number'] = review.pop('_number')
 
     return reviews
 
