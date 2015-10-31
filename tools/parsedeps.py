@@ -1,6 +1,8 @@
 #!/usr/bin/env python
 # vim: ts=2 sw=2
 
+from __future__ import print_function
+
 import optparse
 import re
 import sys
@@ -49,7 +51,9 @@ class Dependencies:
       return None
 
   def __iter__(self):
-    return self.lines.iteritems()
+    if hasattr(self.lines, 'iteritems'):
+      return self.lines.iteritems()
+    return iter(self.lines.items())
 
   def trace(self, tgt, prereq):
     self.__visit = self.__visit + 1
@@ -73,9 +77,9 @@ class Dependencies:
     return result
 
 def help():
-  print "Commands:"
-  print "  dep TARGET             Print the prerequisites for TARGET"
-  print "  trace TARGET PREREQ    Print the paths from TARGET to PREREQ"
+  print("Commands:")
+  print("  dep TARGET             Print the prerequisites for TARGET")
+  print("  trace TARGET PREREQ    Print the paths from TARGET to PREREQ")
 
 
 def main(argv):
@@ -87,7 +91,7 @@ def main(argv):
   deps = Dependencies()
 
   filename = args[0]
-  print "Reading %s" % filename
+  print("Reading %s" % filename)
 
   if True:
     f = open(filename)
@@ -106,7 +110,7 @@ def main(argv):
           deps.add(tgt, prereq)
     f.close()
 
-  print "Read %d dependencies. %d targets." % (deps.count, len(deps.lines))
+  print("Read %d dependencies. %d targets." % (deps.count, len(deps.lines)))
   while True:
     line = raw_input("target> ")
     if not line.strip():
@@ -118,12 +122,12 @@ def main(argv):
       d = deps.get(tgt)
       if d:
         for prereq in d.prereqs:
-          print prereq.tgt
+          print(prereq.tgt)
     elif len(split) == 3 and cmd == "trace":
       tgt = split[1]
       prereq = split[2]
       if False:
-        print "from %s to %s" % (tgt, prereq)
+        print("from %s to %s" % (tgt, prereq))
       trace = deps.trace(tgt, prereq)
       if trace:
         width = 0
@@ -134,10 +138,10 @@ def main(argv):
         for g in trace:
           for t in g:
             if t.pos:
-              print t.tgt, " " * (width-len(t.tgt)), "  #", t.pos
+              print(t.tgt, " " * (width-len(t.tgt)), "  #", t.pos)
             else:
-              print t.tgt
-          print
+              print(t.tgt)
+          print()
     else:
       help()
 
@@ -145,7 +149,6 @@ if __name__ == "__main__":
   try:
     main(sys.argv)
   except KeyboardInterrupt:
-    print
+    print()
   except EOFError:
-    print
-
+    print()
