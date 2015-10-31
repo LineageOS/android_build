@@ -66,7 +66,8 @@ def fetch_query_via_ssh(remote_url, query):
 
 
     out = subprocess.check_output(['ssh', '-x', '-p{0}'.format(port), userhost, 'gerrit', 'query', '--format=JSON --patch-sets --current-patch-set', query])
-
+    if not hasattr(out, 'encode'):
+        out = out.decode()
     reviews = []
     for line in out.split('\n'):
         try:
@@ -82,7 +83,7 @@ def fetch_query_via_ssh(remote_url, query):
                     'fetch': {
                         'ssh': {
                             'ref': patch_set['ref'],
-                            'url': u'ssh://{0}:{1}/{2}'.format(userhost, port, data['project'])
+                            'url': 'ssh://{0}:{1}/{2}'.format(userhost, port, data['project'])
                         }
                     }
                 } for patch_set in data['patchSets']},
@@ -105,7 +106,7 @@ def fetch_query_via_http(remote_url, query):
     reviews = json.loads(data[5:])
 
     for review in reviews:
-        review[u'number'] = review.pop('_number')
+        review['number'] = review.pop('_number')
 
     return reviews
 
@@ -184,8 +185,10 @@ if __name__ == '__main__':
     if args.abandon_first:
         # Determine if the branch already exists; skip the abandon if it does not
         plist = subprocess.check_output(['repo', 'info'])
+        if not hasattr(plist, 'encode'):
+            plist = plist.decode()
         needs_abandon = False
-        for pline in plist:
+        for pline in plist.splitlines():
             matchObj = re.match(r'Local Branches.*\[(.*)\]', pline)
             if matchObj:
                 local_branches = re.split('\s*,\s*', matchObj.group(1))
