@@ -1,8 +1,17 @@
 #!/usr/bin/env python
 
+from __future__ import print_function
+
 import os
 import re
 import sys
+
+
+def itervalues(obj):
+  if hasattr(obj, 'itervalues'):
+    return obj.itervalues()
+  return obj.values()
+
 
 def fail_with_usage():
   sys.stderr.write("usage: java-layers.py DEPENDENCY_FILE SOURCE_DIRECTORIES...\n")
@@ -69,27 +78,27 @@ class Dependencies:
         if upper in deps:
           recurse(obj, deps[upper], visited)
     self.deps = deps
-    self.parts = [(dep.lower.split('.'),dep) for dep in deps.itervalues()]
+    self.parts = [(dep.lower.split('.'),dep) for dep in itervalues(deps)]
     # transitive closure of dependencies
-    for dep in deps.itervalues():
+    for dep in itervalues(deps):
       recurse(dep, dep, [])
     # disallow everything from the low level components
-    for dep in deps.itervalues():
+    for dep in itervalues(deps):
       if dep.lowlevel:
-        for d in deps.itervalues():
+        for d in itervalues(deps):
           if dep != d and not d.legacy:
             dep.transitive.add(d.lower)
     # disallow the 'top' components everywhere but in their own package
-    for dep in deps.itervalues():
+    for dep in itervalues(deps):
       if dep.top and not dep.legacy:
-        for d in deps.itervalues():
+        for d in itervalues(deps):
           if dep != d and not d.legacy:
             d.transitive.add(dep.lower)
-    for dep in deps.itervalues():
+    for dep in itervalues(deps):
       dep.transitive = set([x+"." for x in dep.transitive])
     if False:
-      for dep in deps.itervalues():
-        print "-->", dep.lower, "-->", dep.transitive
+      for dep in itervalues(deps):
+        print("-->", dep.lower, "-->", dep.transitive)
 
   # Lookup the dep object for the given package.  If pkg is a subpackage
   # of one with a rule, that one will be returned.  If no matches are found,
@@ -218,8 +227,8 @@ def examine_java_file(deps, filename):
     imports.append(m.group(1))
   # Do the checking
   if False:
-    print filename
-    print "'%s' --> %s" % (pkg, imports)
+    print(filename)
+    print("'%s' --> %s" % (pkg, imports))
   dep = deps.lookup(pkg)
   if not dep:
     sys.stderr.write(("%s: Error: Package does not appear in dependency file: "
