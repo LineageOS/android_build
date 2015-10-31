@@ -1,5 +1,7 @@
 #!/usr/bin/env python -E
 
+from __future__ import print_function
+
 import sys, os, re
 
 excludes = [r'.*?/\.obj.*?',
@@ -11,7 +13,7 @@ excludes = [r'.*?/\.obj.*?',
             r'.*?/out/.*?',
             r'.*?/install/.*?']
 
-excludes_compiled = map(re.compile, excludes)
+excludes_compiled = list(map(re.compile, excludes))
 
 def filter_excludes(str):
     for e in excludes_compiled:
@@ -60,9 +62,9 @@ def run(command, regex, filt):
     filt_compiled = re.compile(filt)
 
     if len(lines) >= 1:
-        lines = filter(filterit, lines)
+        lines = list(filter(filterit, lines))
         if len(lines) >= 1:
-            return map(matchit, lines)
+            return list(map(matchit, lines))
     return None
 
 try:
@@ -71,24 +73,24 @@ try:
     elif len(sys.argv) == 2 and sys.argv[1] == "-a":
         do_exclude = False
     else:
-        print "usage: checktree [-a]"
-        print "  -a  don't filter common crud in the tree"
+        print("usage: checktree [-a]")
+        print("  -a  don't filter common crud in the tree")
         sys.exit(1)
 
     have = run("p4 have ...", r'[^#]+#[0-9]+ - (.*)', r'.*')
 
     cwd = os.getcwd()
     files = run("find . -not -type d", r'.(.*)', r'.*')
-    files = map(lambda s: cwd+s, files)
+    files = [cwd+s for s in files]
 
     added_depot_path = run("p4 opened ...", r'([^#]+)#.*', r'.*?#[0-9]+ - add .*');
     added = []
     if added_depot_path:
-        added_depot_path = map(quotate, added_depot_path)
+        added_depot_path = list(map(quotate, added_depot_path))
 
         where = "p4 where " + " ".join(added_depot_path)
         added = run(where, r'(.*)', r'.*')
-        added = map(split_perforce_parts, added)
+        added = list(map(split_perforce_parts, added))
 
     extras = []
 
@@ -106,8 +108,8 @@ try:
         extras = filter(filter_excludes, extras)
 
     for s in extras:
-        print s.replace(" ", "\\ ")
+        print(s.replace(" ", "\\ "))
 
-except PerforceError, e:
+except PerforceError as e:
     sys.exit(2)
 
