@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3f3283f1_12af4c95",
+        "filename": "core/tasks/dt_img.mk",
+        "patchSetId": 7
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 13648
+      },
+      "writtenOn": "2015-11-02T01:00:06Z",
+      "side": 1,
+      "message": "You did you remove it? The idea was not to see the command during build, only the output of echo.",
+      "range": {
+        "startLine": 30,
+        "startChar": 1,
+        "endLine": 30,
+        "endChar": 2
+      },
+      "revId": "83f99cc3a61c625b70017ed15f41c2691ecc17dc",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    }
+  ]
+}
