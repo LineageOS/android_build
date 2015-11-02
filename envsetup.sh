@@ -2310,7 +2310,7 @@ EOF
     fi
 
     stop_n_start=false
-    for FILE in $LOC; do
+    for FILE in $(echo $LOC | tr " " "\n"); do
         # Make sure file is in $OUT/system or $OUT/data
         case $FILE in
             $OUT/system/*|$OUT/data/*)
