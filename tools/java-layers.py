@@ -126,7 +126,7 @@ class Dependencies:
 
 def parse_dependency_file(filename):
   global err
-  f = file(filename)
+  f = open(filename)
   lines = f.readlines()
   f.close()
   def lineno(s, i):
@@ -180,7 +180,7 @@ def find_java_files(srcs):
   result = []
   for d in srcs:
     if d[0] == '@':
-      f = file(d[1:])
+      f = open(d[1:])
       result.extend([fn for fn in [s.strip() for s in f.readlines()]
           if len(fn) != 0])
       f.close()
@@ -197,7 +197,7 @@ IMPORT = re.compile("import\s+(.*)")
 def examine_java_file(deps, filename):
   global err
   # Yes, this is a crappy java parser.  Write a better one if you want to.
-  f = file(filename)
+  f = open(filename)
   text = f.read()
   f.close()
   text = COMMENTS.sub("", text)

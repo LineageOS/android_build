@@ -16,20 +16,20 @@
 
 from __future__ import print_function
 
-import os
+from operator import itemgetter
 import re
 import sys
 
 
 def iteritems(obj):
-  if hasattr('iteritems'):
+  if hasattr(obj, 'iteritems'):
     return obj.iteritems()
   return obj.items()
 
 
 def break_lines(key, val):
   # these don't get split
-  if key in ("PRODUCT_MODEL"):
+  if key in ("PRODUCT_MODEL",):
     return (key,val)
   return (key, "\n".join(val.split()))
 
@@ -51,8 +51,7 @@ def parse_variables(lines):
 def render_variables(variables):
   variables = dict(variables)
   del variables["FILE"]
-  variables = list(variables.items())
-  variables.sort(lambda a, b: cmp(a[0], b[0]))
+  variables = sorted(variables.items(), key=itemgetter(0))
   return ("<table id='variables'>"
       + "\n".join([ "<tr><th>%(key)s</th><td>%(val)s</td></tr>" % { "key": key, "val": val }
         for key,val in variables])
@@ -78,7 +77,7 @@ def render_original(variables, text):
   return text
 
 def read_file(fn):
-  f = file(fn)
+  f = open(fn)
   text = f.read()
   f.close()
   return text
