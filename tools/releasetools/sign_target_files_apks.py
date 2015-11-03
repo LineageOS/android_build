@@ -65,14 +65,15 @@ Usage:  sign_target_files_apks [flags] input_target_files output_target_files
 
 """
 
+from __future__ import print_function
+
 import sys
 
 if sys.hexversion < 0x02070000:
-  print >> sys.stderr, "Python 2.7 or newer is required."
+  print("Python 2.7 or newer is required.", file=sys.stderr)
   sys.exit(1)
 
 import base64
-import cStringIO
 import copy
 import errno
 import os
@@ -81,6 +82,11 @@ import shutil
 import subprocess
 import tempfile
 import zipfile
+
+try:
+  from cStringIO import StringIO
+except ImportError:
+  from io import StringIO
 
 import add_img_to_target_files
 import common
@@ -98,11 +104,11 @@ def GetApkCerts(tf_zip):
   certmap = common.ReadApkCerts(tf_zip)
 
   # apply the key remapping to the contents of the file
-  for apk, cert in certmap.iteritems():
+  for apk, cert in certmap.items():
     certmap[apk] = OPTIONS.key_map.get(cert, cert)
 
   # apply all the -e options, overriding anything in the file
-  for apk, cert in OPTIONS.extra_apks.iteritems():
+  for apk, cert in OPTIONS.extra_apks.items():
     if not cert:
       cert = "PRESIGNED"
     certmap[apk] = OPTIONS.key_map.get(cert, cert)
@@ -120,10 +126,10 @@ def CheckAllApksSigned(input_tf_zip, apk_key_map):
       if name not in apk_key_map:
         unknown_apks.append(name)
   if unknown_apks:
-    print "ERROR: no key specified for:\n\n ",
-    print "\n  ".join(unknown_apks)
-    print "\nUse '-e <apkname>=' to specify a key (which may be an"
-    print "empty string to not sign this apk)."
+    print("ERROR: no key specified for:\n\n ", end=' ')
+    print("\n  ".join(unknown_apks))
+    print("\nUse '-e <apkname>=' to specify a key (which may be an")
+    print("empty string to not sign this apk).")
     sys.exit(1)
 
 
@@ -220,26 +226,26 @@ def ProcessTargetFiles(input_tf_zip, output_tf_zip, misc_info,
       name = os.path.basename(info.filename)
       key = apk_key_map[name]
       if key not in common.SPECIAL_CERT_STRINGS:
-        print "    signing: %-*s (%s)" % (maxsize, name, key)
+        print("    signing: %-*s (%s)" % (maxsize, name, key))
         signed_data = SignApk(data, key, key_passwords[key], platform_api_level,
             codename_to_api_level_map)
         common.ZipWriteStr(output_tf_zip, out_info, signed_data)
       else:
         # an APK we're not supposed to sign.
-        print "NOT signing: %s" % (name,)
+        print("NOT signing: %s" % name)
         common.ZipWriteStr(output_tf_zip, out_info, data)
     elif info.filename in ("SYSTEM/build.prop",
                            "VENDOR/build.prop",
                            "BOOT/RAMDISK/default.prop",
                            "RECOVERY/RAMDISK/default.prop"):
-      print "rewriting %s:" % (info.filename,)
+      print("rewriting %s:" % info.filename)
       new_data = RewriteProps(data, misc_info)
       common.ZipWriteStr(output_tf_zip, out_info, new_data)
       if info.filename in ("BOOT/RAMDISK/default.prop",
                            "RECOVERY/RAMDISK/default.prop"):
         write_to_temp(info.filename, info.external_attr, new_data)
     elif info.filename.endswith("mac_permissions.xml"):
-      print "rewriting %s with new keys." % (info.filename,)
+      print("rewriting %s with new keys." % info.filename)
       new_data = ReplaceCerts(data)
       common.ZipWriteStr(output_tf_zip, out_info, new_data)
     elif info.filename in ("SYSTEM/recovery-from-boot.p",
@@ -286,10 +292,10 @@ def ReplaceCerts(data):
   """Given a string of data, replace all occurences of a set
   of X509 certs with a newer set of X509 certs and return
   the updated data string."""
-  for old, new in OPTIONS.key_map.iteritems():
+  for old, new in OPTIONS.key_map.items():
     try:
       if OPTIONS.verbose:
-        print "    Replacing %s.x509.pem with %s.x509.pem" % (old, new)
+        print("    Replacing %s.x509.pem with %s.x509.pem" % (old, new))
       f = open(old + ".x509.pem")
       old_cert16 = base64.b16encode(common.ParseCertificate(f.read())).lower()
       f.close()
@@ -300,14 +306,14 @@ def ReplaceCerts(data):
       pattern = "\\b"+old_cert16+"\\b"
       (data, num) = re.subn(pattern, new_cert16, data, flags=re.IGNORECASE)
       if OPTIONS.verbose:
-        print "    Replaced %d occurence(s) of %s.x509.pem with " \
-            "%s.x509.pem" % (num, old, new)
+        print("    Replaced %d occurence(s) of %s.x509.pem with "
+              "%s.x509.pem" % (num, old, new))
     except IOError as e:
       if e.errno == errno.ENOENT and not OPTIONS.verbose:
         continue
 
-      print "    Error accessing %s. %s. Skip replacing %s.x509.pem " \
-          "with %s.x509.pem." % (e.filename, e.strerror, old, new)
+      print("    Error accessing %s. %s. Skip replacing %s.x509.pem "
+            "with %s.x509.pem." % (e.filename, e.strerror, old, new))
 
   return data
 
@@ -360,8 +366,8 @@ def RewriteProps(data, misc_info):
         value = " ".join(value)
       line = key + "=" + value
     if line != original_line:
-      print "  replace: ", original_line
-      print "     with: ", line
+      print("  replace: ", original_line)
+      print("     with: ", line)
     output.append(line)
   return "\n".join(output) + "\n"
 
@@ -377,7 +383,7 @@ def ReplaceOtaKeys(input_tf_zip, output_tf_zip, misc_info):
     extra_recovery_keys = [OPTIONS.key_map.get(k, k) + ".x509.pem"
                            for k in extra_recovery_keys.split()]
     if extra_recovery_keys:
-      print "extra recovery-only key(s): " + ", ".join(extra_recovery_keys)
+      print("extra recovery-only key(s): " + ", ".join(extra_recovery_keys))
   else:
     extra_recovery_keys = []
 
@@ -391,14 +397,14 @@ def ReplaceOtaKeys(input_tf_zip, output_tf_zip, misc_info):
     mapped_keys.append(OPTIONS.key_map.get(k, k) + ".x509.pem")
 
   if mapped_keys:
-    print "using:\n   ", "\n   ".join(mapped_keys)
-    print "for OTA package verification"
+    print("using:\n   ", "\n   ".join(mapped_keys))
+    print("for OTA package verification")
   else:
     devkey = misc_info.get("default_system_dev_certificate",
                            "build/target/product/security/testkey")
     mapped_keys.append(
         OPTIONS.key_map.get(devkey, devkey) + ".x509.pem")
-    print "META/otakeys.txt has no keys; using", mapped_keys[0]
+    print("META/otakeys.txt has no keys; using", mapped_keys[0])
 
   # recovery uses a version of the key that has been slightly
   # predigested (by DumpPublicKey.java) and put in res/keys.
@@ -426,7 +432,7 @@ def ReplaceOtaKeys(input_tf_zip, output_tf_zip, misc_info):
   # put into a zipfile system/etc/security/otacerts.zip.
   # We DO NOT include the extra_recovery_keys (if any) here.
 
-  temp_file = cStringIO.StringIO()
+  temp_file = StringIO()
   certs_zip = zipfile.ZipFile(temp_file, "w")
   for k in mapped_keys:
     common.ZipWrite(certs_zip, k)
@@ -437,7 +443,7 @@ def ReplaceOtaKeys(input_tf_zip, output_tf_zip, misc_info):
   return new_recovery_keys
 
 def ReplaceVerityPublicKey(targetfile_zip, filename, key_path):
-  print "Replacing verity public key with %s" % key_path
+  print("Replacing verity public key with %s" % key_path)
   with open(key_path) as f:
     data = f.read()
   common.ZipWriteStr(targetfile_zip, filename, data)
@@ -445,7 +451,7 @@ def ReplaceVerityPublicKey(targetfile_zip, filename, key_path):
 
 def ReplaceVerityPrivateKey(targetfile_input_zip, targetfile_output_zip,
                             misc_info, key_path):
-  print "Replacing verity private key with %s" % key_path
+  print("Replacing verity private key with %s" % key_path)
   current_key = misc_info["verity_key"]
   original_misc_info = targetfile_input_zip.read("META/misc_info.txt")
   new_misc_info = original_misc_info.replace(current_key, key_path)
@@ -596,14 +602,14 @@ def main(argv):
 
   add_img_to_target_files.AddImagesToTargetFiles(args[1])
 
-  print "done."
+  print("done.")
 
 
 if __name__ == '__main__':
   try:
     main(sys.argv[1:])
-  except common.ExternalError, e:
-    print
-    print "   ERROR: %s" % (e,)
-    print
+  except common.ExternalError as e:
+    print()
+    print("   ERROR: %s" % e)
+    print()
     sys.exit(1)

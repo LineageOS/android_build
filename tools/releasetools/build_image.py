@@ -20,16 +20,23 @@ Build image output_image_file from input_directory and properties_file.
 Usage:  build_image input_directory properties_file output_image_file
 
 """
+
+from __future__ import print_function
+
 import os
 import os.path
 import re
 import subprocess
 import sys
-import commands
 import common
 import shutil
 import sparse_img
 import tempfile
+
+try:
+  from commands import getstatusoutput
+except ImportError:
+  from subprocess import getstatusoutput
 
 OPTIONS = common.OPTIONS
 
@@ -44,10 +51,10 @@ def RunCommand(cmd):
   Returns:
     A tuple of the output and the exit code.
   """
-  print "Running: ", " ".join(cmd)
+  print("Running: %s" % " ".join(cmd))
   p = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
   output, _ = p.communicate()
-  print "%s" % (output.rstrip(),)
+  print("%s" % output.rstrip())
   return (output, p.returncode)
 
 def GetVerityFECSize(partition_size):
@@ -61,9 +68,9 @@ def GetVerityFECSize(partition_size):
 def GetVerityTreeSize(partition_size):
   cmd = "build_verity_tree -s %d"
   cmd %= partition_size
-  status, output = commands.getstatusoutput(cmd)
+  status, output = getstatusoutput(cmd)
   if status:
-    print output
+    print(output)
     return False, 0
   return True, int(output)
 
@@ -71,9 +78,9 @@ def GetVerityMetadataSize(partition_size):
   cmd = "system/extras/verity/build_verity_metadata.py -s %d"
   cmd %= partition_size
 
-  status, output = commands.getstatusoutput(cmd)
+  status, output = getstatusoutput(cmd)
   if status:
-    print output
+    print(output)
     return False, 0
   return True, int(output)
 
@@ -152,10 +159,10 @@ def BuildVerityFEC(sparse_image_path, verity_path, verity_fec_path):
 def BuildVerityTree(sparse_image_path, verity_image_path, prop_dict):
   cmd = "build_verity_tree -A %s %s %s" % (
       FIXED_SALT, sparse_image_path, verity_image_path)
-  print cmd
-  status, output = commands.getstatusoutput(cmd)
+  print(cmd)
+  status, output = getstatusoutput(cmd)
   if status:
-    print "Could not build verity tree! Error: %s" % output
+    print("Could not build verity tree! Error: %s" % output)
     return False
   root, salt = output.split()
   prop_dict["verity_root_hash"] = root
@@ -168,10 +175,10 @@ def BuildVerityMetadata(image_size, verity_metadata_path, root_hash, salt,
       "system/extras/verity/build_verity_metadata.py %s %s %s %s %s %s %s")
   cmd = cmd_template % (image_size, verity_metadata_path, root_hash, salt,
                         block_device, signer_path, key)
-  print cmd
-  status, output = commands.getstatusoutput(cmd)
+  print(cmd)
+  status, output = getstatusoutput(cmd)
   if status:
-    print "Could not build verity metadata! Error: %s" % output
+    print("Could not build verity metadata! Error: %s" % output)
     return False
   return True
 
@@ -186,10 +193,10 @@ def Append2Simg(sparse_image_path, unsparse_image_path, error_message):
   """
   cmd = "append2simg %s %s"
   cmd %= (sparse_image_path, unsparse_image_path)
-  print cmd
-  status, output = commands.getstatusoutput(cmd)
+  print(cmd)
+  status, output = getstatusoutput(cmd)
   if status:
-    print "%s: %s" % (error_message, output)
+    print("%s: %s" % (error_message, output))
     return False
   return True
 
@@ -472,7 +479,7 @@ def BuildImage(in_dir, prop_dict, out_file, target_out=None):
     ext4fs_stats = re.compile(
         r'Created filesystem with .* (?P<used_blocks>[0-9]+)/'
         r'(?P<total_blocks>[0-9]+) blocks')
-    m = ext4fs_stats.match(ext4fs_output.strip().split('\n')[-1])
+    m = ext4fs_stats.match(ext4fs_output.strip().split(b'\n')[-1])
     used_blocks = int(m.groupdict().get('used_blocks'))
     total_blocks = int(m.groupdict().get('total_blocks'))
     reserved_blocks = min(4096, int(total_blocks * 0.02))
@@ -614,7 +621,7 @@ def LoadGlobalDict(filename):
 
 def main(argv):
   if len(argv) != 4:
-    print __doc__
+    print(__doc__)
     sys.exit(1)
 
   in_dir = argv[0]
@@ -641,14 +648,14 @@ def main(argv):
     elif image_filename == "oem.img":
       mount_point = "oem"
     else:
-      print >> sys.stderr, "error: unknown image file name ", image_filename
+      print("error: unknown image file name ", image_filename, file=sys.stderr)
       exit(1)
 
     image_properties = ImagePropFromGlobalDict(glob_dict, mount_point)
 
   if not BuildImage(in_dir, image_properties, out_file, target_out):
-    print >> sys.stderr, "error: failed to build %s from %s" % (out_file,
-                                                                in_dir)
+    print("error: failed to build %s from %s" % (out_file, in_dir),
+          file=sys.stderr)
     exit(1)
 
 

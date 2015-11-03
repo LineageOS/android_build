@@ -14,8 +14,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+from __future__ import print_function
+
 import sys
-import os
 
 try:
   from hashlib import sha1
@@ -52,8 +53,9 @@ for item in sys.argv[2:]:
   try:
     f = open(fn + ".sha1")
   except IOError:
-    if not bad: print
-    print "*** Error opening \"%s.sha1\"; can't verify %s" % (fn, key)
+    if not bad:
+      print()
+    print("*** Error opening \"%s.sha1\"; can't verify %s" % (fn, key))
     bad = True
     continue
   for line in f:
@@ -63,17 +65,19 @@ for item in sys.argv[2:]:
     versions[h] = v
 
   if digest not in versions:
-    if not bad: print
-    print "*** SHA-1 hash of \"%s\" doesn't appear in \"%s.sha1\"" % (fn, fn)
+    if not bad:
+      print()
+    print("*** SHA-1 hash of \"%s\" doesn't appear in \"%s.sha1\"" % (fn, fn))
     bad = True
     continue
 
   if versions[digest] not in values:
-    if not bad: print
-    print "*** \"%s\" is version %s; not any %s allowed by \"%s\"." % (
-        fn, versions[digest], key, sys.argv[1])
+    if not bad:
+      print()
+    print("*** \"%s\" is version %s; not any %s allowed by \"%s\"." % (
+        fn, versions[digest], key, sys.argv[1]))
     bad = True
 
 if bad:
-  print
+  print()
   sys.exit(1)
