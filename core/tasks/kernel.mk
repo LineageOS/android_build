@@ -186,7 +186,7 @@ ifneq ($(USE_CCACHE),)
     ccache := $(strip $(wildcard $(ccache)))
 endif
 
-KERNEL_CROSS_COMPILE := CROSS_COMPILE="$(ccache) $(KERNEL_TOOLCHAIN_PATH)"
+KERNEL_CROSS_COMPILE := CROSS_COMPILE=$(KERNEL_TOOLCHAIN_PATH)
 ccache =
 
 define mv-modules
