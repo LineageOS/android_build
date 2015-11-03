@@ -667,13 +667,14 @@ else if get_stage("%(bcb_dev)s") == "3/3" then
   if HasVendorPartition(input_zip):
     system_progress -= 0.1
 
-  script.AppendExtra("if is_mounted(\"/data\") then")
-  script.ValidateSignatures("data")
-  script.AppendExtra("else")
-  script.Mount("/data")
-  script.ValidateSignatures("data")
-  script.Unmount("/data")
-  script.AppendExtra("endif;")
+  if not OPTIONS.wipe_user_data:
+    script.AppendExtra("if is_mounted(\"/data\") then")
+    script.ValidateSignatures("data")
+    script.AppendExtra("else")
+    script.Mount("/data")
+    script.ValidateSignatures("data")
+    script.Unmount("/data")
+    script.AppendExtra("endif;")
 
   # Place a copy of file_contexts.bin into the OTA package which will be used
   # by the recovery program.
