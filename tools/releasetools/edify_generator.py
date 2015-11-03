@@ -160,7 +160,7 @@ class EdifyGenerator(object):
            ", ".join(["%s" % (b,) for b in basebands]) +
            '; this device has baseband " + getprop("ro.baseband") + ".");' +
            ");")
-    self.script.append(self._WordWrap(cmd))
+    self.script.append(self.WordWrap(cmd))
 
   def RunBackup(self, command):
     self.script.append(('run_program("/tmp/install/bin/backuptool.sh", "%s");' % command))
@@ -401,7 +401,7 @@ class EdifyGenerator(object):
     for d, l in symlink_list:
       by_dest.setdefault(d, []).append(l)
 
-    for dest, links in sorted(by_dest.iteritems()):
+    for dest, links in sorted(by_dest.items()):
       cmd = ('symlink("%s", ' % (dest,) +
              ",\0".join(['"' + i + '"' for i in sorted(links)]) + ");")
       self.script.append(self.WordWrap(cmd))

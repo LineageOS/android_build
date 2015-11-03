@@ -4,8 +4,12 @@
 from __future__ import print_function
 
 import optparse
-import re
 import sys
+
+try:
+  raw_input
+except NameError:
+  raw_input = input
 
 
 class Dependency:
@@ -45,7 +49,7 @@ class Dependencies:
     t.pos = pos
 
   def get(self, tgt):
-    if self.lines.has_key(tgt):
+    if tgt in self.lines:
       return self.lines[tgt]
     else:
       return None

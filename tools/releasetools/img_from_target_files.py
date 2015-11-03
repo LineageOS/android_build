@@ -26,10 +26,12 @@ Usage:  img_from_target_files [flags] input_target_files output_image_zip
 
 """
 
+from __future__ import print_function
+
 import sys
 
 if sys.hexversion < 0x02070000:
-  print >> sys.stderr, "Python 2.7 or newer is required."
+  print("Python 2.7 or newer is required.", file=sys.stderr)
   sys.exit(1)
 
 import errno
@@ -61,7 +63,7 @@ def AddRadio(output_zip):
     # If a filesmap file exists, create a script to flash the radio images based on it
     filesmap = os.path.join(OPTIONS.input_tmp, "RADIO/filesmap")
     if os.path.isfile(filesmap):
-      print "creating flash-radio.sh..."
+      print("creating flash-radio.sh...")
       filesmap_data = open(filesmap, "r")
       filesmap_regex = re.compile(r'^(\S+)\s\S+\/by-name\/(\S+).*')
       tmp_flash_radio = tempfile.NamedTemporaryFile()
@@ -74,7 +76,7 @@ def AddRadio(output_zip):
       if os.path.getsize(tmp_flash_radio.name) > 0:
         output_zip.write(tmp_flash_radio.name, "flash-radio.sh")
       else:
-        print "flash-radio.sh is empty, skipping..."
+        print("flash-radio.sh is empty, skipping...")
       tmp_flash_radio.close()
 
 def main(argv):
@@ -142,7 +144,7 @@ def main(argv):
           recovery_image.AddToZip(output_zip)
 
       def banner(s):
-        print "\n\n++++ " + s + " ++++\n\n"
+        print("\n\n++++ " + s + " ++++\n\n")
 
       if not bootable_only:
         banner("AddSystem")
@@ -161,11 +163,11 @@ def main(argv):
         add_img_to_target_files.AddCache(output_zip, prefix="")
 
   finally:
-    print "cleaning up..."
+    print("cleaning up...")
     common.ZipClose(output_zip)
     shutil.rmtree(OPTIONS.input_tmp)
 
-  print "done."
+  print("done.")
 
 
 if __name__ == '__main__':
@@ -173,7 +175,7 @@ if __name__ == '__main__':
     common.CloseInheritedPipes()
     main(sys.argv[1:])
   except common.ExternalError as e:
-    print
-    print "   ERROR: %s" % (e,)
-    print
+    print()
+    print("   ERROR: %s" % e)
+    print()
     sys.exit(1)

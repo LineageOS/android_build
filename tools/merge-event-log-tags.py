@@ -42,7 +42,7 @@ except ImportError:
 import event_log_tags
 
 
-def itermitems(obj):
+def iteritems(obj):
   if hasattr(obj, 'iteritems'):
     return obj.iteritems()
   return obj.items()
