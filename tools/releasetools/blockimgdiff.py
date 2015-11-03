@@ -379,7 +379,7 @@ class BlockImageDiff(object):
             src_str.append("%s:%s" % (sh, sr.to_string_raw()))
             stashes[sh] -= 1
             if stashes[sh] == 0:
-              free_string.append("free %s\n" % (sh))
+              free_string.append("free %s\n" % sh)
               stashes.pop(sh)
           heapq.heappush(free_stash_ids, sid)
 
