@@ -21,7 +21,7 @@ import operator, os, sys
 
 def get_file_size(path):
   st = os.lstat(path)
-  return st.st_size;
+  return st.st_size
 
 def main(argv):
   output = []

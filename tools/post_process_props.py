@@ -14,7 +14,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import os, sys
+import sys
 
 
 def iteritems(obj):
@@ -61,7 +61,7 @@ def mangle_default_prop(prop):
   # default to "adb". That might not the right policy there, but it's better
   # to be explicit.
   if not prop.get("persist.sys.usb.config"):
-    prop.put("persist.sys.usb.config", "none");
+    prop.put("persist.sys.usb.config", "none")
 
 def validate(prop):
   """Validate the properties.
