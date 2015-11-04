@@ -314,6 +314,7 @@ $(call add-clean-step, rm -rf $(PRODUCT_OUT)/system/build.prop)
 $(call add-clean-step, rm -rf $(PRODUCT_OUT)/system/app/*)
 $(call add-clean-step, rm -rf $(PRODUCT_OUT)/obj/APPS/*)
 
+# Added new build props
 $(call add-clean-step, rm -rf $(PRODUCT_OUT)/system/build.prop)
 
 # ************************************************
