@@ -42,6 +42,11 @@ Usage:  ota_from_target_files [flags] input_target_files output_ota_package
       radio image. This option is only meaningful when -i is specified,
       because a full radio is always included in a full OTA if applicable.
 
+ --full_bootloader
+      When generating an incremental OTA, always include a full copy of
+      bootloader image. This option is only meaningful when -i is specified,
+      because a full bootloader is always included in a full OTA if applicable.
+
   -v  (--verify)
       Remount and verify the checksums of the files written to the
       system and vendor (if used) partitions.  Incremental builds only.
@@ -83,6 +88,10 @@ Usage:  ota_from_target_files [flags] input_target_files output_ota_package
   -t  (--worker_threads) <int>
       Specifies the number of worker-threads that will be used when
       generating patches for incremental updates (defaults to 3).
+
+  --stash_threshold <float>
+      Specifies the threshold that will be used to compute the maximum
+      allowed stash size (defaults to 0.8).
 
   --backup <boolean>
       Enable or disable the execution of backuptool.sh.
@@ -133,6 +142,10 @@ OPTIONS.updater_binary = None
 OPTIONS.oem_source = None
 OPTIONS.fallback_to_full = True
 OPTIONS.full_radio = False
+OPTIONS.full_bootloader = False
+# Stash size cannot exceed cache_size * threshold.
+OPTIONS.cache_size = None
+OPTIONS.stash_threshold = 0.8
 OPTIONS.backuptool = False
 OPTIONS.override_device = 'auto'
 OPTIONS.override_prop = False
@@ -1571,6 +1584,8 @@ def main(argv):
       OPTIONS.incremental_source = a
     elif o == "--full_radio":
       OPTIONS.full_radio = True
+    elif o == "--full_bootloader":
+      OPTIONS.full_bootloader = True
     elif o in ("-w", "--wipe_user_data"):
       OPTIONS.wipe_user_data = True
     elif o in ("-n", "--no_prereq"):
@@ -1602,6 +1617,12 @@ def main(argv):
       OPTIONS.updater_binary = a
     elif o in ("--no_fallback_to_full",):
       OPTIONS.fallback_to_full = False
+    elif o == "--stash_threshold":
+      try:
+        OPTIONS.stash_threshold = float(a)
+      except ValueError:
+        raise ValueError("Cannot parse value %r for option %r - expecting "
+                         "a float" % (a, o))
     elif o in ("--backup"):
       OPTIONS.backuptool = bool(a.lower() == 'true')
     elif o in ("--override_device"):
@@ -1619,6 +1640,7 @@ def main(argv):
                                  "package_key=",
                                  "incremental_from=",
                                  "full_radio",
+                                 "full_bootloader",
                                  "wipe_user_data",
                                  "no_prereq",
                                  "extra_script=",
@@ -1631,6 +1653,7 @@ def main(argv):
                                  "oem_settings=",
                                  "verify",
                                  "no_fallback_to_full",
+                                 "stash_threshold=",
                                  "backup=",
                                  "override_device=",
                                  "override_prop="
@@ -1690,6 +1713,11 @@ def main(argv):
       temp_zip_file = tempfile.NamedTemporaryFile()
       output_zip = zipfile.ZipFile(temp_zip_file, "w",
                                    compression=zipfile.ZIP_DEFLATED)
+
+    cache_size = OPTIONS.info_dict.get("cache_size", None)
+    if cache_size is None:
+      raise RuntimeError("can't determine the cache partition size")
+    OPTIONS.cache_size = cache_size
 
     if OPTIONS.incremental_source is None:
       WriteFullOTAPackage(input_zip, output_zip)
