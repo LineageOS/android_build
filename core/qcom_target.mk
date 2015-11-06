@@ -32,6 +32,9 @@ ifeq ($(BOARD_USES_QCOM_HARDWARE),true)
     ifneq ($(filter msm7x30 msm8660 msm8960,$(TARGET_BOARD_PLATFORM)),)
         # Enable legacy graphics functions
         qcom_flags += -DQCOM_BSP_LEGACY
+        ifeq ($(BOARD_USES_LEGACY_ALSA_AUDIO),true)
+            qcom_flags += -DLEGACY_ALSA_AUDIO
+        endif
     endif
 
     TARGET_GLOBAL_CFLAGS += $(qcom_flags)
