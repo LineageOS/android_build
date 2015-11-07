@@ -9,6 +9,7 @@
 # variables again.
 INSTALLED_BOOTIMAGE_TARGET := $(PRODUCT_OUT)/boot.img
 INSTALLED_RECOVERYIMAGE_TARGET := $(PRODUCT_OUT)/recovery.img
+INSTALLED_USERDATAIMAGE_TARGET := $(PRODUCT_OUT)/userdata.img
 
 #----------------------------------------------------------------------
 # Generate secure boot & recovery image
