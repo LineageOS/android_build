@@ -89,10 +89,10 @@ BUILT_USERDATAEXTRAIMAGE_TARGET := $(PRODUCT_OUT)/userdata_$(BOARD_USERDATAEXTRA
 
 define build-userdataextraimage-target
     $(call pretty,"Target EXTRA userdata fs image: $(INSTALLED_USERDATAEXTRAIMAGE_TARGET)")
-    @mkdir -p $(TARGET_OUT_DATA)
-    $(hide) $(MKEXTUSERIMG) -s $(TARGET_OUT_DATA) $@ ext4 data $(BOARD_USERDATAEXTRAIMAGE_PARTITION_SIZE)
-    $(hide) chmod a+r $@
-    $(hide) $(call assert-max-image-size,$@,$(BOARD_USERDATAEXTRAIMAGE_PARTITION_SIZE),yaffs)
+    $(hide) PATH=$(foreach p,$(INTERNAL_USERIMAGES_BINARY_PATHS),$(p):)$$PATH \
+      ./build/tools/releasetools/build_image.py \
+      $(TARGET_OUT_DATA) $(userdataimage_intermediates)/userdata_image_info.txt $(INSTALLED_USERDATAEXTRAIMAGE_TARGET) $(TARGET_OUT)
+    $(hide) $(call assert-max-image-size,$(INSTALLED_USERDATAEXTRAIMAGE_TARGET),$(BOARD_USERDATAEXTRAIMAGE_PARTITION_SIZE))
 endef
 
 INSTALLED_USERDATAEXTRAIMAGE_TARGET := $(BUILT_USERDATAEXTRAIMAGE_TARGET)
