@@ -813,7 +813,7 @@ function eat()
         sleep 1
         adb wait-for-device
         cat << EOF > /tmp/command
---sideload
+--sideload_auto_reboot
 EOF
         if adb push /tmp/command /cache/recovery/ ; then
             echo "Rebooting into recovery for sideload installation"
