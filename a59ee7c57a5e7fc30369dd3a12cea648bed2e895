@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1f2f7f8d_e2516710",
+        "filename": "core/Makefile",
+        "patchSetId": 2
+      },
+      "lineNbr": 1015,
+      "author": {
+        "id": 8640
+      },
+      "writtenOn": "2015-11-12T03:46:07Z",
+      "side": 1,
+      "message": "Moving this causes devices with a normal bootimage make to get a ramdisk as the recovery target.  That is why the mismerge was fixed earlier.",
+      "range": {
+        "startLine": 1015,
+        "startChar": 0,
+        "endLine": 1015,
+        "endChar": 39
+      },
+      "revId": "a59ee7c57a5e7fc30369dd3a12cea648bed2e895",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    }
+  ]
+}
