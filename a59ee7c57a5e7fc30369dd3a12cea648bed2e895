@@ -22,6 +22,30 @@
       "revId": "a59ee7c57a5e7fc30369dd3a12cea648bed2e895",
       "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1f2f7f8d_6294578c",
+        "filename": "core/Makefile",
+        "patchSetId": 2
+      },
+      "lineNbr": 1015,
+      "author": {
+        "id": 4550
+      },
+      "writtenOn": "2015-11-12T04:07:37Z",
+      "side": 1,
+      "message": "I don\u0027t understand the issue, I got proper recovery/boot images on semc (with custom mkbootimg) and find7s (without custom mkbootimg)",
+      "parentUuid": "1f2f7f8d_e2516710",
+      "range": {
+        "startLine": 1015,
+        "startChar": 0,
+        "endLine": 1015,
+        "endChar": 39
+      },
+      "revId": "a59ee7c57a5e7fc30369dd3a12cea648bed2e895",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
     }
   ]
 }
