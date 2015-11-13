@@ -825,7 +825,10 @@ function m()
     local T=$(gettop)
     local DRV=$(getdriver $T)
     if [ "$T" ]; then
-        $DRV make -C $T -f build/core/main.mk $@
+        case `uname -s` in
+            Darwin) $DRV make  -C $T -j `sysctl hw.ncpu|cut -d" " -f2` -f build/core/main.mk $@ ;;
+            *)      $DRV make -C $T -j$(cat /proc/cpuinfo | grep "^processor" | wc -l) -f build/core/main.mk $@ ;;
+        esac
     else
         echo "Couldn't locate the top of the tree.  Try setting TOP."
         return 1
@@ -856,7 +859,10 @@ function mm()
     # If we're sitting in the root of the build tree, just do a
     # normal make.
     if [ -f build/core/envsetup.mk -a -f Makefile ]; then
-        $DRV make $@
+        case `uname -s` in
+            Darwin) $DRV make -j `sysctl hw.ncpu|cut -d" " -f2` "$@" ;;
+            *)      $DRV make -j$(cat /proc/cpuinfo | grep "^processor" | wc -l) "$@" ;;
+        esac
     else
         # Find the closest Android.mk file.
         local M=$(findmakefile)
@@ -884,7 +890,10 @@ function mm()
               MODULES=all_modules
               ARGS=$@
             fi
-            ONE_SHOT_MAKEFILE=$M $DRV make -C $T -f build/core/main.mk $MODULES $ARGS
+            case `uname -s` in
+                Darwin) ONE_SHOT_MAKEFILE=$M $DRV make -C $T -j `sysctl hw.ncpu|cut -d" " -f2` -f build/core/main.mk $MODULES $ARGS ;;
+                *)      ONE_SHOT_MAKEFILE=$M $DRV make -C $T -j$(cat /proc/cpuinfo | grep "^processor" | wc -l) -f build/core/main.mk $MODULES $ARGS ;;
+            esac
         fi
     fi
 }
@@ -935,7 +944,10 @@ function mmm()
           ARGS=$GET_INSTALL_PATH
           MODULES=
         fi
-        ONE_SHOT_MAKEFILE="$MAKEFILE" $DRV make -C $T -f build/core/main.mk $DASH_ARGS $MODULES $ARGS
+        case `uname -s` in
+          Darwin) ONE_SHOT_MAKEFILE="$MAKEFILE" $DRV make -C $T -j `sysctl hw.ncpu|cut -d" " -f2` -f build/core/main.mk $DASH_ARGS $MODULES $ARGS ;;
+          *)      ONE_SHOT_MAKEFILE="$MAKEFILE" $DRV make -C $T -j$(cat /proc/cpuinfo | grep "^processor" | wc -l) -f build/core/main.mk $DASH_ARGS $MODULES $ARGS ;;
+        esac
     else
         echo "Couldn't locate the top of the tree.  Try setting TOP."
         return 1
@@ -947,14 +959,20 @@ function mma()
   local T=$(gettop)
   local DRV=$(getdriver $T)
   if [ -f build/core/envsetup.mk -a -f Makefile ]; then
-    $DRV make $@
+    case `uname -s` in
+      Darwin) $DRV make -j `sysctl hw.ncpu|cut -d" " -f2` $@ ;;
+      *)      $DRV make -j$(cat /proc/cpuinfo | grep "^processor" | wc -l) $@ ;;
+    esac
   else
     if [ ! "$T" ]; then
       echo "Couldn't locate the top of the tree.  Try setting TOP."
       return 1
     fi
     local MY_PWD=`PWD= /bin/pwd|sed 's:'$T'/::'`
-    $DRV make -C $T -f build/core/main.mk $@ all_modules BUILD_MODULES_IN_PATHS="$MY_PWD"
+    case `uname -s` in
+      Darwin) $DRV make -C $T -j `sysctl hw.ncpu|cut -d" " -f2` -f build/core/main.mk $@ all_modules BUILD_MODULES_IN_PATHS="$MY_PWD" ;;
+      *)      $DRV make -C $T -j$(cat /proc/cpuinfo | grep "^processor" | wc -l) -f build/core/main.mk $@ all_modules BUILD_MODULES_IN_PATHS="$MY_PWD" ;;
+    esac
   fi
 }
 
@@ -988,7 +1006,10 @@ function mmma()
         esac
       fi
     done
-    $DRV make -C $T -f build/core/main.mk $DASH_ARGS $ARGS all_modules BUILD_MODULES_IN_PATHS="$MODULE_PATHS"
+    case `uname -s` in
+      Darwin) $DRV make -C $T -j `sysctl hw.ncpu|cut -d" " -f2` -f build/core/main.mk $DASH_ARGS $ARGS all_modules BUILD_MODULES_IN_PATHS="$MODULE_PATHS" ;;
+      *)      $DRV make -C $T -j$(cat /proc/cpuinfo | grep "^processor" | wc -l) -f build/core/main.mk $DASH_ARGS $ARGS all_modules BUILD_MODULES_IN_PATHS="$MODULE_PATHS" ;;
+    esac
   else
     echo "Couldn't locate the top of the tree.  Try setting TOP."
     return 1
