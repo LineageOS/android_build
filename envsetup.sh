@@ -825,7 +825,8 @@ function m()
     local T=$(gettop)
     local DRV=$(getdriver $T)
     if [ "$T" ]; then
-        $DRV make -C $T -f build/core/main.mk $@
+        get_make_jobs
+        $DRV make -C $T -j $jobs -f build/core/main.mk $@
     else
         echo "Couldn't locate the top of the tree.  Try setting TOP."
         return 1
@@ -856,7 +857,8 @@ function mm()
     # If we're sitting in the root of the build tree, just do a
     # normal make.
     if [ -f build/core/envsetup.mk -a -f Makefile ]; then
-        $DRV make $@
+        get_make_jobs
+        $DRV make -j $jobs $@
     else
         # Find the closest Android.mk file.
         local M=$(findmakefile)
@@ -884,7 +886,8 @@ function mm()
               MODULES=all_modules
               ARGS=$@
             fi
-            ONE_SHOT_MAKEFILE=$M $DRV make -C $T -f build/core/main.mk $MODULES $ARGS
+            get_make_jobs
+            ONE_SHOT_MAKEFILE=$M $DRV make -C $T -j $jobs -f build/core/main.mk $MODULES $ARGS
         fi
     fi
 }
@@ -935,7 +938,8 @@ function mmm()
           ARGS=$GET_INSTALL_PATH
           MODULES=
         fi
-        ONE_SHOT_MAKEFILE="$MAKEFILE" $DRV make -C $T -f build/core/main.mk $DASH_ARGS $MODULES $ARGS
+        get_make_jobs
+        ONE_SHOT_MAKEFILE="$MAKEFILE" $DRV make -C $T -j $jobs -f build/core/main.mk $DASH_ARGS $MODULES $ARGS
     else
         echo "Couldn't locate the top of the tree.  Try setting TOP."
         return 1
@@ -947,14 +951,16 @@ function mma()
   local T=$(gettop)
   local DRV=$(getdriver $T)
   if [ -f build/core/envsetup.mk -a -f Makefile ]; then
-    $DRV make $@
+    get_make_jobs
+    $DRV make -j $jobs $@
   else
     if [ ! "$T" ]; then
       echo "Couldn't locate the top of the tree.  Try setting TOP."
       return 1
     fi
     local MY_PWD=`PWD= /bin/pwd|sed 's:'$T'/::'`
-    $DRV make -C $T -f build/core/main.mk $@ all_modules BUILD_MODULES_IN_PATHS="$MY_PWD"
+    get_make_jobs
+    $DRV make -C $T -j $jobs -f build/core/main.mk $@ all_modules BUILD_MODULES_IN_PATHS="$MY_PWD"
   fi
 }
 
@@ -988,7 +994,8 @@ function mmma()
         esac
       fi
     done
-    $DRV make -C $T -f build/core/main.mk $DASH_ARGS $ARGS all_modules BUILD_MODULES_IN_PATHS="$MODULE_PATHS"
+    get_make_jobs
+    $DRV make -C $T -j $jobs -f build/core/main.mk $DASH_ARGS $ARGS all_modules BUILD_MODULES_IN_PATHS="$MODULE_PATHS"
   else
     echo "Couldn't locate the top of the tree.  Try setting TOP."
     return 1
@@ -2104,12 +2111,13 @@ function cmrebase() {
 function mka() {
     local T=$(gettop)
     if [ "$T" ]; then
+        get_make_jobs
         case `uname -s` in
             Darwin)
-                make -C $T -j `sysctl hw.ncpu|cut -d" " -f2` "$@"
+                make -C $T -j $jobs "$@"
                 ;;
             *)
-                mk_timer schedtool -B -n 1 -e ionice -n 1 make -C $T -j$(cat /proc/cpuinfo | grep "^processor" | wc -l) "$@"
+                mk_timer schedtool -B -n 1 -e ionice -n 1 make -C $T -j $jobs "$@"
                 ;;
         esac
 
@@ -2364,6 +2372,14 @@ function pez {
 function get_make_command()
 {
   echo command make
+}
+
+function get_make_jobs()
+{
+    case `uname -s` in
+        Darwin) jobs=`sysctl hw.ncpu|cut -d" " -f2` ;;
+        *)      jobs=$(cat /proc/cpuinfo | grep "^processor" | wc -l) ;;
+    esac
 }
 
 function mk_timer()
