@@ -214,6 +214,9 @@ ifeq ($(TARGET_KERNEL_MODULES),)
     TARGET_KERNEL_MODULES := no-external-modules
 endif
 
+# Make sure GNU ld is used
+MAKE_FLAGS += LD=$(KERNEL_TOOLCHAIN_PATH)ld.bfd
+
 $(KERNEL_OUT):
 	mkdir -p $(KERNEL_OUT)
 	mkdir -p $(KERNEL_MODULES_OUT)
