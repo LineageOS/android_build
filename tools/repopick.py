@@ -315,10 +315,10 @@ if __name__ == '__main__':
             else:
                 print(cmd)
             result = subprocess.call([' '.join(cmd)], cwd=project_path, shell=True)
-            if result != 0:
+            FETCH_HEAD = '{0}/.git/FETCH_HEAD'.format(project_path)
+            if result != 0 and os.stat(FETCH_HEAD).st_size != 0:
                 print('ERROR: git command failed')
                 sys.exit(result)
-            FETCH_HEAD = '{0}/.git/FETCH_HEAD'.format(project_path)
         # Check if it worked
         if args.gerrit != default_gerrit or os.stat(FETCH_HEAD).st_size == 0:
             # If not using the default gerrit or github failed, fetch from gerrit.
