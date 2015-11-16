@@ -94,7 +94,7 @@ ifneq ($(USE_CCACHE),)
   ifeq ($(HOST_OS)-$(BUILD_OS),windows-linux)
     CCACHE_HOST_TAG := linux-$(HOST_PREBUILT_ARCH)
   endif
-  ifneq ($(USE_LOCAL_CCACHE),)
+  ifeq ($(USE_LOCAL_CCACHE),)
     ccache := prebuilts/misc/$(CCACHE_HOST_TAG)/ccache/ccache
   else
     ccache := $(shell which ccache)
