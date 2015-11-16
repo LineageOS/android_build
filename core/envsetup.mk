@@ -240,8 +240,8 @@ board_config_mk :=
 # Now we can substitute with the real value of TARGET_COPY_OUT_VENDOR
 ifeq ($(TARGET_COPY_OUT_VENDOR),$(_vendor_path_placeholder))
 TARGET_COPY_OUT_VENDOR := system/vendor
-else ifeq ($(filter vendor system/vendor,$(TARGET_COPY_OUT_VENDOR)),)
-$(error TARGET_COPY_OUT_VENDOR must be either 'vendor' or 'system/vendor', seeing '$(TARGET_COPY_OUT_VENDOR)'.)
+else ifeq ($(filter vendor system/vendor system,$(TARGET_COPY_OUT_VENDOR)),)
+$(error TARGET_COPY_OUT_VENDOR must be either 'vendor', 'system/vendor' or 'system', seeing '$(TARGET_COPY_OUT_VENDOR)'.)
 endif
 PRODUCT_COPY_FILES := $(subst $(_vendor_path_placeholder),$(TARGET_COPY_OUT_VENDOR),$(PRODUCT_COPY_FILES))
 
