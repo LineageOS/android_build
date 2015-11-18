@@ -199,7 +199,7 @@ def add_to_manifest(repositories, fallback_branch = None):
     f.close()
 
 def fetch_dependencies(repo_path, fallback_branch = None):
-    print('Looking for dependencies')
+    print("Looking for dependencies in %s" % repo_path)
     dependencies_path = repo_path + '/cm.dependencies'
     syncable_repos = []
 
@@ -218,8 +218,6 @@ def fetch_dependencies(repo_path, fallback_branch = None):
         if len(fetch_list) > 0:
             print('Adding dependencies to manifest')
             add_to_manifest(fetch_list, fallback_branch)
-    else:
-        print('Dependencies file not found, bailing out.')
 
     if len(syncable_repos) > 0:
         print('Syncing dependencies')
