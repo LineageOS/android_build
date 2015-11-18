@@ -48,6 +48,7 @@ ifeq ($(KERNEL_HEADER_DEFCONFIG),)
 KERNEL_HEADER_DEFCONFIG := $(KERNEL_DEFCONFIG)
 endif
 
+KERNEL_DEFCONFIG_SRC := $(KERNEL_SRC)/arch/$(KERNEL_ARCH)/configs/$(KERNEL_DEFCONFIG)
 
 ifneq ($(BOARD_KERNEL_IMAGE_NAME),)
   TARGET_PREBUILT_INT_KERNEL_TYPE := $(BOARD_KERNEL_IMAGE_NAME)
@@ -206,6 +207,23 @@ define clean-module-folder
     fi
 endef
 
+define make-modules
+grep -q 'CONFIG_MODULES=y' $(KERNEL_CONFIG) || \
+		echo "Kernel Modules not enabled" && exit 0 ; \
+echo "Building Kernel Modules" ; \
+$(MAKE) $(MAKE_FLAGS) -C $(KERNEL_SRC) O=$(KERNEL_OUT) ARCH=$(KERNEL_ARCH) $(KERNEL_CROSS_COMPILE) modules && \
+$(MAKE) $(MAKE_FLAGS) -C $(KERNEL_SRC) O=$(KERNEL_OUT) INSTALL_MOD_PATH=../../$(KERNEL_MODULES_INSTALL) ARCH=$(KERNEL_ARCH) $(KERNEL_CROSS_COMPILE) modules_install && \
+$(mv-modules) && \
+$(clean-module-folder)
+endef
+
+define make-dtbs
+grep -q 'CONFIG_USE_OF=y' $(KERNEL_CONFIG) || \
+		echo "DTBs not enabled" && exit 0 ; \
+echo "Building DTBs" ; \
+$(MAKE) $(MAKE_FLAGS) -C $(KERNEL_SRC) O=$(KERNEL_OUT) ARCH=$(KERNEL_ARCH) $(KERNEL_CROSS_COMPILE) dtbs
+endef
+
 ifeq ($(HOST_OS),darwin)
   MAKE_FLAGS += C_INCLUDE_PATH=$(ANDROID_BUILD_TOP)/external/elfutils/0.153/libelf/
 endif
@@ -231,11 +249,8 @@ $(KERNEL_CONFIG): $(KERNEL_OUT)
 
 TARGET_KERNEL_BINARIES: $(KERNEL_OUT) $(KERNEL_CONFIG) $(KERNEL_HEADERS_INSTALL)
 	$(MAKE) $(MAKE_FLAGS) -C $(KERNEL_SRC) O=$(KERNEL_OUT) ARCH=$(KERNEL_ARCH) $(KERNEL_CROSS_COMPILE) $(TARGET_PREBUILT_INT_KERNEL_TYPE)
-	-$(MAKE) $(MAKE_FLAGS) -C $(KERNEL_SRC) O=$(KERNEL_OUT) ARCH=$(KERNEL_ARCH) $(KERNEL_CROSS_COMPILE) dtbs
-	-$(MAKE) $(MAKE_FLAGS) -C $(KERNEL_SRC) O=$(KERNEL_OUT) ARCH=$(KERNEL_ARCH) $(KERNEL_CROSS_COMPILE) modules
-	-$(MAKE) $(MAKE_FLAGS) -C $(KERNEL_SRC) O=$(KERNEL_OUT) INSTALL_MOD_PATH=../../$(KERNEL_MODULES_INSTALL) ARCH=$(KERNEL_ARCH) $(KERNEL_CROSS_COMPILE) modules_install
-	$(mv-modules)
-	$(clean-module-folder)
+	$(hide) $(make-dtbs)
+	$(hide) $(make-modules)
 
 $(TARGET_KERNEL_MODULES): TARGET_KERNEL_BINARIES
 
@@ -273,7 +288,7 @@ kernelconfig: $(KERNEL_OUT)
 		 $(MAKE) -C $(KERNEL_SRC) O=$(KERNEL_OUT) ARCH=$(KERNEL_ARCH) $(KERNEL_CROSS_COMPILE) menuconfig
 	env KCONFIG_NOTIMESTAMP=true \
 		 $(MAKE) -C $(KERNEL_SRC) O=$(KERNEL_OUT) ARCH=$(KERNEL_ARCH) $(KERNEL_CROSS_COMPILE) savedefconfig
-	cp $(KERNEL_OUT)/defconfig $(KERNEL_SRC)/arch/$(KERNEL_ARCH)/configs/$(KERNEL_DEFCONFIG)
+	cp $(KERNEL_OUT)/defconfig $(KERNEL_DEFCONFIG_SRC)
 
 alldefconfig: $(KERNEL_OUT)
 	env KCONFIG_NOTIMESTAMP=true \
