@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7f515b1d_7a78a1f7",
+        "filename": "core/Makefile",
+        "patchSetId": 1
+      },
+      "lineNbr": 901,
+      "author": {
+        "id": 3671
+      },
+      "writtenOn": "2015-11-19T21:45:37Z",
+      "side": 1,
+      "message": "i should probably use a local variable for this instead of overriding the TARGET variable",
+      "revId": "d0e1c40eafb8731512818df2f969e67868c8fed6",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    }
+  ]
+}
