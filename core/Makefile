@@ -897,6 +897,10 @@ endif
 RECOVERY_RESOURCE_ZIP := $(TARGET_OUT)/etc/recovery-resource.dat
 RECOVERY_PATCH_INSTALL := $(TARGET_OUT)/bin/install-recovery.sh
 
+ifeq ($(TARGET_RELEASETOOL_MAKE_RECOVERY_PATCH_SCRIPT),)
+  TARGET_RELEASETOOL_MAKE_RECOVERY_PATCH_SCRIPT := ./build/tools/releasetools/make_recovery_patch
+endif
+
 ifeq ($(recovery_resources_private),)
   $(info No private recovery resources for TARGET_DEVICE $(TARGET_DEVICE))
 endif
@@ -1078,7 +1082,7 @@ endif
 	$(call generate-userimage-prop-dictionary, $(ota_temp_root)/META/misc_info.txt)
 	$(hide) cp -r $(PRODUCT_OUT)/boot.img $(ota_temp_root)/BOOTABLE_IMAGES/
 	$(hide) cp -r $(PRODUCT_OUT)/recovery.img $(ota_temp_root)/BOOTABLE_IMAGES/
-	$(hide) ./build/tools/releasetools/make_recovery_patch $(ota_temp_root) $(ota_temp_root)
+	$(hide) $(TARGET_RELEASETOOL_MAKE_RECOVERY_PATCH_SCRIPT) $(ota_temp_root) $(ota_temp_root)
 	$(hide) rm -f $(TARGET_OUT)/bin/install-recovery.sh
 	$(hide) rm -f $(TARGET_OUT)/recovery-from-boot.p
 	$(hide) cp $(ota_temp_root)/SYSTEM/bin/install-recovery.sh $(TARGET_OUT)/bin/install-recovery.sh
@@ -1796,13 +1800,8 @@ ifdef TARGET_RELEASETOOL_FACTORY_FROM_TARGET_SCRIPT
 	$(hide) echo "factory_from_target_script=$(TARGET_RELEASETOOL_FACTORY_FROM_TARGET_SCRIPT)" >> $(zip_root)/META/misc_info.txt
 endif
 	$(call generate-userimage-prop-dictionary, $(zip_root)/META/misc_info.txt)
-ifeq ($(TARGET_RELEASETOOL_MAKE_RECOVERY_PATCH_SCRIPT),)
-	$(hide) PATH=$(foreach p,$(INTERNAL_USERIMAGES_BINARY_PATHS),$(p):)$$PATH MKBOOTIMG=$(MKBOOTIMG) \
-	    ./build/tools/releasetools/make_recovery_patch $(zip_root) $(zip_root)
-else
 	$(hide) PATH=$(foreach p,$(INTERNAL_USERIMAGES_BINARY_PATHS),$(p):)$$PATH MKBOOTIMG=$(MKBOOTIMG) \
 	    $(TARGET_RELEASETOOL_MAKE_RECOVERY_PATCH_SCRIPT) $(zip_root) $(zip_root)
-endif
 ifdef PRODUCT_DEFAULT_DEV_CERTIFICATE
 	$(hide) build/tools/getb64key.py $(PRODUCT_DEFAULT_DEV_CERTIFICATE).x509.pem > $(zip_root)/META/releasekey.txt
 else
