@@ -52,6 +52,24 @@
       "revId": "47aaaa704a56f37889a8b54498fbb7daf9a6de30",
       "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7f515b1d_2cd0b7c9",
+        "filename": "tools/roomservice.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 222,
+      "author": {
+        "id": 10094
+      },
+      "writtenOn": "2015-11-19T06:45:16Z",
+      "side": 0,
+      "message": "It will still print \"Looking for dependencies in ...\" when it looks in the initial folder.",
+      "parentUuid": "7f515b1d_2c5b1788",
+      "revId": "47aaaa704a56f37889a8b54498fbb7daf9a6de30",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
     }
   ]
 }
