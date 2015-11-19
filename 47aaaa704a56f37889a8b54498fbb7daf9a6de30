@@ -16,6 +16,24 @@
       "revId": "47aaaa704a56f37889a8b54498fbb7daf9a6de30",
       "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7f515b1d_6c758f98",
+        "filename": "tools/roomservice.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 222,
+      "author": {
+        "id": 10094
+      },
+      "writtenOn": "2015-11-19T05:07:03Z",
+      "side": 0,
+      "message": "I would prefer to remove it.  It still prints info if dependencies are actually found",
+      "parentUuid": "7f515b1d_ac494761",
+      "revId": "47aaaa704a56f37889a8b54498fbb7daf9a6de30",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
     }
   ]
 }
