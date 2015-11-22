@@ -85,7 +85,7 @@ def main(argv):
 
   # Print out the package names that have overlay change.
   for r in result:
-    print r
+    print(r)
 
 if __name__ == "__main__":
   main(sys.argv)
