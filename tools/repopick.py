@@ -185,7 +185,10 @@ if __name__ == '__main__':
         plist = subprocess.check_output(['repo', 'info'])
         needs_abandon = False
         for pline in plist:
-            matchObj = re.match(r'Local Branches.*\[(.*)\]', pline)
+            if sys.version_info >= (3, 0):
+                matchObj = re.match(r'Local Branches.*\[(.*)\]', str(pline))
+            else:
+                matchObj = re.match(r'Local Branches.*\[(.*)\]', pline)
             if matchObj:
                 local_branches = re.split('\s*,\s*', matchObj.group(1))
                 if any(args.start_branch[0] in s for s in local_branches):

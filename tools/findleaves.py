@@ -92,7 +92,7 @@ def main(argv):
   results = list(set(perform_find(mindepth, prune, dirlist, filename)))
   results.sort()
   for r in results:
-    print r
+    print(r)
 
 if __name__ == "__main__":
   main(sys.argv)
