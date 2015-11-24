@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3f4b6375_a44e02bf",
+        "filename": "core/tasks/kernel.mk",
+        "patchSetId": 1
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 14145
+      },
+      "writtenOn": "2015-11-24T00:59:59Z",
+      "side": 1,
+      "message": "This change doesn\u0027t look like it was necessary.  Save it for later, if needed?",
+      "range": {
+        "startLine": 51,
+        "startChar": 0,
+        "endLine": 51,
+        "endChar": 85
+      },
+      "revId": "e2e46ab9a3443b571984baa012f49fb018737b1f",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    }
+  ]
+}
