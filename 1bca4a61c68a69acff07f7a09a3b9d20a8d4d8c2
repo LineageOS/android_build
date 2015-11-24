@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3f4b6375_04d5d6b9",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 14145
+      },
+      "writtenOn": "2015-11-24T01:06:29Z",
+      "side": 1,
+      "message": "No real objection to the change, but are you aware that you can search with kernel config too, with \u0027/\u0027 and select the search result you want to navigate to using the number keys?  I suppose it comes down to preference.",
+      "range": {
+        "startLine": 10,
+        "startChar": 30,
+        "endLine": 11,
+        "endChar": 23
+      },
+      "revId": "1bca4a61c68a69acff07f7a09a3b9d20a8d4d8c2",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    }
+  ]
+}
