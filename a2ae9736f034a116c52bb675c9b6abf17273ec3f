@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ff82abbf_7de190fe",
+        "filename": "core/tasks/kernel.mk",
+        "patchSetId": 3
+      },
+      "lineNbr": 278,
+      "author": {
+        "id": 14090
+      },
+      "writtenOn": "2015-11-27T03:32:27Z",
+      "side": 1,
+      "message": "The name is not very clear. It seems like it should be only applying the defconfig.\n\nMaybe kernelupdatedefconfig?",
+      "revId": "a2ae9736f034a116c52bb675c9b6abf17273ec3f",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    }
+  ]
+}
