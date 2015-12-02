@@ -643,6 +643,14 @@ else if get_stage("%(bcb_dev)s") == "3/3" then
   script.Unmount("/data")
   script.AppendExtra("endif;")
 
+  script.Print("                                                         ")
+  script.Print("   ___                                  __  __         _ ");
+  script.Print("  / __|  _ __ _ _ _  ___  __ _ ___ _ _ |  \/  |___  __| |");
+  script.Print(" | (_| || / _` | ' \/ _ \/ _` / -_) ' \| |\/| / _ \/ _` |");
+  script.Print("  \___\_, \__,_|_||_\___/\__, \___|_||_|_|  |_\___/\__,_|");
+  script.Print("      |__/               |___/                           ");
+  script.Print("                                                         ")
+
   if "selinux_fc" in OPTIONS.info_dict:
     WritePolicyConfig(OPTIONS.info_dict["selinux_fc"], output_zip)
 
