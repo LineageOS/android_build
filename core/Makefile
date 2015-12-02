@@ -864,6 +864,11 @@ else
 recovery_resources_common := $(recovery_resources_common)-xhdpi
 endif
 
+ifneq (,$(RECOVERY_EXTRA_RESOURCE_DIR))
+recovery_resources_extra := $(strip \
+  $(wildcard $(RECOVERY_EXTRA_RESOURCE_DIR)/res-$(recovery_density)))
+endif
+
 # Select the 18x32 font on high-density devices (xhdpi and up); and
 # the 12x22 font on other devices.  Note that the font selected here
 # can be overridden for a particular device by putting a font.png in
@@ -887,7 +892,9 @@ endif
 
 recovery_resources_private := $(strip $(wildcard $(TARGET_DEVICE_DIR)/recovery/res))
 recovery_resource_deps := $(shell find $(recovery_resources_common) \
-  $(recovery_resources_private) -type f)
+  $(recovery_resources_extra) $(recovery_resources_private) -type f)
+
+
 ifdef TARGET_RECOVERY_FSTAB
 recovery_fstab := $(TARGET_RECOVERY_FSTAB)
 else
@@ -975,6 +982,8 @@ define build-recoveryimage-target
   $(hide) mkdir -p $(TARGET_RECOVERY_ROOT_OUT)/res
   $(hide) rm -rf $(TARGET_RECOVERY_ROOT_OUT)/res/*
   $(hide) cp -rf $(recovery_resources_common)/* $(TARGET_RECOVERY_ROOT_OUT)/res
+  $(hide) $(foreach item,$(recovery_resources_extra), \
+    cp -rf $(item)/* $(TARGET_RECOVERY_ROOT_OUT)/res;)
   $(hide) cp -f $(recovery_font) $(TARGET_RECOVERY_ROOT_OUT)/res/images/font.png
   $(hide) $(foreach item,$(recovery_root_private), \
     cp -rf $(item) $(TARGET_RECOVERY_OUT)/;)
