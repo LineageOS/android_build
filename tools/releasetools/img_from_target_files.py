@@ -35,6 +35,7 @@ if sys.hexversion < 0x02070000:
 import os
 import shutil
 import zipfile
+import re
 
 import common
 
