@@ -112,7 +112,7 @@ PRODUCT_SYSTEM_SERVER_JARS := \
 # Adoptable external storage f2fs support
 PRODUCT_PACKAGES += \
     fsck.f2fs \
-    make_f2fs \
+    mkfs.f2fs \
 
 PRODUCT_DEFAULT_PROPERTY_OVERRIDES += \
     ro.zygote=zygote32
