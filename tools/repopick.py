@@ -151,6 +151,7 @@ if __name__ == '__main__':
     parser.add_argument('-t', '--topic', help='pick all commits from a specified topic')
     parser.add_argument('-Q', '--query', help='pick all commits using the specified query')
     parser.add_argument('-g', '--gerrit', default=default_gerrit, help='Gerrit Instance to use. Form proto://[user@]host[:port]')
+    parser.add_argument('-e', '--exclude', nargs=1, help='exclude a list of commit numbers separated by a ,')
     args = parser.parse_args()
     if not args.start_branch and args.abandon_first:
         parser.error('if --abandon-first is set, you must also give the branch name with --start-branch')
@@ -237,12 +238,20 @@ if __name__ == '__main__':
     # make list of things to actually merge
     mergables = []
 
+    # If --exclude is given, create the list of commits to ignore
+    exclude = []
+    if args.exclude:
+        exclude = args.exclude[0].split(',')
+
     for change in change_numbers:
         patchset = None
         if '/' in change:
             (change, patchset) = change.split('/')
-        change = int(change)
 
+        if change in exclude:
+            continue
+
+        change = int(change)
         review = [x for x in reviews if x['number'] == change][0]
         mergables.append({
             'subject': review['subject'],
