@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9f91af0f_dee21430",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 14145
+      },
+      "writtenOn": "2015-12-08T12:18:22Z",
+      "side": 1,
+      "message": "spelling though...",
+      "range": {
+        "startLine": 7,
+        "startChar": 39,
+        "endLine": 7,
+        "endChar": 45
+      },
+      "revId": "a07c4bcb2f8b28d1b066267fc0a8ff3b075e9068",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    }
+  ]
+}
