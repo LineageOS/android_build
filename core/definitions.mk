@@ -175,16 +175,53 @@ $(wildcard $(addsuffix /Android.mk, $(addprefix $(call my-dir)/,$(1))))
 endef
 
 ###########################################################
+## Find all of the directories under the named directories with
+## the specified name.
+## Meant to be used like:
+##    INC_DIRS := $(call all-named-dirs-under,inc,.)
+###########################################################
+
+define all-named-dirs-under
+$(call find-subdir-files,$(2) -type d -name "$(1)")
+endef
+
+###########################################################
+## Find all the directories under the current directory that
+## haves name that match $(1)
+###########################################################
+
+define all-subdir-named-dirs
+$(call all-named-dirs-under,$(1),.)
+endef
+
+###########################################################
+## Find all of the files under the named directories with
+## the specified name.
+## Meant to be used like:
+##    SRC_FILES := $(call all-named-files-under,*.h,src tests)
+###########################################################
+
+define all-named-files-under
+$(call find-files-in-subdirs,$(LOCAL_PATH),"$(1)",$(2))
+endef
+
+###########################################################
+## Find all of the files under the current directory with
+## the specified name.
+###########################################################
+
+define all-subdir-named-files
+$(call all-named-files-under,$(1),.)
+endef
+
+###########################################################
 ## Find all of the java files under the named directories.
 ## Meant to be used like:
 ##    SRC_FILES := $(call all-java-files-under,src tests)
 ###########################################################
 
 define all-java-files-under
-$(patsubst ./%,%, \
-  $(shell cd $(LOCAL_PATH) ; \
-          find -L $(1) -name "*.java" -and -not -name ".*") \
- )
+$(call all-named-files-under,*.java,$(1))
 endef
 
 ###########################################################
@@ -203,10 +240,7 @@ endef
 ###########################################################
 
 define all-c-files-under
-$(patsubst ./%,%, \
-  $(shell cd $(LOCAL_PATH) ; \
-          find -L $(1) -name "*.c" -and -not -name ".*") \
- )
+$(call all-named-files-under,*.c,$(1))
 endef
 
 ###########################################################
@@ -248,10 +282,7 @@ endef
 ###########################################################
 
 define all-Iaidl-files-under
-$(patsubst ./%,%, \
-  $(shell cd $(LOCAL_PATH) ; \
-          find -L $(1) -name "I*.aidl" -and -not -name ".*") \
- )
+$(call all-named-files-under,I*.aidl,$(1))
 endef
 
 ###########################################################
@@ -269,10 +300,7 @@ endef
 ###########################################################
 
 define all-logtags-files-under
-$(patsubst ./%,%, \
-  $(shell cd $(LOCAL_PATH) ; \
-          find -L $(1) -name "*.logtags" -and -not -name ".*") \
-  )
+$(call all-named-files-under,*.logtags,$(1))
 endef
 
 ###########################################################
@@ -282,10 +310,7 @@ endef
 ###########################################################
 
 define all-proto-files-under
-$(patsubst ./%,%, \
-  $(shell cd $(LOCAL_PATH) ; \
-          find -L $(1) -name "*.proto" -and -not -name ".*") \
-  )
+$(call all-named-files-under,*.proto,$(1))
 endef
 
 ###########################################################
@@ -295,10 +320,7 @@ endef
 ###########################################################
 
 define all-renderscript-files-under
-$(patsubst ./%,%, \
-  $(shell cd $(LOCAL_PATH) ; \
-          find -L $(1) \( -name "*.rs" -or -name "*.fs" \) -and -not -name ".*") \
-  )
+$(call find-subdir-files,$(1) \( -name "*.rs" -or -name "*.fs" \) -and -not -name ".*")
 endef
 
 ###########################################################
@@ -308,10 +330,7 @@ endef
 ###########################################################
 
 define all-S-files-under
-$(patsubst ./%,%, \
-  $(shell cd $(LOCAL_PATH) ; \
-          find -L $(1) -name "*.S" -and -not -name ".*") \
- )
+$(call all-named-files-under,*.S,$(1))
 endef
 
 ###########################################################
@@ -321,10 +340,7 @@ endef
 ###########################################################
 
 define all-html-files-under
-$(patsubst ./%,%, \
-  $(shell cd $(LOCAL_PATH) ; \
-          find -L $(1) -name "*.html" -and -not -name ".*") \
- )
+$(call all-named-files-under,*.html,$(1))
 endef
 
 ###########################################################
@@ -342,7 +358,7 @@ endef
 ###########################################################
 
 define find-subdir-files
-$(patsubst ./%,%,$(shell cd $(LOCAL_PATH) ; find -L $(1)))
+$(sort $(patsubst ./%,%,$(shell cd $(LOCAL_PATH) ; find -L $(1))))
 endef
 
 ###########################################################
@@ -354,8 +370,8 @@ endef
 ###########################################################
 
 define find-subdir-subdir-files
-$(filter-out $(patsubst %,$(1)/%,$(3)),$(patsubst ./%,%,$(shell cd \
-            $(LOCAL_PATH) ; find -L $(1) -maxdepth 1 -name $(2))))
+$(sort $(filter-out $(patsubst %,$(1)/%,$(3)),$(patsubst ./%,%,$(shell cd \
+            $(LOCAL_PATH) ; find -L $(1) -maxdepth 1 -name $(2)))))
 endef
 
 ###########################################################
@@ -364,10 +380,10 @@ endef
 ###########################################################
 
 define find-subdir-assets
-$(if $(1),$(patsubst ./%,%, \
+$(sort $(if $(1),$(patsubst ./%,%, \
 	$(shell if [ -d $(1) ] ; then cd $(1) ; find ./ -not -name '.*' -and -type f -and -not -type l ; fi)), \
 	$(warning Empty argument supplied to find-subdir-assets) \
-)
+))
 endef
 
 ###########################################################
@@ -375,7 +391,7 @@ endef
 ###########################################################
 
 define find-other-java-files
-	$(call find-subdir-files,$(1) -name "*.java" -and -not -name ".*")
+$(call all-java-files-under,$(1))
 endef
 
 define find-other-aidl-files
@@ -383,7 +399,7 @@ define find-other-aidl-files
 endef
 
 define find-other-html-files
-	$(call find-subdir-files,$(1) -name "*.html" -and -not -name ".*")
+$(call all-html-files-under,$(1))
 endef
 
 ###########################################################
@@ -396,10 +412,10 @@ endef
 ###########################################################
 
 define find-files-in-subdirs
-$(patsubst ./%,%, \
+$(sort $(patsubst ./%,%, \
   $(shell cd $(1) ; \
           find -L $(3) -name $(2) -and -not -name ".*") \
- )
+ ))
 endef
 
 ###########################################################
@@ -1660,8 +1676,12 @@ endef
 ## Commands for running javac to make .class files
 ###########################################################
 
-#@echo "Source intermediates dir: $(PRIVATE_SOURCE_INTERMEDIATES_DIR)"
-#@echo "Source intermediates: $$(find $(PRIVATE_SOURCE_INTERMEDIATES_DIR) -name '*.java')"
+# Add BUILD_NUMBER to apps default version name if it's unbundled build.
+ifdef TARGET_BUILD_APPS
+APPS_DEFAULT_VERSION_NAME := $(PLATFORM_VERSION)-$(BUILD_NUMBER)
+else
+APPS_DEFAULT_VERSION_NAME := $(PLATFORM_VERSION)
+endif
 
 # TODO: Right now we generate the asset resources twice, first as part
 # of generating the Java classes, then at the end when packaging the final
@@ -1688,8 +1708,8 @@ $(hide) $(AAPT) package $(PRIVATE_AAPT_FLAGS) -m \
     $(addprefix -G , $(PRIVATE_PROGUARD_OPTIONS_FILE)) \
     $(addprefix --min-sdk-version , $(PRIVATE_DEFAULT_APP_TARGET_SDK)) \
     $(addprefix --target-sdk-version , $(PRIVATE_DEFAULT_APP_TARGET_SDK)) \
-    $(if $(filter --version-code,$(PRIVATE_AAPT_FLAGS)),,$(addprefix --version-code , $(PLATFORM_SDK_VERSION))) \
-    $(if $(filter --version-name,$(PRIVATE_AAPT_FLAGS)),,$(addprefix --version-name , $(PLATFORM_VERSION)-$(BUILD_NUMBER))) \
+    $(if $(filter --version-code,$(PRIVATE_AAPT_FLAGS)),,--version-code $(PLATFORM_SDK_VERSION)) \
+    $(if $(filter --version-name,$(PRIVATE_AAPT_FLAGS)),,--version-name $(APPS_DEFAULT_VERSION_NAME)) \
     $(addprefix --rename-manifest-package , $(PRIVATE_MANIFEST_PACKAGE_NAME)) \
     $(addprefix --rename-instrumentation-target-package , $(PRIVATE_MANIFEST_INSTRUMENTATION_FOR)) \
     --skip-symbols-without-default-localization
@@ -2043,8 +2063,8 @@ $(hide) $(AAPT) package -u $(PRIVATE_AAPT_FLAGS) \
     $(addprefix --min-sdk-version , $(PRIVATE_DEFAULT_APP_TARGET_SDK)) \
     $(addprefix --target-sdk-version , $(PRIVATE_DEFAULT_APP_TARGET_SDK)) \
     $(if $(filter --product,$(PRIVATE_AAPT_FLAGS)),,$(addprefix --product , $(TARGET_AAPT_CHARACTERISTICS))) \
-    $(if $(filter --version-code,$(PRIVATE_AAPT_FLAGS)),,$(addprefix --version-code , $(PLATFORM_SDK_VERSION))) \
-    $(if $(filter --version-name,$(PRIVATE_AAPT_FLAGS)),,$(addprefix --version-name , $(PLATFORM_VERSION)-$(BUILD_NUMBER))) \
+    $(if $(filter --version-code,$(PRIVATE_AAPT_FLAGS)),,--version-code $(PLATFORM_SDK_VERSION)) \
+    $(if $(filter --version-name,$(PRIVATE_AAPT_FLAGS)),,--version-name $(APPS_DEFAULT_VERSION_NAME)) \
     $(addprefix --rename-manifest-package , $(PRIVATE_MANIFEST_PACKAGE_NAME)) \
     $(addprefix --rename-instrumentation-target-package , $(PRIVATE_MANIFEST_INSTRUMENTATION_FOR)) \
     --skip-symbols-without-default-localization \
