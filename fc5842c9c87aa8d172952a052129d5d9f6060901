@@ -22,6 +22,30 @@
       "revId": "fc5842c9c87aa8d172952a052129d5d9f6060901",
       "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7f96bb07_de546557",
+        "filename": "core/tasks/dt_image.mk",
+        "patchSetId": 2
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 14145
+      },
+      "writtenOn": "2015-12-09T00:51:00Z",
+      "side": 1,
+      "message": "Yes, I think so.\n\nIIRC, the reason it was like this was that, once-upon-a-time, dtbs for some arm64 targets (early 64-bit 8916 with CAF trees) were built under $(KERNEL_OUT)/arch/arm/boot/dts/, and I think this was added to help with transitioning them over to $(KERNEL_OUT)/arch/arm64/boot/dts/\n\nI think this has long since been fixed.  8992/8994/8996 all put them in the right place.  Quickly checking how 8916 is built now may be worth it though.",
+      "parentUuid": "7f96bb07_5e04d5c6",
+      "range": {
+        "startLine": 22,
+        "startChar": 20,
+        "endLine": 22,
+        "endChar": 226
+      },
+      "revId": "fc5842c9c87aa8d172952a052129d5d9f6060901",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
     }
   ]
 }
