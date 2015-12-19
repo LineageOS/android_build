@@ -1087,7 +1087,7 @@ define build-recoveryramdisk
   $(if $(strip $(recovery_wipe)), \
     $(hide) cp -f $(recovery_wipe) $(TARGET_RECOVERY_ROOT_OUT)/etc/recovery.wipe)
   $(hide) cp $(RECOVERY_INSTALL_OTA_KEYS) $(TARGET_RECOVERY_ROOT_OUT)/res/keys
-  $(hide) cat $(INSTALLED_DEFAULT_PROP_TARGET) $(recovery_build_prop) \
+  $(hide) cat $(INSTALLED_DEFAULT_PROP_TARGET) $(recovery_build_prop) | grep -v "ro.adb.secure" \
           > $(TARGET_RECOVERY_ROOT_OUT)/default.prop
   $(BOARD_RECOVERY_IMAGE_PREPARE)
   $(if $(filter true,$(BOARD_BUILD_SYSTEM_ROOT_IMAGE)), \
