@@ -223,7 +223,7 @@ def AddUserdataExtra(output_zip, prefix="IMAGES/"):
 
   prebuilt_path = os.path.join(OPTIONS.input_tmp, prefix, "userdata_%s.img" % extra_name)
   if os.path.exists(prebuilt_path):
-    print "userdata_%s.img already exists in %s, no need to rebuild..." % (extra_name, prefix,)
+    print("userdata_%s.img already exists in %s, no need to rebuild..." % (extra_name, prefix,))
     return
 
   # We only allow yaffs to have a 0/missing partition_size.
