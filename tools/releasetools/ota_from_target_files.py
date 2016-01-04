@@ -152,7 +152,7 @@ OPTIONS.override_prop = False
 def MostPopularKey(d, default):
   """Given a dict, return the key corresponding to the largest
   value.  Returns 'default' if the dict is empty."""
-  x = list(d.items())
+  x = [(v, k) for (k, v) in d.items()]
   if not x:
     return default
   x.sort()
