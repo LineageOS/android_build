@@ -1715,7 +1715,7 @@ def main(argv):
 
     cache_size = OPTIONS.info_dict.get("cache_size", None)
     if cache_size is None:
-      print "--- can't determine the cache partition size ---"
+      print("--- can't determine the cache partition size ---")
     OPTIONS.cache_size = cache_size
 
     if OPTIONS.incremental_source is None:
