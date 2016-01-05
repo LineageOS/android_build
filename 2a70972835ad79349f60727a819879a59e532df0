@@ -16,6 +16,24 @@
       "revId": "2a70972835ad79349f60727a819879a59e532df0",
       "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fce034c_01d7ceef",
+        "filename": "core/tasks/kernel.mk",
+        "patchSetId": 2
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 4550
+      },
+      "writtenOn": "2016-01-05T20:17:42Z",
+      "side": 1,
+      "message": "Only defconfig is in the \u0027wrong\u0027 place? I suppose the rest of this makefile works?",
+      "parentUuid": "3fce034c_a1dcba18",
+      "revId": "2a70972835ad79349f60727a819879a59e532df0",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
     }
   ]
 }
