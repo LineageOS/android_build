@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3fce034c_a1dcba18",
+        "filename": "core/tasks/kernel.mk",
+        "patchSetId": 2
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 6351
+      },
+      "writtenOn": "2016-01-05T20:02:55Z",
+      "side": 1,
+      "message": "This breaks compilation on zenfone2 and probably fugu (are there any other intel targets?).\n\n$(KERNEL_ARCH) is x86_64 but linux uses\n\narch/x86\n\nso our defdonfig is arch/x86/configs/ not arch/x86_64/configs.",
+      "revId": "2a70972835ad79349f60727a819879a59e532df0",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    }
+  ]
+}
