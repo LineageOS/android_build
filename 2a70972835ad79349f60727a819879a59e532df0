@@ -34,6 +34,24 @@
       "revId": "2a70972835ad79349f60727a819879a59e532df0",
       "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fce034c_8412ecb0",
+        "filename": "core/tasks/kernel.mk",
+        "patchSetId": 2
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 14090
+      },
+      "writtenOn": "2016-01-06T01:00:10Z",
+      "side": 1,
+      "message": "I assumed \u0027$(KERNEL_SRC)/arch/$(KERNEL_ARCH)/configs/$(KERNEL_DEFCONFIG)\u0027 was correct because it was used in the kernelconfig target. We were missing a dependency on KERNEL_CONFIG which I added, and it looks like it breaks zenfone2.\n\nIt\u0027s odd that you pass ARCH\u003dx86_64 when you invoke make, but your defconfig is in x86.  If this is the only inconsistent arch, we can change the definition to something like this:\n\nifneq ($(KERNEL_ARCH),x86_64)\nKERNEL_DEFCONFIG_SRC :\u003d $(KERNEL_SRC)/arch/$(KERNEL_ARCH)/configs/$(KERNEL_DEFCONFIG)\nelse\nKERNEL_DEFCONFIG_SRC :\u003d $(KERNEL_SRC)/arch/x86/configs/$(KERNEL_DEFCONFIG)\nendif\n\nThis should fix make kernelconfig and make kernelxconfig as well.\n\nCan you test the change and submit a patch?",
+      "parentUuid": "3fce034c_01d7ceef",
+      "revId": "2a70972835ad79349f60727a819879a59e532df0",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
     }
   ]
 }
