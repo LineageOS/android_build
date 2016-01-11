@@ -31,10 +31,16 @@ $(combo_2nd_arch_prefix)HOST_GLOBAL_CFLAGS += -D__STDC_FORMAT_MACROS -D__STDC_CO
 
 include $(BUILD_COMBOS)/mac_version.mk
 
+ifeq ($(strip $(HOST_TOOLCHAIN_PATH)),)
 $(combo_2nd_arch_prefix)HOST_TOOLCHAIN_ROOT := prebuilts/gcc/darwin-x86/host/i686-apple-darwin-4.2.1
 $(combo_2nd_arch_prefix)HOST_TOOLCHAIN_PREFIX := $($(combo_2nd_arch_prefix)HOST_TOOLCHAIN_ROOT)/bin/i686-apple-darwin$(gcc_darwin_version)
 $(combo_2nd_arch_prefix)HOST_CC  := $($(combo_2nd_arch_prefix)HOST_TOOLCHAIN_PREFIX)-gcc
 $(combo_2nd_arch_prefix)HOST_CXX := $($(combo_2nd_arch_prefix)HOST_TOOLCHAIN_PREFIX)-g++
+else
+$(combo_2nd_arch_prefix)HOST_TOOLCHAIN_ROOT := $(HOST_TOOLCHAIN_PATH)
+$(combo_2nd_arch_prefix)HOST_CC  := $(CC)
+$(combo_2nd_arch_prefix)HOST_CXX := $(CXX)
+endif # HOST_TOOLCHAIN_PATH
 
 # gcc location for clang; to be updated when clang is updated
 # HOST_TOOLCHAIN_ROOT is a Darwin-specific define
@@ -51,6 +57,11 @@ else
 $(combo_2nd_arch_prefix)HOST_GLOBAL_CPPFLAGS += -isystem $(mac_sdk_path)/Toolchains/XcodeDefault.xctoolchain/usr/include/c++/v1
 endif
 $(combo_2nd_arch_prefix)HOST_GLOBAL_LDFLAGS += -isysroot $(mac_sdk_root) -Wl,-syslibroot,$(mac_sdk_root) -mmacosx-version-min=$(mac_sdk_version)
+
+ifneq ($(strip $(HOST_TOOLCHAIN_CPP_INCLUDE_PATH)),)
+HOST_GLOBAL_CPPFLAGS += -isystem $(HOST_TOOLCHAIN_CPP_INCLUDE_PATH)
+HOST_GLOBAL_CPPFLAGS += -isystem $(HOST_TOOLCHAIN_CPP_SEC_INCLUDE_PATH)
+endif
 
 $(combo_2nd_arch_prefix)HOST_GLOBAL_CFLAGS += -fPIC -funwind-tables
 $(combo_2nd_arch_prefix)HOST_NO_UNDEFINED_LDFLAGS := -Wl,-undefined,error

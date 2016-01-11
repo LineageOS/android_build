@@ -31,10 +31,16 @@ HOST_GLOBAL_CFLAGS += -D__STDC_FORMAT_MACROS -D__STDC_CONSTANT_MACROS
 
 include $(BUILD_COMBOS)/mac_version.mk
 
+ifeq ($(strip $(HOST_TOOLCHAIN_PATH)),)
 HOST_TOOLCHAIN_ROOT := prebuilts/gcc/darwin-x86/host/i686-apple-darwin-4.2.1
 HOST_TOOLCHAIN_PREFIX := $(HOST_TOOLCHAIN_ROOT)/bin/i686-apple-darwin$(gcc_darwin_version)
 HOST_CC  := $(HOST_TOOLCHAIN_PREFIX)-gcc
 HOST_CXX := $(HOST_TOOLCHAIN_PREFIX)-g++
+else
+$(combo_2nd_arch_prefix)HOST_TOOLCHAIN_ROOT := $(HOST_TOOLCHAIN_PATH)
+$(combo_2nd_arch_prefix)HOST_CC  := $(CC)
+$(combo_2nd_arch_prefix)HOST_CXX := $(CXX)
+endif # HOST_TOOLCHAIN_PATH
 
 # gcc location for clang; to be updated when clang is updated
 # HOST_TOOLCHAIN_ROOT is a Darwin-specific define
@@ -51,6 +57,11 @@ else
 HOST_GLOBAL_CPPFLAGS += -isystem $(mac_sdk_path)/Toolchains/XcodeDefault.xctoolchain/usr/include/c++/v1
 endif
 HOST_GLOBAL_LDFLAGS += -isysroot $(mac_sdk_root) -Wl,-syslibroot,$(mac_sdk_root) -mmacosx-version-min=$(mac_sdk_version)
+
+ifneq ($(strip $(HOST_TOOLCHAIN_CPP_INCLUDE_PATH)),)
+HOST_GLOBAL_CPPFLAGS += -isystem $(HOST_TOOLCHAIN_CPP_INCLUDE_PATH)
+HOST_GLOBAL_CPPFLAGS += -isystem $(HOST_TOOLCHAIN_CPP_SEC_INCLUDE_PATH)
+endif
 
 HOST_GLOBAL_CFLAGS += -fPIC -funwind-tables
 HOST_NO_UNDEFINED_LDFLAGS := -Wl,-undefined,error
