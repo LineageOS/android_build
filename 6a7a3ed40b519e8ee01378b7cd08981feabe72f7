@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1fcbff3d_7a88c570",
+        "filename": "tools/releasetools/boot_flash_from_image",
+        "patchSetId": 1
+      },
+      "lineNbr": 4,
+      "author": {
+        "id": 2936
+      },
+      "writtenOn": "2016-01-13T01:08:30Z",
+      "side": 1,
+      "message": "Hmm...",
+      "revId": "6a7a3ed40b519e8ee01378b7cd08981feabe72f7",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    }
+  ]
+}
