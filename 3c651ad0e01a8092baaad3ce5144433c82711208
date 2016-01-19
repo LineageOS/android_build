@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1fcbff3d_e632d1a7",
+        "filename": "core/tasks/kernel.mk",
+        "patchSetId": 6
+      },
+      "lineNbr": 307,
+      "author": {
+        "id": 14090
+      },
+      "writtenOn": "2016-01-19T05:53:33Z",
+      "side": 1,
+      "message": "Is the intention here to overwrite the existing .config or to generate a defconfig based on the current .config?\n\nIf it\u0027s the former, then it\u0027s the same as running menuconfig and exiting without any changes.",
+      "revId": "3c651ad0e01a8092baaad3ce5144433c82711208",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    }
+  ]
+}
