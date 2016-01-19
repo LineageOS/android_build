@@ -34,6 +34,24 @@
       "revId": "3c651ad0e01a8092baaad3ce5144433c82711208",
       "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1fcbff3d_46cf257f",
+        "filename": "core/tasks/kernel.mk",
+        "patchSetId": 6
+      },
+      "lineNbr": 307,
+      "author": {
+        "id": 14090
+      },
+      "writtenOn": "2016-01-19T06:11:15Z",
+      "side": 1,
+      "message": "I don\u0027t see it picking up change in a .config not already in the defconfig.\nIf you edit the .config by hand and run make kernelupdatedefconfig, it will regenerate .config and cause you to lose any changes.",
+      "parentUuid": "1fcbff3d_66e34107",
+      "revId": "3c651ad0e01a8092baaad3ce5144433c82711208",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
     }
   ]
 }
