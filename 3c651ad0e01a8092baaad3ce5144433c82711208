@@ -16,6 +16,24 @@
       "revId": "3c651ad0e01a8092baaad3ce5144433c82711208",
       "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1fcbff3d_66e34107",
+        "filename": "core/tasks/kernel.mk",
+        "patchSetId": 6
+      },
+      "lineNbr": 307,
+      "author": {
+        "id": 4550
+      },
+      "writtenOn": "2016-01-19T06:04:02Z",
+      "side": 1,
+      "message": "It\u0027s for both actually. I know it\u0027s the same as menuconfig \u0026 exit, but it saves a few seconds :)\n\nMaybe it could be integrated in the above menuconfig part with some ifdeffing",
+      "parentUuid": "1fcbff3d_e632d1a7",
+      "revId": "3c651ad0e01a8092baaad3ce5144433c82711208",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
     }
   ]
 }
