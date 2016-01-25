@@ -86,9 +86,9 @@ if not depsonly:
 local_manifests = r'.repo/local_manifests'
 if not os.path.exists(local_manifests): os.makedirs(local_manifests)
 
-def exists_in_tree(lm, path):
+def exists_in_tree(lm, repository):
     for child in lm.getchildren():
-        if child.attrib['path'] == repository:
+        if child.attrib['name'].endswith(repository):
             return True
     return False
 
@@ -138,7 +138,7 @@ def get_from_manifest(devicename):
 
     return None
 
-def is_in_manifest(projectpath):
+def is_in_manifest(projectname):
     try:
         lm = ElementTree.parse(".repo/local_manifests/roomservice.xml")
         lm = lm.getroot()
@@ -146,7 +146,7 @@ def is_in_manifest(projectpath):
         lm = ElementTree.Element("manifest")
 
     for localpath in lm.findall("project"):
-        if localpath.get("path") == projectpath:
+        if localpath.get("name") == projectname:
             return 1
 
     ## Search in main manifest, too
@@ -157,7 +157,7 @@ def is_in_manifest(projectpath):
         lm = ElementTree.Element("manifest")
 
     for localpath in lm.findall("project"):
-        if localpath.get("path") == projectpath:
+        if localpath.get("name") == projectname:
             return 1
 
     return None
@@ -172,8 +172,8 @@ def add_to_manifest(repositories, fallback_branch = None):
     for repository in repositories:
         repo_name = repository['repository']
         repo_target = repository['target_path']
-        if exists_in_tree(lm, repo_target):
-            print('CyanogenMod/%s already fetched to %s' % (repo_name, repo_target))
+        if exists_in_tree(lm, repo_name):
+            print('CyanogenMod/%s already exists' % (repo_name))
             continue
 
         print('Adding dependency: CyanogenMod/%s -> %s' % (repo_name, repo_target))
@@ -209,7 +209,7 @@ def fetch_dependencies(repo_path, fallback_branch = None):
         fetch_list = []
 
         for dependency in dependencies:
-            if not is_in_manifest("CyanogenMod/%s" % dependency['target_path']):
+            if not is_in_manifest("CyanogenMod/%s" % dependency['repository']):
                 fetch_list.append(dependency)
                 syncable_repos.append(dependency['target_path'])
 
