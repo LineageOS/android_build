@@ -293,6 +293,8 @@ LOCAL_MODULE_STEM_64:=
 LOCAL_CLANG_32:=
 LOCAL_CLANG_64:=
 
+LOCAL_PROTOC_OUTPUT:=
+
 # Include any vendor specific clear_vars.mk file
 -include $(TOPDIR)vendor/*/build/core/clear_vars.mk
 
