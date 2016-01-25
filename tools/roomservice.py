@@ -89,7 +89,7 @@ if not os.path.exists(local_manifests): os.makedirs(local_manifests)
 
 def exists_in_tree(lm, path):
     for child in lm.getchildren():
-        if child.attrib['path'] == repository:
+        if child.attrib['path'] == path:
             return True
     return False
 
