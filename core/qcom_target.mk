@@ -67,7 +67,12 @@ $(call set-device-specific-path,GPS,gps,hardware/qcom/gps)
 $(call project-set-path,qcom-media,hardware/qcom/media-caf/$(QCOM_HARDWARE_VARIANT))
 $(call set-device-specific-path,SENSORS,sensors,hardware/qcom/sensors)
 $(call ril-set-path-variant,ril)
-$(call set-device-specific-path,LOC_API,loc-api,vendor/qcom/opensource/location)
+$(call project-set-path,qcom-device-tree,$(strip $(if $(TARGET_QCOM_DEVICE_TREE), \
+    $(TARGET_QCOM_DEVICE_TREE), device/qcom)))
+$(call project-set-path,qcom-open-source,$(strip $(if $(TARGET_QCOM_OPEN_SOURCE), \
+    $(TARGET_QCOM_OPEN_SOURCE), vendor/qcom/opensource)))
+$(call set-device-specific-path,LOC_API,loc-api,$(call project-path-for, \
+    qcom-open-source)/location)
 else
 $(call project-set-path,qcom-audio,hardware/qcom/audio/default)
 $(call project-set-path,qcom-camera,hardware/qcom/camera)
@@ -76,5 +81,7 @@ $(call project-set-path,qcom-gps,hardware/qcom/gps)
 $(call project-set-path,qcom-media,hardware/qcom/media/default)
 $(call project-set-path,qcom-sensors,hardware/qcom/sensors)
 $(call ril-set-path-variant,ril)
+$(call project-set-path,qcom-device-tree,device/qcom)
+$(call project-set-path,qcom-open-source,vendor/qcom/opensource)
 $(call project-set-path,loc-api,vendor/qcom/opensource/location)
 endif
