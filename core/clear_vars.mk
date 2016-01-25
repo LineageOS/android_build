@@ -362,6 +362,8 @@ LOCAL_INIT_RC_32:=
 LOCAL_INIT_RC_64:=
 LOCAL_JAVA_LANGUAGE_VERSION:=
 
+LOCAL_PROTOC_OUTPUT:=
+
 # Include any vendor specific clear_vars.mk file
 -include $(TOPDIR)vendor/*/build/core/clear_vars.mk
 
