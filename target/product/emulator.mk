@@ -51,7 +51,8 @@ PRODUCT_PACKAGES += \
     power.goldfish \
     fingerprint.ranchu \
     fingerprintd \
-    sensors.ranchu
+    sensors.ranchu \
+    e2fsck
 
 PRODUCT_COPY_FILES += \
     device/generic/goldfish/fstab.goldfish:root/fstab.goldfish \
