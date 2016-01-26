@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1fcbff3d_cec6ba17",
+        "filename": "core/qcom_target.mk",
+        "patchSetId": 1
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 2936
+      },
+      "writtenOn": "2016-01-26T01:53:40Z",
+      "side": 1,
+      "message": "Why do you want to pathmap the prefix, why not pathmap device/qcom/common instead?",
+      "revId": "d0988716ddb5a5f88b1dd8ba76f699000b8f95a2",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1fcbff3d_4e55ea4f",
+        "filename": "core/qcom_target.mk",
+        "patchSetId": 1
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 2936
+      },
+      "writtenOn": "2016-01-26T01:53:40Z",
+      "side": 1,
+      "message": "Why wouldn\u0027t you pathmap the individual projects instead? We already provide time services and location here.",
+      "revId": "d0988716ddb5a5f88b1dd8ba76f699000b8f95a2",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    }
+  ]
+}
