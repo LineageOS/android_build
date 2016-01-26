@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "1fcbff3d_aed56ebb",
+        "filename": "core/qcom_target.mk",
+        "patchSetId": 1
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 11895
+      },
+      "writtenOn": "2016-01-26T01:55:20Z",
+      "side": 1,
+      "message": "There are another folder device/qcom/sepolicy, which may also be included in other Android.mk.",
+      "parentUuid": "1fcbff3d_cec6ba17",
+      "revId": "d0988716ddb5a5f88b1dd8ba76f699000b8f95a2",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1fcbff3d_4e55ea4f",
         "filename": "core/qcom_target.mk",
         "patchSetId": 1
