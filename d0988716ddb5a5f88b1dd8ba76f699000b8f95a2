@@ -87,6 +87,24 @@
       "revId": "d0988716ddb5a5f88b1dd8ba76f699000b8f95a2",
       "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1fcbff3d_ce623a17",
+        "filename": "core/qcom_target.mk",
+        "patchSetId": 1
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 2936
+      },
+      "writtenOn": "2016-01-26T02:14:17Z",
+      "side": 1,
+      "message": "Is there some reason you can\u0027t put it in a device specific path?",
+      "parentUuid": "1fcbff3d_eec296e9",
+      "revId": "d0988716ddb5a5f88b1dd8ba76f699000b8f95a2",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
     }
   ]
 }
