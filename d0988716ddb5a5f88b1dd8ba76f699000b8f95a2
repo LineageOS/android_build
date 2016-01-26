@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "1fcbff3d_ceef9a85",
+        "filename": "core/qcom_target.mk",
+        "patchSetId": 1
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 2936
+      },
+      "writtenOn": "2016-01-26T01:56:39Z",
+      "side": 1,
+      "message": "Pathmap it separately. That allows for more fine-grained control.",
+      "parentUuid": "1fcbff3d_aed56ebb",
+      "revId": "d0988716ddb5a5f88b1dd8ba76f699000b8f95a2",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1fcbff3d_4e55ea4f",
         "filename": "core/qcom_target.mk",
         "patchSetId": 1
