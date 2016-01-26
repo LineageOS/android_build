@@ -105,6 +105,24 @@
       "revId": "d0988716ddb5a5f88b1dd8ba76f699000b8f95a2",
       "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1fcbff3d_ae71eee2",
+        "filename": "core/qcom_target.mk",
+        "patchSetId": 1
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 11895
+      },
+      "writtenOn": "2016-01-26T02:19:05Z",
+      "side": 1,
+      "message": "we don\u0027t want to move ODM\u0027s stuff too much and keep them as simple as possible.\nAlso in qcom/proprietary, it referenced location/dataservice/time-service/wlan. Specify one macro for each project seems too much. \n\nPahtmap prefix seems simply for PDK model, how do you think?",
+      "parentUuid": "1fcbff3d_ce623a17",
+      "revId": "d0988716ddb5a5f88b1dd8ba76f699000b8f95a2",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
     }
   ]
 }
