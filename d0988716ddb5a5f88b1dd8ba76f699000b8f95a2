@@ -159,6 +159,24 @@
       "revId": "d0988716ddb5a5f88b1dd8ba76f699000b8f95a2",
       "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1fcbff3d_6e0a2627",
+        "filename": "core/qcom_target.mk",
+        "patchSetId": 1
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 11895
+      },
+      "writtenOn": "2016-01-26T02:31:01Z",
+      "side": 1,
+      "message": "yeah, but we got multiple pdk projects ongoing now. We want put all pdk projects in one build tree and pick correct qcom device tree and open source tree according to the lunch device.",
+      "parentUuid": "1fcbff3d_ee1e166f",
+      "revId": "d0988716ddb5a5f88b1dd8ba76f699000b8f95a2",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
     }
   ]
 }
