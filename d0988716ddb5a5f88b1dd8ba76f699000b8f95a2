@@ -123,6 +123,24 @@
       "revId": "d0988716ddb5a5f88b1dd8ba76f699000b8f95a2",
       "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1fcbff3d_0e80428b",
+        "filename": "core/qcom_target.mk",
+        "patchSetId": 1
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 2936
+      },
+      "writtenOn": "2016-01-26T02:20:19Z",
+      "side": 1,
+      "message": "I\u0027d prefer not to special case the PDK. Let me think about this a bit.",
+      "parentUuid": "1fcbff3d_ae71eee2",
+      "revId": "d0988716ddb5a5f88b1dd8ba76f699000b8f95a2",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
     }
   ]
 }
