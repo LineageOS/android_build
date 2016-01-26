@@ -69,6 +69,24 @@
       "revId": "d0988716ddb5a5f88b1dd8ba76f699000b8f95a2",
       "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1fcbff3d_eec296e9",
+        "filename": "core/qcom_target.mk",
+        "patchSetId": 1
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 11895
+      },
+      "writtenOn": "2016-01-26T02:11:53Z",
+      "side": 1,
+      "message": "LOC_API is using device specific one, which put source codes under device tree. In my case, I will still put loc_api still under opensource folder, but different path.\n\nHow do you handle this kind of case? Change loc_api to non-device specific path?",
+      "parentUuid": "1fcbff3d_4e55ea4f",
+      "revId": "d0988716ddb5a5f88b1dd8ba76f699000b8f95a2",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
     }
   ]
 }
