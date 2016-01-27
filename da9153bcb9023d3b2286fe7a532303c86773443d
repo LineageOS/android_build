@@ -62,6 +62,24 @@
       "revId": "da9153bcb9023d3b2286fe7a532303c86773443d",
       "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1fcbff3d_e4d95283",
+        "filename": "core/tasks/kernel.mk",
+        "patchSetId": 2
+      },
+      "lineNbr": 235,
+      "author": {
+        "id": 14090
+      },
+      "writtenOn": "2016-01-27T01:58:11Z",
+      "side": 1,
+      "message": "OK, no worries here because we don\u0027t touch KERNEL_ADDITIONAL_CONFIG_OUT unless it changed.",
+      "parentUuid": "1fcbff3d_444dc670",
+      "revId": "da9153bcb9023d3b2286fe7a532303c86773443d",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
     }
   ]
 }
