@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1fcbff3d_8791709c",
+        "filename": "core/tasks/kernel.mk",
+        "patchSetId": 5
+      },
+      "lineNbr": 242,
+      "author": {
+        "id": 14145
+      },
+      "writtenOn": "2016-01-27T06:40:42Z",
+      "side": 1,
+      "message": "that\u0027s nicer",
+      "revId": "c729615e57689f9802ba363f5215d2ca262c1c3d",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    }
+  ]
+}
