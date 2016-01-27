@@ -45,6 +45,23 @@
       "revId": "da9153bcb9023d3b2286fe7a532303c86773443d",
       "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1fcbff3d_444dc670",
+        "filename": "core/tasks/kernel.mk",
+        "patchSetId": 2
+      },
+      "lineNbr": 235,
+      "author": {
+        "id": 14090
+      },
+      "writtenOn": "2016-01-27T01:13:29Z",
+      "side": 1,
+      "message": "Don\u0027t make a target depend on a phony. It will cause $(KERNEL_CONFIG) and everything that depends on that to be always out of date.",
+      "revId": "da9153bcb9023d3b2286fe7a532303c86773443d",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
     }
   ]
 }
