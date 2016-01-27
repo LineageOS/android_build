@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1fcbff3d_c4553652",
+        "filename": "core/tasks/kernel.mk",
+        "patchSetId": 4
+      },
+      "lineNbr": 237,
+      "author": {
+        "id": 14145
+      },
+      "writtenOn": "2016-01-27T04:34:33Z",
+      "side": 1,
+      "message": "This change has the side-effect of requiring the file pointed to by TARGET_KERNEL_ADDITIONAL_CONFIG to exist if TARGET_KERNEL_ADDITIONAL_CONFIG is non-empty.\n\nWhether that\u0027s desirable or not could be argued either way, but it may be worth documenting that requirement in the commit text or, even better, splitting that requirement into its own commit.\n\nAs it stands, we won\u0027t be able to merge this change until devices that set TARGET_KERNEL_ADDITIONAL_CONFIG to a non-existent file (like Sambar) are fixed.  I\u0027ll take care of Sambar, but we will need to check all other devices too.\n\n\n cat: kernel/cyanogen/msm8994/arch/arm64/configs/cyanogenmod_debug_config: No such file or directory\n cat: kernel/cyanogen/msm8994/arch/arm64/configs/cyanogenmod_debug_config: No such file or directory\n make: *** [/local/workspace/mwagantall/targets/sambar_cm13_qcpath/out/target/product/sambar/obj/KERNEL_OBJ/.additional_config] Error 1\n make: *** Deleting file `/local/workspace/mwagantall/targets/sambar_cm13_qcpath/out/target/product/sambar/obj/KERNEL_OBJ/.additional_config\u0027",
+      "revId": "a66afef3d6e3889ab95ad8f0b01a7ee29150ee05",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    }
+  ]
+}
