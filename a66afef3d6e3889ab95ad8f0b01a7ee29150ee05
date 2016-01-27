@@ -16,6 +16,24 @@
       "revId": "a66afef3d6e3889ab95ad8f0b01a7ee29150ee05",
       "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1fcbff3d_27275cb6",
+        "filename": "core/tasks/kernel.mk",
+        "patchSetId": 4
+      },
+      "lineNbr": 237,
+      "author": {
+        "id": 10094
+      },
+      "writtenOn": "2016-01-27T06:02:28Z",
+      "side": 1,
+      "message": "It now shows a warning instead of failing.",
+      "parentUuid": "1fcbff3d_c4553652",
+      "revId": "a66afef3d6e3889ab95ad8f0b01a7ee29150ee05",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
     }
   ]
 }
