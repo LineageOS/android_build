@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1fcbff3d_642d6294",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 14145
+      },
+      "writtenOn": "2016-01-27T01:07:09Z",
+      "side": 1,
+      "message": "\".config\" rather than \"defconfig\".",
+      "range": {
+        "startLine": 7,
+        "startChar": 13,
+        "endLine": 7,
+        "endChar": 22
+      },
+      "revId": "da9153bcb9023d3b2286fe7a532303c86773443d",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1fcbff3d_04225ea5",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 14145
+      },
+      "writtenOn": "2016-01-27T01:07:09Z",
+      "side": 1,
+      "message": "Same here, the defconfig isn\u0027t being updated (and we wouldn\u0027t want it to)",
+      "range": {
+        "startLine": 9,
+        "startChar": 40,
+        "endLine": 9,
+        "endChar": 49
+      },
+      "revId": "da9153bcb9023d3b2286fe7a532303c86773443d",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    }
+  ]
+}
