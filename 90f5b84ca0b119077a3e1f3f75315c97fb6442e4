@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1fcbff3d_b54a9224",
+        "filename": "tools/roomservice.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 151,
+      "author": {
+        "id": 2936
+      },
+      "writtenOn": "2016-01-28T01:05:32Z",
+      "side": 1,
+      "message": "I\u0027m very glad we\u0027re returning \u0027True\u0027 and \u0027False\u0027 instead of None and 1 here now.",
+      "revId": "90f5b84ca0b119077a3e1f3f75315c97fb6442e4",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    }
+  ]
+}
