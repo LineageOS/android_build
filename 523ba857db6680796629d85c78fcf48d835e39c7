@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1fcbff3d_f5401a0a",
+        "filename": "core/Makefile",
+        "patchSetId": 1
+      },
+      "lineNbr": 81,
+      "author": {
+        "id": 14090
+      },
+      "writtenOn": "2016-01-28T01:01:40Z",
+      "side": 1,
+      "message": "I think this would cause build.prop to be touched on every build, invalidating everything that depends on it.\n\nCan you confirm that the recipe for $(INSTALLED_BUILD_PROP_TARGET) is cheap and does not touch build.prop unless it actually changes.",
+      "revId": "523ba857db6680796629d85c78fcf48d835e39c7",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    }
+  ]
+}
