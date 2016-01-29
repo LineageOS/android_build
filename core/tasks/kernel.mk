@@ -176,8 +176,14 @@ ifeq ($(FULL_KERNEL_BUILD),true)
 
 KERNEL_HEADERS_INSTALL := $(KERNEL_OUT)/usr
 KERNEL_HEADERS_INSTALL_STAMP := $(KERNEL_OUT)/.headers_install_stamp
+
+ifeq ($(NEED_KERNEL_MODULE_ROOT),true)
+KERNEL_MODULES_INSTALL := root
+KERNEL_MODULES_OUT := $(TARGET_ROOT_OUT)/lib/modules
+else
 KERNEL_MODULES_INSTALL := system
 KERNEL_MODULES_OUT := $(TARGET_OUT)/lib/modules
+endif
 
 TARGET_KERNEL_CROSS_COMPILE_PREFIX := $(strip $(TARGET_KERNEL_CROSS_COMPILE_PREFIX))
 ifeq ($(TARGET_KERNEL_CROSS_COMPILE_PREFIX),)
@@ -232,6 +238,7 @@ endif
 
 $(KERNEL_OUT_STAMP):
 	$(hide) mkdir -p $(KERNEL_OUT)
+	$(hide) rm -rf $(KERNEL_MODULES_OUT)
 	$(hide) mkdir -p $(KERNEL_MODULES_OUT)
 	$(hide) touch $@
 
