@@ -255,6 +255,10 @@ if __name__ == '__main__':
             continue
 
         change = int(change)
+        if len([x for x in reviews if x['number'] == change]) <= 0:
+            print('Change %d not found, skipping' % change)
+            continue
+
         review = [x for x in reviews if x['number'] == change][0]
         mergables.append({
             'subject': review['subject'],
