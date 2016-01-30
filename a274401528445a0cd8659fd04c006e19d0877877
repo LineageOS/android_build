@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1fcbff3d_43ccd334",
+        "filename": "tools/repopick.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 258,
+      "author": {
+        "id": 5531
+      },
+      "writtenOn": "2016-01-30T07:30:21Z",
+      "side": 1,
+      "message": "can define new variable reviews_found if you don\u0027t like this array being evaluated twice (here and below). i think it\u0027s ok this way, though.",
+      "revId": "a274401528445a0cd8659fd04c006e19d0877877",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    }
+  ]
+}
