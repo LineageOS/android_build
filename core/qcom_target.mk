@@ -64,6 +64,19 @@ ifeq ($(BOARD_USES_QCOM_HARDWARE),true)
         endif
     endif
 
+ifneq ($(FORCE_AOSP_HALS),)
+ifeq ($(FORCE_AOSP_HALS),audio)
+$(call project-set-path,qcom-audio,hardware/qcom/audio/default)
+endif
+ifeq ($(FORCE_AOSP_HALS),display)
+$(call project-set-path,qcom-display,hardware/qcom/display/$(TARGET_BOARD_PLATFORM))
+endif
+ifeq ($(FORCE_AOSP_HALS),media)
+$(call project-set-path,qcom-media,hardware/qcom/media/default)
+endif
+
+else
+
 $(call project-set-path,qcom-audio,hardware/qcom/audio-caf/$(QCOM_HARDWARE_VARIANT))
 
 ifeq ($(SONY_BF64_KERNEL_VARIANT),true)
@@ -73,6 +86,8 @@ else
 $(call project-set-path,qcom-display,hardware/qcom/display-caf/$(QCOM_HARDWARE_VARIANT))
 $(call project-set-path,qcom-media,hardware/qcom/media-caf/$(QCOM_HARDWARE_VARIANT))
 endif
+
+endif # FORCE_AOSP_HALS
 
 $(call set-device-specific-path,CAMERA,camera,hardware/qcom/camera)
 $(call set-device-specific-path,GPS,gps,hardware/qcom/gps)
