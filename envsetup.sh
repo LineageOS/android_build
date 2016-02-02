@@ -2271,6 +2271,19 @@ function repodiff() {
       'echo "$REPO_PATH ($REPO_REMOTE)"; git diff ${diffopts} 2>/dev/null ;'
 }
 
+# Return success if adb is up and not in recovery
+function _adb_connected {
+    {
+        if [[ "$(adb get-state)" == device &&
+              "$(adb shell test -e /sbin/recovery; echo $?)" == 0 ]]
+        then
+            return 0
+        fi
+    } 2>/dev/null
+
+    return 1
+};
+
 # Credit for color strip sed: http://goo.gl/BoIcm
 function dopush()
 {
@@ -2278,10 +2291,10 @@ function dopush()
     shift
 
     adb start-server # Prevent unexpected starting server message from adb get-state in the next line
-    if [ $(adb get-state) != device -a $(adb shell test -e /sbin/recovery 2> /dev/null; echo $?) != 0 ] ; then
+    if ! _adb_connected; then
         echo "No device is online. Waiting for one..."
         echo "Please connect USB and/or enable USB debugging"
-        until [ $(adb get-state) = device -o $(adb shell test -e /sbin/recovery 2> /dev/null; echo $?) = 0 ];do
+        until _adb_connected; do
             sleep 1
         done
         echo "Device Found."
