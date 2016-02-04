@@ -352,6 +352,10 @@ class EdifyGenerator(object):
         self.script.append(
             'write_raw_image(package_extract_file("%(fn)s"), "%(device)s");'
             % args)
+      elif partition_type == "OSIP":
+        self.script.append(
+            'write_osip_image(package_extract_file("%(fn)s"), "%(device)s");'
+            % args)
       elif partition_type == "EMMC":
         if mapfn:
           args["map"] = mapfn
