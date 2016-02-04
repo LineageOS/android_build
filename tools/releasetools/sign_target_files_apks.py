@@ -285,6 +285,10 @@ def ProcessTargetFiles(input_tf_zip, output_tf_zip, misc_info,
       print "rewriting %s with new keys." % (info.filename,)
       new_data = ReplaceCerts(data)
       common.ZipWriteStr(output_tf_zip, out_info, new_data)
+    elif info.filename.startswith("SYSTEM/etc/permissions/"):
+      print("rewriting %s with new keys." % info.filename)
+      new_data = ReplaceCerts(data)
+      common.ZipWriteStr(output_tf_zip, out_info, new_data)
 
     # Ask add_img_to_target_files to rebuild the recovery patch if needed.
     elif info.filename in ("SYSTEM/recovery-from-boot.p",
