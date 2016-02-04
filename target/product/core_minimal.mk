@@ -41,7 +41,6 @@ PRODUCT_PACKAGES += \
     com.android.mediadrm.signer \
     com.android.mediadrm.signer.xml \
     drmserver \
-    ethernet-service \
     framework-res \
     idmap \
     installd \
@@ -78,6 +77,10 @@ PRODUCT_PACKAGES += \
     webview \
     wifi-service
 
+ifneq ($(TARGET_SUPPORTS_WEARABLES),true)
+PRODUCT_PACKAGES += ethernet-service
+endif
+
 PRODUCT_COPY_FILES += \
     frameworks/native/data/etc/android.software.webview.xml:system/etc/permissions/android.software.webview.xml
 
@@ -99,8 +102,11 @@ PRODUCT_BOOT_JARS := \
 # The order of PRODUCT_SYSTEM_SERVER_JARS matters.
 PRODUCT_SYSTEM_SERVER_JARS := \
     services \
-    ethernet-service \
     wifi-service
+
+ifneq ($(TARGET_SUPPORTS_WEARABLES),true)
+PRODUCT_SYSTEM_SERVER_JARS += ethernet-service
+endif
 
 # Adoptable external storage supports both ext4 and f2fs
 PRODUCT_PACKAGES += \
