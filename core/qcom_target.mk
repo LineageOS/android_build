@@ -13,8 +13,12 @@ endef
 
 # Set device-specific HALs into project pathmap
 define set-device-specific-path
-$(call project-set-path,qcom-$(2),$(strip $(if $(USE_DEVICE_SPECIFIC_$(1)), \
-    $(TARGET_DEVICE_DIR)/$(2), $(3))))
+$(if $(USE_DEVICE_SPECIFIC_$(1)), \
+    $(if $(DEVICE_SPECIFIC_$(1)_PATH), \
+        $(eval $(1)_PATH := $(DEVICE_SPECIFIC_$(1)_PATH)), \
+        $(eval $(1)_PATH := $(TARGET_DEVICE_DIR)/$(2))), \
+    $(eval $(1)_PATH := $(3))) \
+$(call project-set-path,qcom-$(2),$($(1)_PATH))
 endef
 
 ifeq ($(BOARD_USES_QCOM_HARDWARE),true)
