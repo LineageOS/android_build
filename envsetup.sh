@@ -1911,6 +1911,12 @@ function makerecipe() {
 }
 
 function cmgerrit() {
+
+    if [ "$(__detect_shell)" == "zsh" ]; then
+        # zsh does not define FUNCNAME, derive from funcstack
+        local FUNCNAME=$funcstack[1]
+    fi
+
     if [ $# -eq 0 ]; then
         $FUNCNAME help
         return 1
