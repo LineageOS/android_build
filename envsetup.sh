@@ -1638,16 +1638,24 @@ function atest()
     "$(gettop)"/tools/tradefederation/core/atest/atest.py "$@"
 }
 
-if [ "x$SHELL" != "x/bin/bash" ]; then
+function __detect_shell() {
     case `ps -o command -p $$` in
         *bash*)
+            echo bash
             ;;
         *zsh*)
+            echo zsh
             ;;
         *)
-            echo "WARNING: Only bash and zsh are supported, use of other shell may lead to erroneous results"
+            echo unknown
+            return 1
             ;;
     esac
+    return
+}
+
+if ! __detect_shell > /dev/null; then
+    echo "WARNING: Only bash and zsh are supported, use of other shell may lead to erroneous results"
 fi
 
 # determine whether arrays are zero-based (bash) or one-based (zsh)
