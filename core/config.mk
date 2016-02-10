@@ -736,6 +736,9 @@ $(eval include vendor/cm/sepolicy/sepolicy.mk)
 # Include any vendor specific config.mk file
 -include $(TOPDIR)vendor/*/build/core/config.mk
 
+# Include any vendor specific apicheck.mk file
+-include $(TOPDIR)vendor/*/build/core/apicheck.mk
+
 endif
 
 include $(BUILD_SYSTEM)/dumpvar.mk
