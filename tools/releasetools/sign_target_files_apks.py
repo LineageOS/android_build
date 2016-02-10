@@ -199,6 +199,9 @@ def ProcessTargetFiles(input_tf_zip, output_tf_zip, misc_info,
     if info.filename.startswith("IMAGES/"):
       continue
 
+    if info.filename.startswith("BOOTABLE_IMAGES/"):
+      continue
+
     data = input_tf_zip.read(info.filename)
     out_info = copy.copy(info)
 
