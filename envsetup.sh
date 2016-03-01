@@ -844,7 +844,7 @@ function mmm()
         local DIR TO_CHOP
         local GET_INSTALL_PATH=
 
-        if [ "$(__detect_shell)" == "zsh" ]; then
+        if [ "$(__detect_shell)" = "zsh" ]; then
             set -lA DASH_ARGS $(echo "$@" | awk -v RS=" " -v ORS=" " '/^-.*$/')
             set -lA DIRS $(echo "$@" | awk -v RS=" " -v ORS=" " '/^[^-].*$/')
         else
@@ -917,7 +917,7 @@ function mmma()
   local T=$(gettop)
   local DRV=$(getdriver $T)
   if [ "$T" ]; then
-    if [ "$(__detect_shell)" == "zsh" ]; then
+    if [ "$(__detect_shell)" = "zsh" ]; then
         set -lA DASH_ARGS $(echo "$@" | awk -v RS=" " -v ORS=" " '/^-.*$/')
         set -lA DIRS $(echo "$@" | awk -v RS=" " -v ORS=" " '/^[^-].*$/')
     else
