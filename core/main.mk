@@ -96,6 +96,9 @@ include $(BUILD_SYSTEM)/config.mk
 # CTS-specific config.
 -include cts/build/config.mk
 
+# CMTS-specific config.
+-include vendor/cmts/build/config.mk
+
 # This allows us to force a clean build - included after the config.mk
 # environment setup is done, but before we generate any dependencies.  This
 # file does the rm -rf inline so the deps which are all done below will
