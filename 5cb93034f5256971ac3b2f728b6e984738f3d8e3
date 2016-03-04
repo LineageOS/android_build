@@ -2,6 +2,46 @@
   "comments": [
     {
       "key": {
+        "uuid": "ffb9cba7_0ff03067",
+        "filename": "core/tasks/kernel.mk",
+        "patchSetId": 1
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 14090
+      },
+      "writtenOn": "2016-03-04T05:12:11Z",
+      "side": 1,
+      "message": "I\u0027m not sure how this is used. Anyone know why we would use a different ARCH here?",
+      "range": {
+        "startLine": 30,
+        "startChar": 4,
+        "endLine": 30,
+        "endChar": 29
+      },
+      "revId": "5cb93034f5256971ac3b2f728b6e984738f3d8e3",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ffb9cba7_efd59cba",
+        "filename": "core/tasks/kernel.mk",
+        "patchSetId": 1
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 14090
+      },
+      "writtenOn": "2016-03-04T05:12:11Z",
+      "side": 1,
+      "message": "This var should probably have a different name, it was added recently,",
+      "revId": "5cb93034f5256971ac3b2f728b6e984738f3d8e3",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ffb9cba7_6f4c4cc7",
         "filename": "core/tasks/kernel.mk",
         "patchSetId": 1
@@ -13,6 +53,30 @@
       "writtenOn": "2016-03-04T05:02:27Z",
       "side": 1,
       "message": "Diogo or RC would probably know what these do exactly.",
+      "range": {
+        "startLine": 47,
+        "startChar": 4,
+        "endLine": 47,
+        "endChar": 26
+      },
+      "revId": "5cb93034f5256971ac3b2f728b6e984738f3d8e3",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ffb9cba7_cfd0d8cc",
+        "filename": "core/tasks/kernel.mk",
+        "patchSetId": 1
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 14090
+      },
+      "writtenOn": "2016-03-04T05:12:11Z",
+      "side": 1,
+      "message": "Yeah, those look gnarly.",
+      "parentUuid": "ffb9cba7_6f4c4cc7",
       "range": {
         "startLine": 47,
         "startChar": 4,
