@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "ffb9cba7_4f92a8f8",
+        "filename": "core/tasks/kernel.mk",
+        "patchSetId": 1
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 14090
+      },
+      "writtenOn": "2016-03-04T05:42:58Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ffb9cba7_8f03c042",
+      "range": {
+        "startLine": 30,
+        "startChar": 4,
+        "endLine": 30,
+        "endChar": 29
+      },
+      "revId": "5cb93034f5256971ac3b2f728b6e984738f3d8e3",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ffb9cba7_efd59cba",
         "filename": "core/tasks/kernel.mk",
         "patchSetId": 1
@@ -125,6 +149,30 @@
       "side": 1,
       "message": "The KERNELBUILD one can be removed. It\u0027s a leftover from mediatek\u0027s non-standard kernel build system on Kitkat and lower. Newer mediatek kernels don\u0027t need it.\n\nBOARD_HAS_MTK_HARDWARE is also a leftover. We used to use these for platform-specific workarounds or functionality. As far as I can tell nothing uses it anymore.",
       "parentUuid": "ffb9cba7_cfd0d8cc",
+      "range": {
+        "startLine": 47,
+        "startChar": 4,
+        "endLine": 47,
+        "endChar": 26
+      },
+      "revId": "5cb93034f5256971ac3b2f728b6e984738f3d8e3",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ffb9cba7_8f88a0c6",
+        "filename": "core/tasks/kernel.mk",
+        "patchSetId": 1
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 14090
+      },
+      "writtenOn": "2016-03-04T05:42:58Z",
+      "side": 1,
+      "message": "Alright, thanks. I\u0027ve removed docs for these, and I\u0027ll submit a patch to remove the MTK support entirely.",
+      "parentUuid": "ffb9cba7_efeefc86",
       "range": {
         "startLine": 47,
         "startChar": 4,
