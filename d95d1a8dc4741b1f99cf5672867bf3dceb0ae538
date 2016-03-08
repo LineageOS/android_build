@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ffb9cba7_266d1632",
+        "filename": "core/Makefile",
+        "patchSetId": 1
+      },
+      "lineNbr": 1046,
+      "author": {
+        "id": 14090
+      },
+      "writtenOn": "2016-03-08T02:38:42Z",
+      "side": 1,
+      "message": "Why define the $(RECOVERY_FROM_BOOT_PATCH): rule on the next line for this case?\n\nNot sure how the rule below would be interpreted when RECOVERY_FROM_BOOT_PATCH is empty.",
+      "range": {
+        "startLine": 1046,
+        "startChar": 0,
+        "endLine": 1046,
+        "endChar": 24
+      },
+      "revId": "d95d1a8dc4741b1f99cf5672867bf3dceb0ae538",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    }
+  ]
+}
