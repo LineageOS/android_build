@@ -2486,7 +2486,7 @@ function set_java_home() {
                 export JAVA_HOME=$(/usr/libexec/java_home -v 1.7)
                 ;;
             *)
-                export JAVA_HOME=/usr/lib/jvm/java-7-openjdk-amd64
+                export JAVA_HOME=$(dirname $(dirname $(dirname $(readlink -f $(which java)))))
                 ;;
         esac
       else
@@ -2495,7 +2495,7 @@ function set_java_home() {
                 export JAVA_HOME=$(/usr/libexec/java_home -v 1.8)
                 ;;
             *)
-                export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64
+                export JAVA_HOME=$(dirname $(dirname $(dirname $(readlink -f $(which java)))))
                 ;;
         esac
       fi
