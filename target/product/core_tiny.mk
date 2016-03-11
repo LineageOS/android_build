@@ -58,6 +58,7 @@ PRODUCT_PACKAGES += \
     javax.btobex \
     keystore \
     keystore.default \
+    ld.mc \
     libOpenMAXAL \
     libOpenSLES \
     libdownmix \
