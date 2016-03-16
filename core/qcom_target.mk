@@ -37,6 +37,7 @@ ifeq ($(BOARD_USES_QCOM_HARDWARE),true)
         qcom_flags += -DQCOM_BSP_LEGACY
         # Enable legacy audio functions
         ifeq ($(BOARD_USES_LEGACY_ALSA_AUDIO),true)
+            USE_CUSTOM_AUDIO_POLICY := 1
             qcom_flags += -DLEGACY_ALSA_AUDIO
         endif
     endif
