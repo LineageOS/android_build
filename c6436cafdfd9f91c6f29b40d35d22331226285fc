@@ -16,6 +16,24 @@
       "revId": "c6436cafdfd9f91c6f29b40d35d22331226285fc",
       "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7faddb67_990fab2d",
+        "filename": "core/qcom_target.mk",
+        "patchSetId": 4
+      },
+      "lineNbr": 74,
+      "author": {
+        "id": 2936
+      },
+      "writtenOn": "2016-03-30T16:12:00Z",
+      "side": 1,
+      "message": "Will fix.",
+      "parentUuid": "7faddb67_b9086728",
+      "revId": "c6436cafdfd9f91c6f29b40d35d22331226285fc",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
     }
   ]
 }
