@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7faddb67_b9086728",
+        "filename": "core/qcom_target.mk",
+        "patchSetId": 4
+      },
+      "lineNbr": 74,
+      "author": {
+        "id": 5503
+      },
+      "writtenOn": "2016-03-30T16:06:03Z",
+      "side": 1,
+      "message": "While this is valid make syntax (I had to check), it might be nice to use the parenthesized form to match the rest of the build system.",
+      "revId": "c6436cafdfd9f91c6f29b40d35d22331226285fc",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    }
+  ]
+}
