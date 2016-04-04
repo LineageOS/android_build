@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7faddb67_3bd2215e",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 2936
+      },
+      "writtenOn": "2016-04-04T22:49:08Z",
+      "side": 1,
+      "message": "overridden",
+      "revId": "7c11135e685a337ecdb49dc54f8fe1d941bb7b82",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7faddb67_9be31534",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 2936
+      },
+      "writtenOn": "2016-04-04T22:49:08Z",
+      "side": 1,
+      "message": "line length",
+      "revId": "7c11135e685a337ecdb49dc54f8fe1d941bb7b82",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7faddb67_fbcb29a2",
+        "filename": "core/product.mk",
+        "patchSetId": 1
+      },
+      "lineNbr": 295,
+      "author": {
+        "id": 2936
+      },
+      "writtenOn": "2016-04-04T22:49:08Z",
+      "side": 1,
+      "message": "You should probably not put this flag into this section. Maybe you can add your own after line 329?",
+      "revId": "7c11135e685a337ecdb49dc54f8fe1d941bb7b82",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7faddb67_1bd16555",
+        "filename": "tools/buildinfo.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 2936
+      },
+      "writtenOn": "2016-04-04T22:49:08Z",
+      "side": 1,
+      "message": "You should be able to merge these 2 statements: http://stackoverflow.com/questions/8920245/bash-conditionals-how-to-and-expressions-if-z-var-e-var",
+      "revId": "7c11135e685a337ecdb49dc54f8fe1d941bb7b82",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    }
+  ]
+}
