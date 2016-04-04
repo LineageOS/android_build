@@ -166,19 +166,24 @@ ifeq "$(wildcard $(KERNEL_SRC) )" ""
         FULL_KERNEL_BUILD := false
         KERNEL_BIN := $(TARGET_PREBUILT_KERNEL)
     else
-        $(warning ***************************************************************)
-        $(warning *                                                             *)
-        $(warning * No kernel source found, and no fallback prebuilt defined.   *)
-        $(warning * Please make sure your device is properly configured to      *)
-        $(warning * download the kernel repository to $(KERNEL_SRC))
-        $(warning * and add the TARGET_KERNEL_CONFIG variable to BoardConfig.mk *)
-        $(warning *                                                             *)
-        $(warning * As an alternative, define the TARGET_PREBUILT_KERNEL        *)
-        $(warning * variable with the path to the prebuilt binary kernel image  *)
-        $(warning * in your BoardConfig.mk file                                 *)
-        $(warning *                                                             *)
-        $(warning ***************************************************************)
-        $(error "NO KERNEL")
+        ifeq ($(TARGET_NO_KERNEL),true)
+            FULL_KERNEL_BUILD := false
+            NEEDS_KERNEL_COPY := false
+        else
+            $(warning ***************************************************************)
+            $(warning *                                                             *)
+            $(warning * No kernel source found, and no fallback prebuilt defined.   *)
+            $(warning * Please make sure your device is properly configured to      *)
+            $(warning * download the kernel repository to $(KERNEL_SRC))
+            $(warning * and add the TARGET_KERNEL_CONFIG variable to BoardConfig.mk *)
+            $(warning *                                                             *)
+            $(warning * As an alternative, define the TARGET_PREBUILT_KERNEL        *)
+            $(warning * variable with the path to the prebuilt binary kernel image  *)
+            $(warning * in your BoardConfig.mk file                                 *)
+            $(warning *                                                             *)
+            $(warning ***************************************************************)
+            $(error "NO KERNEL")
+        endif
     endif
 else
     NEEDS_KERNEL_COPY := true
