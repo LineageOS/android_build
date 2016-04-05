@@ -43,7 +43,7 @@ echo "ro.product.cpu.abilist32=$TARGET_CPU_ABI_LIST_32_BIT"
 echo "ro.product.cpu.abilist64=$TARGET_CPU_ABI_LIST_64_BIT"
 
 echo "ro.product.manufacturer=$PRODUCT_MANUFACTURER"
-if [ -n "$PRODUCT_DEFAULT_LOCALE" ] ; then
+if [ -n "$PRODUCT_DEFAULT_LOCALE" ] && [ -z "$TARGET_SKIP_DEFAULT_LOCALE" ] ; then
   echo "ro.product.locale=$PRODUCT_DEFAULT_LOCALE"
 fi
 echo "ro.wifi.channels=$PRODUCT_DEFAULT_WIFI_CHANNELS"
