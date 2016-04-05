@@ -327,6 +327,9 @@ _product_stash_var_list += \
 	GLOBAL_CFLAGS_NO_OVERRIDE \
 	GLOBAL_CPPFLAGS_NO_OVERRIDE \
 
+_product_stash_var_list += \
+	TARGET_SKIP_DEFAULT_LOCALE \
+
 #
 # Stash values of the variables in _product_stash_var_list.
 # $(1): Renamed prefix
