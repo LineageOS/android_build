@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7faddb67_c1699abe",
+        "filename": "core/tasks/kernel.mk",
+        "patchSetId": 1
+      },
+      "lineNbr": 157,
+      "author": {
+        "id": 2936
+      },
+      "writtenOn": "2016-04-05T17:14:37Z",
+      "side": 1,
+      "message": "You can\u0027t use HAS_PREBUILT_KERNEL?",
+      "range": {
+        "startLine": 157,
+        "startChar": 13,
+        "endLine": 157,
+        "endChar": 32
+      },
+      "revId": "dcd81d14f41b23052e4904beed66e553e4d617cc",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    }
+  ]
+}
