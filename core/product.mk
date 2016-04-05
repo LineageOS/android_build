@@ -115,7 +115,6 @@ _product_var_list := \
     PRODUCT_DEX_PREOPT_DEFAULT_FLAGS \
     PRODUCT_DEX_PREOPT_BOOT_FLAGS \
 
-
 define dump-product
 $(info ==== $(1) ====)\
 $(foreach v,$(_product_var_list),\
@@ -293,6 +292,7 @@ _product_stash_var_list := $(_product_var_list) \
 	TARGET_PROVIDES_INIT_RC \
 	TARGET_CPU_ABI \
 	TARGET_CPU_ABI2 \
+	TARGET_SKIP_DEFAULT_LOCALE \
 
 
 _product_stash_var_list += \
