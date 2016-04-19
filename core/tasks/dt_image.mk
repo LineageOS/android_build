@@ -23,9 +23,9 @@ ifeq ($(strip $(TARGET_CUSTOM_DTBTOOL)),)
 possible_dtb_dirs = $(KERNEL_OUT)/arch/$(KERNEL_ARCH)/boot/
 else
 # Most specific paths must come first in possible_dtb_dirs
-possible_dtb_dirs = $(KERNEL_OUT)/arch/$(KERNEL_ARCH)/boot/dts/ $(KERNEL_OUT)/arch/$(KERNEL_ARCH)/boot/
+possible_dtb_dirs = $(KERNEL_OUT)/arch/$(KERNEL_ARCH)/boot/dts/qcom/*.dtb $(KERNEL_OUT)/arch/$(KERNEL_ARCH)/boot/dts/*.dtb $(KERNEL_OUT)/arch/$(KERNEL_ARCH)/boot/*.dtb
 endif
-dtb_dir = $(firstword $(wildcard $(possible_dtb_dirs)))
+dtb_dir = $(dir $(firstword $(wildcard $(possible_dtb_dirs))))
 
 define build-dtimage-target
     $(call pretty,"Target dt image: $@")
