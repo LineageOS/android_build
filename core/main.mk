@@ -181,39 +181,6 @@ $(info ************************************************************)
 $(error stop)
 endif
 
-# Check for the current JDK.
-#
-# For Java 1.7, we require OpenJDK on linux and Oracle JDK on Mac OS.
-requires_openjdk := false
-ifeq ($(HOST_OS), linux)
-requires_openjdk := true
-endif
-
-
-# Check for the current jdk
-ifeq ($(requires_openjdk), true)
-# The user asked for java7 openjdk, so check that the host
-# java version is really openjdk
-ifeq ($(shell echo '$(java_version_str)' | grep -i openjdk),)
-$(info ************************************************************)
-$(info You asked for an OpenJDK 7 build but your version is)
-$(info $(java_version_str).)
-$(info ************************************************************)
-$(error stop)
-endif # java version is not OpenJdk
-else # if requires_openjdk
-ifneq ($(shell echo '$(java_version_str)' | grep -i openjdk),)
-$(info ************************************************************)
-$(info You are attempting to build with an unsupported JDK.)
-$(info $(space))
-$(info You use OpenJDK but only Sun/Oracle JDK is supported.)
-$(info Please follow the machine setup instructions at)
-$(info $(space)$(space)$(space)$(space)https://source.android.com/source/download.html)
-$(info ************************************************************)
-$(error stop)
-endif # java version is not Sun Oracle JDK
-endif # if requires_openjdk
-
 # Check for the correct version of javac
 ifeq ($(strip $(javac_version)),)
 $(info ************************************************************)
