@@ -72,6 +72,7 @@ ifeq ($(BOARD_USES_QCOM_HARDWARE),true)
 # HACK: check to see if build uses standard QC HAL paths by checking for CM path structure
 AOSP_VARIANT_MAKEFILE := $(wildcard hardware/qcom/audio/default/Android.mk)
 ifeq ("$(AOSP_VARIANT_MAKEFILE)","")
+$(call project-set-path,qcom-common,device/qcom/common)
 $(call project-set-path,qcom-audio,hardware/qcom/audio)
 $(call project-set-path,qcom-display,hardware/qcom/display)
 $(call project-set-path,qcom-media,hardware/qcom/media)
@@ -84,6 +85,8 @@ $(call project-set-path,ril,hardware/ril)
 $(call project-set-path,wlan,hardware/qcom/wlan)
 $(call project-set-path,bt-vendor,hardware/qcom/bt)
 else
+$(call set-device-specific-path,COMMON,common,device/qcom/common)
+
 $(call project-set-path,qcom-audio,hardware/qcom/audio-caf/$(QCOM_HARDWARE_VARIANT))
 
 ifeq ($(SONY_BF64_KERNEL_VARIANT),true)
@@ -106,6 +109,7 @@ $(call bt-vendor-set-path-variant,bt-caf)
 endif # AOSP_VARIANT_MAKEFILE
 
 else
+$(call project-set-path,qcom-common,device/qcom/common)
 
 $(call project-set-path,qcom-audio,hardware/qcom/audio/default)
 $(call project-set-path,qcom-display,hardware/qcom/display/$(TARGET_BOARD_PLATFORM))
