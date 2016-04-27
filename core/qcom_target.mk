@@ -75,7 +75,7 @@ ifeq ($(SONY_BF64_KERNEL_VARIANT),true)
 $(call project-set-path,qcom-display,hardware/qcom/display-caf/sony)
 $(call project-set-path,qcom-media,hardware/qcom/media-caf/sony)
 else
-$(call project-set-path,qcom-display,hardware/qcom/display-caf/$(QCOM_HARDWARE_VARIANT))
+$(call project-set-path,qcom-display,hardware/qcom/display/msm8909)
 $(call project-set-path,qcom-media,hardware/qcom/media-caf/$(QCOM_HARDWARE_VARIANT))
 endif
 
