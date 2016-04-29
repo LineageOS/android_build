@@ -140,6 +140,7 @@ $(built_aar): PRIVATE_ANDROID_MANIFEST := $(full_android_manifest)
 $(built_aar): PRIVATE_CLASSES_JAR := $(LOCAL_BUILT_MODULE)
 $(built_aar): PRIVATE_RESOURCE_DIR := $(LOCAL_RESOURCE_DIR)
 $(built_aar): PRIVATE_R_TXT := $(LOCAL_INTERMEDIATE_SOURCE_DIR)/R.txt
+$(built_aar): PRIVATE_CONSUMER_PROGUARD_FILE := $(LOCAL_CONSUMER_PROGUARD_FILE)
 $(built_aar) : $(LOCAL_BUILT_MODULE)
 	@echo "target AAR:  $(PRIVATE_MODULE) ($@)"
 	$(hide) rm -rf $(dir $@)aar && mkdir -p $(dir $@)aar/res
@@ -148,6 +149,9 @@ $(built_aar) : $(LOCAL_BUILT_MODULE)
 	# Note: Use "cp -n" to honor the resource overlay rules, if multiple res dirs exist.
 	$(hide) $(foreach res,$(PRIVATE_RESOURCE_DIR),cp -Rfn $(res)/* $(dir $@)aar/res;)
 	$(hide) cp $(PRIVATE_R_TXT) $(dir $@)aar/R.txt
+ifneq ($(PRIVATE_CONSUMER_PROGUARD_FILE),)
+	$(hide) cp $(PRIVATE_CONSUMER_PROGUARD_FILE) $(dir $@)aar/proguard.txt
+endif
 	$(hide) jar -cMf $@ \
 	  -C $(dir $@)aar .
 
