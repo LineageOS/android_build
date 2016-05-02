@@ -190,8 +190,8 @@ $(built_aar) : $(full_classes_jar) $(full_android_manifest)
 	$(hide) $(foreach res,$(PRIVATE_RESOURCE_DIR),cp -Rfn $(res)/* $(dir $@)aar/res;)
 	$(hide) cp $(PRIVATE_R_TXT) $(dir $@)aar/R.txt
 	$(hide) if [ ! -z "$(PRIVATE_CONSUMER_PROGUARD_FILE)" ]; then \
-                        echo "Including '$(PRIVATE_CONSUMER_PROGUARD_FILE)'"; \
-			$(hide) cp $(PRIVATE_CONSUMER_PROGUARD_FILE) $(dir $@)aar/proguard.txt; fi
+			echo "Including '$(PRIVATE_CONSUMER_PROGUARD_FILE)'"; \
+			cp $(PRIVATE_CONSUMER_PROGUARD_FILE) $(dir $@)aar/proguard.txt; fi
 	$(hide) jar -cMf $@ \
 	  -C $(dir $@)aar .
 
