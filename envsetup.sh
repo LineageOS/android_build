@@ -1689,7 +1689,7 @@ function cmremote()
     GERRIT_REMOTE=$(git config --get remote.github.projectname)
     if [ -z "$GERRIT_REMOTE" ]
     then
-        echo Unable to set up the git remote, are you under a git repo?
+        echo "Unable to set up the git remote, are you under a git repo?"
         return 0
     fi
     CMUSER=$(git config --get review.review.cyanogenmod.org.username)
@@ -1707,9 +1707,10 @@ function aospremote()
     git remote rm aosp 2> /dev/null
     if [ ! -d .git ]
     then
-        echo .git directory not found. Please run this from the root directory of the Android repository you wish to set up.
+        echo ".git directory not found. Please run this from the root directory of the Android repository you wish to set up."
+        return 0
     fi
-    PROJECT=`pwd -P | sed s#$ANDROID_BUILD_TOP/##g`
+    PROJECT=${$(pwd -P)#$ANDROID_BUILD_TOP/}
     if (echo $PROJECT | grep -qv "^device")
     then
         PFX="platform/"
@@ -1723,9 +1724,10 @@ function cafremote()
     git remote rm caf 2> /dev/null
     if [ ! -d .git ]
     then
-        echo .git directory not found. Please run this from the root directory of the Android repository you wish to set up.
+        echo ".git directory not found. Please run this from the root directory of the Android repository you wish to set up."
+        return 0
     fi
-    PROJECT=`pwd -P | sed s#$ANDROID_BUILD_TOP/##g`
+    PROJECT=${$(pwd -P)#$ANDROID_BUILD_TOP/}
     if (echo $PROJECT | grep -qv "^device")
     then
         PFX="platform/"
