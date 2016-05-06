@@ -22,6 +22,11 @@ ifeq ($(filter $(TARGET_OUT)/% $(TARGET_OUT_VENDOR)/% $(TARGET_OUT_OEM)/%, $(my_
 # If this app isn't to be installed to system partitions.
 my_embed_jni := true
 endif
+ifeq (true,$(PACKAGE_PREBUNDLED_JNI_LIBS))
+# If this app isn't to be installed to system partitions.
+my_embed_jni := true
+endif
+
 
 jni_shared_libraries :=
 jni_shared_libraries_abis :=
