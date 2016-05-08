@@ -33,7 +33,7 @@ define build-dtimage-target
     $(hide) chmod a+r $@
 endef
 
-$(INSTALLED_DTIMAGE_TARGET): $(DTBTOOL) $(INSTALLED_KERNEL_TARGET)
+$(INSTALLED_DTIMAGE_TARGET): $(DTBTOOL) $(INSTALLED_KERNEL_TARGET) $(dtb_dir)
 	$(build-dtimage-target)
 	@echo -e ${CL_CYN}"Made DT image: $@"${CL_RST}
 
