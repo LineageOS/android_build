@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5faad753_27dd0e70",
+        "filename": "core/tasks/dt_image.mk",
+        "patchSetId": 2
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 2936
+      },
+      "writtenOn": "2016-05-09T16:43:59Z",
+      "side": 1,
+      "message": "We\u0027re potentially invoking dtbtool multiple times with this now? I wonder if we want to separate the codepath for dtbToolCM and QC dtbTool at this point.",
+      "revId": "e9d9391e3c312bb8d26bb0a8ba343b5ed6518b76",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    }
+  ]
+}
