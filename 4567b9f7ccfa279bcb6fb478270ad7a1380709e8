@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5faad753_dc92d1f6",
+        "filename": "core/tasks/kernel.mk",
+        "patchSetId": 2
+      },
+      "lineNbr": 367,
+      "author": {
+        "id": 14090
+      },
+      "writtenOn": "2016-05-09T15:02:17Z",
+      "side": 1,
+      "message": "Looks like we already have a definition here, though it\u0027s not just the kernel it\u0027s building there.\n\nhttps://github.com/CyanogenMod/android_build/blob/cm-12.1/core/generate_extra_images.mk#L313",
+      "range": {
+        "startLine": 366,
+        "startChar": 0,
+        "endLine": 367,
+        "endChar": 34
+      },
+      "revId": "4567b9f7ccfa279bcb6fb478270ad7a1380709e8",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    }
+  ]
+}
