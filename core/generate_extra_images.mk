@@ -108,7 +108,7 @@ endif
 .PHONY: aboot
 aboot: $(INSTALLED_BOOTLOADER_MODULE)
 
-.PHONY: kernel
+.PHONY: bootimage
 kernel: $(INSTALLED_BOOTIMAGE_TARGET) $(INSTALLED_SEC_BOOTIMAGE_TARGET)
 
 .PHONY: recoveryimage
