@@ -16,6 +16,24 @@
       "revId": "e9d9391e3c312bb8d26bb0a8ba343b5ed6518b76",
       "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5faad753_e7e61645",
+        "filename": "core/tasks/dt_image.mk",
+        "patchSetId": 2
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 11883
+      },
+      "writtenOn": "2016-05-09T16:45:03Z",
+      "side": 1,
+      "message": "The DTBTOOL call is outside of the for loop so it will be called once",
+      "parentUuid": "5faad753_27dd0e70",
+      "revId": "e9d9391e3c312bb8d26bb0a8ba343b5ed6518b76",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
     }
   ]
 }
