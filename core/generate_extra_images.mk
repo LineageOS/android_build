@@ -108,10 +108,10 @@ endif
 .PHONY: aboot
 aboot: $(INSTALLED_BOOTLOADER_MODULE)
 
-.PHONY: kernel
+.PHONY: bootsecimage
 kernel: $(INSTALLED_BOOTIMAGE_TARGET) $(INSTALLED_SEC_BOOTIMAGE_TARGET)
 
-.PHONY: recoveryimage
+.PHONY: recoverysecimage
 recoveryimage: $(INSTALLED_RECOVERYIMAGE_TARGET) $(INSTALLED_SEC_RECOVERYIMAGE_TARGET)
 
 .PHONY: persistimage
