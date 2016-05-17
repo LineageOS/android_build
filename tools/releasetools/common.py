@@ -448,6 +448,7 @@ def _BuildBootableImage(sourcedir, fs_config_file, info_dict=None,
 
   img = tempfile.NamedTemporaryFile()
   bootimg_key = os.getenv("PRODUCT_PRIVATE_KEY", None)
+  custom_boot_signer = os.getenv("PRODUCT_BOOT_SIGNER", None)
 
   if has_ramdisk:
     ramdisk_img = make_ramdisk()
@@ -531,8 +532,16 @@ def _BuildBootableImage(sourcedir, fs_config_file, info_dict=None,
   assert p.returncode == 0, "mkbootimg of %s image failed" % (
       os.path.basename(sourcedir),)
 
-  if bootimg_key and os.path.exists(bootimg_key) and kernel_pagesize > 0:
-    print "Signing bootable image..."
+  if custom_boot_signer and bootimg_key and os.path.exists(bootimg_key):
+    print("Signing bootable image with custom boot signer...")
+    img_secure = tempfile.NamedTemporaryFile()
+    p = Run([custom_boot_signer, img.name, img_secure.name], stdout=subprocess.PIPE)
+    p.communicate()
+    assert p.returncode == 0, "signing of bootable image failed"
+    shutil.copyfile(img_secure.name, img.name)
+    img_secure.close()
+  elif bootimg_key and os.path.exists(bootimg_key) and kernel_pagesize > 0:
+    print("Signing bootable image...")
     bootimg_key_passwords = {}
     bootimg_key_passwords.update(PasswordManager().GetPasswords(bootimg_key.split()))
     bootimg_key_password = bootimg_key_passwords[bootimg_key]
