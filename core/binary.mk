@@ -209,7 +209,7 @@ ifdef LOCAL_CLANG_$($(my_prefix)$(LOCAL_2ND_ARCH_VAR_PREFIX)ARCH)
 my_clang := $(strip $(LOCAL_CLANG_$($(my_prefix)$(LOCAL_2ND_ARCH_VAR_PREFIX)ARCH)))
 endif
 
-my_qcclang := $(strip $(LOCAL_QCCLANG))
+my_sdclang := $(strip $(LOCAL_SDCLANG))
 
 # clang is enabled by default for host builds
 # enable it unless we've specifically disabled clang above
@@ -253,9 +253,9 @@ endif
 my_cppflags := $(my_cpp_std_version) $(my_cppflags)
 
 
-ifeq ($(QCCLANG),true)
-    ifeq ($(my_qcclang),)
-        my_qcclang := true
+ifeq ($(SDCLANG),true)
+    ifeq ($(my_sdclang),)
+        my_sdclang := true
     endif
 endif
 
@@ -334,12 +334,12 @@ my_target_global_cflags := $($(LOCAL_2ND_ARCH_VAR_PREFIX)CLANG_TARGET_GLOBAL_CFL
 my_target_global_conlyflags := $($(LOCAL_2ND_ARCH_VAR_PREFIX)CLANG_TARGET_GLOBAL_CONLYFLAGS)
 my_target_global_cppflags += $($(LOCAL_2ND_ARCH_VAR_PREFIX)CLANG_TARGET_GLOBAL_CPPFLAGS)
 my_target_global_ldflags := $($(LOCAL_2ND_ARCH_VAR_PREFIX)CLANG_TARGET_GLOBAL_LDFLAGS)
-    ifeq ($(my_qcclang),true)
+    ifeq ($(my_sdclang),true)
         ifeq ($(strip $(my_cc)),)
-            my_cc := $(QCCLANG_PATH)/clang $(SDLLVM_AE_FLAG) -Wno-vectorizer-no-neon
+            my_cc := $(SDCLANG_PATH)/clang $(SDLLVM_AE_FLAG) -Wno-vectorizer-no-neon
         endif
         ifeq ($(strip $(my_cxx)),)
-            my_cxx := $(QCCLANG_PATH)/clang++ $(SDLLVM_AE_FLAG) -Wno-vectorizer-no-neon
+            my_cxx := $(SDCLANG_PATH)/clang++ $(SDLLVM_AE_FLAG) -Wno-vectorizer-no-neon
         endif
     endif
 else
