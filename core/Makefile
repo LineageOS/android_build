@@ -1881,7 +1881,7 @@ else
     OTA_FROM_TARGET_SCRIPT := $(TARGET_RELEASETOOL_OTA_FROM_TARGET_SCRIPT)
 endif
 
-ifeq ($(WITH_GMS),true)
+ifeq ($(CYNGN_TARGET),true)
     $(INTERNAL_OTA_PACKAGE_TARGET): backuptool := false
 else
 ifneq ($(CM_BUILD),)
