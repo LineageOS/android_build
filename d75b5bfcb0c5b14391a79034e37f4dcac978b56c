@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5faad753_d481184c",
+        "filename": "core/Makefile",
+        "patchSetId": 3
+      },
+      "lineNbr": 1884,
+      "author": {
+        "id": 2936
+      },
+      "writtenOn": "2016-05-25T04:20:39Z",
+      "side": 1,
+      "message": "CYNGN_TARGET, CYNGN_TARGETS is a list.",
+      "revId": "d75b5bfcb0c5b14391a79034e37f4dcac978b56c",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    }
+  ]
+}
