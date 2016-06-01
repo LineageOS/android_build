@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5faad753_09c3095f",
+        "filename": "core/binary.mk",
+        "patchSetId": 1
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 10094
+      },
+      "writtenOn": "2016-06-01T18:43:45Z",
+      "side": 1,
+      "message": "I\u0027ll move this up...",
+      "revId": "e230188ca7c9e3663426042f7b4c7863e53bd2ac",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    }
+  ]
+}
