@@ -190,6 +190,11 @@ ifeq ($(DONT_DEXPREOPT_PREBUILTS),true)
 LOCAL_DEX_PREOPT := false
 endif
 
+# Disable dex-preopt of specific prebuilts to save space, if requested.
+ifneq ($(filter $(DEXPREOPT_BLACKLIST),$(LOCAL_MODULE)),)
+LOCAL_DEX_PREOPT := false
+endif
+
 #######################################
 # defines built_odex along with rule to install odex
 include $(BUILD_SYSTEM)/dex_preopt_odex_install.mk
