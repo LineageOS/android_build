@@ -111,10 +111,12 @@ def BuildVerityMetadata(image_size, verity_metadata_path, root_hash, salt,
   cmd = cmd_template % (image_size, verity_metadata_path, root_hash, salt,
                         block_device, signer_path, key)
   print(cmd)
-  status, output = getstatusoutput(cmd)
-  if status:
-    print("Could not build verity metadata! Error: %s" % output)
-    return False
+  runcmd = ["system/extras/verity/build_verity_metadata.py", image_size, verity_metadata_path, root_hash, salt, block_device, signer_path, key];
+  sp = subprocess.Popen(runcmd)
+  sp.wait()
+
+  assert sp.returncode == 0, "Could not build verity metadata!"
+
   return True
 
 def Append2Simg(sparse_image_path, unsparse_image_path, error_message):
