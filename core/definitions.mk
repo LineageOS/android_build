@@ -2130,6 +2130,7 @@ endef
 #
 define sign-package
 $(hide) mv $@ $@.unsigned
+$(hide) echo $(notdir $(basename $(PRIVATE_PRIVATE_KEY))) > $(PRIVATE_INTERMEDIATES_DIR)/CERTIFICATE
 $(hide) java -jar $(SIGNAPK_JAR) \
     $(PRIVATE_CERTIFICATE) $(PRIVATE_PRIVATE_KEY) \
     $(PRIVATE_ADDITIONAL_CERTIFICATES) $@.unsigned $@.signed
