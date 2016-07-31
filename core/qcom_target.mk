@@ -90,11 +90,19 @@ $(call project-set-path,bt-vendor,hardware/qcom/bt)
 else
 $(call project-set-path,qcom-audio,hardware/qcom/audio-caf/$(QCOM_HARDWARE_VARIANT))
 
+ifneq ($(TARGET_SPECIFIC_DISPLAY_HAL),)
+$(call project-set-path,qcom-display,$(TARGET_SPECIFIC_DISPLAY_HAL))
+else
 ifeq ($(SONY_BF64_KERNEL_VARIANT),true)
 $(call project-set-path,qcom-display,hardware/qcom/display-caf/sony)
-$(call project-set-path,qcom-media,hardware/qcom/media-caf/sony)
 else
 $(call project-set-path,qcom-display,hardware/qcom/display-caf/$(QCOM_HARDWARE_VARIANT))
+endif
+endif
+
+ifeq ($(SONY_BF64_KERNEL_VARIANT),true)
+$(call project-set-path,qcom-media,hardware/qcom/media-caf/sony)
+else
 $(call project-set-path,qcom-media,hardware/qcom/media-caf/$(QCOM_HARDWARE_VARIANT))
 endif
 
