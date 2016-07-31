@@ -290,7 +290,7 @@ TARGET_KERNEL_BINARIES: $(KERNEL_OUT_STAMP) $(KERNEL_CONFIG) $(KERNEL_HEADERS_IN
 				echo -e ${CL_GRN}"Building DTBs"${CL_RST} ; \
 				$(MAKE) $(MAKE_FLAGS) -C $(KERNEL_SRC) O=$(KERNEL_OUT) ARCH=$(KERNEL_ARCH) $(KERNEL_CROSS_COMPILE) dtbs ; \
 			else \
-				echo "DTBs not enabled" ; \
+				echo -e ${CL_CYN}"DTBs not enabled"${CL_RST} ; \
 			fi ;
 	$(hide) if grep -q 'CONFIG_MODULES=y' $(KERNEL_CONFIG) ; \
 			then \
@@ -300,15 +300,18 @@ TARGET_KERNEL_BINARIES: $(KERNEL_OUT_STAMP) $(KERNEL_CONFIG) $(KERNEL_HEADERS_IN
 				$(mv-modules) && \
 				$(clean-module-folder) ; \
 			else \
-				echo "Kernel Modules not enabled" ; \
+				echo -e ${CL_CYN}"Kernel Modules not enabled"${CL_RST} ; \
 			fi ;
 
 
 $(TARGET_KERNEL_MODULES): TARGET_KERNEL_BINARIES
 
 $(TARGET_PREBUILT_INT_KERNEL): $(TARGET_KERNEL_MODULES)
-	$(mv-modules)
-	$(clean-module-folder)
+	$(hide) if grep -q 'CONFIG_MODULES=y' $(KERNEL_CONFIG) ; \
+			then \
+				$(mv-modules) && \
+				$(clean-module-folder) ; \
+			fi ;
 
 $(KERNEL_HEADERS_INSTALL_STAMP): $(KERNEL_OUT_STAMP) $(KERNEL_CONFIG)
 	@echo -e ${CL_GRN}"Building Kernel Headers"${CL_RST}
