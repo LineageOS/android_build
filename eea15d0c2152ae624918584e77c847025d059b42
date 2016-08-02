@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3fa7e38b_3e2bcf30",
+        "filename": "core/tasks/kernel.mk",
+        "patchSetId": 3
+      },
+      "lineNbr": 312,
+      "author": {
+        "id": 2936
+      },
+      "writtenOn": "2016-08-02T03:05:34Z",
+      "side": 1,
+      "message": "Do you want the \u0026\u0026? Shouldn\u0027t we clean the folder even if the compilation fails?",
+      "range": {
+        "startLine": 312,
+        "startChar": 18,
+        "endLine": 312,
+        "endChar": 20
+      },
+      "revId": "eea15d0c2152ae624918584e77c847025d059b42",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    }
+  ]
+}
