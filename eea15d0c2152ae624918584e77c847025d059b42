@@ -22,6 +22,30 @@
       "revId": "eea15d0c2152ae624918584e77c847025d059b42",
       "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fa7e38b_5e8a4b1b",
+        "filename": "core/tasks/kernel.mk",
+        "patchSetId": 3
+      },
+      "lineNbr": 312,
+      "author": {
+        "id": 8084
+      },
+      "writtenOn": "2016-08-02T04:24:36Z",
+      "side": 1,
+      "message": "I take the idea of 300-301 lines, and you\u0027re right, I\u0027ll change :)",
+      "parentUuid": "3fa7e38b_3e2bcf30",
+      "range": {
+        "startLine": 312,
+        "startChar": 18,
+        "endLine": 312,
+        "endChar": 20
+      },
+      "revId": "eea15d0c2152ae624918584e77c847025d059b42",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
     }
   ]
 }
