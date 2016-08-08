@@ -270,8 +270,8 @@ include $(BUILD_SYSTEM)/cxx_stl_setup.mk
 ifdef LOCAL_HAL_STATIC_LIBRARIES
 $(foreach lib, $(LOCAL_HAL_STATIC_LIBRARIES), \
     $(eval b_lib := $(filter $(lib).%,$(BOARD_HAL_STATIC_LIBRARIES)))\
-    $(if $(b_lib), $(eval my_static_libraries += $(b_lib)),\
-                   $(eval my_static_libraries += $(lib).default)))
+    $(if $(b_lib), $(eval my_static_libraries := $(b_lib) $(my_static_libraries)),\
+                   $(eval my_static_libraries := $(lib).default $(my_static_libraries))))
 b_lib :=
 endif
 
