@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3fa7e38b_79e70f42",
+        "filename": "core/main.mk",
+        "patchSetId": 4
+      },
+      "lineNbr": 161,
+      "author": {
+        "id": 11801
+      },
+      "writtenOn": "2016-08-10T12:06:43Z",
+      "side": 1,
+      "message": "Shouldn\u0027t this be made to match the java7 grep and say \"^java .*[ \"]...?",
+      "revId": "fd3a63be0bd8954dfcd12347b293359950a3024f",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    }
+  ]
+}
