@@ -16,6 +16,24 @@
       "revId": "0e39dd276709d99d49f86d245f1254b4a328d5e8",
       "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1fa4df85_952a22e5",
+        "filename": "core/tasks/dt_image.mk",
+        "patchSetId": 3
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 6334
+      },
+      "writtenOn": "2016-08-19T14:38:50Z",
+      "side": 1,
+      "message": "http://review.cyanogenmod.org/#/c/157172/",
+      "parentUuid": "1fa4df85_d553bae1",
+      "revId": "0e39dd276709d99d49f86d245f1254b4a328d5e8",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
     }
   ]
 }
