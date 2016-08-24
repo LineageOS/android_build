@@ -509,11 +509,13 @@ else # LOCAL_SDK_RES_VERSION
 framework_res_package_export := \
     $(call intermediates-dir-for,APPS,framework-res,,COMMON)/package-export.apk
 
+ifneq ($(TARGET_DISABLE_LINEAGE_SDK), true)
 # Avoid possible circular dependency with our platform-res
 ifneq ($(LOCAL_IGNORE_SUBDIR), true)
 lineage_plat_res_package_export := \
     $(call intermediates-dir-for,APPS,org.lineageos.platform-res,,COMMON)/package-export.apk
 endif # LOCAL_IGNORE_SUBDIR
+endif
 
 # We can't depend directly on the export.apk file; it won't get its
 # PRIVATE_ vars set up correctly if we do.  Instead, depend on the
@@ -521,10 +523,12 @@ endif # LOCAL_IGNORE_SUBDIR
 framework_res_package_export_deps := \
     $(dir $(framework_res_package_export))src/R.stamp
 
+ifneq ($(TARGET_DISABLE_LINEAGE_SDK), true)
 ifneq ($(LOCAL_IGNORE_SUBDIR), true)
 lineage_plat_res_package_export_deps := \
     $(dir $(lineage_plat_res_package_export))src/R.stamp
 endif # LOCAL_IGNORE_SUBDIR
+endif
 
 endif # LOCAL_SDK_RES_VERSION
 all_library_res_package_exports := \
@@ -537,12 +541,14 @@ all_library_res_package_export_deps := \
     $(foreach lib,$(LOCAL_RES_LIBRARIES),\
         $(call intermediates-dir-for,APPS,$(lib),,COMMON)/src/R.stamp)
 
+ifneq ($(TARGET_DISABLE_LINEAGE_SDK), true)
 ifneq ($(LOCAL_IGNORE_SUBDIR), true)
 all_library_res_package_exports += \
     $(lineage_plat_res_package_export)
 all_library_res_package_export_deps += \
     $(lineage_plat_res_package_export_deps)
 endif # LOCAL_IGNORE_SUBDIR
+endif
 
 $(resource_export_package) $(R_file_stamp) $(LOCAL_BUILT_MODULE): $(all_library_res_package_export_deps)
 $(LOCAL_INTERMEDIATE_TARGETS): \
