@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1fa4df85_e375d3fb",
+        "filename": "core/qcom_target.mk",
+        "patchSetId": 1
+      },
+      "lineNbr": 116,
+      "author": {
+        "id": 2936
+      },
+      "writtenOn": "2016-08-24T20:26:29Z",
+      "side": 0,
+      "message": "Why not just $(TARGET_BOARD_PLATFORM) ?",
+      "range": {
+        "startLine": 116,
+        "startChar": 55,
+        "endLine": 116,
+        "endChar": 62
+      },
+      "revId": "65a3f59eed518eafd33c7febe73d7a2948521ee7",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    }
+  ]
+}
