@@ -113,7 +113,12 @@ else
 
 $(call project-set-path,qcom-audio,hardware/qcom/audio/default)
 $(call project-set-path,qcom-display,hardware/qcom/display/$(TARGET_BOARD_PLATFORM))
-$(call project-set-path,qcom-media,hardware/qcom/media/default)
+ifneq ($(filter msm8996, $(TARGET_BOARD_PLATFORM)),)
+    QCOM_MEDIA_SUFFIX := $(call my-dir)/msm8996
+else
+    QCOM_MEDIA_SUFFIX := $(call my-dir)/msm8974
+endif
+$(call project-set-path,qcom-media,hardware/qcom/media/$(QCOM_MEDIA_SUFFIX))
 
 $(call project-set-path,qcom-camera,hardware/qcom/camera)
 $(call project-set-path,qcom-gps,hardware/qcom/gps)
