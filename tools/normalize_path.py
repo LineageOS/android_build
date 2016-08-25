@@ -16,14 +16,15 @@
 """
 Normalize and output paths from arguments, or stdin if no arguments provided.
 """
+from __future__ import print_function
 
 import os.path
 import sys
 
 if len(sys.argv) > 1:
   for p in sys.argv[1:]:
-    print os.path.normpath(p)
+    print(os.path.normpath(p))
   sys.exit(0)
 
 for line in sys.stdin:
-  print os.path.normpath(line.strip())
+  print(os.path.normpath(line.strip()))
