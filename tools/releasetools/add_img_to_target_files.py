@@ -107,7 +107,7 @@ def AddOem(output_zip, prefix="IMAGES/"):
 
   prebuilt_path = os.path.join(OPTIONS.input_tmp, prefix, "oem.img")
   if os.path.exists(prebuilt_path):
-    print "oem.img already exists in %s, no need to rebuild..." % (prefix,)
+    print("oem.img already exists in %s, no need to rebuild..." % (prefix,))
     return
 
   block_list = common.MakeTempFile(prefix="oem-blocklist-", suffix=".map")
