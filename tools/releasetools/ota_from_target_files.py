@@ -2063,11 +2063,11 @@ def main(argv):
       common.ZipClose(source_zip)
 
     if OPTIONS.verbose:
-      print "--- target info ---"
+      print("--- target info ---")
       common.DumpInfoDict(OPTIONS.info_dict)
 
       if OPTIONS.incremental_source is not None:
-        print "--- source info ---"
+        print("--- source info ---")
         common.DumpInfoDict(OPTIONS.source_info_dict)
 
     WriteABOTAPackageWithBrilloScript(
@@ -2075,7 +2075,7 @@ def main(argv):
         output_file=args[1],
         source_file=OPTIONS.incremental_source)
 
-    print "done."
+    print("done.")
     return
 
   if OPTIONS.extra_script is not None:
@@ -2134,7 +2134,7 @@ def main(argv):
   # Non A/B OTAs rely on /cache partition to store temporary files.
   cache_size = OPTIONS.info_dict.get("cache_size", None)
   if cache_size is None:
-    print "--- can't determine the cache partition size ---"
+    print("--- can't determine the cache partition size ---")
   OPTIONS.cache_size = cache_size
 
   # Generate a verify package.
@@ -2148,14 +2148,14 @@ def main(argv):
   # Generate an incremental OTA. It will fall back to generate a full OTA on
   # failure unless no_fallback_to_full is specified.
   else:
-    print "unzipping source target-files..."
+    print("unzipping source target-files...")
     OPTIONS.source_tmp, source_zip = common.UnzipTemp(
         OPTIONS.incremental_source)
     OPTIONS.target_info_dict = OPTIONS.info_dict
     OPTIONS.source_info_dict = common.LoadInfoDict(source_zip,
                                                    OPTIONS.source_tmp)
     if OPTIONS.verbose:
-      print "--- source info ---"
+      print("--- source info ---")
       common.DumpInfoDict(OPTIONS.source_info_dict)
     try:
       WriteIncrementalOTAPackage(input_zip, source_zip, output_zip)
