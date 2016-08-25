@@ -399,9 +399,9 @@ def LoadRecoveryFSTab(read_helper, fstab_version, type, system_root_image=False)
   # / is used for the system mount point when the root directory is included in
   # system. Other areas assume system is always at "/system" so point /system
   # at /.
-  if system_root_image:
-    assert not d.has_key("/system") and d.has_key("/")
-    d["/system"] = d["/"]
+  #if system_root_image:
+    #assert not d.has_key("/system") and d.has_key("/")
+    #d["/system"] = d["/"]
   return d
 
 
