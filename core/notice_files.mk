@@ -68,7 +68,7 @@ installed_notice_file := $($(my_prefix)OUT_NOTICE_FILES)/src/$(module_installed_
 $(installed_notice_file): PRIVATE_INSTALLED_MODULE := $(module_installed_filename)
 
 $(installed_notice_file): $(notice_file)
-	@echo -e ${CL_CYN}Notice file:${CL_RST} $< -- $@
+	@echo Notice file: $< -- $@
 	$(hide) mkdir -p $(dir $@)
 	$(hide) cat $< > $@
 
