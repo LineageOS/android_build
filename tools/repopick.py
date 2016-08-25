@@ -209,6 +209,7 @@ if __name__ == '__main__':
     manifest = subprocess.check_output(['repo', 'manifest'])
     xml_root = ElementTree.fromstring(manifest)
     projects = xml_root.findall('project')
+    remotes = xml_root.findall('remote')
     default_revision = xml_root.findall('default')[0].get('revision').split('/')[-1]
 
     #dump project data into the a list of dicts with the following data:
@@ -219,7 +220,11 @@ if __name__ == '__main__':
         path = project.get('path')
         revision = project.get('revision')
         if revision is None:
-            revision = default_revision
+            for remote in remotes:
+                if remote.get('name') == project.get('remote'):
+                    revision = remote.get('revision')
+            if revision is None:
+                revision = default_revision
 
         if not name in project_name_to_data:
             project_name_to_data[name] = {}
