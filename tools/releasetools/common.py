@@ -279,7 +279,7 @@ def LoadInfoDict(input_file, input_dir=None):
     d["fstab"] = None
   else:
     d["fstab"] = LoadRecoveryFSTab(read_helper, d["fstab_version"],
-                                   d.get("system_root_image", d["device_type"], False))
+                                   d.get("system_root_image", False), d["device_type"])
   d["build.prop"] = LoadBuildProp(read_helper)
   return d
 
