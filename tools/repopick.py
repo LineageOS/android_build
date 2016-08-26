@@ -275,6 +275,7 @@ if __name__ == '__main__':
             'subject': review['subject'],
             'project': review['project'],
             'branch': review['branch'],
+            'change_id': review['change_id'],
             'change_number': review['number'],
             'status': review['status'],
             'fetch': None
@@ -316,6 +317,19 @@ if __name__ == '__main__':
         # If --start-branch is given, create the branch (more than once per path is okay; repo ignores gracefully)
         if args.start_branch:
             subprocess.check_output(['repo', 'start', args.start_branch[0], project_path])
+
+        # Check if change is already picked to HEAD...HEAD~10
+        found_change = False
+        for i in range(0, 10):
+            output = subprocess.check_output(['git', 'show', '-q', 'HEAD~{0}'.format(i)], cwd=project_path).split()
+            if 'Change-Id:' in output:
+                head_change_id = output[output.index('Change-Id:')+1]
+                if head_change_id.strip() == item['change_id']:
+                    print('Skipping {0} - already picked in {1} as HEAD~{2}'.format(item['id'], project_path, i))
+                    found_change = True
+                    break
+        if found_change:
+            continue
 
         # Print out some useful info
         if not args.quiet:
