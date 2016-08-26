@@ -102,9 +102,12 @@ PRODUCT_BOOT_JARS := \
     org.apache.http.legacy.boot
 
 # The order of PRODUCT_SYSTEM_SERVER_JARS matters.
+ifneq ($(TARGET_DISABLE_CMSDK), true)
 PRODUCT_SYSTEM_SERVER_JARS := \
     org.cyanogenmod.platform \
-    org.cyanogenmod.hardware \
+    org.cyanogenmod.hardware
+endif
+PRODUCT_SYSTEM_SERVER_JARS += \
     services \
     ethernet-service \
     wifi-service
