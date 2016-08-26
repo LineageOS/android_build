@@ -683,9 +683,7 @@ function lunch()
     fi
 
     local product=$(echo -n $selection | sed -e "s/-.*$//")
-    TARGET_PRODUCT=$product \
-    TARGET_BUILD_VARIANT=$variant \
-    build_build_var_cache
+    check_product $product
     if [ $? -ne 0 ]
     then
         # if we can't find a product, try to grab it off the CM github
@@ -697,6 +695,10 @@ function lunch()
     else
         build/tools/roomservice.py $product true
     fi
+    TARGET_PRODUCT=$product \
+    TARGET_BUILD_VARIANT=$variant \
+    build_build_var_cache
+
     if [ $? -ne 0 ]
     then
         echo
