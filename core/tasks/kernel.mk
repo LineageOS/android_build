@@ -32,7 +32,9 @@
 #   TARGET_USES_UNCOMPRESSED_KERNEL    = 'true' if Kernel is uncompressed,
 #                                          optional, defaults to false
 #   TARGET_KERNEL_CROSS_COMPILE_PREFIX = Compiler prefix (e.g. aarch64-linux-android-)
-#                                          defaults to arm-eabi-
+#                                          defaults to arm-eabi- for arm
+#                                                      aarch64-linux-android- for arm64
+#                                                      x86_64-linux-android- for x86
 #
 #   BOARD_KERNEL_IMAGE_NAME            = Built image name, optional,
 #                                          defaults to Image.gz on arm64
@@ -210,10 +212,14 @@ KERNEL_MODULES_OUT := $(TARGET_OUT)/lib/modules
 endif
 
 TARGET_KERNEL_CROSS_COMPILE_PREFIX := $(strip $(TARGET_KERNEL_CROSS_COMPILE_PREFIX))
-ifeq ($(TARGET_KERNEL_CROSS_COMPILE_PREFIX),)
-KERNEL_TOOLCHAIN_PREFIX ?= arm-eabi-
-else
+ifneq ($(TARGET_KERNEL_CROSS_COMPILE_PREFIX),)
 KERNEL_TOOLCHAIN_PREFIX ?= $(TARGET_KERNEL_CROSS_COMPILE_PREFIX)
+else ifeq ($(KERNEL_ARCH),arm64)
+KERNEL_TOOLCHAIN_PREFIX ?= aarch64-linux-android-
+else ifeq ($(KERNEL_ARCH),arm)
+KERNEL_TOOLCHAIN_PREFIX ?= arm-eabi-
+else ifeq ($(KERNEL_ARCH),x86)
+KERNEL_TOOLCHAIN_PREFIX ?= x86_64-linux-android-
 endif
 
 ifeq ($(KERNEL_TOOLCHAIN),)
