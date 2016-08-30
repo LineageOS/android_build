@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1fa4df85_ed6febc2",
+        "filename": "core/tasks/kernel.mk",
+        "patchSetId": 3
+      },
+      "lineNbr": 218,
+      "author": {
+        "id": 6334
+      },
+      "writtenOn": "2016-08-30T14:03:47Z",
+      "side": 1,
+      "message": "are we handling x86 as a default?",
+      "revId": "a3d7c761dc352e5caa0efd609923c5510ea0df90",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    }
+  ]
+}
