@@ -210,7 +210,7 @@ if __name__ == '__main__':
     xml_root = ElementTree.fromstring(manifest)
     projects = xml_root.findall('project')
     remotes = xml_root.findall('remote')
-    default_revision = xml_root.findall('default')[0].get('revision').split('/')[-1]
+    default_revision = "/".join(xml_root.findall('default')[0].get('revision').split('/')[2:])
 
     #dump project data into the a list of dicts with the following data:
     #{project: {path, revision}}
