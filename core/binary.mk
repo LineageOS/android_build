@@ -218,6 +218,8 @@ ifdef LOCAL_CLANG_$($(my_prefix)$(LOCAL_2ND_ARCH_VAR_PREFIX)ARCH)
 my_clang := $(strip $(LOCAL_CLANG_$($(my_prefix)$(LOCAL_2ND_ARCH_VAR_PREFIX)ARCH)))
 endif
 
+my_sdclang := $(strip $(LOCAL_SDCLANG))
+
 # clang is enabled by default for host builds
 # enable it unless we've specifically disabled clang above
 ifdef LOCAL_IS_HOST_MODULE
@@ -260,6 +262,12 @@ endif
 my_cppflags := $(my_cpp_std_version) $(my_cppflags)
 
 
+ifeq ($(SDCLANG),true)
+    ifeq ($(my_sdclang),)
+        my_sdclang := true
+    endif
+endif
+
 # arch-specific static libraries go first so that generic ones can depend on them
 my_static_libraries := $(LOCAL_STATIC_LIBRARIES_$($(my_prefix)$(LOCAL_2ND_ARCH_VAR_PREFIX)ARCH)) $(LOCAL_STATIC_LIBRARIES_$(my_32_64_bit_suffix)) $(my_static_libraries)
 my_whole_static_libraries := $(LOCAL_WHOLE_STATIC_LIBRARIES_$($(my_prefix)$(LOCAL_2ND_ARCH_VAR_PREFIX)ARCH)) $(LOCAL_WHOLE_STATIC_LIBRARIES_$(my_32_64_bit_suffix)) $(my_whole_static_libraries)
@@ -270,8 +278,8 @@ include $(BUILD_SYSTEM)/cxx_stl_setup.mk
 ifdef LOCAL_HAL_STATIC_LIBRARIES
 $(foreach lib, $(LOCAL_HAL_STATIC_LIBRARIES), \
     $(eval b_lib := $(filter $(lib).%,$(BOARD_HAL_STATIC_LIBRARIES)))\
-    $(if $(b_lib), $(eval my_static_libraries += $(b_lib)),\
-                   $(eval my_static_libraries += $(lib).default)))
+    $(if $(b_lib), $(eval my_static_libraries := $(b_lib) $(my_static_libraries)),\
+                   $(eval my_static_libraries := $(lib).default $(my_static_libraries))))
 b_lib :=
 endif
 
@@ -335,6 +343,14 @@ my_target_global_cflags := $($(LOCAL_2ND_ARCH_VAR_PREFIX)CLANG_TARGET_GLOBAL_CFL
 my_target_global_conlyflags := $($(LOCAL_2ND_ARCH_VAR_PREFIX)CLANG_TARGET_GLOBAL_CONLYFLAGS)
 my_target_global_cppflags += $($(LOCAL_2ND_ARCH_VAR_PREFIX)CLANG_TARGET_GLOBAL_CPPFLAGS)
 my_target_global_ldflags := $($(LOCAL_2ND_ARCH_VAR_PREFIX)CLANG_TARGET_GLOBAL_LDFLAGS)
+    ifeq ($(my_sdclang),true)
+        ifeq ($(strip $(my_cc)),)
+            my_cc := $(SDCLANG_PATH)/clang $(SDLLVM_AE_FLAG) -Wno-vectorizer-no-neon
+        endif
+        ifeq ($(strip $(my_cxx)),)
+            my_cxx := $(SDCLANG_PATH)/clang++ $(SDLLVM_AE_FLAG) -Wno-vectorizer-no-neon
+        endif
+    endif
 else
 my_target_global_cflags := $($(LOCAL_2ND_ARCH_VAR_PREFIX)TARGET_GLOBAL_CFLAGS)
 my_target_global_conlyflags := $($(LOCAL_2ND_ARCH_VAR_PREFIX)TARGET_GLOBAL_CONLYFLAGS)
