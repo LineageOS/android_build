@@ -34,13 +34,11 @@ Format of current_overlays.txt and previous_overlays.txt:
   ...
 """
 
-from __future__ import print_function
-
 import sys
 
 def main(argv):
   if len(argv) != 4:
-    print(sys.stderr, __doc__)
+    print >> sys.stderr, __doc__
     sys.exit(1)
 
   f = open(argv[1])
@@ -87,7 +85,7 @@ def main(argv):
 
   # Print out the package names that have overlay change.
   for r in result:
-    print(r)
+    print r
 
 if __name__ == "__main__":
   main(sys.argv)

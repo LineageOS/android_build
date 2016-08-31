@@ -20,14 +20,12 @@
 # the search in a given subdirectory when the file is found.
 #
 
-from __future__ import print_function
-
 import os
 import sys
 
 def perform_find(mindepth, prune, dirlist, filename):
   result = []
-  pruneleaves = set([os.path.split(x)[1] for x in prune])
+  pruneleaves = set(map(lambda x: os.path.split(x)[1], prune))
   for rootdir in dirlist:
     rootdepth = rootdir.count("/")
     for root, dirs, files in os.walk(rootdir, followlinks=True):
@@ -94,7 +92,7 @@ def main(argv):
   results = list(set(perform_find(mindepth, prune, dirlist, filename)))
   results.sort()
   for r in results:
-    print(r)
+    print r
 
 if __name__ == "__main__":
   main(sys.argv)

@@ -149,7 +149,7 @@ for t in tagfile.tags:
   buffer.write("\n  }\n")
 
 
-buffer.write("}\n")
+buffer.write("}\n");
 
 output_dir = os.path.dirname(output_file)
 if not os.path.exists(output_dir):

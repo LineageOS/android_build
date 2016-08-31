@@ -14,12 +14,10 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from __future__ import print_function
-
 import sys
 
 if sys.hexversion < 0x02070000:
-  print("Python 2.7 or newer is required.", file=sys.stderr)
+  print >> sys.stderr, "Python 2.7 or newer is required."
   sys.exit(1)
 
 import os

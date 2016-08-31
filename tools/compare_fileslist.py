@@ -17,7 +17,7 @@
 
 from __future__ import print_function
 
-import cgi, os, sys
+import cgi, os, string, sys
 
 
 def iteritems(obj):
@@ -42,10 +42,10 @@ def main(argv):
   data = {}
   index = 0
   for input in inputs:
-    f = open(input)
+    f = file(input, "r")
     lines = f.readlines()
     f.close()
-    lines = [l.strip() for l in lines]
+    lines = map(string.split, lines)
     lines = [(x_y[1],int(x_y[0])) for x_y in lines]
     for fn,sz in lines:
       if fn not in data:
