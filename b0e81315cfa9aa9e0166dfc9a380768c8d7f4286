@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1fa4df85_a88801c6",
+        "filename": "core/main.mk",
+        "patchSetId": 3
+      },
+      "lineNbr": 128,
+      "author": {
+        "id": 6334
+      },
+      "writtenOn": "2016-08-31T13:16:17Z",
+      "side": 1,
+      "message": "Might as well kill the whole HOST_OS check then",
+      "revId": "b0e81315cfa9aa9e0166dfc9a380768c8d7f4286",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    }
+  ]
+}
