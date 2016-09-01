@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "1fa4df85_8e8e6d76",
+        "filename": "core/tasks/kernel.mk",
+        "patchSetId": 3
+      },
+      "lineNbr": 216,
+      "author": {
+        "id": 3962
+      },
+      "writtenOn": "2016-09-01T04:21:58Z",
+      "side": 1,
+      "message": "Why not aarch64-linux-android- ?",
+      "range": {
+        "startLine": 216,
+        "startChar": 27,
+        "endLine": 216,
+        "endChar": 55
+      },
+      "revId": "a3d7c761dc352e5caa0efd609923c5510ea0df90",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1fa4df85_ed6febc2",
         "filename": "core/tasks/kernel.mk",
         "patchSetId": 3
