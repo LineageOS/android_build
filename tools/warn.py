@@ -1,11 +1,13 @@
 #!/usr/bin/env python
 # This file uses the following encoding: utf-8
 
+from __future__ import print_function
+
 import sys
 import re
 
 if len(sys.argv) == 1:
-    print 'usage: ' + sys.argv[0] + ' <build.log>'
+    print('usage: ' + sys.argv[0] + ' <build.log>')
     sys.exit()
 
 # if you add another level, don't forget to give it a color below
@@ -399,7 +401,7 @@ cur_row_color = 0
 row_colors = [ 'e0e0e0', 'd0d0d0' ]
 
 def output(text):
-    print text,
+    print(text, end=' ')
 
 def htmlbig(param):
     return '<font size="+2">' + param + '</font>'
