@@ -571,6 +571,9 @@ include $(BUILD_SYSTEM)/qcom_target.mk
 # Rules for MTK targets
 include $(BUILD_SYSTEM)/mtk_target.mk
 
+# Rules for SPRD targets
+include $(BUILD_SYSTEM)/sprd_target.mk
+
 # ###############################################################
 # Set up final options.
 # ###############################################################
