@@ -26,6 +26,8 @@ MSM7K_BOARD_PLATFORMS += msm7k
 
 QSD8K_BOARD_PLATFORMS := qsd8k
 
+#List of targets that use video hw
+MSM_VIDC_TARGET_LIST := msm8974 msm8610 msm8226 apq8084 msm8916 msm8994 msm8909 msm8992 msm8996 msm8952 msm8937 titanium msmcobalt
 
 # vars for use by utils
 empty :=
