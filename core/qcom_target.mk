@@ -35,6 +35,12 @@ ifeq ($(BOARD_USES_QCOM_HARDWARE),true)
     # Tell HALs that we're compiling an AOSP build with an in-line kernel
     TARGET_COMPILE_WITH_MSM_KERNEL := true
 
+    # Compile the new universal MSM HALs on boards that support it
+    ifneq ($(filter msm8937 msm8953 msm8996,$(TARGET_BOARD_PLATFORM)),)
+        # Use ?= to allow devices to opt out of unified HALs
+        BOARD_USES_UNIFIED_HALS ?= true
+    endif
+
     ifneq ($(filter msm7x27a msm7x30 msm8660 msm8960,$(TARGET_BOARD_PLATFORM)),)
         # Enable legacy graphics functions
         qcom_flags += -DQCOM_BSP_LEGACY
@@ -69,7 +75,7 @@ ifeq ($(BOARD_USES_QCOM_HARDWARE),true)
             QCOM_HARDWARE_VARIANT := msm8916
         else
         ifneq ($(filter msm8953 msm8937,$(TARGET_BOARD_PLATFORM)),)
-            QCOM_HARDWARE_VARIANT := msm8937
+            QCOM_HARDWARE_VARIANT := msm8937 # Deprecated, move to unified HALs
         else
         ifneq ($(filter msm8992 msm8994,$(TARGET_BOARD_PLATFORM)),)
             QCOM_HARDWARE_VARIANT := msm8994
@@ -96,6 +102,12 @@ $(call project-set-path,ril,hardware/ril)
 $(call project-set-path,wlan,hardware/qcom/wlan)
 $(call project-set-path,bt-vendor,hardware/qcom/bt)
 else
+
+ifeq ($(BOARD_USES_UNIFIED_HALS),true)
+$(call project-set-path,qcom-audio,hardware/qcom/audio-caf/msm89xx)
+$(call project-set-path,qcom-display,hardware/qcom/display-caf/msm89xx)
+$(call project-set-path,qcom-media,hardware/qcom/media-caf/msm89xx)
+else
 $(call project-set-path,qcom-audio,hardware/qcom/audio-caf/$(QCOM_HARDWARE_VARIANT))
 
 ifeq ($(SONY_BF64_KERNEL_VARIANT),true)
@@ -105,6 +117,7 @@ else
 $(call project-set-path,qcom-display,hardware/qcom/display-caf/$(QCOM_HARDWARE_VARIANT))
 $(call project-set-path,qcom-media,hardware/qcom/media-caf/$(QCOM_HARDWARE_VARIANT))
 endif
+endif # BOARD USES_UNIFIED_HALS
 
 $(call set-device-specific-path,CAMERA,camera,hardware/qcom/camera)
 $(call set-device-specific-path,GPS,gps,hardware/qcom/gps)
