@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1fa4df85_1bf07867",
+        "filename": "tools/diff_package_overlays.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2016-09-03T02:50:51Z",
+      "side": 1,
+      "message": "shouldnt this be print(__doc__,file\u003dsys.stderr)",
+      "range": {
+        "startLine": 43,
+        "startChar": 4,
+        "endLine": 43,
+        "endChar": 30
+      },
+      "revId": "e801f55d2a318e7eff671b26da303bb26e4d1eaa",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1fa4df85_dbe98080",
+        "filename": "tools/merge-event-log-tags.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 7446
+      },
+      "writtenOn": "2016-09-03T02:50:51Z",
+      "side": 1,
+      "message": "If I am not wrong in python3 print(err) is as good as print(str(err))",
+      "range": {
+        "startLine": 65,
+        "startChar": 2,
+        "endLine": 65,
+        "endChar": 17
+      },
+      "revId": "e801f55d2a318e7eff671b26da303bb26e4d1eaa",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    }
+  ]
+}
