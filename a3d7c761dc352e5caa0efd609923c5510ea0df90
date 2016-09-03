@@ -57,6 +57,24 @@
       "revId": "a3d7c761dc352e5caa0efd609923c5510ea0df90",
       "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1fa4df85_5b4fd0bc",
+        "filename": "core/tasks/kernel.mk",
+        "patchSetId": 3
+      },
+      "lineNbr": 218,
+      "author": {
+        "id": 32
+      },
+      "writtenOn": "2016-09-03T01:50:45Z",
+      "side": 1,
+      "message": "Ya, ifdef this for ARM",
+      "parentUuid": "1fa4df85_eda4cb0a",
+      "revId": "a3d7c761dc352e5caa0efd609923c5510ea0df90",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
     }
   ]
 }
