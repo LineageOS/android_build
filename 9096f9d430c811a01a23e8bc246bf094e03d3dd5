@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1fa4df85_47fdb338",
+        "filename": "core/qcom_target.mk",
+        "patchSetId": 4
+      },
+      "lineNbr": 77,
+      "author": {
+        "id": 2936
+      },
+      "writtenOn": "2016-09-04T19:18:28Z",
+      "side": 1,
+      "message": "Why can\u0027t we just add more things to this, instead of adding a whole other UNIFIED_HALS bit of logic, is my point.",
+      "range": {
+        "startLine": 77,
+        "startChar": 24,
+        "endLine": 77,
+        "endChar": 39
+      },
+      "revId": "9096f9d430c811a01a23e8bc246bf094e03d3dd5",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    }
+  ]
+}
