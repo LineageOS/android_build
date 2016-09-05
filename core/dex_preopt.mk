@@ -28,18 +28,18 @@ install-on-system-other = $(filter-out $(PRODUCT_DEXPREOPT_SPEED_APPS) $(PRODUCT
 
 # The default values for pre-opting: always preopt PIC.
 # Conditional to building on linux, as dex2oat currently does not work on darwin.
-ifeq ($(HOST_OS),linux)
-  WITH_DEXPREOPT ?= true
+#ifeq ($(HOST_OS),linux)
+#  WITH_DEXPREOPT ?= true
 # For an eng build only pre-opt the boot image and system server. This gives reasonable performance
 # and still allows a simple workflow: building in frameworks/base and syncing.
-  ifeq (eng,$(TARGET_BUILD_VARIANT))
-    WITH_DEXPREOPT_BOOT_IMG_AND_SYSTEM_SERVER_ONLY ?= true
-  endif
+#  ifeq (eng,$(TARGET_BUILD_VARIANT))
+#    WITH_DEXPREOPT_BOOT_IMG_AND_SYSTEM_SERVER_ONLY ?= true
+#  endif
 # Add mini-debug-info to the boot classpath unless explicitly asked not to.
-  ifneq (false,$(WITH_DEXPREOPT_DEBUG_INFO))
-    PRODUCT_DEX_PREOPT_BOOT_FLAGS += --generate-mini-debug-info
-  endif
-endif
+#  ifneq (false,$(WITH_DEXPREOPT_DEBUG_INFO))
+#    PRODUCT_DEX_PREOPT_BOOT_FLAGS += --generate-mini-debug-info
+#  endif
+#endif
 
 GLOBAL_DEXPREOPT_FLAGS :=
 
