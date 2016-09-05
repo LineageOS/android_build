@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1fa4df85_ce769b07",
+        "filename": "core/qcom_target.mk",
+        "patchSetId": 5
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 2936
+      },
+      "writtenOn": "2016-09-05T17:27:32Z",
+      "side": 1,
+      "message": "Looks like this is only really a thing for UM media HALs to build libc2dcolorconvert. This could move to the UM HAL section, or we could remove the entries from the makefiles if we always want to build libc2dcolorconvert.",
+      "range": {
+        "startLine": 33,
+        "startChar": 4,
+        "endLine": 33,
+        "endChar": 29
+      },
+      "revId": "3ce7bac38c9315d10bb72e4fcfa65013cd9285b1",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1fa4df85_0e6d9331",
+        "filename": "core/qcom_target.mk",
+        "patchSetId": 5
+      },
+      "lineNbr": 75,
+      "author": {
+        "id": 2936
+      },
+      "writtenOn": "2016-09-05T17:27:32Z",
+      "side": 1,
+      "message": "Let\u0027s just point these to msm8996? Having a HAL directory that\u0027s not named for a specific platform is weird.",
+      "range": {
+        "startLine": 75,
+        "startChar": 37,
+        "endLine": 75,
+        "endChar": 44
+      },
+      "revId": "3ce7bac38c9315d10bb72e4fcfa65013cd9285b1",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    }
+  ]
+}
