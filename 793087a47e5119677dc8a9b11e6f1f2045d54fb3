@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1fa4df85_513b2cea",
+        "filename": "envsetup.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 2356,
+      "author": {
+        "id": 11883
+      },
+      "writtenOn": "2016-09-06T11:45:41Z",
+      "side": 0,
+      "message": "Removed since ninja always append copy files",
+      "range": {
+        "startLine": 2356,
+        "startChar": 4,
+        "endLine": 2356,
+        "endChar": 18
+      },
+      "revId": "793087a47e5119677dc8a9b11e6f1f2045d54fb3",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    }
+  ]
+}
