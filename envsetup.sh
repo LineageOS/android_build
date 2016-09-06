@@ -2297,7 +2297,7 @@ function repodiff() {
 function _adb_connected {
     {
         if [[ "$(adb get-state)" == device &&
-              "$(adb shell test -e /sbin/recovery; echo $?)" == 0 ]]
+              "$(adb shell test -e /sbin/recovery; echo $?)" == 1 ]]
         then
             return 0
         fi
@@ -2306,7 +2306,6 @@ function _adb_connected {
     return 1
 };
 
-# Credit for color strip sed: http://goo.gl/BoIcm
 function dopush()
 {
     local func=$1
@@ -2339,26 +2338,16 @@ function dopush()
     sleep 0.3
     adb remount &> /dev/null
 
-    mkdir -p $OUT
-    ($func $*|tee $OUT/.log;return ${PIPESTATUS[0]})
-    ret=$?;
-    if [ $ret -ne 0 ]; then
-        rm -f $OUT/.log;return $ret
+    $func $*
+    if [ $? -ne 0 ]; then
+        return $?
     fi
+
+    NINJA_DIR=$(pwd -P | sed "s#$ANDROID_BUILD_TOP\/##" | sed "s/\//_/g")
+    NINJA_MAKEFILE=$(gettop)/out/build-${TARGET_PRODUCT}-mmm-${NINJA_DIR}_Android.mk.ninja
 
     # Install: <file>
-    if [ `uname` = "Linux" ]; then
-        LOC="$(cat $OUT/.log | sed -r 's/\x1B\[([0-9]{1,2}(;[0-9]{1,2})?)?[m|K]//g' | grep '^Install: ' | cut -d ':' -f 2)"
-    else
-        LOC="$(cat $OUT/.log | sed -E "s/"$'\E'"\[([0-9]{1,3}((;[0-9]{1,3})*)?)?[m|K]//g" | grep '^Install: ' | cut -d ':' -f 2)"
-    fi
-
-    # Copy: <file>
-    if [ `uname` = "Linux" ]; then
-        LOC="$LOC $(cat $OUT/.log | sed -r 's/\x1B\[([0-9]{1,2}(;[0-9]{1,2})?)?[m|K]//g' | grep '^Copy: ' | cut -d ':' -f 2)"
-    else
-        LOC="$LOC $(cat $OUT/.log | sed -E "s/"$'\E'"\[([0-9]{1,3}((;[0-9]{1,3})*)?)?[m|K]//g" | grep '^Copy: ' | cut -d ':' -f 2)"
-    fi
+    LOC="$(grep '^ description = Install:' $NINJA_MAKEFILE | cut -d ':' -f 2)"
 
     # If any files are going to /data, push an octal file permissions reader to device
     if [ -n "$(echo $LOC | egrep '(^|\s)/data')" ]; then
@@ -2430,7 +2419,6 @@ EOF
     if $stop_n_start; then
         adb shell start
     fi
-    rm -f $OUT/.log
     return 0
     else
         echo "The connected device does not appear to be $CM_BUILD, run away!"
