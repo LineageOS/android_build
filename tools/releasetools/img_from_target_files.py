@@ -119,7 +119,7 @@ def main(argv):
             continue
           if not image.endswith(".img"):
             continue
-          if i == "oem.img":
+          if image == "oem.img":
             continue
           common.ZipWrite(
               output_zip, os.path.join(images_path, image), image)
