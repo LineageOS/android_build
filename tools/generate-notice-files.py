@@ -134,7 +134,7 @@ def combine_notice_files_html(file_hash, input_dir, output_filename):
         print('<tr id="id%d"><td class="same-license">' % id_table.get(value[0]), file=output_file)
         print('<div class="label">Notices for file(s):</div>', file=output_file)
         print('<div class="file-list">', file=output_file)
-        for filename in sorted(value):
+        for filename in value:
             print("%s <br/>" % (SRC_DIR_STRIP_RE.sub(r"\1", filename)), file=output_file)
         print("</div><!-- file-list -->", file=output_file)
         print(file=output_file)
@@ -160,7 +160,7 @@ def combine_notice_files_text(file_hash, input_dir, output_filename, file_title)
     for value in file_hash:
       print("============================================================", file=output_file)
       print("Notices for file(s):", file=output_file)
-      for filename in sorted(value):
+      for filename in value:
         print(SRC_DIR_STRIP_RE.sub(r"\1", filename), file=output_file)
       print("------------------------------------------------------------", file=output_file)
       print(open(value[0]).read(), file=output_file)
