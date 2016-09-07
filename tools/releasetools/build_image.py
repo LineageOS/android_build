@@ -59,7 +59,7 @@ def RunCommand(cmd):
 
 def GetVerityFECSize(partition_size):
   cmd = "fec -s %d" % partition_size
-  status, output = commands.getstatusoutput(cmd)
+  status, output = getstatusoutput(cmd)
   if status:
     print(output)
     return False, 0
@@ -150,7 +150,7 @@ AdjustPartitionSizeForVerity.results = {}
 def BuildVerityFEC(sparse_image_path, verity_path, verity_fec_path):
   cmd = "fec -e %s %s %s" % (sparse_image_path, verity_path, verity_fec_path)
   print(cmd)
-  status, output = commands.getstatusoutput(cmd)
+  status, output = getstatusoutput(cmd)
   if status:
     print("Could not build FEC data! Error: %s" % output)
     return False
@@ -220,7 +220,7 @@ def Append2Simg(sparse_image_path, unsparse_image_path, error_message):
 def Append(target, file_to_append, error_message):
   cmd = 'cat %s >> %s' % (file_to_append, target)
   print(cmd)
-  status, output = commands.getstatusoutput(cmd)
+  status, output = getstatusoutput(cmd)
   if status:
     print("%s: %s" % (error_message, output))
     return False
