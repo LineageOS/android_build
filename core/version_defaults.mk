@@ -140,7 +140,7 @@ ifeq "" "$(BUILD_DATETIME)"
 endif
 
 ifneq (,$(findstring Darwin,$(shell uname -sm)))
-DATE := date -r $(BUILD_DATETIME)
+DATE := gdate -d @$(BUILD_DATETIME)
 else
 DATE := date -d @$(BUILD_DATETIME)
 endif
