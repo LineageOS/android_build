@@ -330,7 +330,11 @@ if __name__ == '__main__':
         for i in range(0, check_picked_count):
             output = subprocess.check_output(['git', 'show', '-q', 'HEAD~{0}'.format(i)], cwd=project_path).split()
             if 'Change-Id:' in output:
-                head_change_id = output[output.index('Change-Id:')+1]
+                head_change_id = ''
+                for j,t in enumerate(reversed(output)):
+                    if t == 'Change-Id:':
+                        head_change_id = output[len(output) - j]
+                        break
                 if head_change_id.strip() == item['change_id']:
                     print('Skipping {0} - already picked in {1} as HEAD~{2}'.format(item['id'], project_path, i))
                     found_change = True
