@@ -1390,7 +1390,7 @@ class Difference(object):
 
       if err or p.returncode != 0:
         print("WARNING: failure running %s:\n%s\n" % (
-            diff_program, "".join(err)))
+            cmd, "".join(err)))
         self.patch = None
         return None, None, None
       diff = ptemp.read()
