@@ -2406,7 +2406,8 @@ function set_java_home() {
                 export JAVA_HOME=/usr/lib/jvm/java-7-openjdk-amd64
                 ;;
         esac
-      else
+      fi
+      if [ ! "$JAVA_HOME" ] || [ ! -d "$JAVA_HOME" ]; then
         case `uname -s` in
             Darwin)
                 export JAVA_HOME=$(/usr/libexec/java_home -v 1.8)
