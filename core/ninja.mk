@@ -96,7 +96,7 @@ KATI_NINJA_SUFFIX := $(KATI_NINJA_SUFFIX)-mmma-$(call replace_space_and_slash,$(
 endif
 
 my_checksum_suffix :=
-my_ninja_suffix_too_long := $(filter 1, $(shell v='$(KATI_NINJA_SUFFIX)' && echo $$(($${$(pound)v} > 64))))
+my_ninja_suffix_too_long := $(filter 1, $(shell v='$(KATI_NINJA_SUFFIX)' && echo $$(($${$(pound)v} > 240))))
 ifneq ($(my_ninja_suffix_too_long),)
 # Replace the suffix with a checksum if it gets too long.
 my_checksum_suffix := $(KATI_NINJA_SUFFIX)
