@@ -1,12 +1,22 @@
 <head>
-<?cs
-  ####### If building devsite, add some meta data needed for when generating the top nav ######### ?>
-  <?cs
-    if:devsite ?>
-    <meta name="top_category" value="<?cs
+  <title><?cs
+if:devsite ?><?cs
+  if:page.title ?><?cs
+    var:html_strip(page.title) ?><?cs
+  else ?>Android Developers<?cs
+  /if ?><?cs
+else ?><?cs
+  if:page.title ?><?cs
+    var:page.title ?> | <?cs
+  /if ?>Android Developers
+<?cs /if ?><?cs
+# END if/else devsite ?></title><?cs
+  ####### If building devsite, add some meta data needed for when generating the top nav ######### ?><?cs
+if:devsite ?>
+  <meta name="top_category" value="<?cs
       if:ndk ?>ndk<?cs
       elif:(guide||develop||training||reference||tools||sdk||google||reference.gms||reference.gcm||samples) ?>develop<?cs
-      elif:(topic||libraries||instantapps) ?>develop<?cs
+      elif:(topic||libraries||instantapps||perf||arc) ?>develop<?cs
       elif:(distribute||googleplay||essentials||users||engage||monetize||disttools||stories||analyze) ?>distribute<?cs
       elif:(design||vision||material||patterns||devices||designdownloads) ?>design<?cs
       elif:(about||versions||wear||tv||auto) ?>about<?cs
@@ -14,9 +24,8 @@
       elif:work ?>about<?cs
       elif:preview ?>preview<?cs
       else ?>none<?cs
-      /if ?>" />
-    <?cs set:dac_subcategory_set = #1 ?>
-    <meta name="subcategory" value="<?cs
+      /if ?>" /><?cs set:dac_subcategory_set = #1 ?>
+  <meta name="subcategory" value="<?cs
       if:ndk ?><?cs
         if:guide ?>guide<?cs
         elif:samples ?>samples<?cs
@@ -35,9 +44,11 @@
             if:(samplesDocPage&&!samplesProjectIndex) ?> samples-docpage<?cs /if ?><?cs
           else ?>none<?cs set:dac_subcategory_set = #0 ?><?cs /if ?><?cs
         elif:(google||reference.gms||reference.gcm) ?>google<?cs
-        elif:(topic||libraries) ?><?cs
+        elif:(topic||libraries||perf||arc) ?><?cs
           if:libraries ?>libraries<?cs
           elif:instantapps ?>instantapps<?cs
+          elif:perf ?>perf<?cs
+          elif:arc ?>arc<?cs
           else ?>none<?cs set:dac_subcategory_set = #0 ?><?cs /if ?><?cs
         elif:(distribute||googleplay||essentials||users||engage||monetize||disttools||stories||analyze) ?><?cs
           if:googleplay ?>googleplay<?cs
@@ -56,12 +67,11 @@
         elif:design ?>design<?cs
         elif:walkthru ?>walkthru<?cs
         else ?>none<?cs set:dac_subcategory_set = #0 ?><?cs /if ?><?cs
-      /if ?>" />
-
-    <?cs if:nonavpage ?>
-      <meta name="hide_toc" value='True' />
-    <?cs elif: !nonavpage && dac_subcategory_set && !tools && !sdk ?>
-      <meta name="book_path" value="<?cs
+      /if ?>" /><?cs
+      if:nonavpage ?>
+  <meta name="hide_toc" value='True' /><?cs
+      elif: !nonavpage && dac_subcategory_set && !tools && !sdk ?>
+  <meta name="book_path" value="<?cs
         if:ndk ?>/ndk<?cs
           if:guide ?>/guides<?cs
           elif:samples ?>/samples<?cs
@@ -74,16 +84,18 @@
             elif:reference ?>/reference<?cs
             elif:samples ?>/samples<?cs /if ?><?cs
           elif:(google||reference.gms||reference.gcm) ?>/google<?cs
-          elif:(topic||libraries) ?>/topic<?cs
+          elif:(topic||libraries||perf) ?>/topic<?cs
             if:libraries ?>/libraries<?cs
-            elif:instantapps ?>/instant-apps<?cs /if ?><?cs
+            elif:instantapps ?>/instant-apps<?cs
+            elif:perf ?>/performance<?cs
+            elif:arc ?>/arc<?cs /if ?><?cs
           elif:(distribute||googleplay||essentials||users||engage||monetize||disttools||stories||analyze) ?>/distribute<?cs
             if:googleplay ?>/googleplay<?cs
             elif:essentials ?>/essentials<?cs
             elif:users ?>/users<?cs
             elif:engage ?>/engage<?cs
             elif:monetize ?>/monetize<?cs
-            elif:disttools ?>/disttools<?cs
+            elif:disttools ?>/tools<?cs
             elif:stories ?>/stories<?cs
             elif:analyze ?>/analyze<?cs /if ?><?cs
           elif:(about||versions||wear||tv||auto) ?>/about<?cs
@@ -94,32 +106,52 @@
           elif:reference.testSupport ?>/reference/android/support/test<?cs
           elif:reference.wearableSupport ?>/reference/android/support/wearable<?cs
           elif:walkthru ?>/walkthru<?cs /if ?><?cs
-        /if ?>/_book.yaml" />
-    <?cs /if ?>
+        /if ?>/_book.yaml" /><?cs
+        /if ?>
+  <meta name="project_path" value="<?cs
+      if:(guide||develop||training||reference||tools||sdk||samples) ?><?cs
+        if:guide ?>/guide<?cs
+        elif:training ?>/training<?cs
+        elif:reference ?>/reference<?cs
+        elif:samples ?>/samples<?cs /if ?><?cs
+      elif:(google||reference.gms||reference.gcm) ?>/google<?cs
+      elif:(topic||libraries) ?>/develop<?cs
+      elif:(distribute||googleplay||essentials||users||engage||monetize||disttools||stories||analyze) ?>/distribute<?cs
+        if:googleplay ?>/googleplay<?cs
+        elif:essentials ?>/essentials<?cs
+        elif:users ?>/users<?cs
+        elif:engage ?>/engage<?cs
+        elif:monetize ?>/monetize<?cs
+        elif:disttools ?>/tools<?cs
+        elif:stories ?>/stories<?cs
+        elif:analyze ?>/analyze<?cs
+        else ?><?cs /if ?><?cs
+      elif:(about||versions||wear||tv||auto) ?>/about<?cs
+      elif:wearpreview ?>/wear<?cs
+      elif:work ?>/work<?cs
+      elif:preview ?>/preview<?cs
+      elif:design ?>/design<?cs /if ?>/_project.yaml" /><?cs
 
-    <?cs if:page.tags && page.tags != "" ?>
-      <meta name="keywords" value='<?cs var:page.tags ?>' />
-    <?cs /if ?>
+      if:page.tags && page.tags != "" ?>
+  <meta name="keywords" value='<?cs var:page.tags ?>' /><?cs
+      /if ?><?cs
+      if:meta.tags && meta.tags != "" ?>
+  <meta name="meta_tags" value='<?cs var:meta.tags ?>' /><?cs
+      /if ?><?cs
+      if:fullpage ?>
+  <meta name="full_width" value="True" /><?cs
+      /if ?><?cs
+      if:page.landing ?>
+  <meta name="page_type" value="landing" /><?cs
+      /if ?><?cs
+      if:page.article ?>
+  <meta name="page_type" value="article" /><?cs
+      /if ?><?cs
+      if:page.image ?>
+  <meta name="image_path" value='<?cs var:page.image ?>' /><?cs
+      /if ?><?cs
+/if ?><?cs # END if/else devsite ?><?cs
 
-    <?cs if:meta.tags && meta.tags != "" ?>
-      <meta name="meta_tags" value='<?cs var:meta.tags ?>' />
-    <?cs /if ?>
-
-    <?cs if:fullpage ?>
-      <meta name="full_width" value="True" />
-    <?cs /if ?>
-
-    <?cs if:page.landing ?>
-      <meta name="page_type" value="landing" />
-    <?cs /if ?>
-
-    <?cs if:page.article ?>
-      <meta name="page_type" value="article" />
-    <?cs /if ?>
-
-    <?cs /if ?><?cs
-    # END if/else devsite ?>
-<?cs
   if:!devsite ?>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
@@ -136,25 +168,11 @@
 <link rel="alternate" href="http://developer.android.com/intl/zh-cn/<?cs var:path.canonical ?>" hreflang="zh-cn" />
 <link rel="alternate" href="http://developer.android.com/intl/zh-tw/<?cs var:path.canonical ?>" hreflang="zh-tw" />
 <?cs /if ?><?cs
-# END if/else !devsite ?>
+# END if/else !devsite ?><?cs
 
-<title><?cs
-if:devsite ?><?cs
-  if:page.title ?><?cs
-    var:html_strip(page.title) ?><?cs
-  else ?>Android Developers<?cs
-  /if ?><?cs
-else ?><?cs
-  if:page.title ?><?cs
-    var:page.title ?> | <?cs
-  /if ?>Android Developers
-<?cs /if ?><?cs
-# END if/else devsite ?></title>
-<?cs
-  if:page.metaDescription ?>
-<meta name="description" content="<?cs var:page.metaDescription ?>"><?cs
-  /if ?>
-<?cs
+      if:page.metaDescription ?>
+  <meta name="description" content="<?cs var:page.metaDescription ?>"><?cs
+      /if ?><?cs
   if:!devsite ?>
 <!-- STYLESHEETS -->
 <link rel="stylesheet"
@@ -196,7 +214,6 @@ if:android.whichdoc != 'online' ?>http:<?cs
   ga('create', 'UA-49880327-2', 'android.com', {'name': 'universal'});  // New tracker);
   ga('send', 'pageview');
   ga('universal.send', 'pageview'); // Send page view for new tracker.
-</script>
-<?cs /if ?><?cs
+</script><?cs /if ?><?cs
 # END if/else !devsite ?>
 </head>

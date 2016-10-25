@@ -254,7 +254,7 @@ class TargetFiles(object):
             fullname = os.path.join(dirpath, fn)
             displayname = fullname[len(d)+1:]
             apk = APK(fullname, displayname)
-            self.apks[apk.package] = apk
+            self.apks[apk.filename] = apk
             self.apks_by_basename[os.path.basename(apk.filename)] = apk
 
             self.max_pkg_len = max(self.max_pkg_len, len(apk.package))

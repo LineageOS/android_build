@@ -437,6 +437,8 @@ def BuildImage(in_dir, prop_dict, out_file, target_out=None):
       build_command.extend(["-z", prop_dict["squashfs_compressor"]])
     if "squashfs_compressor_opt" in prop_dict:
       build_command.extend(["-zo", prop_dict["squashfs_compressor_opt"]])
+    if "squashfs_block_size" in prop_dict:
+      build_command.extend(["-b", prop_dict["squashfs_block_size"]])
     if "squashfs_disable_4k_align" in prop_dict and prop_dict.get("squashfs_disable_4k_align") == "true":
       build_command.extend(["-a"])
   elif fs_type.startswith("f2fs"):
@@ -588,7 +590,21 @@ def ImagePropFromGlobalDict(glob_dict, mount_point):
     copy_prop("has_ext4_reserved_blocks", "has_ext4_reserved_blocks")
     copy_prop("system_squashfs_compressor", "squashfs_compressor")
     copy_prop("system_squashfs_compressor_opt", "squashfs_compressor_opt")
+    copy_prop("system_squashfs_block_size", "squashfs_block_size")
     copy_prop("system_squashfs_disable_4k_align", "squashfs_disable_4k_align")
+    copy_prop("system_base_fs_file", "base_fs_file")
+  elif mount_point == "system_other":
+    # We inherit the selinux policies of /system since we contain some of its files.
+    d["mount_point"] = "system"
+    copy_prop("fs_type", "fs_type")
+    copy_prop("system_fs_type", "fs_type")
+    copy_prop("system_size", "partition_size")
+    copy_prop("system_journal_size", "journal_size")
+    copy_prop("system_verity_block_device", "verity_block_device")
+    copy_prop("has_ext4_reserved_blocks", "has_ext4_reserved_blocks")
+    copy_prop("system_squashfs_compressor", "squashfs_compressor")
+    copy_prop("system_squashfs_compressor_opt", "squashfs_compressor_opt")
+    copy_prop("system_squashfs_block_size", "squashfs_block_size")
     copy_prop("system_base_fs_file", "base_fs_file")
   elif mount_point == "data":
     # Copy the generic fs type first, override with specific one if available.
@@ -611,6 +627,7 @@ def ImagePropFromGlobalDict(glob_dict, mount_point):
     copy_prop("has_ext4_reserved_blocks", "has_ext4_reserved_blocks")
     copy_prop("vendor_squashfs_compressor", "squashfs_compressor")
     copy_prop("vendor_squashfs_compressor_opt", "squashfs_compressor_opt")
+    copy_prop("vendor_squashfs_block_size", "squashfs_block_size")
     copy_prop("vendor_squashfs_disable_4k_align", "squashfs_disable_4k_align")
     copy_prop("vendor_base_fs_file", "base_fs_file")
   elif mount_point == "oem":
@@ -656,6 +673,8 @@ def main(argv):
     mount_point = ""
     if image_filename == "system.img":
       mount_point = "system"
+    elif image_filename == "system_other.img":
+      mount_point = "system_other"
     elif image_filename == "userdata.img":
       mount_point = "data"
     elif image_filename == "cache.img":
