@@ -51,6 +51,26 @@
             >Downloads</a>
           </li>
         </ul><?cs else
+        ?><?cs
+        #
+        # For the reference only docs, include just one tab
+        #
+        ?><?cs if:referenceonly
+          ?><ul class="dac-header-tabs">
+            <li><a href="<?cs var:toroot ?>reference/packages.html" class="dac-header-tab"><?cs
+              if:sdk.preview
+                ?>Android <?cs var:sdk.codename ?>
+                  Preview <?cs var:sdk.preview.version ?><?cs
+              else
+                ?>Android <?cs var:sdk.version ?>
+                  r<?cs var:sdk.rel.id ?><?cs
+              /if ?></a>
+            </li>
+          </ul>
+        <?cs else ?><?cs
+        #
+        # End reference only docs, now the online DAC tabs...
+        #
         ?><ul class="dac-header-tabs">
           <li>
           <a class="dac-header-tab" href="<?cs var:toroot ?>design/index.html"
@@ -80,7 +100,12 @@
              es-lang="Distribuir">Distribute</a>
           </li>
         </ul><?cs
-        /if ?>
+        /if ?><?cs
+        #
+        # End if/else reference only docs
+        #
+        ?><?cs
+        /if ?><?cs # end if/else ndk ?>
 
         <?cs if:ndk ?><a class="dac-header-console-btn" href="http://developer.android.com">
           Back to Android Developers
@@ -88,12 +113,14 @@
           <span class="dac-sprite dac-google-play"></span>
           <span class="dac-visible-desktop-inline">Developer</span>
           Console
-        </a><?cs /if ?>
+        </a><?cs /if ?><?cs
 
-        <?cs # ADD SEARCH AND MENU ?>
-        <?cs if:!ndk ?>
-        <?cs call:header_search_widget() ?>
-        <?cs /if ?>
+        # ADD SEARCH AND MENU ?><?cs
+        if:!ndk ?><?cs
+          if:!referenceonly ?><?cs
+            call:header_search_widget() ?><?cs
+          /if ?><?cs
+        /if ?>
       </div><!-- end header-wrap.wrap -->
     </div><!-- end header -->
   </div> <!--end header-wrapper -->
@@ -147,15 +174,16 @@
     <div class="dac-nav-dimmer" data-dac-toggle-nav></div>
 
     <div class="dac-nav-sidebar" data-swap data-dynamic="false" data-transition-speed="300" data-dac-nav>
-      <div data-swap-container>
+      <div <?cs if:!referenceonly ?>data-swap-container<?cs /if ?>>
         <?cs call:custom_left_nav() ?>
+        <?cs if:!referenceonly ?>
         <ul id="dac-main-navigation" class="dac-nav-list dac-swap-section dac-left dac-no-anim">
         <li class="dac-nav-item home">
           <a class="dac-nav-link" href="<?cs var:toroot ?>index.html">Home</a>
           <i class="dac-sprite dac-expand-more-black dac-nav-sub-slider"></i>
           <ul class="dac-nav-secondary about">
             <li class="dac-nav-item versions">
-              <a class="dac-nav-link" href="<?cs var:toroot ?>about/versions/marshmallow/index.html">Android</a>
+              <a class="dac-nav-link" href="<?cs var:toroot ?>about/versions/nougat/index.html">Android</a>
             </li>
             <li class="dac-nav-item wear">
               <a class="dac-nav-link" href="<?cs var:toroot ?>wear/index.html">Wear</a>
@@ -261,10 +289,11 @@
             </li>
           </ul>
         </li>
-        <li class="dac-nav-item preview">
+        <!--<li class="dac-nav-item preview">
           <a class="dac-nav-link" href="<?cs var:toroot ?>preview/index.html">Preview</a>
-        </li>
+        </li>-->
         </ul>
+        <?cs /if ?><?cs # end if referenceonly ?>
       </div>
     </div>
   </nav>
@@ -275,12 +304,11 @@
 <script>$('[data-dac-nav]').dacNav();</script>
 
 <?cs
-/def ?><?cs # end custom_masthead() ?>
+/def ?><?cs # end custom_masthead() ?><?cs
 
+def:toast() ?><?cs
 
-<?cs def:toast() ?>
-
-  <?cs # (UN)COMMENT TO TOGGLE VISIBILITY
+# (UN)COMMENT TO TOGGLE VISIBILITY
 
   <div class="dac-toast-group">
     <div class="dac-toast" data-toast>
@@ -290,6 +318,5 @@
     </div>
   </div>
 
-?>
-
-<?cs /def ?>
+?><?cs
+/def ?>
