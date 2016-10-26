@@ -2485,7 +2485,7 @@ function make()
 }
 
 function __detect_shell() {
-    case `ps -o command -p $$` in
+    case `command ps -o command -p $$` in
         *bash*)
             echo bash
             ;;
