@@ -1387,7 +1387,7 @@ class Difference(object):
           err.append(e)
       th = threading.Thread(target=run)
       th.start()
-      th.join(timeout=300)   # 5 mins
+      th.join(timeout=600)   # 10 mins
       if th.is_alive():
         print("WARNING: diff command timed out")
         p.terminate()
