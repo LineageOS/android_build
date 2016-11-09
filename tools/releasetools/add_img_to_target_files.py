@@ -47,7 +47,8 @@ OPTIONS.replace_verity_public_key = False
 OPTIONS.replace_verity_private_key = False
 OPTIONS.verity_signer_path = None
 
-def AddSystem(output_zip, prefix="IMAGES/", recovery_img=None, boot_img=None):
+def AddSystem(output_zip, prefix="IMAGES/", recovery_img=None, boot_img=None,
+    rebuild_recovery=OPTIONS.rebuild_recovery):
   """Turn the contents of SYSTEM into a system image and store it in
   output_zip."""
 
@@ -61,7 +62,7 @@ def AddSystem(output_zip, prefix="IMAGES/", recovery_img=None, boot_img=None):
     ofile.write(data)
     ofile.close()
 
-  if OPTIONS.rebuild_recovery:
+  if rebuild_recovery:
     print("Building new recovery patch")
     common.MakeRecoveryPatch(OPTIONS.input_tmp, output_sink, recovery_img,
                              boot_img, info_dict=OPTIONS.info_dict)
@@ -322,7 +323,7 @@ def AddCache(output_zip, prefix="IMAGES/"):
   os.rmdir(temp_dir)
 
 
-def AddImagesToTargetFiles(filename):
+def AddImagesToTargetFiles(filename, rebuild_recovery=OPTIONS.rebuild_recovery):
   OPTIONS.input_tmp, input_zip = common.UnzipTemp(filename)
 
   if not OPTIONS.add_missing:
@@ -360,7 +361,7 @@ def AddImagesToTargetFiles(filename):
   boot_image = None
   if os.path.exists(prebuilt_path):
     print("boot.img already exists in IMAGES/, no need to rebuild...")
-    if OPTIONS.rebuild_recovery:
+    if rebuild_recovery:
       boot_image = common.GetBootableImage(
           "IMAGES/boot.img", "boot.img", OPTIONS.input_tmp, "BOOT")
   else:
@@ -374,7 +375,7 @@ def AddImagesToTargetFiles(filename):
   prebuilt_path = os.path.join(OPTIONS.input_tmp, "IMAGES", "recovery.img")
   if os.path.exists(prebuilt_path):
     print("recovery.img already exists in IMAGES/, no need to rebuild...")
-    if OPTIONS.rebuild_recovery:
+    if rebuild_recovery:
       recovery_image = common.GetBootableImage(
           "IMAGES/recovery.img", "recovery.img", OPTIONS.input_tmp, "RECOVERY")
   else:
@@ -384,7 +385,8 @@ def AddImagesToTargetFiles(filename):
       recovery_image.AddToZip(output_zip)
 
   banner("system")
-  AddSystem(output_zip, recovery_img=recovery_image, boot_img=boot_image)
+  AddSystem(output_zip, recovery_img=recovery_image, boot_img=boot_image,
+      rebuild_recovery = rebuild_recovery)
   if has_vendor:
     banner("vendor")
     AddVendor(output_zip)
