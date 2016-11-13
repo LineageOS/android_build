@@ -265,7 +265,7 @@ $(cleantarget) : PRIVATE_CLEAN_FILES := \
     $(LOCAL_INSTALLED_MODULE) \
     $(intermediates)
 $(cleantarget)::
-	@echo "Clean:"" $(PRIVATE_MODULE)"
+	@echo "Clean: $(PRIVATE_MODULE)"
 	$(hide) rm -rf $(PRIVATE_CLEAN_FILES)
 
 ###########################################################
