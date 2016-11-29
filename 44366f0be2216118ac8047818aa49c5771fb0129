@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5f681702_b2cba0a3",
+        "filename": "core/binary.mk",
+        "patchSetId": 1
+      },
+      "lineNbr": 335,
+      "author": {
+        "id": 11883
+      },
+      "writtenOn": "2016-11-29T16:29:40Z",
+      "side": 1,
+      "message": "Make it feature proof and use shitty if code?",
+      "range": {
+        "startLine": 335,
+        "startChar": 0,
+        "endLine": 335,
+        "endChar": 73
+      },
+      "revId": "44366f0be2216118ac8047818aa49c5771fb0129",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    }
+  ]
+}
