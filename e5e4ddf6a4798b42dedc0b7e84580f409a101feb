@@ -46,6 +46,30 @@
       "revId": "e5e4ddf6a4798b42dedc0b7e84580f409a101feb",
       "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5f681702_bd9ed104",
+        "filename": "core/binary.mk",
+        "patchSetId": 2
+      },
+      "lineNbr": 343,
+      "author": {
+        "id": 11883
+      },
+      "writtenOn": "2016-11-29T18:52:25Z",
+      "side": 1,
+      "message": "I think so and it doesn\u0027t make sense to use 2 different wrappers for c and c++ code imo",
+      "parentUuid": "5f681702_7d9439e9",
+      "range": {
+        "startLine": 338,
+        "startChar": 0,
+        "endLine": 343,
+        "endChar": 7
+      },
+      "revId": "e5e4ddf6a4798b42dedc0b7e84580f409a101feb",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
     }
   ]
 }
