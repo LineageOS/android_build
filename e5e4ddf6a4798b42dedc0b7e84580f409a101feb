@@ -70,6 +70,30 @@
       "revId": "e5e4ddf6a4798b42dedc0b7e84580f409a101feb",
       "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5f681702_dd846db4",
+        "filename": "core/binary.mk",
+        "patchSetId": 2
+      },
+      "lineNbr": 343,
+      "author": {
+        "id": 13897
+      },
+      "writtenOn": "2016-11-29T18:55:00Z",
+      "side": 1,
+      "message": "In general they are the same, but you can override each of them independently defining CC_WRAPPER and CXX_WRAPPER.",
+      "parentUuid": "5f681702_bd9ed104",
+      "range": {
+        "startLine": 338,
+        "startChar": 0,
+        "endLine": 343,
+        "endChar": 7
+      },
+      "revId": "e5e4ddf6a4798b42dedc0b7e84580f409a101feb",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
     }
   ]
 }
