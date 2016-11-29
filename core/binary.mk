@@ -313,10 +313,34 @@ ifneq ($(filter true always, $(LOCAL_FDO_SUPPORT)),)
     my_cflags += $($(LOCAL_2ND_ARCH_VAR_PREFIX)TARGET_FDO_OPTIMIZE_CFLAGS)
     my_fdo_build := true
   endif
-  # Disable ccache (or other compiler wrapper) except gomacc, which
-  # can handle -fprofile-use properly.
-  my_cc_wrapper := $(filter $(GOMA_CC),$(my_cc_wrapper))
-  my_cxx_wrapper := $(filter $(GOMA_CC),$(my_cxx_wrapper))
+  # Disable ccache (or other compiler wrapper) except gomacc, unless
+  # it can handle -fprofile-use properly.
+
+  # ccache supports -fprofile-use as of version 3.2. Parse the version output
+  # of each wrapper to determine if it's ccache 3.2 or newer.
+  is_cc_ccache := $(shell if [ "`$(my_cc_wrapper) -V 2>/dev/null | head -1 | cut -d' ' -f1`" = ccache ]; then echo true; fi)
+  cc_ccache_ge_3_2 := 0
+  ifeq ($(is_cc_ccache),true)
+    # Extract version major.minor and use bc to compare it with 3.2
+    # This needs to be updated after version 3.10
+    cc_ccache_version := $(shell $(my_cc_wrapper) -V | head -1 | grep -o '[[:digit:]]\+\.[[:digit:]]\+')
+    cc_ccache_ge_3_2 = $(shell echo "$(cc_ccache_version) >= 3.2" | bc)
+  endif
+  is_cxx_ccache := $(shell if [ "`$(my_cxx_wrapper) -V 2>/dev/null | head -1 | cut -d' ' -f1`" = ccache ]; then echo true; fi)
+  cxx_ccache_ge_3_2 := 0
+  ifeq ($(is_cxx_ccache),true)
+    # Extract version major.minor and use bc to compare it with 3.2
+    # This needs to be updated after version 3.10
+    cxx_ccache_version := $(shell $(my_cxx_wrapper) -V | head -1 | grep -o '[[:digit:]]\+\.[[:digit:]]\+')
+    cxx_ccache_ge_3_2 = $(shell echo "$(cxx_ccache_version) >= 3.2" | bc)
+  endif
+
+  ifeq ($(cc_ccache_ge_3_2),0)
+    my_cc_wrapper := $(filter $(GOMA_CC),$(my_cc_wrapper))
+  endif
+  ifeq ($(cxx_ccache_ge_3_2),0)
+    my_cxx_wrapper := $(filter $(GOMA_CC),$(my_cxx_wrapper))
+  endif
 endif
 
 ###########################################################
