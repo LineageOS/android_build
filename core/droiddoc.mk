@@ -173,6 +173,7 @@ $(full_target): \
 	$(call prepare-doc-source-list,$(PRIVATE_SRC_LIST_FILE),$(PRIVATE_JAVA_FILES), \
 			$(PRIVATE_SOURCE_INTERMEDIATES_DIR) $(PRIVATE_ADDITIONAL_JAVA_DIR))
 	$(hide) ( \
+		flock $(BUILD_DROIDDOC) \
 		javadoc \
                 -encoding UTF-8 \
                 \@$(PRIVATE_SRC_LIST_FILE) \
@@ -210,6 +211,7 @@ $(full_target): $(full_src_files) $(full_java_lib_deps)
 	$(call prepare-doc-source-list,$(PRIVATE_SRC_LIST_FILE),$(PRIVATE_JAVA_FILES), \
 			$(PRIVATE_SOURCE_INTERMEDIATES_DIR) $(PRIVATE_ADDITIONAL_JAVA_DIR))
 	$(hide) ( \
+		flock $(BUILD_DROIDDOC) \
 		javadoc \
                 -encoding UTF-8 \
                 $(PRIVATE_DROIDDOC_OPTIONS) \
