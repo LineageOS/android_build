@@ -113,6 +113,17 @@ Usage:  ota_from_target_files [flags] input_target_files output_ota_package
       Generate a log file that shows the differences in the source and target
       builds for an incremental package. This option is only meaningful when
       -i is specified.
+
+  --payload_signer <signer>
+      Specify the signer when signing the payload and metadata for A/B OTAs.
+      By default (i.e. without this flag), it calls 'openssl pkeyutl' to sign
+      with the package private key. If the private key cannot be accessed
+      directly, a payload signer that knows how to do that should be specified.
+      The signer will be supplied with "-inkey <path_to_key>",
+      "-in <input_file>" and "-out <output_file>" parameters.
+
+  --payload_signer_args <args>
+      Specify the arguments needed for payload signer.
 """
 
 import sys
@@ -124,6 +135,7 @@ if sys.hexversion < 0x02070000:
 import multiprocessing
 import os
 import subprocess
+import shlex
 import tempfile
 import zipfile
 
@@ -160,6 +172,8 @@ OPTIONS.cache_size = None
 OPTIONS.stash_threshold = 0.8
 OPTIONS.gen_verify = False
 OPTIONS.log_diff = None
+OPTIONS.payload_signer = None
+OPTIONS.payload_signer_args = []
 
 def MostPopularKey(d, default):
   """Given a dict, return the key corresponding to the largest
@@ -859,15 +873,17 @@ def WriteBlockIncrementalOTAPackage(target_zip, source_zip, output_zip):
         int(i) for i in
         OPTIONS.info_dict.get("blockimgdiff_versions", "1").split(","))
 
-  # Check first block of system partition for remount R/W only if
-  # disk type is ext4
-  system_partition = OPTIONS.source_info_dict["fstab"]["/system"]
-  check_first_block = system_partition.fs_type == "ext4"
+  # Check the first block of the source system partition for remount R/W only
+  # if the filesystem is ext4.
+  system_src_partition = OPTIONS.source_info_dict["fstab"]["/system"]
+  check_first_block = system_src_partition.fs_type == "ext4"
   # Disable using imgdiff for squashfs. 'imgdiff -z' expects input files to be
   # in zip formats. However with squashfs, a) all files are compressed in LZ4;
   # b) the blocks listed in block map may not contain all the bytes for a given
   # file (because they're rounded to be 4K-aligned).
-  disable_imgdiff = system_partition.fs_type == "squashfs"
+  system_tgt_partition = OPTIONS.target_info_dict["fstab"]["/system"]
+  disable_imgdiff = (system_src_partition.fs_type == "squashfs" or
+                     system_tgt_partition.fs_type == "squashfs")
   system_diff = common.BlockDifference("system", system_tgt, system_src,
                                        check_first_block,
                                        version=blockimgdiff_version,
@@ -1163,17 +1179,19 @@ def WriteABOTAPackageWithBrilloScript(target_file, output_file,
         "default_system_dev_certificate",
         "build/target/product/security/testkey")
 
-  # A/B updater expects key in RSA format.
-  cmd = ["openssl", "pkcs8",
-         "-in", OPTIONS.package_key + OPTIONS.private_key_suffix,
-         "-inform", "DER", "-nocrypt"]
-  rsa_key = common.MakeTempFile(prefix="key-", suffix=".key")
-  cmd.extend(["-out", rsa_key])
-  p1 = common.Run(cmd, stdout=subprocess.PIPE)
-  p1.wait()
-  assert p1.returncode == 0, "openssl pkcs8 failed"
+  # A/B updater expects a signing key in RSA format. Gets the key ready for
+  # later use in step 3, unless a payload_signer has been specified.
+  if OPTIONS.payload_signer is None:
+    cmd = ["openssl", "pkcs8",
+           "-in", OPTIONS.package_key + OPTIONS.private_key_suffix,
+           "-inform", "DER", "-nocrypt"]
+    rsa_key = common.MakeTempFile(prefix="key-", suffix=".key")
+    cmd.extend(["-out", rsa_key])
+    p1 = common.Run(cmd, stdout=subprocess.PIPE)
+    p1.wait()
+    assert p1.returncode == 0, "openssl pkcs8 failed"
 
-  # Stage the output zip package for signing.
+  # Stage the output zip package for package signing.
   temp_zip_file = tempfile.NamedTemporaryFile()
   output_zip = zipfile.ZipFile(temp_zip_file, "w",
                                compression=zipfile.ZIP_DEFLATED)
@@ -1234,21 +1252,30 @@ def WriteABOTAPackageWithBrilloScript(target_file, output_file,
   signed_metadata_sig_file = common.MakeTempFile(prefix="signed-sig-",
                                                  suffix=".bin")
   # 3a. Sign the payload hash.
-  cmd = ["openssl", "pkeyutl", "-sign",
-         "-inkey", rsa_key,
-         "-pkeyopt", "digest:sha256",
-         "-in", payload_sig_file,
-         "-out", signed_payload_sig_file]
+  if OPTIONS.payload_signer is not None:
+    cmd = [OPTIONS.payload_signer]
+    cmd.extend(OPTIONS.payload_signer_args)
+  else:
+    cmd = ["openssl", "pkeyutl", "-sign",
+           "-inkey", rsa_key,
+           "-pkeyopt", "digest:sha256"]
+  cmd.extend(["-in", payload_sig_file,
+              "-out", signed_payload_sig_file])
+
   p1 = common.Run(cmd, stdout=subprocess.PIPE)
   p1.wait()
   assert p1.returncode == 0, "openssl sign payload failed"
 
   # 3b. Sign the metadata hash.
-  cmd = ["openssl", "pkeyutl", "-sign",
-         "-inkey", rsa_key,
-         "-pkeyopt", "digest:sha256",
-         "-in", metadata_sig_file,
-         "-out", signed_metadata_sig_file]
+  if OPTIONS.payload_signer is not None:
+    cmd = [OPTIONS.payload_signer]
+    cmd.extend(OPTIONS.payload_signer_args)
+  else:
+    cmd = ["openssl", "pkeyutl", "-sign",
+           "-inkey", rsa_key,
+           "-pkeyopt", "digest:sha256"]
+  cmd.extend(["-in", metadata_sig_file,
+              "-out", signed_metadata_sig_file])
   p1 = common.Run(cmd, stdout=subprocess.PIPE)
   p1.wait()
   assert p1.returncode == 0, "openssl sign metadata failed"
@@ -1276,11 +1303,29 @@ def WriteABOTAPackageWithBrilloScript(target_file, output_file,
   p1.wait()
   assert p1.returncode == 0, "brillo_update_payload properties failed"
 
+  if OPTIONS.wipe_user_data:
+    with open(properties_file, "a") as f:
+      f.write("POWERWASH=1\n")
+    metadata["ota-wipe"] = "yes"
+
   # Add the signed payload file and properties into the zip.
   common.ZipWrite(output_zip, properties_file, arcname="payload_properties.txt")
   common.ZipWrite(output_zip, signed_payload_file, arcname="payload.bin",
                   compress_type=zipfile.ZIP_STORED)
   WriteMetadata(metadata, output_zip)
+
+  # If dm-verity is supported for the device, copy contents of care_map
+  # into A/B OTA package.
+  if OPTIONS.info_dict.get("verity") == "true":
+    target_zip = zipfile.ZipFile(target_file, "r")
+    care_map_path = "META/care_map.txt"
+    namelist = target_zip.namelist()
+    if care_map_path in namelist:
+      care_map_data = target_zip.read(care_map_path)
+      common.ZipWriteStr(output_zip, "care_map.txt", care_map_data)
+    else:
+      print "Warning: cannot find care map file in target_file package"
+    common.ZipClose(target_zip)
 
   # Sign the whole package to comply with the Android OTA package format.
   common.ZipClose(output_zip)
@@ -1900,6 +1945,10 @@ def main(argv):
       OPTIONS.gen_verify = True
     elif o == "--log_diff":
       OPTIONS.log_diff = a
+    elif o == "--payload_signer":
+      OPTIONS.payload_signer = a
+    elif o == "--payload_signer_args":
+      OPTIONS.payload_signer_args = shlex.split(a)
     else:
       return False
     return True
@@ -1929,6 +1978,8 @@ def main(argv):
                                  "stash_threshold=",
                                  "gen_verify",
                                  "log_diff=",
+                                 "payload_signer=",
+                                 "payload_signer_args=",
                              ], extra_option_handler=option_handler)
 
   if len(args) != 2:
