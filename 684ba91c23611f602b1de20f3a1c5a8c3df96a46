@@ -22,6 +22,30 @@
       "revId": "684ba91c23611f602b1de20f3a1c5a8c3df96a46",
       "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5f681702_0914c29f",
+        "filename": "core/Makefile",
+        "patchSetId": 4
+      },
+      "lineNbr": 496,
+      "author": {
+        "id": 2936
+      },
+      "writtenOn": "2016-12-08T16:58:52Z",
+      "side": 1,
+      "message": "Ah, duh, it\u0027s the the device. Did we want to have a flag for these instead of a list variable?",
+      "parentUuid": "5f681702_c9480ace",
+      "range": {
+        "startLine": 496,
+        "startChar": 9,
+        "endLine": 496,
+        "endChar": 29
+      },
+      "revId": "684ba91c23611f602b1de20f3a1c5a8c3df96a46",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
     }
   ]
 }
