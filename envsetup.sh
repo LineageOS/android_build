@@ -31,6 +31,7 @@ Environment options:
 - SANITIZE_HOST: Set to 'true' to use ASAN for all host modules. Note that
                  ASAN_OPTIONS=detect_leaks=0 will be set by default until the
                  build is leak-check clean.
+- ANDROID_HOST_JACK_DESTROY: Set to 'true' to stop the Jack server after builds.
 
 Look at the source to view more functions. The complete list is:
 EOF
@@ -1678,6 +1679,9 @@ function _wrap_build()
     fi
     echo " ####${color_reset}"
     echo
+    if [ ! -z "$ANDROID_HOST_JACK_DESTROY" ]; then
+        $(gettop)/prebuilts/sdk/tools/jack-admin stop-server 2>&1 >/dev/null
+    fi
     return $ret
 }
 
