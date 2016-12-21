@@ -620,17 +620,17 @@ function lunch()
 
     local product=$(echo -n $selection | sed -e "s/-.*$//")
     check_product $product
+    T=$(gettop)
+    pushd $T > /dev/null
     if [ $? -ne 0 ]
     then
         # if we can't find a product, try to grab it off the CM github
-        T=$(gettop)
-        pushd $T > /dev/null
         vendor/cm/build/tools/roomservice.py $product
-        popd > /dev/null
         check_product $product
     else
         vendor/cm/build/tools/roomservice.py $product true
     fi
+    popd > /dev/null
     TARGET_PRODUCT=$product \
     TARGET_BUILD_VARIANT=$variant \
     build_build_var_cache
