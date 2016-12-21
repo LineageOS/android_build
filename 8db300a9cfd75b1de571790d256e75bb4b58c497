@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5f681702_ad312cef",
+        "filename": "envsetup.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 625,
+      "author": {
+        "id": 2195
+      },
+      "writtenOn": "2016-12-21T06:00:16Z",
+      "side": 1,
+      "message": "Since this line checks for $?, this would change behavior. We want to see what check_product exits with, so that should be last line above the this.",
+      "revId": "8db300a9cfd75b1de571790d256e75bb4b58c497",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    }
+  ]
+}
