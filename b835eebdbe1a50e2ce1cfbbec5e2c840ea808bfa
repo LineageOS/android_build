@@ -16,6 +16,24 @@
       "revId": "b835eebdbe1a50e2ce1cfbbec5e2c840ea808bfa",
       "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa0f191f_7a82d953",
+        "filename": "core/Makefile",
+        "patchSetId": 1
+      },
+      "lineNbr": 2240,
+      "author": {
+        "id": 13589
+      },
+      "writtenOn": "2016-12-27T07:47:41Z",
+      "side": 1,
+      "message": "Maybe also rename the variable to ROM_ here and below",
+      "parentUuid": "1a014df3_3b20d79a",
+      "revId": "b835eebdbe1a50e2ce1cfbbec5e2c840ea808bfa",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
     }
   ]
 }
