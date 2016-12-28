@@ -198,25 +198,30 @@ def add_to_manifest(repositories, fallback_branch = None):
 
 def fetch_dependencies(repo_path, fallback_branch = None):
     print('Looking for dependencies')
-    dependencies_path = repo_path + '/cm.dependencies'
+    dependencies_paths = [repo_path + '/lineage.dependencies', repo_path + '/cm.dependencies']
+    found_dependencies = False
     syncable_repos = []
 
-    if os.path.exists(dependencies_path):
-        dependencies_file = open(dependencies_path, 'r')
-        dependencies = json.loads(dependencies_file.read())
-        fetch_list = []
+    for dependencies_path in dependencies_paths:
+        if os.path.exists(dependencies_path):
+            dependencies_file = open(dependencies_path, 'r')
+            dependencies = json.loads(dependencies_file.read())
+            fetch_list = []
 
-        for dependency in dependencies:
-            if not is_in_manifest("LineageOS/%s" % dependency['repository']):
-                fetch_list.append(dependency)
-                syncable_repos.append(dependency['target_path'])
+            for dependency in dependencies:
+                if not is_in_manifest("LineageOS/%s" % dependency['repository']):
+                    fetch_list.append(dependency)
+                    syncable_repos.append(dependency['target_path'])
 
-        dependencies_file.close()
+            dependencies_file.close()
+            found_dependencies = True
 
-        if len(fetch_list) > 0:
-            print('Adding dependencies to manifest')
-            add_to_manifest(fetch_list, fallback_branch)
-    else:
+            if len(fetch_list) > 0:
+                print('Adding dependencies to manifest')
+                add_to_manifest(fetch_list, fallback_branch)
+            break
+
+    if not found_dependencies:
         print('Dependencies file not found, bailing out.')
 
     if len(syncable_repos) > 0:
