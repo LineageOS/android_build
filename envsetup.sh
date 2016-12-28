@@ -74,11 +74,17 @@ function check_product()
         return
     fi
 
-    if (echo -n $1 | grep -q -e "^cm_") ; then
-       CM_BUILD=$(echo -n $1 | sed -e 's/^cm_//g')
-       export BUILD_NUMBER=$((date +%s%N ; echo $CM_BUILD; hostname) | openssl sha1 | sed -e 's/.*=//g; s/ //g' | cut -c1-10)
+    if (echo -n $1 | grep -q -e "^lineage_") ; then
+        CM_BUILD=$(echo -n $1 | sed -e 's/^lineage_//g')
+        export BUILD_NUMBER=$((date +%s%N ; echo $CM_BUILD; hostname) | openssl sha1 | sed -e 's/.*=//g; s/ //g' | cut -c1-10)
     else
-       CM_BUILD=
+        # Fall back to cm_<product>
+        if (echo -n $1 | grep -q -e "^cm_") ; then
+            CM_BUILD=$(echo -n $1 | sed -e 's/^cm_//g')
+            export BUILD_NUMBER=$((date +%s%N ; echo $CM_BUILD; hostname) | openssl sha1 | sed -e 's/.*=//g; s/ //g' | cut -c1-10)
+        else
+            CM_BUILD=
+        fi
     fi
     export CM_BUILD
 
@@ -526,11 +532,16 @@ function breakfast()
             # A buildtype was specified, assume a full device name
             lunch $target
         else
-            # This is probably just the CM model name
+            # This is probably just the Lineage model name
             if [ -z "$variant" ]; then
                 variant="userdebug"
             fi
-            lunch cm_$target-$variant
+            if ! check_product lineage_$target && check_product cm_$target; then
+                echo "** Warning: '$target' is using CM-based makefiles. This will be deprecated in the next major release."
+                lunch cm_$target-$variant
+            else
+                lunch lineage_$target-$variant
+            fi
         fi
     fi
     return $?
