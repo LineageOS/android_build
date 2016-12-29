@@ -1928,7 +1928,7 @@ ifdef INSTALLED_2NDBOOTLOADER_TARGET
 		$(INSTALLED_2NDBOOTLOADER_TARGET) $(zip_root)/$(PRIVATE_RECOVERY_OUT)/second
 endif
 ifdef BOARD_KERNEL_TAGS_OFFSET
-	$(hide) echo "$(BOARD_KERNEL_TAGS_OFFSET)" > $(zip_root)/RECOVERY/tags_offset
+	$(hide) echo "$(BOARD_KERNEL_TAGS_OFFSET)" > $(zip_root)/$(PRIVATE_RECOVERY_OUT)/tags_offset
 endif
 ifdef BOARD_KERNEL_CMDLINE
 	$(hide) echo "$(BOARD_KERNEL_CMDLINE)" > $(zip_root)/$(PRIVATE_RECOVERY_OUT)/cmdline
@@ -1940,13 +1940,13 @@ ifdef BOARD_KERNEL_PAGESIZE
 	$(hide) echo "$(BOARD_KERNEL_PAGESIZE)" > $(zip_root)/$(PRIVATE_RECOVERY_OUT)/pagesize
 endif
 ifdef BOARD_KERNEL_TAGS_ADDR
-	$(hide) echo "$(BOARD_KERNEL_TAGS_ADDR)" > $(zip_root)/RECOVERY/tagsaddr
+	$(hide) echo "$(BOARD_KERNEL_TAGS_ADDR)" > $(zip_root)/$(PRIVATE_RECOVERY_OUT)/tagsaddr
 endif
 ifdef BOARD_RAMDISK_OFFSET
-	$(hide) echo "$(BOARD_RAMDISK_OFFSET)" > $(zip_root)/RECOVERY/ramdisk_offset
+	$(hide) echo "$(BOARD_RAMDISK_OFFSET)" > $(zip_root)/$(PRIVATE_RECOVERY_OUT)/ramdisk_offset
 endif
 ifeq ($(strip $(BOARD_KERNEL_SEPARATED_DT)),true)
-	$(hide) $(ACP) $(INSTALLED_DTIMAGE_TARGET) $(zip_root)/RECOVERY/dt
+	$(hide) $(ACP) $(INSTALLED_DTIMAGE_TARGET) $(zip_root)/$(PRIVATE_RECOVERY_OUT)/dt
 endif
 endif # INSTALLED_RECOVERYIMAGE_TARGET defined or BOARD_USES_RECOVERY_AS_BOOT is true
 	@# Components of the boot image
