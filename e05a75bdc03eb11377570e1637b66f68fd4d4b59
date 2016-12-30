@@ -16,6 +16,24 @@
       "revId": "e05a75bdc03eb11377570e1637b66f68fd4d4b59",
       "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a1d315d_b7e402ad",
+        "filename": "core/dumpvar.mk",
+        "patchSetId": 2
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 3075
+      },
+      "writtenOn": "2016-12-30T19:12:17Z",
+      "side": 1,
+      "message": "I think so.\n\nAs far as I\u0027ve seen so far, we\u0027ve been changing:\ncyanogenmod -\u003e lineageos\ncm -\u003e lineage",
+      "parentUuid": "5a202591_b833d5f5",
+      "revId": "e05a75bdc03eb11377570e1637b66f68fd4d4b59",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
     }
   ]
 }
