@@ -1,17 +1,8 @@
 #!/usr/bin/env python
 
-from __future__ import print_function
-
 import os
 import re
 import sys
-
-
-def itervalues(obj):
-  if hasattr(obj, 'itervalues'):
-    return obj.itervalues()
-  return obj.values()
-
 
 def fail_with_usage():
   sys.stderr.write("usage: java-layers.py DEPENDENCY_FILE SOURCE_DIRECTORIES...\n")
@@ -78,27 +69,27 @@ class Dependencies:
         if upper in deps:
           recurse(obj, deps[upper], visited)
     self.deps = deps
-    self.parts = [(dep.lower.split('.'),dep) for dep in itervalues(deps)]
+    self.parts = [(dep.lower.split('.'),dep) for dep in deps.itervalues()]
     # transitive closure of dependencies
-    for dep in itervalues(deps):
+    for dep in deps.itervalues():
       recurse(dep, dep, [])
     # disallow everything from the low level components
-    for dep in itervalues(deps):
+    for dep in deps.itervalues():
       if dep.lowlevel:
-        for d in itervalues(deps):
+        for d in deps.itervalues():
           if dep != d and not d.legacy:
             dep.transitive.add(d.lower)
     # disallow the 'top' components everywhere but in their own package
-    for dep in itervalues(deps):
+    for dep in deps.itervalues():
       if dep.top and not dep.legacy:
-        for d in itervalues(deps):
+        for d in deps.itervalues():
           if dep != d and not d.legacy:
             d.transitive.add(dep.lower)
-    for dep in itervalues(deps):
+    for dep in deps.itervalues():
       dep.transitive = set([x+"." for x in dep.transitive])
     if False:
-      for dep in itervalues(deps):
-        print("-->", dep.lower, "-->", dep.transitive)
+      for dep in deps.itervalues():
+        print "-->", dep.lower, "-->", dep.transitive
 
   # Lookup the dep object for the given package.  If pkg is a subpackage
   # of one with a rule, that one will be returned.  If no matches are found,
@@ -126,7 +117,7 @@ class Dependencies:
 
 def parse_dependency_file(filename):
   global err
-  f = open(filename)
+  f = file(filename)
   lines = f.readlines()
   f.close()
   def lineno(s, i):
@@ -180,7 +171,7 @@ def find_java_files(srcs):
   result = []
   for d in srcs:
     if d[0] == '@':
-      f = open(d[1:])
+      f = file(d[1:])
       result.extend([fn for fn in [s.strip() for s in f.readlines()]
           if len(fn) != 0])
       f.close()
@@ -197,7 +188,7 @@ IMPORT = re.compile("import\s+(.*)")
 def examine_java_file(deps, filename):
   global err
   # Yes, this is a crappy java parser.  Write a better one if you want to.
-  f = open(filename)
+  f = file(filename)
   text = f.read()
   f.close()
   text = COMMENTS.sub("", text)
@@ -227,8 +218,8 @@ def examine_java_file(deps, filename):
     imports.append(m.group(1))
   # Do the checking
   if False:
-    print(filename)
-    print("'%s' --> %s" % (pkg, imports))
+    print filename
+    print "'%s' --> %s" % (pkg, imports)
   dep = deps.lookup(pkg)
   if not dep:
     sys.stderr.write(("%s: Error: Package does not appear in dependency file: "

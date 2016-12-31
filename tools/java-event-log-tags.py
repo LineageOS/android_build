@@ -23,18 +23,12 @@ tags in the given input file.
 -h to display this usage message and exit.
 """
 
-from __future__ import print_function
-
+import cStringIO
 import getopt
 import os
 import os.path
 import re
 import sys
-
-try:
-  from cStringIO import StringIO
-except ImportError:
-  from io import StringIO
 
 import event_log_tags
 
@@ -42,24 +36,24 @@ output_file = None
 
 try:
   opts, args = getopt.getopt(sys.argv[1:], "ho:")
-except getopt.GetoptError as err:
-  print(str(err))
-  print(__doc__)
+except getopt.GetoptError, err:
+  print str(err)
+  print __doc__
   sys.exit(2)
 
 for o, a in opts:
   if o == "-h":
-    print(__doc__)
+    print __doc__
     sys.exit(2)
   elif o == "-o":
     output_file = a
   else:
-    print("unhandled option %s" % o, file=sys.stderr)
+    print >> sys.stderr, "unhandled option %s" % (o,)
     sys.exit(1)
 
 if len(args) != 2:
-  print("need exactly two input files, not %d" % len(args))
-  print(__doc__)
+  print "need exactly two input files, not %d" % (len(args),)
+  print __doc__
   sys.exit(1)
 
 fn = args[0]
@@ -91,10 +85,10 @@ if "javadoc_hide" in tagfile.options:
 
 if tagfile.errors:
   for fn, ln, msg in tagfile.errors:
-    print("%s:%d: error: %s" % (fn, ln, msg), file=sys.stderr)
+    print >> sys.stderr, "%s:%d: error: %s" % (fn, ln, msg)
   sys.exit(1)
 
-buffer = StringIO()
+buffer = cStringIO.StringIO()
 buffer.write("/* This file is auto-generated.  DO NOT MODIFY.\n"
              " * Source file: %s\n"
              " */\n\n" % (fn,))
@@ -149,7 +143,7 @@ for t in tagfile.tags:
   buffer.write("\n  }\n")
 
 
-buffer.write("}\n")
+buffer.write("}\n");
 
 output_dir = os.path.dirname(output_file)
 if not os.path.exists(output_dir):

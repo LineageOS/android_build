@@ -14,22 +14,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from __future__ import print_function
-
-from operator import itemgetter
+import os
 import re
 import sys
 
-
-def iteritems(obj):
-  if hasattr(obj, 'iteritems'):
-    return obj.iteritems()
-  return obj.items()
-
-
 def break_lines(key, val):
   # these don't get split
-  if key in ("PRODUCT_MODEL",):
+  if key in ("PRODUCT_MODEL"):
     return (key,val)
   return (key, "\n".join(val.split()))
 
@@ -51,7 +42,8 @@ def parse_variables(lines):
 def render_variables(variables):
   variables = dict(variables)
   del variables["FILE"]
-  variables = sorted(variables.items(), key=itemgetter(0))
+  variables = list(variables.iteritems())
+  variables.sort(lambda a, b: cmp(a[0], b[0]))
   return ("<table id='variables'>"
       + "\n".join([ "<tr><th>%(key)s</th><td>%(val)s</td></tr>" % { "key": key, "val": val }
         for key,val in variables])
@@ -77,7 +69,7 @@ def render_original(variables, text):
   return text
 
 def read_file(fn):
-  f = open(fn)
+  f = file(fn)
   text = f.read()
   f.close()
   return text
@@ -112,7 +104,7 @@ def main(argv):
     "variables": render_variables(variables),
     "original": render_original(variables, original),
   })
-  print("""<html>
+  print """<html>
 
 
 <head>
@@ -161,7 +153,7 @@ def main(argv):
 %(variables)s
 </body>
 </html>
-""" % values)
+""" % values
 
 if __name__ == "__main__":
   main(sys.argv)

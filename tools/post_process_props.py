@@ -14,14 +14,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import sys
-
-
-def iteritems(obj):
-  if hasattr(obj, 'iteritems'):
-    return obj.iteritems()
-  return obj.items()
-
+import os, sys
 
 # Usage: post_process_props.py file.prop [blacklist_key, ...]
 # Blacklisted keys are removed from the property file, if present
@@ -61,7 +54,7 @@ def mangle_default_prop(prop):
   # default to "adb". That might not the right policy there, but it's better
   # to be explicit.
   if not prop.get("persist.sys.usb.config"):
-    prop.put("persist.sys.usb.config", "none")
+    prop.put("persist.sys.usb.config", "none");
 
 def validate(prop):
   """Validate the properties.
@@ -71,7 +64,7 @@ def validate(prop):
   """
   check_pass = True
   buildprops = prop.to_dict()
-  for key, value in iteritems(buildprops):
+  for key, value in buildprops.iteritems():
     # Check build properties' length.
     if len(key) > PROP_NAME_MAX:
       check_pass = False

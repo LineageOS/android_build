@@ -24,8 +24,7 @@ and fails if they do.
 -h to display this usage message and exit.
 """
 
-from __future__ import print_function
-
+import cStringIO
 import getopt
 try:
   import hashlib
@@ -34,19 +33,7 @@ except ImportError:
 import struct
 import sys
 
-try:
-  from cStringIO import StringIO
-except ImportError:
-  from io import StringIO
-
 import event_log_tags
-
-
-def iteritems(obj):
-  if hasattr(obj, 'iteritems'):
-    return obj.iteritems()
-  return obj.items()
-
 
 errors = []
 warnings = []
@@ -61,21 +48,21 @@ ASSIGN_LIMIT = 1000000
 
 try:
   opts, args = getopt.getopt(sys.argv[1:], "ho:m:")
-except getopt.GetoptError as err:
-  print(str(err))
-  print(__doc__)
+except getopt.GetoptError, err:
+  print str(err)
+  print __doc__
   sys.exit(2)
 
 for o, a in opts:
   if o == "-h":
-    print(__doc__)
+    print __doc__
     sys.exit(2)
   elif o == "-o":
     output_file = a
   elif o == "-m":
     pre_merged_file = a
   else:
-    print("unhandled option %s" % (o,), file=sys.stderr)
+    print >> sys.stderr, "unhandled option %s" % (o,)
     sys.exit(1)
 
 # Restrictions on tags:
@@ -146,12 +133,12 @@ for fn in args:
 
 if errors:
   for fn, ln, msg in errors:
-    print("%s:%d: error: %s" % (fn, ln, msg), file=sys.stderr)
+    print >> sys.stderr, "%s:%d: error: %s" % (fn, ln, msg)
   sys.exit(1)
 
 if warnings:
   for fn, ln, msg in warnings:
-    print("%s:%d: warning: %s" % (fn, ln, msg), file=sys.stderr)
+    print >> sys.stderr, "%s:%d: warning: %s" % (fn, ln, msg)
 
 # Python's hash function (a) isn't great and (b) varies between
 # versions of python.  Using md5 is overkill here but is the same from
@@ -167,14 +154,14 @@ def hashname(str):
 # If we were provided pre-merged tags (w/ the -m option), then don't
 # ever try to allocate one, just fail if we don't have a number
 
-for name, t in sorted(iteritems(by_tagname)):
+for name, t in sorted(by_tagname.iteritems()):
   if t.tagnum is None:
     if pre_merged_tags:
       try:
         t.tagnum = pre_merged_tags[t.tagname]
       except KeyError:
-        print("Error: Tag number not defined for tag `%s'."
-              " Have you done a full build?" % t.tagname, file=sys.stderr)
+        print >> sys.stderr, ("Error: Tag number not defined for tag `%s'."
+            +" Have you done a full build?") % t.tagname
         sys.exit(1)
     else:
       while True:
@@ -187,8 +174,8 @@ for name, t in sorted(iteritems(by_tagname)):
 
 # by_tagnum should be complete now; we've assigned numbers to all tags.
 
-buffer = StringIO()
-for n, t in sorted(iteritems(by_tagnum)):
+buffer = cStringIO.StringIO()
+for n, t in sorted(by_tagnum.iteritems()):
   if t.description:
     buffer.write("%d %s %s\n" % (t.tagnum, t.tagname, t.description))
   else:

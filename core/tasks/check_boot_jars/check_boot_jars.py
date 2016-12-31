@@ -1,7 +1,5 @@
 #!/usr/bin/env python
 
-from __future__ import print_function
-
 """
 Check boot jars.
 
@@ -57,15 +55,15 @@ def CheckJar(jar):
       package_name = package_name.replace('/', '.')
       # Skip class without a package name
       if package_name and not whitelist_re.match(package_name):
-        print('Error: %s: unknown package name of class file %s'
-              % (jar, f), file=sys.stderr)
+        print >> sys.stderr, ('Error: %s: unknown package name of class file %s'
+                              % (jar, f))
         return False
   return True
 
 
 def main(argv):
   if len(argv) < 2:
-    print(__doc__)
+    print __doc__
     return 1
 
   if not LoadWhitelist(argv[0]):

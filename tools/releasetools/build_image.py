@@ -20,23 +20,16 @@ Build image output_image_file from input_directory and properties_file.
 Usage:  build_image input_directory properties_file output_image_file
 
 """
-
-from __future__ import print_function
-
 import os
 import os.path
 import re
 import subprocess
 import sys
+import commands
 import common
 import shutil
 import sparse_img
 import tempfile
-
-try:
-  from commands import getstatusoutput
-except ImportError:
-  from subprocess import getstatusoutput
 
 OPTIONS = common.OPTIONS
 
@@ -51,26 +44,26 @@ def RunCommand(cmd):
   Returns:
     A tuple of the output and the exit code.
   """
-  print("Running: %s" % " ".join(cmd))
+  print "Running: ", " ".join(cmd)
   p = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
   output, _ = p.communicate()
-  print("%s" % output.rstrip())
+  print "%s" % (output.rstrip(),)
   return (output, p.returncode)
 
 def GetVerityFECSize(partition_size):
   cmd = "fec -s %d" % partition_size
   status, output = getstatusoutput(cmd)
   if status:
-    print(output)
+    print output
     return False, 0
   return True, int(output)
 
 def GetVerityTreeSize(partition_size):
   cmd = "build_verity_tree -s %d"
   cmd %= partition_size
-  status, output = getstatusoutput(cmd)
+  status, output = commands.getstatusoutput(cmd)
   if status:
-    print(output)
+    print output
     return False, 0
   return True, int(output)
 
@@ -78,9 +71,9 @@ def GetVerityMetadataSize(partition_size):
   cmd = "system/extras/verity/build_verity_metadata.py -s %d"
   cmd %= partition_size
 
-  status, output = getstatusoutput(cmd)
+  status, output = commands.getstatusoutput(cmd)
   if status:
-    print(output)
+    print output
     return False, 0
   return True, int(output)
 
@@ -149,20 +142,20 @@ AdjustPartitionSizeForVerity.results = {}
 
 def BuildVerityFEC(sparse_image_path, verity_path, verity_fec_path):
   cmd = "fec -e %s %s %s" % (sparse_image_path, verity_path, verity_fec_path)
-  print(cmd)
+  print cmd
   status, output = getstatusoutput(cmd)
   if status:
-    print("Could not build FEC data! Error: %s" % output)
+    print "Could not build FEC data! Error: %s" % output
     return False
   return True
 
 def BuildVerityTree(sparse_image_path, verity_image_path, prop_dict):
   cmd = "build_verity_tree -A %s %s %s" % (
       FIXED_SALT, sparse_image_path, verity_image_path)
-  print(cmd)
-  status, output = getstatusoutput(cmd)
+  print cmd
+  status, output = commands.getstatusoutput(cmd)
   if status:
-    print("Could not build verity tree! Error: %s" % output)
+    print "Could not build verity tree! Error: %s" % output
     return False
   root, salt = output.split()
   prop_dict["verity_root_hash"] = root
@@ -183,7 +176,7 @@ def BuildVerityMetadata(image_size, verity_metadata_path, root_hash, salt,
       "system/extras/verity/build_verity_metadata.py %s %s %s %s %s %s %s")
   cmd = cmd_template % (image_size, verity_metadata_path, root_hash, salt,
                         block_device, signer_path, key)
-  print(cmd)
+  print cmd
   runcmd = ["system/extras/verity/build_verity_metadata.py", image_size, verity_metadata_path, root_hash, salt, block_device, signer_path, key];
   if verity_key_password is not None:
     sp = subprocess.Popen(runcmd, stdin=subprocess.PIPE)
@@ -210,19 +203,19 @@ def Append2Simg(sparse_image_path, unsparse_image_path, error_message):
   """
   cmd = "append2simg %s %s"
   cmd %= (sparse_image_path, unsparse_image_path)
-  print(cmd)
-  status, output = getstatusoutput(cmd)
+  print cmd
+  status, output = commands.getstatusoutput(cmd)
   if status:
-    print("%s: %s" % (error_message, output))
+    print "%s: %s" % (error_message, output)
     return False
   return True
 
 def Append(target, file_to_append, error_message):
   cmd = 'cat %s >> %s' % (file_to_append, target)
-  print(cmd)
+  print cmd
   status, output = getstatusoutput(cmd)
   if status:
-    print("%s: %s" % (error_message, output))
+    print "%s: %s" % (error_message, output)
     return False
   return True
 
@@ -383,7 +376,7 @@ def BuildImage(in_dir, prop_dict, out_file, target_out=None):
     adjusted_size = AdjustPartitionSizeForVerity(partition_size,
                                                  verity_fec_supported)
     if not adjusted_size:
-      print("Error: adjusting partition size for verity failed, partition_size = %d" % partition_size)
+      print "Error: adjusting partition size for verity failed, partition_size = %d" % partition_size
       return False
     prop_dict["partition_size"] = str(adjusted_size)
     prop_dict["original_partition_size"] = str(partition_size)
@@ -413,7 +406,7 @@ def BuildImage(in_dir, prop_dict, out_file, target_out=None):
     if "base_fs_file" in prop_dict:
       base_fs_file = ConvertBlockMapToBaseFs(prop_dict["base_fs_file"])
       if base_fs_file is None:
-        print("Error: no base fs file found")
+        print "Error: no base fs file found"
         return False
       build_command.extend(["-d", base_fs_file])
     build_command.extend(["-L", prop_dict["mount_point"]])
@@ -469,10 +462,10 @@ def BuildImage(in_dir, prop_dict, out_file, target_out=None):
 
   try:
     if reserved_blocks and fs_type.startswith("ext4"):
-      print("fs type is ext4")
+      print "fs type is ext4"
       (ext4fs_output, exit_code) = RunCommand(build_command)
     else:
-      print("fs type is not ext4")
+      print "fs type is not ext4"
       (_, exit_code) = RunCommand(build_command)
     print("Running %s command, exit code = %d" % (build_command, exit_code))
   finally:
@@ -484,7 +477,7 @@ def BuildImage(in_dir, prop_dict, out_file, target_out=None):
     if base_fs_file is not None:
       os.remove(base_fs_file)
   if exit_code != 0:
-    print("Error: %s command unsuccessful" % build_command)
+    print "Error: %s command unsuccessful" % build_command
     return False
 
   # Bug: 21522719, 22023465
@@ -498,7 +491,7 @@ def BuildImage(in_dir, prop_dict, out_file, target_out=None):
     ext4fs_stats = re.compile(
         r'Created filesystem with .* (?P<used_blocks>[0-9]+)/'
         r'(?P<total_blocks>[0-9]+) blocks')
-    m = ext4fs_stats.match(ext4fs_output.strip().split(b'\n')[-1])
+    m = ext4fs_stats.match(ext4fs_output.strip().split('\n')[-1])
     used_blocks = int(m.groupdict().get('used_blocks'))
     total_blocks = int(m.groupdict().get('total_blocks'))
     reserved_blocks = min(4096, int(total_blocks * 0.02))
@@ -525,13 +518,13 @@ def BuildImage(in_dir, prop_dict, out_file, target_out=None):
   # create the verified image if this is to be verified
   if verity_supported and is_verity_partition:
     if not MakeVerityEnabledImage(out_file, verity_fec_supported, prop_dict):
-      print("Error: making verity enabled image failed")
+      print "Error: making verity enabled image failed"
       return False
 
   if run_fsck and prop_dict.get("skip_fsck") != "true":
     success, unsparse_image = UnsparseImage(out_file, replace=False)
     if not success:
-      print("Error: unparsing of image failed")
+      print "Error: unparsing of image failed"
       return False
 
     # Run e2fsck on the inflated image file
@@ -655,7 +648,7 @@ def LoadGlobalDict(filename):
 
 def main(argv):
   if len(argv) != 4:
-    print(__doc__)
+    print __doc__
     sys.exit(1)
 
   in_dir = argv[0]
@@ -684,14 +677,14 @@ def main(argv):
     elif image_filename == "oem.img":
       mount_point = "oem"
     else:
-      print("error: unknown image file name ", image_filename, file=sys.stderr)
+      print >> sys.stderr, "error: unknown image file name ", image_filename
       exit(1)
 
     image_properties = ImagePropFromGlobalDict(glob_dict, mount_point)
 
   if not BuildImage(in_dir, image_properties, out_file, target_out):
-    print("error: failed to build %s from %s" % (out_file, in_dir),
-          file=sys.stderr)
+    print >> sys.stderr, "error: failed to build %s from %s" % (out_file,
+                                                                in_dir)
     exit(1)
 
 
