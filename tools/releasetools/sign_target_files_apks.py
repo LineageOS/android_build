@@ -503,8 +503,8 @@ def ReplaceOtaKeys(input_tf_zip, output_tf_zip, misc_info):
 
   # Save the base64 key representation in the update for key-change
   # validations
-  p = common.Run(["python", "build/tools/getb64key.py", mapped_keys[0]],
-                 stdout=subprocess.PIPE)
+  p = common.Run(["python", "vendor/cm/build/tools/getb64key.py",
+                 mapped_keys[0]], stdout=subprocess.PIPE)
   data, _ = p.communicate()
   if p.returncode == 0:
     common.ZipWriteStr(output_tf_zip, "META/releasekey.txt", data)
@@ -529,7 +529,7 @@ def ReplaceOtaKeys(input_tf_zip, output_tf_zip, misc_info):
       print("\n  WARNING: Found more than one OTA keys; Using the first one"
             " as payload verification key.\n\n")
 
-    print("Using %s for payload verification." % mapped_keys[0])
+    print "Using %s for payload verification." % (mapped_keys[0],)
     cmd = common.Run(
         ["openssl", "x509", "-pubkey", "-noout", "-in", mapped_keys[0]],
         stdout=subprocess.PIPE)
@@ -577,14 +577,14 @@ def ReplaceVerityKeyId(targetfile_input_zip, targetfile_output_zip, keypath):
       p = common.Run(["openssl", "x509", "-in", keypath, "-text"], stdout=subprocess.PIPE)
       keyid, stderr = p.communicate()
       keyid = re.search(r'keyid:([0-9a-fA-F:]*)', keyid).group(1).replace(':', '').lower()
-      print("Replacing verity keyid with %s error=%s" % keyid, stderr)
+      print "Replacing verity keyid with %s error=%s" % (keyid, stderr)
       out_cmdline.append("veritykeyid=id:%s" % (keyid,))
     else:
       out_cmdline.append(param)
 
   out_cmdline = ' '.join(out_cmdline)
   out_cmdline = out_cmdline.strip()
-  print("out_cmdline %s" % out_cmdline)
+  print "out_cmdline %s" % (out_cmdline)
   common.ZipWriteStr(targetfile_output_zip, "BOOT/cmdline", out_cmdline)
   return out_cmdline
 

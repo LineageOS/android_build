@@ -101,7 +101,7 @@ def AddSystemOther(output_zip, prefix="IMAGES/"):
 
   prebuilt_path = os.path.join(OPTIONS.input_tmp, prefix, "system_other.img")
   if os.path.exists(prebuilt_path):
-    print("system_other.img already exists in %s, no need to rebuild..." % prefix)
+    print "system_other.img already exists in %s, no need to rebuild..." % (prefix,)
     return
 
   imgname = BuildSystemOther(OPTIONS.input_tmp, OPTIONS.info_dict)
@@ -375,14 +375,13 @@ def AddImagesToTargetFiles(filename):
   except KeyError:
     has_vendor = False
 
+  has_system_other = "SYSTEM_OTHER/" in input_zip.namelist()
+
   try:
     input_zip.getinfo("OEM/")
     has_oem = True
   except KeyError:
     has_oem = False
-
-  has_system_other = "SYSTEM_OTHER/" in input_zip.namelist()
-
 
   OPTIONS.info_dict = common.LoadInfoDict(input_zip, OPTIONS.input_tmp)
 
@@ -444,7 +443,6 @@ def AddImagesToTargetFiles(filename):
   if has_oem:
     banner("oem")
     AddOem(output_zip)
-
 
   # For devices using A/B update, copy over images from RADIO/ to IMAGES/ and
   # make sure we have all the needed images ready under IMAGES/.
