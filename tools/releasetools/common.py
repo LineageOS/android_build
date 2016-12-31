@@ -243,7 +243,6 @@ def LoadInfoDict(input_file, input_dir=None):
             vendor_base_fs_file,))
         del d["vendor_base_fs_file"]
 
-
   if "device_type" not in d:
     d["device_type"] = "MMC"
   try:
@@ -278,12 +277,12 @@ def LoadInfoDict(input_file, input_dir=None):
   system_root_image = d.get("system_root_image", None) == "true"
   if d.get("no_recovery", None) != "true":
     recovery_fstab_path = "RECOVERY/RAMDISK/etc/recovery.fstab"
-    d["fstab"] = LoadRecoveryFSTab(read_helper, d["fstab_version"], d["device_type"],
-        recovery_fstab_path, system_root_image)
+    d["fstab"] = LoadRecoveryFSTab(read_helper, d["fstab_version"],
+        recovery_fstab_path, system_root_image, d["device_type"])
   elif d.get("recovery_as_boot", None) == "true":
     recovery_fstab_path = "BOOT/RAMDISK/etc/recovery.fstab"
-    d["fstab"] = LoadRecoveryFSTab(read_helper, d["fstab_version"], d["device_type"],
-        recovery_fstab_path, system_root_image)
+    d["fstab"] = LoadRecoveryFSTab(read_helper, d["fstab_version"],
+        recovery_fstab_path, system_root_image, d["device_type"])
   else:
     d["fstab"] = None
 
@@ -309,8 +308,8 @@ def LoadDictionaryFromLines(lines):
       d[name] = value
   return d
 
-def LoadRecoveryFSTab(read_helper, fstab_version, type, recovery_fstab_path,
-                      system_root_image=False):
+def LoadRecoveryFSTab(read_helper, fstab_version, recovery_fstab_path,
+                      system_root_image=False, type):
   class Partition(object):
     def __init__(self, mount_point, fs_type, device, length, device2, context):
       self.mount_point = mount_point
@@ -323,7 +322,7 @@ def LoadRecoveryFSTab(read_helper, fstab_version, type, recovery_fstab_path,
   try:
     data = read_helper(recovery_fstab_path)
   except KeyError:
-    print("Warning: could not find %s" % format(recovery_fstab_path))
+    print("Warning: could not find {}".format(recovery_fstab_path))
     data = ""
 
   if fstab_version == 1:

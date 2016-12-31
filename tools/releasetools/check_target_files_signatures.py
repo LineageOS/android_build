@@ -325,8 +325,7 @@ class TargetFiles(object):
                                         self.max_pkg_len, apk.package,
                                         apk.shared_uid))
         else:
-          print("  %-*s  %-*s" % (self.max_fn_len, apk.filename,
-                                  self.max_pkg_len, apk.package))
+          print("  %-*s  %s" % (self.max_fn_len, apk.filename, apk.package))
       print()
 
   def CompareWith(self, other):
