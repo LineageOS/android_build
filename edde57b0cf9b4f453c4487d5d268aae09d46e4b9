@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a1d315d_4883cfcc",
+        "filename": "envsetup.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 627,
+      "author": {
+        "id": 7880
+      },
+      "writtenOn": "2017-01-01T01:24:21Z",
+      "side": 1,
+      "message": "Doesnt that mean that this is broken on zsh too?",
+      "revId": "edde57b0cf9b4f453c4487d5d268aae09d46e4b9",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    }
+  ]
+}
