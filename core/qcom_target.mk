@@ -57,17 +57,22 @@ ifeq ($(BOARD_USES_QCOM_HARDWARE),true)
 
     ifeq ($(QCOM_HARDWARE_VARIANT),)
         ifneq ($(filter msm8610 msm8226 msm8974,$(TARGET_BOARD_PLATFORM)),)
+            MSM_VIDC_TARGET_LIST := msm8610 msm8226 msm8974
             QCOM_HARDWARE_VARIANT := msm8974
         else
         ifneq ($(filter msm8909 msm8916,$(TARGET_BOARD_PLATFORM)),)
+            MSM_VIDC_TARGET_LIST := msm8909 msm8916
             QCOM_HARDWARE_VARIANT := msm8916
         else
         ifneq ($(filter msm8953 msm8937,$(TARGET_BOARD_PLATFORM)),)
+            MSM_VIDC_TARGET_LIST := msm8953 msm8937
             QCOM_HARDWARE_VARIANT := msm8937
         else
         ifneq ($(filter msm8992 msm8994,$(TARGET_BOARD_PLATFORM)),)
+            MSM_VIDC_TARGET_LIST := msm8992 msm8994
             QCOM_HARDWARE_VARIANT := msm8994
         else
+            MSM_VIDC_TARGET_LIST := $(TARGET_BOARD_PLATFORM)
             QCOM_HARDWARE_VARIANT := $(TARGET_BOARD_PLATFORM)
         endif
         endif
