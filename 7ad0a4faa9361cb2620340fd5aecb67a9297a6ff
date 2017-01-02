@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa3479d7_b8f061ca",
+        "filename": "core/qcom_target.mk",
+        "patchSetId": 1
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 7880
+      },
+      "writtenOn": "2017-01-02T22:13:27Z",
+      "side": 1,
+      "message": "The MSM8974 media HAL doesn\u0027t use this, only MSM8916 and later HALs do. However, for consistency, I added it for MSM8974 as well.",
+      "revId": "7ad0a4faa9361cb2620340fd5aecb67a9297a6ff",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    }
+  ]
+}
