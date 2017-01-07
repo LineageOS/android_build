@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "fa3479d7_c926a7ba",
+        "filename": "core/qcom_target.mk",
+        "patchSetId": 1
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 7880
+      },
+      "writtenOn": "2017-01-07T03:57:35Z",
+      "side": 1,
+      "message": "Not in cm 13",
+      "parentUuid": "fa3479d7_a9048315",
+      "range": {
+        "startLine": 61,
+        "startChar": 17,
+        "endLine": 61,
+        "endChar": 32
+      },
+      "revId": "e8922bb691635e63af2761dc1647f07ae6145a14",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fa3479d7_8909bf2e",
         "filename": "core/qcom_target.mk",
         "patchSetId": 1
@@ -36,6 +60,30 @@
       "writtenOn": "2017-01-07T03:41:41Z",
       "side": 1,
       "message": "Can we call this something else if it included 8996 and 8998?",
+      "range": {
+        "startLine": 73,
+        "startChar": 33,
+        "endLine": 73,
+        "endChar": 40
+      },
+      "revId": "e8922bb691635e63af2761dc1647f07ae6145a14",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa3479d7_a92b6381",
+        "filename": "core/qcom_target.mk",
+        "patchSetId": 1
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 7880
+      },
+      "writtenOn": "2017-01-07T03:57:35Z",
+      "side": 1,
+      "message": "That\u0027s something to be discussed for in cm 14.1, but for cm 13, things seem fine the way they currently are",
+      "parentUuid": "fa3479d7_8909bf2e",
       "range": {
         "startLine": 73,
         "startChar": 33,
