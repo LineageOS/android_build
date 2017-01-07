@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa3479d7_c95ea7e9",
+        "filename": "core/qcom_target.mk",
+        "patchSetId": 2
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 7880
+      },
+      "writtenOn": "2017-01-07T08:54:52Z",
+      "side": 1,
+      "message": "Ethan: What about this? Should it be changed to B64_FAMILY or something similar?",
+      "revId": "c091775fa3f96501f737f8c473910dc6a5dbe5fd",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    }
+  ]
+}
