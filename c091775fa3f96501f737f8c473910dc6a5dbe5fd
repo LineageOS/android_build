@@ -16,6 +16,24 @@
       "revId": "c091775fa3f96501f737f8c473910dc6a5dbe5fd",
       "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa3479d7_54b92ee8",
+        "filename": "core/qcom_target.mk",
+        "patchSetId": 2
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 2936
+      },
+      "writtenOn": "2017-01-07T18:40:55Z",
+      "side": 1,
+      "message": "Probably good to make it consistent, after all the BF \u003d\u003d B Family.",
+      "parentUuid": "fa3479d7_c95ea7e9",
+      "revId": "c091775fa3f96501f737f8c473910dc6a5dbe5fd",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
     }
   ]
 }
