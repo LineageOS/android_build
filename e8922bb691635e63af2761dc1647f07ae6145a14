@@ -96,6 +96,24 @@
     },
     {
       "key": {
+        "uuid": "fa3479d7_a9eec320",
+        "filename": "core/qcom_target.mk",
+        "patchSetId": 1
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 3962
+      },
+      "writtenOn": "2017-01-07T07:55:01Z",
+      "side": 1,
+      "message": "Derp, I can\u0027t read branch names. Sorrt, youre right.",
+      "parentUuid": "fa3479d7_c926a7ba",
+      "revId": "e8922bb691635e63af2761dc1647f07ae6145a14",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fa3479d7_8909bf2e",
         "filename": "core/qcom_target.mk",
         "patchSetId": 1
@@ -161,6 +179,24 @@
         "endLine": 73,
         "endChar": 40
       },
+      "revId": "e8922bb691635e63af2761dc1647f07ae6145a14",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa3479d7_89f3ff09",
+        "filename": "core/qcom_target.mk",
+        "patchSetId": 1
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 3962
+      },
+      "writtenOn": "2017-01-07T07:55:01Z",
+      "side": 1,
+      "message": "Yeah I\u0027m blind sorry",
+      "parentUuid": "fa3479d7_69257baa",
       "revId": "e8922bb691635e63af2761dc1647f07ae6145a14",
       "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
       "unresolved": false
