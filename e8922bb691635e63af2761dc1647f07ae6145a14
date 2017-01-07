@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "fa3479d7_89a53f06",
+        "filename": "core/qcom_target.mk",
+        "patchSetId": 1
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 2936
+      },
+      "writtenOn": "2017-01-07T06:52:14Z",
+      "side": 1,
+      "message": "BF stands for B family already, you can make this just B_FAMILY",
+      "range": {
+        "startLine": 58,
+        "startChar": 4,
+        "endLine": 58,
+        "endChar": 13
+      },
+      "revId": "e8922bb691635e63af2761dc1647f07ae6145a14",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fa3479d7_a9048315",
         "filename": "core/qcom_target.mk",
         "patchSetId": 1
@@ -37,6 +60,30 @@
       "side": 1,
       "message": "Not in cm 13",
       "parentUuid": "fa3479d7_a9048315",
+      "range": {
+        "startLine": 61,
+        "startChar": 17,
+        "endLine": 61,
+        "endChar": 32
+      },
+      "revId": "e8922bb691635e63af2761dc1647f07ae6145a14",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa3479d7_69aa1bd6",
+        "filename": "core/qcom_target.mk",
+        "patchSetId": 1
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 2936
+      },
+      "writtenOn": "2017-01-07T06:52:14Z",
+      "side": 1,
+      "message": "Don\u0027t add them at all, 8996 and 8998 have separate branches.",
+      "parentUuid": "fa3479d7_c926a7ba",
       "range": {
         "startLine": 61,
         "startChar": 17,
