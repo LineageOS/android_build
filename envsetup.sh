@@ -626,17 +626,25 @@ function lunch()
     check_product $product
     if [ $? -ne 0 ]
     then
-        # if we can't find a product, try to grab it off the CM github
-        T=$(gettop)
-        cd $T > /dev/null
-        vendor/cm/build/tools/roomservice.py $product
-        cd - > /dev/null
-        check_product $product
+        # if we can't find a product, try to grab it off the LineageOS github
+        case "$product" in
+            "lineage_"*)
+                T=$(gettop)
+                cd $T > /dev/null
+                vendor/cm/build/tools/roomservice.py $product
+                cd - > /dev/null
+                check_product $product
+                ;;
+        esac
     else
-        T=$(gettop)
-        cd $T > /dev/null
-        vendor/cm/build/tools/roomservice.py $product true
-        cd - > /dev/null
+        case "$product" in
+            "lineage_"*)
+                T=$(gettop)
+                cd $T > /dev/null
+                vendor/cm/build/tools/roomservice.py $product true
+                cd - > /dev/null
+                ;;
+        esac
     fi
     TARGET_PRODUCT=$product \
     TARGET_BUILD_VARIANT=$variant \
