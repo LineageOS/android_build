@@ -657,10 +657,12 @@ else
   DEFAULT_SYSTEM_DEV_CERTIFICATE := build/target/product/security/testkey
 endif
 
-# Rules for QCOM targets
+# Rules and helper macros for QCOM targets
+include vendor/cm/build/core/qcom_utils.mk
 include vendor/cm/build/core/qcom_target.mk
 
-# Rules for MTK targets
+# Rules and helper macros for MTK targets
+include vendor/cm/build/core/mtk_utils.mk
 include vendor/cm/build/core/mtk_target.mk
 
 # ###############################################################
