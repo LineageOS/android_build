@@ -1,3 +1,6 @@
+# Bring in Mediatek helper macros
+include $(BUILD_SYSTEM)/mtk_utils.mk
+
 ifeq ($(BOARD_USES_MTK_HARDWARE),true)
     mtk_flags := -DMTK_HARDWARE
 
