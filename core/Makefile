@@ -2188,7 +2188,8 @@ name := $(name)-ota-$(FILE_NAME_TAG)
 
 INTERNAL_OTA_PACKAGE_TARGET := $(PRODUCT_OUT)/$(name).zip
 
-$(INTERNAL_OTA_PACKAGE_TARGET): KEY_CERT_PAIR := $(DEFAULT_KEY_CERT_PAIR)
+.PHONY: ota-package-setup
+ota-package-setup: KEY_CERT_PAIR := $(DEFAULT_KEY_CERT_PAIR)
 
 ifeq ($(TARGET_RELEASETOOL_OTA_FROM_TARGET_SCRIPT),)
     OTA_FROM_TARGET_SCRIPT := ./build/tools/releasetools/ota_from_target_files
@@ -2197,35 +2198,38 @@ else
 endif
 
 ifeq ($(WITH_GMS),true)
-    $(INTERNAL_OTA_PACKAGE_TARGET): backuptool := false
+    ota-package-setup: backuptool := false
 else
 ifneq ($(CM_BUILD),)
-    $(INTERNAL_OTA_PACKAGE_TARGET): backuptool := true
+    ota-package-setup: backuptool := true
 else
-    $(INTERNAL_OTA_PACKAGE_TARGET): backuptool := false
+    ota-package-setup: backuptool := false
 endif
 endif
 
 ifeq ($(TARGET_OTA_ASSERT_DEVICE),)
-    $(INTERNAL_OTA_PACKAGE_TARGET): override_device := auto
+    ota-package-setup: override_device := auto
 else
-    $(INTERNAL_OTA_PACKAGE_TARGET): override_device := $(TARGET_OTA_ASSERT_DEVICE)
+    ota-package-setup: override_device := $(TARGET_OTA_ASSERT_DEVICE)
 endif
 
 ifneq ($(TARGET_UNIFIED_DEVICE),)
-    $(INTERNAL_OTA_PACKAGE_TARGET): override_prop := --override_prop=true
+    ota-package-setup: override_prop := --override_prop=true
     ifeq ($(TARGET_OTA_ASSERT_DEVICE),)
-        $(INTERNAL_OTA_PACKAGE_TARGET): override_device := $(TARGET_DEVICE)
+        ota-package-setup: override_device := $(TARGET_DEVICE)
     endif
 endif
 
 ifneq ($(BLOCK_BASED_OTA),false)
-    $(INTERNAL_OTA_PACKAGE_TARGET): block_based := --block
+    ota-package-setup: block_based := --block
 endif
 
-$(INTERNAL_OTA_PACKAGE_TARGET): $(BUILT_TARGET_FILES_PACKAGE)
+ota-package-setup:
 	@echo "$(OTA_FROM_TARGET_SCRIPT)" > $(PRODUCT_OUT)/ota_script_path
-	@echo "$(override_device)" > $(PRODUCT_OUT)/ota_override_device
+	@echo "$(block_based) --override_device=$(override_device) $(override_prop)" \
+		"$(if $(OEM_OTA_CONFIG), -o $(OEM_OTA_CONFIG))" > $(PRODUCT_OUT)/ota_script_args
+
+$(INTERNAL_OTA_PACKAGE_TARGET): ota-package-setup $(BUILT_TARGET_FILES_PACKAGE)
 	@echo "Package OTA: $@"
 	$(hide) PATH=$(foreach p,$(INTERNAL_USERIMAGES_BINARY_PATHS),$(p):)$$PATH MKBOOTIMG=$(MKBOOTIMG) \
 	   $(OTA_FROM_TARGET_SCRIPT) -v \
@@ -2245,6 +2249,9 @@ bacon: otapackage
 	$(hide) ln -f $(INTERNAL_OTA_PACKAGE_TARGET) $(CM_TARGET_PACKAGE)
 	$(hide) $(MD5SUM) $(CM_TARGET_PACKAGE) > $(CM_TARGET_PACKAGE).md5sum
 	@echo "Package Complete: $(CM_TARGET_PACKAGE)"
+
+.PHONY: give-this-some-cool-name
+give-this-some-cool-name: ota-package-setup $(BUILT_TARGET_FILES_PACKAGE)
 
 endif    # build_ota_package
 # -----------------------------------------------------------------
