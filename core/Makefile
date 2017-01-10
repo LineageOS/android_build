@@ -2088,6 +2088,13 @@ endif
 ifdef BUILD_NO
 	$(hide) echo "build_number=$(BUILD_NO)" >> $(zip_root)/META/misc_info.txt
 endif
+ifneq ($(filter $(MAKECMDGOALS),give-this-some-cool-name),)
+	$(hide) echo "ota_override_args=true" >> $(zip_root)/META/misc_info.txt
+	$(hide) echo "ota_backuptool=$(OTA_SCRIPT_BACKUPTOOL)" >> $(zip_root)/META/misc_info.txt
+	$(hide) echo "ota_block_based=$(OTA_SCRIPT_BLOCK_BASED)" >> $(zip_root)/META/misc_info.txt
+	$(hide) echo "ota_override_device=$(OTA_SCRIPT_OVERRIDE_DEVICE)" >> $(zip_root)/META/misc_info.txt
+	$(hide) echo "ota_override_prop=$(OTA_SCRIPT_OVERRIDE_PROP)" >> $(zip_root)/META/misc_info.txt
+endif
 ifneq ($(PRODUCTS.$(INTERNAL_PRODUCT).PRODUCT_SYSTEM_BASE_FS_PATH),)
 	$(hide) $(ACP) $(PRODUCTS.$(INTERNAL_PRODUCT).PRODUCT_SYSTEM_BASE_FS_PATH) \
 	  $(zip_root)/META/$(notdir $(PRODUCTS.$(INTERNAL_PRODUCT).PRODUCT_SYSTEM_BASE_FS_PATH))
@@ -2198,29 +2205,37 @@ endif
 
 ifeq ($(WITH_GMS),true)
     $(INTERNAL_OTA_PACKAGE_TARGET): backuptool := false
+    OTA_SCRIPT_BACKUPTOOL := false
 else
 ifneq ($(CM_BUILD),)
     $(INTERNAL_OTA_PACKAGE_TARGET): backuptool := true
+    OTA_SCRIPT_BACKUPTOOL := true
 else
     $(INTERNAL_OTA_PACKAGE_TARGET): backuptool := false
+    OTA_SCRIPT_BACKUPTOOL := false
 endif
 endif
 
 ifeq ($(TARGET_OTA_ASSERT_DEVICE),)
     $(INTERNAL_OTA_PACKAGE_TARGET): override_device := auto
+    OTA_SCRIPT_OVERRIDE_DEVICE := auto
 else
     $(INTERNAL_OTA_PACKAGE_TARGET): override_device := $(TARGET_OTA_ASSERT_DEVICE)
+    OTA_SCRIPT_OVERRIDE_DEVICE := $(TARGET_OTA_ASSERT_DEVICE)
 endif
 
 ifneq ($(TARGET_UNIFIED_DEVICE),)
     $(INTERNAL_OTA_PACKAGE_TARGET): override_prop := --override_prop=true
+    OTA_SCRIPT_OVERRIDE_PROP := true
     ifeq ($(TARGET_OTA_ASSERT_DEVICE),)
         $(INTERNAL_OTA_PACKAGE_TARGET): override_device := $(TARGET_DEVICE)
+        OTA_SCRIPT_OVERRIDE_DEVICE := $(TARGET_OTA_ASSERT_DEVICE)
     endif
 endif
 
 ifneq ($(BLOCK_BASED_OTA),false)
     $(INTERNAL_OTA_PACKAGE_TARGET): block_based := --block
+    OTA_SCRIPT_BLOCK_BASED := true
 endif
 
 $(INTERNAL_OTA_PACKAGE_TARGET): $(BUILT_TARGET_FILES_PACKAGE)
@@ -2245,6 +2260,14 @@ bacon: otapackage
 	$(hide) ln -f $(INTERNAL_OTA_PACKAGE_TARGET) $(CM_TARGET_PACKAGE)
 	$(hide) $(MD5SUM) $(CM_TARGET_PACKAGE) > $(CM_TARGET_PACKAGE).md5sum
 	@echo "Package Complete: $(CM_TARGET_PACKAGE)"
+
+TARGET_PACKAGE_DIST := $(PRODUCT_OUT)/lineage-$(LINEAGE_VERSION)-dist.zip
+
+.PHONY: give-this-some-cool-name
+give-this-some-cool-name: $(TARGET_PACKAGE_DIST)
+$(TARGET_PACKAGE_DIST): $(BUILT_TARGET_FILES_PACKAGE)
+	@mv $(BUILT_TARGET_FILES_PACKAGE) $@
+	@echo "Package: $@"
 
 endif    # build_ota_package
 # -----------------------------------------------------------------

@@ -2105,6 +2105,12 @@ def main(argv):
   OPTIONS.info_dict = common.LoadInfoDict(input_zip)
   common.ZipClose(input_zip)
 
+  if OPTIONS.info_dict.get("ota_override_args") == "true":
+    OPTIONS.backuptool = OPTIONS.info_dict.get("ota_backuptool") == "true"
+    OPTIONS.block_based = OPTIONS.info_dict.get("ota_block_based") == "true"
+    OPTIONS.override_device = OPTIONS.info_dict.get("ota_override_device")
+    OPTIONS.override_prop = OPTIONS.info_dict.get("ota_override_prop") == "true"
+
   ab_update = OPTIONS.info_dict.get("ab_update") == "true"
 
   if ab_update:
