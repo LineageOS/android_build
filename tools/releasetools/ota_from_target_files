@@ -57,21 +57,6 @@ Usage:  ota_from_target_files [flags] input_target_files output_ota_package
       first, so that any changes made to the system partition are done
       using the new recovery (new kernel, etc.).
 
-  --backup <boolean>
-      Enable or disable the execution of backuptool.sh.
-      Disabled by default.
-
-  --override_device <device>
-      Override device-specific asserts. Can be a comma-separated list.
-
-  --override_prop <boolean>
-      Override build.prop items with custom vendor init.
-      Enabled when TARGET_UNIFIED_DEVICE is defined in BoardConfig
-
-  --no_separate_recovery <boolean>
-      Do not generate recovery image. For devices which do not have a truly
-      separate recovery partition.
-
 """
 
 import sys
@@ -1031,14 +1016,6 @@ def main(argv):
       OPTIONS.worker_threads = int(a)
     elif o in ("-2", "--two_step"):
       OPTIONS.two_step = True
-    elif o in ("--backup"):
-      OPTIONS.backuptool = bool(a.lower() == 'true')
-    elif o in ("--override_device"):
-      OPTIONS.override_device = a
-    elif o in ("--override_prop"):
-      OPTIONS.override_prop = bool(a.lower() == 'true')
-    elif o in ("--no_separate_recovery"):
-      OPTIONS.no_separate_recovery = bool(a.lower() == 'true')
     else:
       return False
     return True
@@ -1054,10 +1031,6 @@ def main(argv):
                                               "worker_threads=",
                                               "aslr_mode=",
                                               "two_step",
-                                              "backup=",
-                                              "override_device=",
-                                              "override_prop=",
-                                              "no_separate_recovery=",
                                               ],
                              extra_option_handler=option_handler)
 
@@ -1073,6 +1046,18 @@ def main(argv):
 
   OPTIONS.target_tmp = OPTIONS.input_tmp
   OPTIONS.info_dict = common.LoadInfoDict(input_zip)
+
+  if "ota_override_device" in OPTIONS.info_dict:
+    OPTIONS.override_device = OPTIONS.info_dict.get("ota_override_device")
+
+  if "ota_override_prop" in OPTIONS.info_dict:
+    OPTIONS.override_prop = OPTIONS.info_dict.get("ota_override_prop") == "true"
+
+  if "ota_backuptool" in OPTIONS.info_dict:
+    OPTIONS.backuptool = OPTIONS.info_dict.get("ota_backuptool") == "true"
+
+  if "ota_no_separate_recovery" in OPTIONS.info_dict:
+    OPTIONS.no_separate_recovery = OPTIONS.info_dict.get("ota_no_separate_recovery") == "true"
 
   # If this image was originally labelled with SELinux contexts, make sure we
   # also apply the labels in our new image. During building, the "file_contexts"
