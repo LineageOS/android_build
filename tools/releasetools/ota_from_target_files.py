@@ -1392,6 +1392,9 @@ def main(argv):
     OPTIONS.info_dict = common.LoadInfoDict(input_zip)
     common.ZipClose(input_zip)
 
+  if "ota_override_device" in OPTIONS.info_dict:
+    OPTIONS.override_device = OPTIONS.info_dict.get("ota_override_device")
+
   ab_update = OPTIONS.info_dict.get("ab_update") == "true"
 
   if ab_update:
