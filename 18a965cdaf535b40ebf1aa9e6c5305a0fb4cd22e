@@ -22,6 +22,30 @@
       "revId": "18a965cdaf535b40ebf1aa9e6c5305a0fb4cd22e",
       "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa3479d7_d6799bfd",
+        "filename": "core/combo/select.mk",
+        "patchSetId": 3
+      },
+      "lineNbr": 105,
+      "author": {
+        "id": 5531
+      },
+      "writtenOn": "2017-01-10T15:18:42Z",
+      "side": 1,
+      "message": "No, I assign the shell command to a variable since makefiles don\u0027t like letting you run shell commands outside of a build routine. This is just me responsibly clearing the variable after running the command.",
+      "parentUuid": "fa3479d7_36234707",
+      "range": {
+        "startLine": 105,
+        "startChar": 4,
+        "endLine": 105,
+        "endChar": 18
+      },
+      "revId": "18a965cdaf535b40ebf1aa9e6c5305a0fb4cd22e",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
     }
   ]
 }
