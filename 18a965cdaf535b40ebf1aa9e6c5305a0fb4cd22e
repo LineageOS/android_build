@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa3479d7_36234707",
+        "filename": "core/combo/select.mk",
+        "patchSetId": 3
+      },
+      "lineNbr": 105,
+      "author": {
+        "id": 3671
+      },
+      "writtenOn": "2017-01-10T15:17:29Z",
+      "side": 1,
+      "message": "doesn\u0027t this make the above additions a no-op?",
+      "range": {
+        "startLine": 105,
+        "startChar": 4,
+        "endLine": 105,
+        "endChar": 18
+      },
+      "revId": "18a965cdaf535b40ebf1aa9e6c5305a0fb4cd22e",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    }
+  ]
+}
