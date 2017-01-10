@@ -2196,44 +2196,46 @@ else
     OTA_FROM_TARGET_SCRIPT := $(TARGET_RELEASETOOL_OTA_FROM_TARGET_SCRIPT)
 endif
 
+OTA_SCRIPT_EXTRA_ARGS :=
 ifeq ($(WITH_GMS),true)
-    $(INTERNAL_OTA_PACKAGE_TARGET): backuptool := false
+    OTA_SCRIPT_EXTRA_ARGS += --backup=false
 else
 ifneq ($(CM_BUILD),)
-    $(INTERNAL_OTA_PACKAGE_TARGET): backuptool := true
+    OTA_SCRIPT_EXTRA_ARGS += --backup=true
 else
-    $(INTERNAL_OTA_PACKAGE_TARGET): backuptool := false
+    OTA_SCRIPT_EXTRA_ARGS += --backup=false
 endif
 endif
 
 ifeq ($(TARGET_OTA_ASSERT_DEVICE),)
-    $(INTERNAL_OTA_PACKAGE_TARGET): override_device := auto
+    OTA_SCRIPT_EXTRA_ARGS += --override_device=auto
 else
-    $(INTERNAL_OTA_PACKAGE_TARGET): override_device := $(TARGET_OTA_ASSERT_DEVICE)
+    OTA_SCRIPT_EXTRA_ARGS += --override_device=$(TARGET_OTA_ASSERT_DEVICE)
 endif
 
 ifneq ($(TARGET_UNIFIED_DEVICE),)
-    $(INTERNAL_OTA_PACKAGE_TARGET): override_prop := --override_prop=true
+    OTA_SCRIPT_EXTRA_ARGS += --override_prop=true
     ifeq ($(TARGET_OTA_ASSERT_DEVICE),)
-        $(INTERNAL_OTA_PACKAGE_TARGET): override_device := $(TARGET_DEVICE)
+        OTA_SCRIPT_EXTRA_ARGS += --override_device=$(TARGET_DEVICE)
     endif
 endif
 
 ifneq ($(BLOCK_BASED_OTA),false)
-    $(INTERNAL_OTA_PACKAGE_TARGET): block_based := --block
+    OTA_SCRIPT_EXTRA_ARGS += --block
 endif
 
-$(INTERNAL_OTA_PACKAGE_TARGET): $(BUILT_TARGET_FILES_PACKAGE)
+.PHONY: ota-package-setup
+ota-package-setup:
 	@echo "$(OTA_FROM_TARGET_SCRIPT)" > $(PRODUCT_OUT)/ota_script_path
-	@echo "$(override_device)" > $(PRODUCT_OUT)/ota_override_device
+	@echo "$(OTA_SCRIPT_EXTRA_ARGS)" > $(PRODUCT_OUT)/ota_script_args
+
+$(INTERNAL_OTA_PACKAGE_TARGET): ota-package-setup $(BUILT_TARGET_FILES_PACKAGE)
 	@echo "Package OTA: $@"
 	$(hide) PATH=$(foreach p,$(INTERNAL_USERIMAGES_BINARY_PATHS),$(p):)$$PATH MKBOOTIMG=$(MKBOOTIMG) \
 	   $(OTA_FROM_TARGET_SCRIPT) -v \
-	   $(block_based) \
+	   $(OTA_SCRIPT_EXTRA_ARGS) \
 	   -p $(HOST_OUT) \
 	   -k $(KEY_CERT_PAIR) \
-	   --backup=$(backuptool) \
-	   --override_device=$(override_device) $(override_prop) \
 	   $(if $(OEM_OTA_CONFIG), -o $(OEM_OTA_CONFIG)) \
 	   $(BUILT_TARGET_FILES_PACKAGE) $@
 
@@ -2245,6 +2247,14 @@ bacon: otapackage
 	$(hide) ln -f $(INTERNAL_OTA_PACKAGE_TARGET) $(CM_TARGET_PACKAGE)
 	$(hide) $(MD5SUM) $(CM_TARGET_PACKAGE) > $(CM_TARGET_PACKAGE).md5sum
 	@echo "Package Complete: $(CM_TARGET_PACKAGE)"
+
+TARGET_PACKAGE_DIST := $(PRODUCT_OUT)/lineage-$(LINEAGE_VERSION)-dist.zip
+
+.PHONY: give-this-some-cool-name
+give-this-some-cool-name: $(TARGET_PACKAGE_DIST)
+$(TARGET_PACKAGE_DIST): ota-package-setup $(BUILT_TARGET_FILES_PACKAGE)
+	@mv $(BUILT_TARGET_FILES_PACKAGE) $@
+	@echo "Package: $@"
 
 endif    # build_ota_package
 # -----------------------------------------------------------------
