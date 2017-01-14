@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2006 The Android Open Source Project
+# Copyright (C) 2018 The LineageOS Project
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -14,14 +14,5 @@
 # limitations under the License.
 #
 
-# Configuration for builds hosted on linux-x86_64.
-# Included by combo/select.mk
-
-define $(combo_var_prefix)transform-shared-lib-to-toc
-$(call _gen_toc_command_for_elf,$(1),$(2))
-endef
-
-# Microsoft Windows Subsystem for Linux
-ifeq ($(HOST_OS_IS_WSL),true)
-include $(BUILD_COMBOS)/HOST_EXTRA_wsl-x86_64.mk
-endif
+# Configuration for builds hosted on wsl-x86_64.
+# Included by combo/HOST_linux-x86_64.mk
