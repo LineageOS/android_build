@@ -42,6 +42,7 @@ endif
 # running on
 
 UNAME := $(shell uname -sm)
+UNAME_R := $(shell uname -r)
 
 # HOST_OS
 ifneq (,$(findstring Linux,$(UNAME)))
@@ -55,6 +56,12 @@ ifneq (,$(findstring Macintosh,$(UNAME)))
 endif
 ifneq (,$(findstring CYGWIN,$(UNAME)))
   HOST_OS := windows
+endif
+ifneq (,$(findstring Microsoft,$(UNAME_R)))
+  # Microsoft Windows Linux Subsystem
+  # The OS is still Linux, with some limitations. Assumes that there are no
+  # other Microsoft Linux kernels
+  HOST_OS_IS_LXSS := true
 endif
 
 # BUILD_OS is the real host doing the build.

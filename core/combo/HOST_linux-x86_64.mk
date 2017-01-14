@@ -48,3 +48,8 @@ HOST_GLOBAL_CFLAGS += -U_FORTIFY_SOURCE -D_FORTIFY_SOURCE=0 -fstack-protector
 HOST_GLOBAL_CFLAGS += -D__STDC_FORMAT_MACROS -D__STDC_CONSTANT_MACROS
 
 HOST_NO_UNDEFINED_LDFLAGS := -Wl,--no-undefined
+
+# Microsoft Windows Linux Subsystem
+ifeq ($(HOST_OS_IS_LXSS),true)
+include $(BUILD_COMBOS)/HOST_EXTRA_lxss.mk
+endif 
