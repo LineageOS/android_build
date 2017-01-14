@@ -100,6 +100,12 @@ endif
 # HOST_OS
 ifneq (,$(findstring Linux,$(UNAME)))
   HOST_OS := linux
+    ifneq (,$(findstring Microsoft,$(shell uname -r)))
+      # Microsoft Windows Subsystem for Linux
+      # The HOST_OS is still Linux but with some limitations.
+      # Assumes that there are no other Microsoft Linux kernels
+      HOST_OS_IS_WSL := true
+    endif
 endif
 ifneq (,$(findstring Darwin,$(UNAME)))
   HOST_OS := darwin
