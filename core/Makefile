@@ -1892,14 +1892,30 @@ ifeq ($(BOARD_USES_UBOOT_MULTIIMAGE),true)
 
 endif
 
+.PHONY: no-systemimage
+no-systemimage: $(FULL_SYSTEMIMAGE_DEPS) $(INSTALLED_FILES_FILE) \
+		$(RECOVERY_FROM_BOOT_PATCH) | $(ACP)
+ifndef I_WANT_A_QUAIL_STAR
+ifneq ($(WITHOUT_CHECK_API),true)
+no-systemimage: checkapi
+ifneq ($(TARGET_DISABLE_CMSDK),true)
+no-systemimage: checkapi-cm
+endif
+endif
+endif
+
 # Depending on the various images guarantees that the underlying
 # directories are up-to-date.
 include $(BUILD_SYSTEM)/tasks/oem_image.mk
+ifneq ($(filter $(MAKECMDGOALS),no-systemimage),)
+$(BUILT_TARGET_FILES_PACKAGE): no-systemimage
+else
+$(BUILT_TARGET_FILES_PACKAGE): $(INSTALLED_SYSTEMIMAGE)
+endif
 $(BUILT_TARGET_FILES_PACKAGE): \
 		$(INSTALLED_BOOTIMAGE_TARGET) \
 		$(INSTALLED_RADIOIMAGE_TARGET) \
 		$(INSTALLED_RECOVERYIMAGE_TARGET) \
-		$(INSTALLED_SYSTEMIMAGE) \
 		$(INSTALLED_USERDATAIMAGE_TARGET) \
 		$(INSTALLED_CACHEIMAGE_TARGET) \
 		$(INSTALLED_VENDORIMAGE_TARGET) \
