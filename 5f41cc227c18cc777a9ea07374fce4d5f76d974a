@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba3e81b7_85889023",
+        "filename": "tools/releasetools/ota_from_target_files.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 2108,
+      "author": {
+        "id": 13897
+      },
+      "writtenOn": "2017-01-16T22:52:15Z",
+      "side": 1,
+      "message": "Or maybe a new command line option, something like \"--get-args-from-zip\" instead of this.",
+      "range": {
+        "startLine": 2108,
+        "startChar": 2,
+        "endLine": 2108,
+        "endChar": 58
+      },
+      "revId": "5f41cc227c18cc777a9ea07374fce4d5f76d974a",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    }
+  ]
+}
