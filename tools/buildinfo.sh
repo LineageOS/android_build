@@ -22,7 +22,7 @@ else
         echo "ro.build.user=$KBUILD_BUILD_USER"
 fi
 if test -z "$KBUILD_BUILD_HOST"; then
-        echo "ro.build.host=`hostname`
+        echo "ro.build.host=`hostname`"
 else
         echo "ro.build.host=$KBUILD_BUILD_HOST"
 fi
