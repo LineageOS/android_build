@@ -16,6 +16,24 @@
       "revId": "33c973a8f645ab1fc129827e45d23716bd825a5b",
       "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba3e81b7_bf6163d5",
+        "filename": "core/product_config.mk",
+        "patchSetId": 1
+      },
+      "lineNbr": 184,
+      "author": {
+        "id": 10505
+      },
+      "writtenOn": "2017-01-16T12:21:29Z",
+      "side": 1,
+      "message": "No, there is no special reason for it. We don\u0027t use the QCOM specific branches. That\u0027s where the \"find\" came from, and because it works and wanted to be as close to CP as possible I let it through. But I agree with your reasoning to keep it like old where it can (roomservice). Will upload a second one.",
+      "parentUuid": "ba3e81b7_9f47bf4b",
+      "revId": "33c973a8f645ab1fc129827e45d23716bd825a5b",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
     }
   ]
 }
