@@ -70,6 +70,9 @@ PARSE_TIME_MAKE_GOALS := \
 	win_sdk \
 	winsdk-tools
 
+PARSE_TIME_MAKE_GOALS += \
+	eggs
+
 -include vendor/google/build/ninja_config.mk
 
 # Any Android goals that need to be built.

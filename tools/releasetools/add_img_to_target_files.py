@@ -48,6 +48,7 @@ OPTIONS.rebuild_recovery = False
 OPTIONS.replace_verity_public_key = False
 OPTIONS.replace_verity_private_key = False
 OPTIONS.verity_signer_path = None
+OPTIONS.exclude_system_image = False
 
 def GetCareMap(which, imgname):
   """Generate care_map of system (or vendor) partition"""
@@ -425,9 +426,10 @@ def AddImagesToTargetFiles(filename):
       if recovery_image:
         recovery_image.AddToZip(output_zip)
 
-  banner("system")
-  system_imgname = AddSystem(output_zip, recovery_img=recovery_image,
-                             boot_img=boot_image)
+  if not OPTIONS.exclude_system_image:
+    banner("system")
+    system_imgname = AddSystem(output_zip, recovery_img=recovery_image,
+                               boot_img=boot_image)
   vendor_imgname = None
   if has_vendor:
     banner("vendor")
@@ -493,6 +495,8 @@ def main(argv):
       OPTIONS.replace_verity_public_key = (True, a)
     elif o == "--verity_signer_path":
       OPTIONS.verity_signer_path = a
+    elif o == "--exclude_system_image":
+      OPTIONS.exclude_system_image = True
     else:
       return False
     return True
@@ -502,7 +506,8 @@ def main(argv):
       extra_long_opts=["add_missing", "rebuild_recovery",
                        "replace_verity_public_key=",
                        "replace_verity_private_key=",
-                       "verity_signer_path="],
+                       "verity_signer_path=",
+                       "exclude_system_image"],
       extra_option_handler=option_handler)
 
 

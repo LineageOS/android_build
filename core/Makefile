@@ -2172,7 +2172,7 @@ ifdef INSTALLED_SYSTEMOTHERIMAGE_TARGET
 endif
 	$(hide) (cd $(zip_root) && zip -qX ../$(notdir $@) META/*filesystem_config.txt)
 	$(hide) PATH=$(foreach p,$(INTERNAL_USERIMAGES_BINARY_PATHS),$(p):)$$PATH MKBOOTIMG=$(MKBOOTIMG) \
-	    ./build/tools/releasetools/add_img_to_target_files -a -v -p $(HOST_OUT) $@
+	    ./build/tools/releasetools/add_img_to_target_files -a -v -p $(HOST_OUT) $(TARGET_FILES_NO_SYSTEM_IMAGE) $@
 
 .PHONY: target-files-package
 target-files-package: $(BUILT_TARGET_FILES_PACKAGE)
@@ -2258,6 +2258,18 @@ bacon: otapackage
 	$(hide) ln -f $(INTERNAL_OTA_PACKAGE_TARGET) $(CM_TARGET_PACKAGE)
 	$(hide) $(MD5SUM) $(CM_TARGET_PACKAGE) > $(CM_TARGET_PACKAGE).md5sum
 	@echo "Package Complete: $(CM_TARGET_PACKAGE)"
+
+TARGET_PACKAGE_DIST := $(PRODUCT_OUT)/lineage-$(LINEAGE_VERSION)-dist.zip
+
+ifneq (,$(filter eggs,$(MAKECMDGOALS)))
+TARGET_FILES_NO_SYSTEM_IMAGE := --exclude_system_image
+endif
+
+.PHONY: eggs
+eggs: $(TARGET_PACKAGE_DIST)
+$(TARGET_PACKAGE_DIST): $(BUILT_TARGET_FILES_PACKAGE)
+	@mv $(BUILT_TARGET_FILES_PACKAGE) $@
+	@echo "Package: $@"
 
 endif    # build_ota_package
 # -----------------------------------------------------------------
