@@ -747,3 +747,5 @@ if __name__ == '__main__':
     print("   ERROR: %s" % e)
     print()
     sys.exit(1)
+  finally:
+    common.Cleanup()
