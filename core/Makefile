@@ -4,6 +4,16 @@
 # intermedites-dir-for
 LOCAL_PATH := $(BUILD_SYSTEM)
 
+# releasetools extensions are not allowed for official builds
+ifdef OFFICIAL_BUILD
+ifdef TARGET_RELEASETOOL_OTA_FROM_TARGET_SCRIPT
+$(error TARGET_RELEASETOOL_OTA_FROM_TARGET_SCRIPT is not allowed)
+endif
+ifdef TARGET_RELEASETOOLS_EXTENSIONS
+$(error TARGET_RELEASETOOLS_EXTENSIONS is not allowed)
+endif
+endif
+
 # Pick a reasonable string to use to identify files.
 ifneq "" "$(filter eng.%,$(BUILD_NUMBER))"
   # BUILD_NUMBER has a timestamp in it, which means that
