@@ -490,6 +490,18 @@ def AppendAssertions(script, info_dict, oem_dict=None):
             "The OEM file is missing the property %s" % prop)
       script.AssertOemProperty(prop, oem_dict.get(prop))
 
+  ota_bootloader_versions = OPTIONS.info_dict.get("ota_bootloader_versions")
+  if ota_bootloader_versions:
+    bootloaders = ota_bootloader_versions.split("|")
+    if "*" not in bootloaders:
+      script.AssertSomeBootloader(*bootloaders)
+
+  ota_baseband_versions = OPTIONS.info_dict.get("ota_baseband_versions")
+  if ota_baseband_versions:
+    basebands = ota_baseband_versions.split("|")
+    if "*" not in basebands:
+      script.AssertSomeBaseband(*basebands)
+
 
 def HasRecoveryPatch(target_files_zip):
   namelist = [name for name in target_files_zip.namelist()]

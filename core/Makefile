@@ -2147,6 +2147,12 @@ endif
 	$(hide) echo "ota_block_based=$(OTA_SCRIPT_BLOCK_BASED)" >> $(zip_root)/META/misc_info.txt
 	$(hide) echo "ota_override_device=$(OTA_SCRIPT_OVERRIDE_DEVICE)" >> $(zip_root)/META/misc_info.txt
 	$(hide) echo "ota_override_prop=$(OTA_SCRIPT_OVERRIDE_PROP)" >> $(zip_root)/META/misc_info.txt
+ifdef TARGET_OTA_BOOTLOADER_VERSIONS
+	$(hide) echo "ota_bootloader_versions=$(TARGET_OTA_BOOTLOADER_VERSIONS)" >> $(zip_root)/META/misc_info.txt
+endif
+ifdef TARGET_OTA_BASEBAND_VERSIONS
+	$(hide) echo "ota_baseband_versions=$(TARGET_OTA_BASEBAND_VERSIONS)" >> $(zip_root)/META/misc_info.txt
+endif
 ifdef BOARD_PREBUILT_VENDORIMAGE
 	$(hide) mkdir -p $(zip_root)/IMAGES
 	$(hide) cp $(INSTALLED_VENDORIMAGE_TARGET) $(zip_root)/IMAGES/
