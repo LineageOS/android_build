@@ -1081,6 +1081,7 @@ class PasswordManager(object):
   def __init__(self):
     self.editor = os.getenv("EDITOR", None)
     self.pwfile = os.getenv("ANDROID_PW_FILE", None)
+    self.secure_storage_cmd = os.getenv("ANDROID_SECURE_STORAGE_CMD", None)
 
   def GetPasswords(self, items):
     """Get passwords corresponding to each string in 'items',
@@ -1100,9 +1101,23 @@ class PasswordManager(object):
       missing = []
       for i in items:
         if i not in current or not current[i]:
-          missing.append(i)
+          #Attempt to load using ANDROID_SECURE_STORAGE_CMD
+          if self.secure_storage_cmd:
+            try:
+              os.environ["TMP__KEY_FILE_NAME"] = str(i)
+              ps = subprocess.Popen(self.secure_storage_cmd, shell=True, stdout=subprocess.PIPE)
+              output = ps.communicate()[0]
+              if ps.returncode == 0:
+                current[i] = output
+            except Exception as e:
+              print(e)
+              pass
+          if i not in current or not current[i]:
+            missing.append(i)
       # Are all the passwords already in the file?
       if not missing:
+        if "ANDROID_SECURE_STORAGE_CMD" in os.environ:
+          del os.environ["ANDROID_SECURE_STORAGE_CMD"]
         return current
 
       for i in missing:
