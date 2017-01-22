@@ -418,6 +418,13 @@ fi
   common.ZipWriteStr(output_zip, "recovery/etc/install-cm-recovery.sh", sh)
   return Item.Get("system/etc/install-cm-recovery.sh", dir=False)
 
+def CopyExtra(output_zip):
+  install_path = os.path.join(OPTIONS.input_tmp, "EXTRA")
+  for root, subdirs, files in os.walk(install_path):
+     for f in files:
+      install_source = os.path.join(root, f)
+      install_target = os.path.join("extra", os.path.relpath(root, install_path), f)
+      output_zip.write(install_source, install_target)
 
 def WriteFullOTAPackage(input_zip, output_zip):
   # TODO: how to determine this?  We don't know what version it will
@@ -499,6 +506,8 @@ else if get_stage("%(bcb_dev)s", "stage") == "3/3" then
   if OPTIONS.backuptool:
     script.Mount("/system")
     script.RunBackup("backup")
+    if OPTIONS.info_dict.get("addonsu_updater") == "true":
+      CopyExtra(output_zip)
     script.Unmount("/system")
 
   script.ShowProgress(0.5, 0)
@@ -539,6 +548,8 @@ else if get_stage("%(bcb_dev)s", "stage") == "3/3" then
   if OPTIONS.backuptool:
     script.ShowProgress(0.2, 10)
     script.RunBackup("restore")
+    if OPTIONS.info_dict.get("addonsu_updater") == "true":
+      script.AppendSuUpdater() # This must be done after backup restore
 
   script.ShowProgress(0.2, 10)
   script.WriteRawImage("/boot", "boot.img")
