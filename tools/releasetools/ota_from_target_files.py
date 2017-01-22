@@ -558,6 +558,15 @@ def CopyInstallTools(output_zip):
       output_zip.write(install_source, install_target)
 
 
+def CopyExtra(output_zip):
+  install_path = os.path.join(OPTIONS.input_tmp, "EXTRA")
+  for root, subdirs, files in os.walk(install_path):
+     for f in files:
+      install_source = os.path.join(root, f)
+      install_target = os.path.join("extra", os.path.relpath(root, install_path), f)
+      output_zip.write(install_source, install_target)
+
+
 def WriteFullOTAPackage(input_zip, output_zip):
   # TODO: how to determine this?  We don't know what version it will
   # be installed on top of. For now, we expect the API just won't
@@ -663,9 +672,12 @@ else if get_stage("%(bcb_dev)s") == "3/3" then
   script.SetPermissionsRecursive("/tmp/install", 0, 0, 0o755, 0o644, None, None)
   script.SetPermissionsRecursive("/tmp/install/bin", 0, 0, 0o755, 0o755, None, None)
 
+  addonsu_updater = OPTIONS.info_dict.get("addonsu_updater") == "true"
   if OPTIONS.backuptool:
     script.Mount("/system")
     script.RunBackup("backup")
+    if addonsu_updater:
+      CopyExtra(output_zip)
     script.Unmount("/system")
 
   system_progress = 0.75
@@ -752,11 +764,19 @@ else if get_stage("%(bcb_dev)s") == "3/3" then
 
   device_specific.FullOTA_PostValidate()
 
+  addonsu_updater = OPTIONS.info_dict.get("addonsu_updater") == "true"
   if OPTIONS.backuptool:
     script.ShowProgress(0.02, 10)
     if block_based:
       script.Mount("/system")
     script.RunBackup("restore")
+    if addonsu_updater:
+      script.AppendExtra('if file_exists("/system/etc/addonsu") then')
+      script.AppendExtra('package_extract_file("extra/su", "/system/xbin/su");')
+      script.SetPermissions("/system/xbin/su", 0, 2000, 0o755,
+                            "u:object_r:su_exec:s0", None)
+      script.MakeSymlinks([("/system/xbin/su", "/system/bin/su")])
+      script.AppendExtra('endif;')
     if block_based:
       script.Unmount("/system")
 
