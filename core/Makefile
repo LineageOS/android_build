@@ -1557,7 +1557,8 @@ DISTTOOLS += \
   $(HOST_LIBRARY_PATH)/libext2_e2p_host$(HOST_SHLIB_SUFFIX) \
   $(HOST_LIBRARY_PATH)/libext2_profile_host$(HOST_SHLIB_SUFFIX) \
   $(HOST_LIBRARY_PATH)/libext2_quota_host$(HOST_SHLIB_SUFFIX) \
-  $(HOST_LIBRARY_PATH)/libext2_uuid_host$(HOST_SHLIB_SUFFIX)
+  $(HOST_LIBRARY_PATH)/libext2_uuid_host$(HOST_SHLIB_SUFFIX) \
+  $(HOST_LIBRARY_PATH)/libf2fs_fmt_host_dyn$(HOST_SHLIB_SUFFIX)
 
 OTATOOLS := $(DISTTOOLS) \
   $(HOST_OUT_EXECUTABLES)/aapt
