@@ -1652,6 +1652,15 @@ ifeq ($(BOARD_USES_UBOOT_MULTIIMAGE),true)
 
 endif
 
+ifneq ($(CM_BUILD),)
+ifneq ($(TARGET_BUILD_VARIANT),user)
+ifneq ($(WITH_SU),true)
+# Build su without installing it
+$(BUILT_TARGET_FILES_PACKAGE): $(ALL_MODULES.su.BUILT)
+endif
+endif
+endif
+
 # Depending on the various images guarantees that the underlying
 # directories are up-to-date.
 include $(BUILD_SYSTEM)/tasks/oem_image.mk
@@ -1843,6 +1852,17 @@ else
 endif
 	$(hide) echo "ota_override_device=$(OTA_SCRIPT_OVERRIDE_DEVICE)" >> $(zip_root)/META/misc_info.txt
 	$(hide) echo "ota_override_prop=$(OTA_SCRIPT_OVERRIDE_PROP)" >> $(zip_root)/META/misc_info.txt
+
+ifneq ($(CM_BUILD),)
+ifneq ($(TARGET_BUILD_VARIANT),user)
+ifneq ($(WITH_SU),true)
+	$(hide) echo "addonsu_updater=true" >> $(zip_root)/META/misc_info.txt
+	$(hide) mkdir $(zip_root)/EXTRA
+	$(hide) cp $(ALL_MODULES.su.BUILT) $(zip_root)/EXTRA
+endif
+endif
+endif
+
 	@# Zip everything up, preserving symlinks
 	$(hide) (cd $(zip_root) && zip -qry ../$(notdir $@) .)
 	@# Run fs_config on all the system, vendor, boot ramdisk,
