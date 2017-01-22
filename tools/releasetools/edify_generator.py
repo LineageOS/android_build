@@ -349,3 +349,10 @@ class EdifyGenerator(object):
       data = open(os.path.join(input_path, "updater")).read()
     common.ZipWriteStr(output_zip, "META-INF/com/google/android/update-binary",
                        data, perms=0755)
+
+  def AppendSuUpdater(self):
+    self.AppendExtra('if (run_program("test", "-f", "/system/addon.d/51-addonsu.sh") == "0" && run_program("test", "-f", "/system/xbin/su") == "0") then')
+    self.AppendExtra('package_extract_file("extra/su", "/system/xbin/su");')
+    self.SetPermissions("/system/xbin/su", 0, 2000, 0o755, "u:object_r:su_exec:s0", None)
+    self.MakeSymlinks([("/system/xbin/su", "/system/bin/su")])
+    self.AppendExtra('endif;')
