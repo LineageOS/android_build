@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a437d4f_5d35d644",
+        "filename": "tools/releasetools/edify_generator.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 449,
+      "author": {
+        "id": 13897
+      },
+      "writtenOn": "2017-01-23T22:53:50Z",
+      "side": 1,
+      "message": "I\u0027d prefer not to hard-code these, but I don\u0027t know what I could do instead. I wouldn\u0027t rely on restorecon, which uses the recovery\u0027s /file_contexts(.bin), and I don\u0027t think there\u0027s something ready that allows to parse a custom file_contexts.bin. But I doubt this will change anytime soon.",
+      "range": {
+        "startLine": 449,
+        "startChar": 60,
+        "endLine": 449,
+        "endChar": 81
+      },
+      "revId": "f505a80ee2eb0a7ecf978a8ff79db50ce1da3251",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    }
+  ]
+}
