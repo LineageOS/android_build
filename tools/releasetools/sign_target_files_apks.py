@@ -218,7 +218,7 @@ def ProcessTargetFiles(input_tf_zip, output_tf_zip, misc_info,
       continue
 
     if info.filename.startswith("BOOTABLE_IMAGES/"):
-      continue
+      pass
 
     data = input_tf_zip.read(info.filename)
     out_info = copy.copy(info)
