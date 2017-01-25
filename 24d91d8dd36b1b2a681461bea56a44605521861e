@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a437d4f_353a26ce",
+        "filename": "tools/releasetools/ota_from_target_files.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 1660,
+      "author": {
+        "id": 16756
+      },
+      "writtenOn": "2017-01-25T13:36:46Z",
+      "side": 1,
+      "message": "info_dict isn\u0027t loaded yet",
+      "revId": "24d91d8dd36b1b2a681461bea56a44605521861e",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a437d4f_153722e5",
+        "filename": "tools/releasetools/ota_from_target_files.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 1669,
+      "author": {
+        "id": 16756
+      },
+      "writtenOn": "2017-01-25T13:36:46Z",
+      "side": 1,
+      "message": "therefore you need to move these instructions to here",
+      "revId": "24d91d8dd36b1b2a681461bea56a44605521861e",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    }
+  ]
+}
