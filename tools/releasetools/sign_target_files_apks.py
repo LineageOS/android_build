@@ -78,6 +78,10 @@ Usage:  sign_target_files_apks [flags] input_target_files output_target_files
   --replace_verity_keyid <path_to_X509_PEM_cert_file>
       Replace the veritykeyid in BOOT/cmdline of input_target_file_zip
       with keyid of the cert pointed by <path_to_X509_PEM_cert_file>.
+
+  --prebuilt_boot_images <boolean>
+      Copy boot.img and recovery.img that are inside input_target_file_zip
+      instead of regenerating them.
 """
 
 from __future__ import print_function
@@ -115,6 +119,7 @@ OPTIONS.replace_verity_public_key = False
 OPTIONS.replace_verity_private_key = False
 OPTIONS.replace_verity_keyid = False
 OPTIONS.tag_changes = ("-test-keys", "-dev-keys", "+release-keys")
+OPTIONS.prebuilt_boot_images = False
 
 def GetApkCerts(tf_zip):
   certmap = common.ReadApkCerts(tf_zip)
@@ -215,7 +220,10 @@ def ProcessTargetFiles(input_tf_zip, output_tf_zip, misc_info,
 
   for info in input_tf_zip.infolist():
     if info.filename.startswith("IMAGES/"):
-      continue
+      if not OPTIONS.prebuilt_boot_images:
+        continue
+      if (info.filename not in ("IMAGES/boot.img", "IMAGES/recovery.img")):
+        continue
 
     if info.filename.startswith("BOOTABLE_IMAGES/"):
       continue
@@ -264,7 +272,7 @@ def ProcessTargetFiles(input_tf_zip, output_tf_zip, misc_info,
     elif info.filename in ("SYSTEM/recovery-from-boot.p",
                            "SYSTEM/etc/recovery.img",
                            "SYSTEM/bin/install-recovery.sh"):
-      rebuild_recovery = True
+      rebuild_recovery = OPTIONS.prebuilt_boot_images
 
     # Don't copy OTA keys if we're replacing them.
     elif (OPTIONS.replace_ota_keys and
@@ -688,6 +696,8 @@ def main(argv):
       OPTIONS.replace_verity_private_key = (True, a)
     elif o == "--replace_verity_keyid":
       OPTIONS.replace_verity_keyid = (True, a)
+    elif o == "--prebuilt_boot_images":
+      OPTIONS.prebuilt_boot_images = bool(a.lower() == 'true')
     else:
       return False
     return True
@@ -701,7 +711,9 @@ def main(argv):
                                               "tag_changes=",
                                               "replace_verity_public_key=",
                                               "replace_verity_private_key=",
-                                              "replace_verity_keyid="],
+                                              "replace_verity_keyid=",
+                                              "prebuilt_boot_images=",
+                                             ],
                              extra_option_handler=option_handler)
 
   if len(args) != 2:
@@ -734,7 +746,8 @@ def main(argv):
   common.ZipClose(input_zip)
   common.ZipClose(output_zip)
 
-  add_img_to_target_files.AddImagesToTargetFiles(args[1])
+  add_img_to_target_files.AddImagesToTargetFiles(args[1],
+                                                 OPTIONS.prebuilt_boot_images)
 
   print("done.")
 
