@@ -360,10 +360,10 @@ def AddCache(output_zip, prefix="IMAGES/"):
   os.rmdir(temp_dir)
 
 
-def AddImagesToTargetFiles(filename):
+def AddImagesToTargetFiles(filename, prebuilt_boot_images=False):
   OPTIONS.input_tmp, input_zip = common.UnzipTemp(filename)
 
-  if not OPTIONS.add_missing:
+  if not (OPTIONS.add_missing or prebuilt_boot_images):
     for n in input_zip.namelist():
       if n.startswith("IMAGES/"):
         print("target_files appears to already contain images.")
