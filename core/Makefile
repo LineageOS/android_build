@@ -849,6 +849,8 @@ endif
 
 SELINUX_FC := $(TARGET_ROOT_OUT)/file_contexts.bin
 INTERNAL_USERIMAGES_DEPS += $(SELINUX_FC)
+SELINUX_FC_TEXT := $(OUT)/file_contexts
+INTERNAL_USERIMAGES_DEPS += $(SELINUX_FC_TEXT)
 
 INTERNAL_USERIMAGES_DEPS += $(BLK_ALLOC_TO_BASE_FS)
 
@@ -885,6 +887,7 @@ $(if $(INTERNAL_USERIMAGES_SPARSE_EXT_FLAG),$(hide) echo "extfs_sparse_flag=$(IN
 $(if $(mkyaffs2_extra_flags),$(hide) echo "mkyaffs2_extra_flags=$(mkyaffs2_extra_flags)" >> $(1))
 $(if $(INTERNAL_USERIMAGES_SPARSE_SQUASHFS_FLAG),$(hide) echo "squashfs_sparse_flag=$(INTERNAL_USERIMAGES_SPARSE_SQUASHFS_FLAG)" >> $(1))
 $(hide) echo "selinux_fc=$(SELINUX_FC)" >> $(1)
+$(hide) echo "selinux_fc_text=$(SELINUX_FC_TEXT)" >> $(1)
 $(if $(PRODUCTS.$(INTERNAL_PRODUCT).PRODUCT_SUPPORTS_BOOT_SIGNER),$(hide) echo "boot_signer=$(PRODUCTS.$(INTERNAL_PRODUCT).PRODUCT_SUPPORTS_BOOT_SIGNER)" >> $(1))
 $(if $(PRODUCTS.$(INTERNAL_PRODUCT).PRODUCT_SUPPORTS_VERITY),$(hide) echo "verity=$(PRODUCTS.$(INTERNAL_PRODUCT).PRODUCT_SUPPORTS_VERITY)" >> $(1))
 $(if $(PRODUCTS.$(INTERNAL_PRODUCT).PRODUCT_SUPPORTS_VERITY),$(hide) echo "verity_key=$(PRODUCTS.$(INTERNAL_PRODUCT).PRODUCT_VERITY_SIGNING_KEY)" >> $(1))
@@ -1907,6 +1910,7 @@ $(BUILT_TARGET_FILES_PACKAGE): \
 		$(INSTALLED_SYSTEMOTHERIMAGE_TARGET) \
 		$(INSTALLED_ANDROID_INFO_TXT_TARGET) \
 		$(SELINUX_FC) \
+		$(SELINUX_FC_TEXT) \
 		$(APKCERTS_FILE) \
 		$(HOST_OUT_EXECUTABLES)/fs_config \
 		| $(ACP)
@@ -2044,6 +2048,7 @@ endif
 	$(hide) if test -e $(tool_extensions)/releasetools.py; then $(ACP) $(tool_extensions)/releasetools.py $(zip_root)/META/; fi
 	$(hide) echo "$(PRODUCT_OTA_PUBLIC_KEYS)" > $(zip_root)/META/otakeys.txt
 	$(hide) $(ACP) $(SELINUX_FC) $(zip_root)/META/file_contexts.bin
+	$(hide) $(ACP) $(SELINUX_FC_TEXT) $(zip_root)/META/file_contexts
 	$(hide) echo "recovery_api_version=$(PRIVATE_RECOVERY_API_VERSION)" > $(zip_root)/META/misc_info.txt
 	$(hide) echo "fstab_version=$(PRIVATE_RECOVERY_FSTAB_VERSION)" >> $(zip_root)/META/misc_info.txt
 ifdef BOARD_FLASH_BLOCK_SIZE

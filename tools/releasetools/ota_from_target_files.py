@@ -688,6 +688,9 @@ else if get_stage("%(bcb_dev)s") == "3/3" then
   # by the recovery program.
   if "selinux_fc" in OPTIONS.info_dict:
     WritePolicyConfig(OPTIONS.info_dict["selinux_fc"], output_zip)
+  # And a textual version for backward compatibility
+  if "selinux_fc_text" in OPTIONS.info_dict:
+    WritePolicyConfig(OPTIONS.info_dict["selinux_fc_text"], output_zip)
 
   recovery_mount_options = OPTIONS.info_dict.get("recovery_mount_options")
 
