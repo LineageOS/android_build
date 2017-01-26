@@ -1653,6 +1653,12 @@ def main(argv):
     common.Usage(__doc__)
     sys.exit(1)
 
+  if OPTIONS.info_dict is not None:
+    if "ota_override_device" in OPTIONS.info_dict:
+      OPTIONS.override_device = OPTIONS.info_dict.get("ota_override_device")
+    if "ota_override_prop" in OPTIONS.info_dict:
+      OPTIONS.override_prop = OPTIONS.info_dict.get("ota_override_prop") == "true"
+
   if OPTIONS.extra_script is not None:
     OPTIONS.extra_script = open(OPTIONS.extra_script).read()
 
@@ -1661,11 +1667,6 @@ def main(argv):
 
   OPTIONS.target_tmp = OPTIONS.input_tmp
   OPTIONS.info_dict = common.LoadInfoDict(input_zip)
-
-  if "ota_override_device" in OPTIONS.info_dict:
-    OPTIONS.override_device = OPTIONS.info_dict.get("ota_override_device")
-  if "ota_override_prop" in OPTIONS.info_dict:
-    OPTIONS.override_prop = OPTIONS.info_dict.get("ota_override_prop") == "true"
 
   # If this image was originally labelled with SELinux contexts, make sure we
   # also apply the labels in our new image. During building, the "file_contexts"
