@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a437d4f_eb6395af",
+        "filename": "tools/releasetools/edify_generator.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 416,
+      "author": {
+        "id": 6753
+      },
+      "writtenOn": "2017-01-29T03:20:06Z",
+      "side": 1,
+      "message": "this branch doesn\u0027t support the \"file_exist\" commands so this fails in recovery",
+      "revId": "2409dc65cd498db96863aa89c6cf2ab76ed7f5b2",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    }
+  ]
+}
