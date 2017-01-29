@@ -16,6 +16,24 @@
       "revId": "2409dc65cd498db96863aa89c6cf2ab76ed7f5b2",
       "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a437d4f_eb303558",
+        "filename": "tools/releasetools/edify_generator.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 416,
+      "author": {
+        "id": 13897
+      },
+      "writtenOn": "2017-01-29T08:13:22Z",
+      "side": 1,
+      "message": "I\u0027m sorry, it\u0027s the same for me. I read the edify README where it mentions the function, but it doesn\u0027t exist. I don\u0027t remember if I ever got the chance to actually try this patch, I kept it aside while trying to get other things work. I should\u0027ve probably added -1 to it to make it clear.\n\nAnyway, one thing we can do here is here is (I\u0027m typing it as I reply, so totally untested):\n\n  self.AppendExtra(\u0027if run_program(\"test\", \"-f\", \"/system/addon.d/51-addonsu.sh\") \u003d\u003d 0 \u0026\u0026 run_program(\"test\", \"-f\", \"/system/xbin/su\") then\u0027)",
+      "parentUuid": "9a437d4f_eb6395af",
+      "revId": "2409dc65cd498db96863aa89c6cf2ab76ed7f5b2",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
     }
   ]
 }
