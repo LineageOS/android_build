@@ -1709,7 +1709,7 @@ endef
 ###########################################################
 
 define transform-o-to-executable-inner
-$(hide) $(PRIVATE_CXX) -pie \
+$(hide) $(PRIVATE_CXX) \
 	-nostdlib -Bdynamic \
 	-Wl,-dynamic-linker,$(PRIVATE_LINKER) \
 	-Wl,--gc-sections \
