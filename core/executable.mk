@@ -31,6 +31,18 @@ else #!LOCAL_MULTILIB == both
 LOCAL_NO_2ND_ARCH_MODULE_SUFFIX := true
 endif
 
+ifeq ($(TARGET_NEEDS_NONPIE_CAMERASERVER), true)
+ifeq ($(LOCAL_MODULE), cameraserver)
+NO_FPIE := true
+else
+NO_FPIE :=
+endif
+endif
+
+ifeq ($(NO_FPIE),)
+LOCAL_LDFLAGS += -pie
+endif
+
 # if TARGET_PREFER_32_BIT_EXECUTABLES is set, try to build 32-bit first
 ifdef TARGET_2ND_ARCH
 ifeq ($(TARGET_PREFER_32_BIT_EXECUTABLES),true)
