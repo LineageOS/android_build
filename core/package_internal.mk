@@ -651,7 +651,7 @@ $(built_apk_splits) : $(built_module_path)/%.apk : $(LOCAL_BUILT_MODULE)
 
 # Rules to install the splits
 $(installed_apk_splits) : $(my_module_path)/$(LOCAL_MODULE)_%.apk : $(built_module_path)/package_%.apk | $(ACP)
-	@echo "Install: $@"
+	@echo "Install: $@" >&2
 	$(copy-file-to-new-target)
 
 # Register the additional built and installed files.

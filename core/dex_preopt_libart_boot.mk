@@ -40,13 +40,13 @@ endif
 # The rule to install boot.art
 # Depends on installed boot.oat, boot-*.art, boot-*.oat
 $($(my_2nd_arch_prefix)DEFAULT_DEX_PREOPT_INSTALLED_IMAGE) : $($(my_2nd_arch_prefix)DEFAULT_DEX_PREOPT_BUILT_IMAGE_FILENAME) | $(ACP) $($(my_2nd_arch_prefix)LIBART_TARGET_BOOT_ART_EXTRA_INSTALLED_FILES)
-	@echo "Install: $@"
+	@echo "Install: $@" >&2
 	$(copy-file-to-target)
 
 # The rule to install boot.oat, boot-*.art, boot-*.oat
 # Depends on built-but-not-installed boot.art
 $($(my_2nd_arch_prefix)LIBART_TARGET_BOOT_ART_EXTRA_INSTALLED_FILES) : $($(my_2nd_arch_prefix)DEFAULT_DEX_PREOPT_BUILT_IMAGE_FILENAME)  | $(ACP)
-	@echo "Install: $@"
+	@echo "Install: $@" >&2
 	@mkdir -p $(dir $@)
 	$(hide) $(ACP) -fp $(dir $<)$(notdir $@) $@
 
