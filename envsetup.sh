@@ -123,6 +123,23 @@ function get_build_var()
       command make --no-print-directory -f build/core/config.mk dumpvar-$1)
 }
 
+function dont_make_me_type_it_again()
+{
+    INCONCEIVABLE_SPELLINGS="leneage lieage lienage linage lineae"
+
+    for is in $INCONCEIVABLE_SPELLINGS; do
+        if echo "$1" | grep -q -e "^$is"; then
+            if [ "$2" = true ]; then
+                echo -e "***\nIt looks like you're having trouble typing today." >&2
+                echo -e "Here, let me help you with that: $is --> lineage\n***" >&2
+            fi
+            echo "$1" | sed -e "s|^$is|lineage|"
+            return
+        fi
+    done
+    echo "$1"
+}
+
 # check to see if the supplied product is one we can build
 function check_product()
 {
@@ -131,6 +148,8 @@ function check_product()
         echo "Couldn't locate the top of the tree.  Try setting TOP." >&2
         return
     fi
+
+    set -- "$(dont_make_me_type_it_again "$1" true)"
 
     if (echo -n $1 | grep -q -e "^lineage_") ; then
         CM_BUILD=$(echo -n $1 | sed -e 's/^lineage_//g')
@@ -620,6 +639,7 @@ function lunch()
 
     local product=$(echo -n $selection | sed -e "s/-.*$//")
     check_product $product
+    product="$(dont_make_me_type_it_again "$product" false)"
     if [ $? -ne 0 ]
     then
         # if we can't find a product, try to grab it off the CM github
