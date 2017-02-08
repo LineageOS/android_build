@@ -32,6 +32,15 @@ print_build_config_vars += \
   TARGET_USE_SDCLANG
 endif
 
+ifeq ($(WITH_SU),true)
+print_build_config_vars += \
+  WITH_SU
+endif
+ifeq ($(WITH_GMS),true)
+print_build_config_vars += \
+  WITH_GMS
+endif
+
 ifeq ($(TARGET_BUILD_PDK),true)
 print_build_config_vars += \
   TARGET_BUILD_PDK \
