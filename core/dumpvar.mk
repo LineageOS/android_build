@@ -32,6 +32,10 @@ print_build_config_vars += \
   TARGET_USE_SDCLANG
 endif
 
+ifneq ($(RECOVERY_VARIANT),)
+print_build_config_vars += \
+  RECOVERY_VARIANT
+endif
 ifeq ($(WITH_SU),true)
 print_build_config_vars += \
   WITH_SU
