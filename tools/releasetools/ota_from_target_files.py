@@ -1701,8 +1701,10 @@ else if get_stage("%(bcb_dev)s") != "3/3" then
 """ % bcb_dev)
 
   # Dump fingerprints
-  script.Print("Source: %s" % (source_fp,))
-  script.Print("Target: %s" % (target_fp,))
+  script.Print("Source: %s" % CalculateFingerprint(
+      oem_props, oem_dict, OPTIONS.source_info_dict))
+  script.Print("Target: %s" % CalculateFingerprint(
+      oem_props, oem_dict, OPTIONS.target_info_dict))
 
   script.Print("Verifying current system...")
 
