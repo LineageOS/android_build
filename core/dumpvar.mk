@@ -25,6 +25,11 @@ print_build_config_vars := \
   BUILD_ID \
   OUT_DIR
 
+ifeq ($(WITH_SU),true)
+print_build_config_vars += \
+  WITH_SU
+endif
+
 ifeq ($(TARGET_BUILD_PDK),true)
 print_build_config_vars += \
   TARGET_BUILD_PDK \
