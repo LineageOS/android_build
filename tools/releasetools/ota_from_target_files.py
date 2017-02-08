@@ -1703,8 +1703,10 @@ else if get_stage("%(bcb_dev)s") != "3/3" then
 """ % bcb_dev)
 
   # Dump fingerprints
-  script.Print("Source: %s" % source_fp)
-  script.Print("Target: %s" % target_fp)
+  script.Print("Source: %s" % CalculateFingerprint(
+      oem_props, oem_dict, OPTIONS.source_info_dict))
+  script.Print("Target: %s" % CalculateFingerprint(
+      oem_props, oem_dict, OPTIONS.target_info_dict))
 
   script.Print("Verifying current system...")
 
@@ -1732,8 +1734,8 @@ else if get_stage("%(bcb_dev)s") != "3/3" then
     else:
       include_full_boot = False
 
-      print( "boot      target: %d  source: %d  diff: %d" %
-        target_boot.size, source_boot.size, len(d))
+      print( "boot      target: %d  source: %d  diff: %d" % (
+        target_boot.size, source_boot.size, len(d)))
 
       common.ZipWriteStr(output_zip, "patch/boot.img.p", d)
 
