@@ -116,7 +116,7 @@ Usage:  ota_from_target_files [flags] input_target_files output_ota_package
 
   --backup <boolean>
       Enable or disable the execution of backuptool.sh.
-      Disabled by default.
+      Enabled by default.
 
   --payload_signer <signer>
       Specify the signer when signing the payload and metadata for A/B OTAs.
@@ -178,7 +178,7 @@ OPTIONS.cache_size = None
 OPTIONS.stash_threshold = 0.8
 OPTIONS.gen_verify = False
 OPTIONS.log_diff = None
-OPTIONS.backuptool = False
+OPTIONS.backuptool = True
 OPTIONS.override_device = 'auto'
 OPTIONS.override_prop = False
 OPTIONS.payload_signer = None
