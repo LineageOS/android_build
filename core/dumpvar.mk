@@ -85,7 +85,7 @@ $(info   HOST_BUILD_TYPE=$(HOST_BUILD_TYPE))
 $(info   BUILD_ID=$(BUILD_ID))
 $(info   OUT_DIR=$(OUT_DIR))
 ifneq ($(RECOVERY_VARIANT),)
-$(info   RECOVERY_VARIANT=$(RECOVERY_VARIANT)
+$(info   RECOVERY_VARIANT=$(RECOVERY_VARIANT))
 endif
 ifeq ($(WITH_SU),true)
 $(info   WITH_SU=$(WITH_SU))
