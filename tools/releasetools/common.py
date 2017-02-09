@@ -1774,14 +1774,18 @@ def MakeRecoveryPatch(input_dir, output_sink, recovery_img, boot_img,
 
   full_recovery_image = info_dict.get("full_recovery_image", None) == "true"
   system_root_image = info_dict.get("system_root_image", None) == "true"
+  use_bsdiff = info_dict.get("no_gzip_recovery_ramdisk", None) == "true"
 
   if full_recovery_image:
     output_sink("etc/recovery.img", recovery_img.data)
 
   else:
-    diff_program = ["imgdiff"]
+    if use_bsdiff:
+      diff_program = ["bsdiff"]
+    else:
+      diff_program = ["imgdiff"]
     path = os.path.join(input_dir, "SYSTEM", "etc", "recovery-resource.dat")
-    if os.path.exists(path):
+    if os.path.exists(path) and not use_bsdiff:
       diff_program.append("-b")
       diff_program.append(path)
       bonus_args = "-b /system/etc/recovery-resource.dat"
