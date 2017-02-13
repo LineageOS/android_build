@@ -2148,9 +2148,6 @@ else
 endif
 	$(hide) echo "ota_override_device=$(OTA_SCRIPT_OVERRIDE_DEVICE)" >> $(zip_root)/META/misc_info.txt
 	$(hide) echo "ota_override_prop=$(OTA_SCRIPT_OVERRIDE_PROP)" >> $(zip_root)/META/misc_info.txt
-ifdef BOARD_DISABLE_BLOCK_BASED_OTA
-	$(hide) echo "disable_block_based_ota=$(BOARD_DISABLE_BLOCK_BASED_OTA)" >> $(zip_root)/META/misc_info.txt
-endif
 ifdef BOARD_PREBUILT_VENDORIMAGE
 	$(hide) mkdir -p $(zip_root)/IMAGES
 	$(hide) cp $(INSTALLED_VENDORIMAGE_TARGET) $(zip_root)/IMAGES/
@@ -2229,9 +2226,7 @@ ifneq ($(TARGET_UNIFIED_DEVICE),)
 endif
 
 ifneq ($(BLOCK_BASED_OTA),false)
-ifneq ($(BOARD_DISABLE_BLOCK_BASED_OTA),true)
     $(INTERNAL_OTA_PACKAGE_TARGET): block_based := --block
-endif
 endif
 
 $(INTERNAL_OTA_PACKAGE_TARGET): $(BUILT_TARGET_FILES_PACKAGE)
