@@ -2097,6 +2097,11 @@ def main(argv):
   if "ota_override_prop" in OPTIONS.info_dict:
     OPTIONS.override_prop = OPTIONS.info_dict.get("ota_override_prop") == "true"
 
+  disable_block_based_ota = OPTIONS.info_dict.get("disable_block_based_ota") == "true"
+  if OPTIONS.block_based and disable_block_based_ota:
+    print("Block based OTAs are disabled for this device")
+    OPTIONS.block_based = False
+
   ab_update = OPTIONS.info_dict.get("ab_update") == "true"
 
   if ab_update:
