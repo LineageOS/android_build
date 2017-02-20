@@ -1676,7 +1676,7 @@ class BlockDifference(object):
 
     call = ('block_image_update("{device}", '
             'package_extract_file("{partition}.transfer.list"), '
-            '"{partition}.new.dat", "{partition}.patch.dat") ||\n'
+            '"{partition}.new.dat", "{partition}.patch.dat") ||'
             '  abort("E{code}: Failed to update {partition} image.");'.format(
                 device=self.device, partition=self.partition, code=code))
     script.AppendExtra(script.WordWrap(call))
