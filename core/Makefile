@@ -1788,7 +1788,7 @@ $(BUILT_OTATOOLS_PACKAGE): zip_root := $(call intermediates-dir-for,PACKAGING,ot
 $(BUILT_OTATOOLS_PACKAGE): $(OTATOOLS) | $(ACP)
 	@echo "Package OTA tools: $@"
 	$(hide) rm -rf $@ $(zip_root)
-	$(hide) mkdir -p $(dir $@) $(zip_root)/bin $(zip_root)/framework $(zip_root)/releasetools $(zip_root)/system/extras/verity
+	$(hide) mkdir -p $(dir $@) $(zip_root)/bin $(zip_root)/framework $(zip_root)/releasetools $(zip_root)/system/extras/verity $(zip_root)/vendor/cm/build/tools
 	$(call copy-files-with-structure,$(OTATOOLS),$(HOST_OUT)/,$(zip_root))
 	$(hide) $(ACP) $(HOST_OUT_JAVA_LIBRARIES)/VeritySigner.jar $(zip_root)/framework/
 	$(hide) $(ACP) -p system/extras/verity/build_verity_metadata.py $(zip_root)/system/extras/verity/
@@ -1797,6 +1797,7 @@ $(BUILT_OTATOOLS_PACKAGE): $(OTATOOLS) | $(ACP)
 	$(hide) (cd $(zip_root) && zip -qryX $(abspath $@) *)
 	$(hide) zip -qryX $(abspath $@) build/target/product/security/
 	$(hide) find device vendor -name \*.pk8 -o -name verifiedboot\* -o -name \*.x509.pem -o -name oem\*.prop | xargs zip -qryX $(abspath $@)>/dev/null || true
+	$(hide) $(ACP) -p vendor/cm/build/tools/getb64key.py $(zip_root)/vendor/cm/build/tools
 
 .PHONY: otatools-package
 otatools-package: $(BUILT_OTATOOLS_PACKAGE)
