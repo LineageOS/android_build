@@ -661,6 +661,15 @@ else if get_stage("%(bcb_dev)s") == "3/3" then
   script.SetPermissionsRecursive("/tmp/install", 0, 0, 0755, 0644, None, None)
   script.SetPermissionsRecursive("/tmp/install/bin", 0, 0, 0755, 0755, None, None)
 
+  if not OPTIONS.wipe_user_data:
+    script.AppendExtra("if is_mounted(\"/data\") then")
+    script.ValidateSignatures("data")
+    script.AppendExtra("else")
+    script.Mount("/data")
+    script.ValidateSignatures("data")
+    script.Unmount("/data")
+    script.AppendExtra("endif;")
+
   if OPTIONS.backuptool:
     script.Mount("/system")
     script.RunBackup("backup")
@@ -672,15 +681,6 @@ else if get_stage("%(bcb_dev)s") == "3/3" then
     system_progress -= 0.1
   if HasVendorPartition(input_zip):
     system_progress -= 0.1
-
-  if not OPTIONS.wipe_user_data:
-    script.AppendExtra("if is_mounted(\"/data\") then")
-    script.ValidateSignatures("data")
-    script.AppendExtra("else")
-    script.Mount("/data")
-    script.ValidateSignatures("data")
-    script.Unmount("/data")
-    script.AppendExtra("endif;")
 
   # Place a copy of file_contexts.bin into the OTA package which will be used
   # by the recovery program.
