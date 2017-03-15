@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba57610f_02137e5d",
+        "filename": "tools/releasetools/ota_from_target_files.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 724,
+      "author": {
+        "id": 5008
+      },
+      "writtenOn": "2017-03-15T02:30:09Z",
+      "side": 1,
+      "message": "typo? AppendSuUpdater?",
+      "range": {
+        "startLine": 724,
+        "startChar": 13,
+        "endLine": 724,
+        "endChar": 27
+      },
+      "revId": "7de1d4dd30aceaea807afcc423018432b375afba",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    }
+  ]
+}
