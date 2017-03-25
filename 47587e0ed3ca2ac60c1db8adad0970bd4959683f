@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba57610f_87ce4482",
+        "filename": "core/version_defaults.mk",
+        "patchSetId": 2
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 9341
+      },
+      "writtenOn": "2017-03-25T18:19:33Z",
+      "side": 1,
+      "message": "Date typo. It\u0027s already 2017.",
+      "range": {
+        "startLine": 71,
+        "startChar": 29,
+        "endLine": 71,
+        "endChar": 33
+      },
+      "revId": "47587e0ed3ca2ac60c1db8adad0970bd4959683f",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    }
+  ]
+}
