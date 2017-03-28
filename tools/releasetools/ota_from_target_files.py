@@ -506,6 +506,8 @@ def CalculateFingerprint(oem_props, oem_dict, info_dict):
       GetOemProperty("ro.product.device", oem_props, oem_dict, info_dict),
       GetBuildProp("ro.build.thumbprint", info_dict))
 
+def GetIncrementalVersion(info_dict):
+  return GetBuildProp("ro.build.version.incremental", info_dict)
 
 def GetImage(which, tmpdir, info_dict):
   # Return an image object (suitable for passing to BlockImageDiff)
@@ -650,8 +652,7 @@ else if get_stage("%(bcb_dev)s") == "3/3" then
 """ % bcb_dev)
 
   # Dump fingerprints
-  script.Print("Target: %s" % CalculateFingerprint(
-      oem_props, oem_dict, OPTIONS.info_dict))
+  script.Print("Target: %s" % GetIncrementalVersion(OPTIONS.info_dict))
 
   script.AppendExtra("ifelse(is_mounted(\"/system\"), unmount(\"/system\"));")
   device_specific.FullOTA_InstallBegin()
@@ -910,16 +911,10 @@ def WriteBlockIncrementalOTAPackage(target_zip, source_zip, output_zip):
       metadata=metadata,
       info_dict=OPTIONS.source_info_dict)
 
-  source_fp = CalculateFingerprint(oem_props, oem_dict,
-                                   OPTIONS.source_info_dict)
-  target_fp = CalculateFingerprint(oem_props, oem_dict,
-                                   OPTIONS.target_info_dict)
-  metadata["pre-build"] = source_fp
-  metadata["post-build"] = target_fp
-  metadata["pre-build-incremental"] = GetBuildProp(
-      "ro.build.version.incremental", OPTIONS.source_info_dict)
-  metadata["post-build-incremental"] = GetBuildProp(
-      "ro.build.version.incremental", OPTIONS.target_info_dict)
+  metadata["pre-build"] = CalculateFingerprint(oem_props, oem_dict, OPTIONS.source_info_dict)
+  metadata["post-build"] = CalculateFingerprint(oem_props, oem_dict, OPTIONS.target_info_dict)
+  metadata["pre-build-incremental"] = GetIncrementalVersion(OPTIONS.source_info_dict)
+  metadata["post-build-incremental"] = GetIncrementalVersion(OPTIONS.target_info_dict)
 
   source_boot = common.GetBootableImage(
       "/tmp/boot.img", "boot.img", OPTIONS.source_tmp, "BOOT",
@@ -1022,24 +1017,17 @@ else if get_stage("%(bcb_dev)s") != "3/3" then
 """ % bcb_dev)
 
   # Dump fingerprints
-  script.Print("Source: %s" % CalculateFingerprint(
-      oem_props, oem_dict, OPTIONS.source_info_dict))
-  script.Print("Target: %s" % CalculateFingerprint(
-      oem_props, oem_dict, OPTIONS.target_info_dict))
+  script.Print("Source: %s" % GetIncrementalVersion(OPTIONS.source_info_dict))
+  script.Print("Target: %s" % GetIncrementalVersion(OPTIONS.target_info_dict))
 
   script.Print("Verifying current system...")
 
   device_specific.IncrementalOTA_VerifyBegin()
 
   if oem_props is None:
-    # When blockimgdiff version is less than 3 (non-resumable block-based OTA),
-    # patching on a device that's already on the target build will damage the
-    # system. Because operations like move don't check the block state, they
-    # always apply the changes unconditionally.
-    if blockimgdiff_version <= 2:
-      script.AssertSomeFingerprint(source_fp)
-    else:
-      script.AssertSomeFingerprint(source_fp, target_fp)
+      script.AssertSomeIncrementalVersion(
+          GetIncrementalVersion(OPTIONS.source_info_dict),
+		  GetIncrementalVersion(OPTIONS.target_info_dict))
   else:
     if blockimgdiff_version <= 2:
       script.AssertSomeThumbprint(
@@ -1276,8 +1264,7 @@ def WriteABOTAPackageWithBrilloScript(target_file, output_file,
   metadata = {
       "post-build": CalculateFingerprint(oem_props, oem_dict,
                                          OPTIONS.info_dict),
-      "post-build-incremental" : GetBuildProp("ro.build.version.incremental",
-                                              OPTIONS.info_dict),
+      "post-build-incremental" : GGetIncrementalVersion(OPTIONS.info_dict),
       "pre-device": GetOemProperty("ro.product.device", oem_props, oem_dict,
                                    OPTIONS.info_dict),
       "post-timestamp": GetBuildProp("ro.build.date.utc", OPTIONS.info_dict),
@@ -1288,8 +1275,7 @@ def WriteABOTAPackageWithBrilloScript(target_file, output_file,
   if source_file is not None:
     metadata["pre-build"] = CalculateFingerprint(oem_props, oem_dict,
                                                  OPTIONS.source_info_dict)
-    metadata["pre-build-incremental"] = GetBuildProp(
-        "ro.build.version.incremental", OPTIONS.source_info_dict)
+    metadata["pre-build-incremental"] = GetIncrementalVersion(OPTIONS.source_info_dict)
 
   # 1. Generate payload.
   payload_file = common.MakeTempFile(prefix="payload-", suffix=".bin")
@@ -1616,24 +1602,19 @@ def WriteIncrementalOTAPackage(target_zip, source_zip, output_zip):
     vendor_diff = None
 
   if not OPTIONS.override_prop:
-    target_fp = CalculateFingerprint(oem_props, oem_dict,
-                                     OPTIONS.target_info_dict)
-    source_fp = CalculateFingerprint(oem_props, oem_dict,
-                                     OPTIONS.source_info_dict)
-
     if oem_props is None:
-      script.AssertSomeFingerprint(source_fp, target_fp)
+      script.AssertSomeIncrementalVersion(
+          GetIncrementalVersion(OPTIONS.source_info_dict),
+          GetIncrementalVersion(OPTIONS.target_info_dict))
     else:
       script.AssertSomeThumbprint(
           GetBuildProp("ro.build.thumbprint", OPTIONS.target_info_dict),
           GetBuildProp("ro.build.thumbprint", OPTIONS.source_info_dict))
 
-    metadata["pre-build"] = source_fp
-    metadata["post-build"] = target_fp
-    metadata["pre-build-incremental"] = GetBuildProp(
-      "ro.build.version.incremental", OPTIONS.source_info_dict)
-    metadata["post-build-incremental"] = GetBuildProp(
-      "ro.build.version.incremental", OPTIONS.target_info_dict)
+    metadata["pre-build"] = CalculateFingerprint(oem_props, oem_dict, OPTIONS.source_info_dict)
+    metadata["post-build"] = CalculateFingerprint(oem_props, oem_dict, OPTIONS.target_info_dict)
+    metadata["pre-build-incremental"] = GetIncrementalVersion(OPTIONS.source_info_dict)
+    metadata["post-build-incremental"] = GetIncrementalVersion(OPTIONS.target_info_dict)
 
   source_boot = common.GetBootableImage(
       "/tmp/boot.img", "boot.img", OPTIONS.source_tmp, "BOOT",
@@ -1701,10 +1682,8 @@ else if get_stage("%(bcb_dev)s") != "3/3" then
 """ % bcb_dev)
 
   # Dump fingerprints
-  script.Print("Source: %s" % CalculateFingerprint(
-      oem_props, oem_dict, OPTIONS.source_info_dict))
-  script.Print("Target: %s" % CalculateFingerprint(
-      oem_props, oem_dict, OPTIONS.target_info_dict))
+  script.Print("Source: %s" % GetIncrementalVersion(OPTIONS.source_info_dict))
+  script.Print("Target: %s" % GetIncrementalVersion(OPTIONS.target_info_dict))
 
   script.Print("Verifying current system...")
 
