@@ -100,6 +100,7 @@ class ErrorCode(object):
   INSUFFICIENT_CACHE_SPACE = 3006
   TUNE_PARTITION_FAILURE = 3007
   APPLY_PATCH_FAILURE = 3008
+  INCREMENTAL_MISMATCH = 3009
 
 class ExternalError(RuntimeError):
   pass
