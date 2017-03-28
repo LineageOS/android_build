@@ -1030,24 +1030,24 @@ else if get_stage("%(bcb_dev)s") != "3/3" then
   script.Print("Verifying current system...")
 
   device_specific.IncrementalOTA_VerifyBegin()
-
-  if oem_props is None:
-    # When blockimgdiff version is less than 3 (non-resumable block-based OTA),
-    # patching on a device that's already on the target build will damage the
-    # system. Because operations like move don't check the block state, they
-    # always apply the changes unconditionally.
-    if blockimgdiff_version <= 2:
-      script.AssertSomeFingerprint(source_fp)
+  if not OPTIONS.override_prop:
+    if oem_props is None:
+      # When blockimgdiff version is less than 3 (non-resumable block-based OTA),
+      # patching on a device that's already on the target build will damage the
+      # system. Because operations like move don't check the block state, they
+      # always apply the changes unconditionally.
+      if blockimgdiff_version <= 2:
+        script.AssertSomeFingerprint(source_fp)
+      else:
+        script.AssertSomeFingerprint(source_fp, target_fp)
     else:
-      script.AssertSomeFingerprint(source_fp, target_fp)
-  else:
-    if blockimgdiff_version <= 2:
-      script.AssertSomeThumbprint(
-          GetBuildProp("ro.build.thumbprint", OPTIONS.source_info_dict))
-    else:
-      script.AssertSomeThumbprint(
-          GetBuildProp("ro.build.thumbprint", OPTIONS.target_info_dict),
-          GetBuildProp("ro.build.thumbprint", OPTIONS.source_info_dict))
+      if blockimgdiff_version <= 2:
+        script.AssertSomeThumbprint(
+            GetBuildProp("ro.build.thumbprint", OPTIONS.source_info_dict))
+      else:
+        script.AssertSomeThumbprint(
+            GetBuildProp("ro.build.thumbprint", OPTIONS.target_info_dict),
+            GetBuildProp("ro.build.thumbprint", OPTIONS.source_info_dict))
 
   # Check the required cache size (i.e. stashed blocks).
   size = []
