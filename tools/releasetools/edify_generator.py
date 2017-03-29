@@ -110,6 +110,17 @@ class EdifyGenerator(object):
                common.ErrorCode.FINGERPRINT_MISMATCH, " or ".join(fp))
     self.script.append(cmd)
 
+  def AssertSomeIncrementalVersion(self, partition, *fp):
+    """Assert that the current recovery build incremental version is one of *fp."""
+    if not fp:
+      raise ValueError("must specify some incremental versions")
+    cmd = (' ||\n    '.join([('file_getprop("'.partition.'/build.prop", "ro.build.version.incremental") == "%s"') % i
+                             for i in fp]) +
+           ' ||\n    abort("E%d: Package expects build incremental of %s; '
+           'this device has " + file_getprop("'.partition.'/build.prop", "ro.build.version.incremental") + ".");') % (
+               common.ErrorCode.INCREMENTAL_MISMATCH, " or ".join(fp))
+    self.script.append(cmd)
+
   def AssertSomeThumbprint(self, *fp):
     """Assert that the current recovery build thumbprint is one of *fp."""
     if not fp:
