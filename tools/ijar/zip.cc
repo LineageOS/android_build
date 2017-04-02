@@ -197,12 +197,22 @@ class InputZipFile : public ZipExtractor {
 //
 class OutputZipFile : public ZipBuilder {
  public:
+  #ifndef HOST_OS_IS_WSL
   OutputZipFile(int fd, u1 * const zipdata_out) :
       fd_out(fd),
       zipdata_out_(zipdata_out),
       q(zipdata_out) {
     errmsg[0] = 0;
   }
+  #else
+  OutputZipFile(int fd, u1 * const zipdata_out, size_t mmap_length) :
+      fd_out(fd),
+      mmap_length_(mmap_length),
+      zipdata_out_(zipdata_out),
+      q(zipdata_out) {
+    errmsg[0] = 0;
+  }
+  #endif
 
   virtual const char* GetError() {
     if (errmsg[0] == 0) {
@@ -252,7 +262,9 @@ class OutputZipFile : public ZipBuilder {
   };
 
   int fd_out;  // file descriptor for the output file
-
+  #ifdef HOST_OS_IS_WSL
+      size_t mmap_length_;
+  #endif
   // OutputZipFile is responsible for maintaining the following
   // pointers. They are allocated by the Create() method before
   // the object is actually created using mmap.
@@ -933,6 +945,9 @@ size_t OutputZipFile::WriteFileSizeInLocalFileHeader(u1 *header_ptr,
 int OutputZipFile::Finish() {
   if (fd_out > 0) {
     WriteCentralDirectory();
+    #ifdef HOST_OS_IS_WSL
+        munmap(zipdata_out_, mmap_length_);
+    #endif
     if (ftruncate(fd_out, GetSize()) < 0) {
       return error("ftruncate(fd_out, GetSize()): %s", strerror(errno));
     }
@@ -1000,8 +1015,11 @@ ZipBuilder* ZipBuilder::Create(const char* zip_file, u8 estimated_size) {
     fprintf(stderr, "output_length=%llu\n", estimated_size);
     return NULL;
   }
-
-  return new OutputZipFile(fd_out, (u1*) zipdata_out);
+  #ifndef HOST_OS_IS_WSL
+      return new OutputZipFile(fd_out, (u1*) zipdata_out);
+  #else
+      return new OutputZipFile(fd_out, (u1*) zipdata_out, mmap_length);
+  #endif
 }
 
 u8 ZipBuilder::EstimateSize(char **files) {
