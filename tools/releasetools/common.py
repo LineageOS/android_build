@@ -46,7 +46,7 @@ class Options(object):
     self.signapk_shared_library_path = "lib64"   # Relative to search_path
     self.extra_signapk_args = []
     self.java_path = "java"  # Use the one on the path by default.
-    self.java_args = "-Xmx2048m" # JVM Args
+    self.java_args = ["-Xmx2048m"]  # The default JVM args.
     self.public_key_suffix = ".x509.pem"
     self.private_key_suffix = ".pk8"
     # use otatools built boot_signer by default
@@ -405,13 +405,17 @@ def DumpInfoDict(d):
 
 
 def _BuildBootableImage(sourcedir, fs_config_file, info_dict=None,
-                        has_ramdisk=False):
+                        has_ramdisk=False, two_step_image=False):
   """Build a bootable image from the specified sourcedir.
 
   Take a kernel, cmdline, and optionally a ramdisk directory from the input (in
-  'sourcedir'), and turn them into a boot image.  Return the image data, or
-  None if sourcedir does not appear to contains files for building the
-  requested image."""
+  'sourcedir'), and turn them into a boot image. 'two_step_image' indicates if
+  we are building a two-step special image (i.e. building a recovery image to
+  be loaded into /boot in two-step OTAs).
+
+  Return the image data, or None if sourcedir does not appear to contains files
+  for building the requested image.
+  """
 
   def make_ramdisk():
     ramdisk_img = tempfile.NamedTemporaryFile()
@@ -573,7 +577,12 @@ def _BuildBootableImage(sourcedir, fs_config_file, info_dict=None,
 
   if (info_dict.get("boot_signer", None) == "true" and
       info_dict.get("verity_key", None)):
-    path = "/" + os.path.basename(sourcedir).lower()
+    # Hard-code the path as "/boot" for two-step special recovery image (which
+    # will be loaded into /boot during the two-step OTA).
+    if two_step_image:
+      path = "/boot"
+    else:
+      path = "/" + os.path.basename(sourcedir).lower()
     cmd = [OPTIONS.boot_signer_path]
     cmd.extend(OPTIONS.boot_signer_args)
     cmd.extend([path, img.name,
@@ -625,7 +634,7 @@ def _BuildBootableImage(sourcedir, fs_config_file, info_dict=None,
 
 
 def GetBootableImage(name, prebuilt_name, unpack_dir, tree_subdir,
-                     info_dict=None):
+                     info_dict=None, two_step_image=False):
   """Return a File object with the desired bootable image.
 
   Look for it in 'unpack_dir'/BOOTABLE_IMAGES under the name 'prebuilt_name',
@@ -657,7 +666,7 @@ def GetBootableImage(name, prebuilt_name, unpack_dir, tree_subdir,
   fs_config = "META/" + tree_subdir.lower() + "_filesystem_config.txt"
   data = _BuildBootableImage(os.path.join(unpack_dir, tree_subdir),
                              os.path.join(unpack_dir, fs_config),
-                             info_dict, has_ramdisk)
+                             info_dict, has_ramdisk, two_step_image)
   if data:
     return File(name, data)
   return None
@@ -806,11 +815,10 @@ def SignFile(input_name, output_name, key, password, min_api_level=None,
   java_library_path = os.path.join(
       OPTIONS.search_path, OPTIONS.signapk_shared_library_path)
 
-  cmd = [OPTIONS.java_path, OPTIONS.java_args,
-         "-Djava.library.path=" + java_library_path,
-         "-jar",
-         os.path.join(OPTIONS.search_path, OPTIONS.signapk_path)]
-  cmd.extend(OPTIONS.extra_signapk_args)
+  cmd = ([OPTIONS.java_path] + OPTIONS.java_args +
+         ["-Djava.library.path=" + java_library_path,
+          "-jar", os.path.join(OPTIONS.search_path, OPTIONS.signapk_path)] +
+         OPTIONS.extra_signapk_args)
   if whole_file:
     cmd.append("-w")
 
@@ -968,7 +976,7 @@ def ParseOptions(argv,
     elif o in ("--java_path",):
       OPTIONS.java_path = a
     elif o in ("--java_args",):
-      OPTIONS.java_args = a
+      OPTIONS.java_args = shlex.split(a)
     elif o in ("--public_key_suffix",):
       OPTIONS.public_key_suffix = a
     elif o in ("--private_key_suffix",):

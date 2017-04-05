@@ -68,7 +68,7 @@ def GetVerityTreeSize(partition_size):
   return True, int(output)
 
 def GetVerityMetadataSize(partition_size):
-  cmd = "system/extras/verity/build_verity_metadata.py -s %d"
+  cmd = "system/extras/verity/build_verity_metadata.py size %d"
   cmd %= partition_size
 
   status, output = commands.getstatusoutput(cmd)
@@ -109,7 +109,8 @@ def AdjustPartitionSizeForVerity(partition_size, fec_supported):
   Args:
     partition_size: the size of the partition to be verified.
   Returns:
-    The size of the partition adjusted for verity metadata.
+    A tuple of the size of the partition adjusted for verity metadata, and
+    the size of verity metadata.
   """
   key = "%d %d" % (partition_size, fec_supported)
   if key in AdjustPartitionSizeForVerity.results:
@@ -121,27 +122,31 @@ def AdjustPartitionSizeForVerity(partition_size, fec_supported):
 
   # verity tree and fec sizes depend on the partition size, which
   # means this estimate is always going to be unnecessarily small
-  lo = partition_size - GetVeritySize(hi, fec_supported)
+  verity_size = GetVeritySize(hi, fec_supported)
+  lo = partition_size - verity_size
   result = lo
 
   # do a binary search for the optimal size
   while lo < hi:
     i = ((lo + hi) // (2 * BLOCK_SIZE)) * BLOCK_SIZE
-    size = i + GetVeritySize(i, fec_supported)
-    if size <= partition_size:
+    v = GetVeritySize(i, fec_supported)
+    if i + v <= partition_size:
       if result < i:
         result = i
+        verity_size = v
       lo = i + BLOCK_SIZE
     else:
       hi = i
 
-  AdjustPartitionSizeForVerity.results[key] = result
-  return result
+  AdjustPartitionSizeForVerity.results[key] = (result, verity_size)
+  return (result, verity_size)
 
 AdjustPartitionSizeForVerity.results = {}
 
-def BuildVerityFEC(sparse_image_path, verity_path, verity_fec_path):
-  cmd = "fec -e %s %s %s" % (sparse_image_path, verity_path, verity_fec_path)
+def BuildVerityFEC(sparse_image_path, verity_path, verity_fec_path,
+                   padding_size):
+  cmd = "fec -e -p %d %s %s %s" % (padding_size, sparse_image_path,
+                                   verity_path, verity_fec_path)
   print cmd
   status, output = commands.getstatusoutput(cmd)
   if status:
@@ -163,7 +168,7 @@ def BuildVerityTree(sparse_image_path, verity_image_path, prop_dict):
   return True
 
 def BuildVerityMetadata(image_size, verity_metadata_path, root_hash, salt,
-                        block_device, signer_path, key):
+                        block_device, signer_path, key, signer_args):
   verity_key = os.getenv("PRODUCT_VERITY_KEY", None)
   verity_key_password = None
 
@@ -173,9 +178,12 @@ def BuildVerityMetadata(image_size, verity_metadata_path, root_hash, salt,
     verity_key_password = verity_key_passwords[verity_key]
 
   cmd_template = (
-      "system/extras/verity/build_verity_metadata.py %s %s %s %s %s %s %s")
+      "system/extras/verity/build_verity_metadata.py build " +
+      "%s %s %s %s %s %s %s")
   cmd = cmd_template % (image_size, verity_metadata_path, root_hash, salt,
                         block_device, signer_path, key)
+  if signer_args:
+    cmd += " --signer_args=\"%s\"" % (' '.join(signer_args),)
   print cmd
   runcmd = ["system/extras/verity/build_verity_metadata.py", image_size, verity_metadata_path, root_hash, salt, block_device, signer_path, key];
   if verity_key_password is not None:
@@ -221,7 +229,7 @@ def Append(target, file_to_append, error_message):
 
 def BuildVerifiedImage(data_image_path, verity_image_path,
                        verity_metadata_path, verity_fec_path,
-                       fec_supported):
+                       padding_size, fec_supported):
   if not Append(verity_image_path, verity_metadata_path,
                 "Could not append verity metadata!"):
     return False
@@ -229,7 +237,7 @@ def BuildVerifiedImage(data_image_path, verity_image_path,
   if fec_supported:
     # build FEC for the entire partition, including metadata
     if not BuildVerityFEC(data_image_path, verity_image_path,
-                          verity_fec_path):
+                          verity_fec_path, padding_size):
       return False
 
     if not Append(verity_image_path, verity_fec_path, "Could not append FEC!"):
@@ -267,14 +275,14 @@ def MakeVerityEnabledImage(out_file, fec_supported, prop_dict):
     True on success, False otherwise.
   """
   # get properties
-  image_size = prop_dict["partition_size"]
+  image_size = int(prop_dict["partition_size"])
   block_dev = prop_dict["verity_block_device"]
   signer_key = prop_dict["verity_key"] + ".pk8"
   if OPTIONS.verity_signer_path is not None:
-    signer_path = OPTIONS.verity_signer_path + ' '
-    signer_path += ' '.join(OPTIONS.verity_signer_args)
+    signer_path = OPTIONS.verity_signer_path
   else:
     signer_path = prop_dict["verity_signer_cmd"]
+  signer_args = OPTIONS.verity_signer_args
 
   # make a tempdir
   tempdir_name = tempfile.mkdtemp(suffix="_verity_images")
@@ -293,15 +301,22 @@ def MakeVerityEnabledImage(out_file, fec_supported, prop_dict):
   root_hash = prop_dict["verity_root_hash"]
   salt = prop_dict["verity_salt"]
   if not BuildVerityMetadata(image_size, verity_metadata_path, root_hash, salt,
-                             block_dev, signer_path, signer_key):
+                             block_dev, signer_path, signer_key, signer_args):
     shutil.rmtree(tempdir_name, ignore_errors=True)
     return False
 
   # build the full verified image
+  target_size = int(prop_dict["original_partition_size"])
+  verity_size = int(prop_dict["verity_size"])
+
+  padding_size = target_size - image_size - verity_size
+  assert padding_size >= 0
+
   if not BuildVerifiedImage(out_file,
                             verity_image_path,
                             verity_metadata_path,
                             verity_fec_path,
+                            padding_size,
                             fec_supported):
     shutil.rmtree(tempdir_name, ignore_errors=True)
     return False
@@ -373,13 +388,14 @@ def BuildImage(in_dir, prop_dict, out_file, target_out=None):
   # verified.
   if verity_supported and is_verity_partition:
     partition_size = int(prop_dict.get("partition_size"))
-    adjusted_size = AdjustPartitionSizeForVerity(partition_size,
-                                                 verity_fec_supported)
+    (adjusted_size, verity_size) = AdjustPartitionSizeForVerity(partition_size,
+                                                                verity_fec_supported)
     if not adjusted_size:
       print "Error: adjusting partition size for verity failed, partition_size = %d" % partition_size
       return False
     prop_dict["partition_size"] = str(adjusted_size)
     prop_dict["original_partition_size"] = str(partition_size)
+    prop_dict["verity_size"] = str(verity_size)
 
   if fs_type.startswith("ext"):
     build_command = ["mkuserimg.sh"]
@@ -410,6 +426,8 @@ def BuildImage(in_dir, prop_dict, out_file, target_out=None):
         return False
       build_command.extend(["-d", base_fs_file])
     build_command.extend(["-L", prop_dict["mount_point"]])
+    if "extfs_inode_count" in prop_dict:
+      build_command.extend(["-i", prop_dict["extfs_inode_count"]])
     if "selinux_fc" in prop_dict:
       build_command.append(prop_dict["selinux_fc"])
   elif fs_type.startswith("squash"):
@@ -586,6 +604,7 @@ def ImagePropFromGlobalDict(glob_dict, mount_point):
     copy_prop("system_squashfs_block_size", "squashfs_block_size")
     copy_prop("system_squashfs_disable_4k_align", "squashfs_disable_4k_align")
     copy_prop("system_base_fs_file", "base_fs_file")
+    copy_prop("system_extfs_inode_count", "extfs_inode_count")
   elif mount_point == "system_other":
     # We inherit the selinux policies of /system since we contain some of its files.
     d["mount_point"] = "system"
@@ -599,6 +618,7 @@ def ImagePropFromGlobalDict(glob_dict, mount_point):
     copy_prop("system_squashfs_compressor_opt", "squashfs_compressor_opt")
     copy_prop("system_squashfs_block_size", "squashfs_block_size")
     copy_prop("system_base_fs_file", "base_fs_file")
+    copy_prop("system_extfs_inode_count", "extfs_inode_count")
   elif mount_point == "data":
     # Copy the generic fs type first, override with specific one if available.
     copy_prop("fs_type", "fs_type")
@@ -623,11 +643,13 @@ def ImagePropFromGlobalDict(glob_dict, mount_point):
     copy_prop("vendor_squashfs_block_size", "squashfs_block_size")
     copy_prop("vendor_squashfs_disable_4k_align", "squashfs_disable_4k_align")
     copy_prop("vendor_base_fs_file", "base_fs_file")
+    copy_prop("vendor_extfs_inode_count", "extfs_inode_count")
   elif mount_point == "oem":
     copy_prop("fs_type", "fs_type")
     copy_prop("oem_size", "partition_size")
     copy_prop("oem_journal_size", "journal_size")
     copy_prop("has_ext4_reserved_blocks", "has_ext4_reserved_blocks")
+    copy_prop("oem_extfs_inode_count", "extfs_inode_count")
 
   return d
 
