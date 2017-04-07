@@ -546,6 +546,7 @@ def AddImagesToTargetFiles(filename):
     images_dir = None
 
   has_recovery = (OPTIONS.info_dict.get("no_recovery") != "true")
+  use_two_step_recovery = (OPTIONS.info_dict.get("no_two_step_recovery") != "true")
 
   if OPTIONS.info_dict.get("avb_enable") == "true":
     fp = None
@@ -598,16 +599,14 @@ def AddImagesToTargetFiles(filename):
         else:
           recovery_image.WriteToDir(OPTIONS.input_tmp)
 
-      banner("recovery (two-step image)")
-      # The special recovery.img for two-step package use.
-      recovery_two_step_image = common.GetBootableImage(
-          "IMAGES/recovery-two-step.img", "recovery-two-step.img",
-          OPTIONS.input_tmp, "RECOVERY", two_step_image=True)
-      if recovery_two_step_image:
-        if output_zip:
+      if use_two_step_recovery:
+        banner("recovery (two-step image)")
+        # The special recovery.img for two-step package use.
+        recovery_two_step_image = common.GetBootableImage(
+            "IMAGES/recovery-two-step.img", "recovery-two-step.img",
+            OPTIONS.input_tmp, "RECOVERY", two_step_image=True)
+        if recovery_two_step_image:
           recovery_two_step_image.AddToZip(output_zip)
-        else:
-          recovery_two_step_image.WriteToDir(OPTIONS.input_tmp)
 
   banner("system")
   system_img_path = AddSystem(
