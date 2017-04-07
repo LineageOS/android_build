@@ -2100,6 +2100,9 @@ endif
 ifeq ($(TARGET_NOT_USE_GZIP_RECOVERY_RAMDISK),true)
 	$(hide) echo "no_gzip_recovery_ramdisk=true" >> $(zip_root)/META/misc_info.txt
 endif
+ifeq ($(TARGET_NO_TWO_STEP_RECOVERY),true)
+	$(hide) echo "no_two_step_recovery=true" >> $(zip_root)/META/misc_info.txt
+endif
 ifdef TARGET_RELEASETOOL_FACTORY_FROM_TARGET_SCRIPT
 	$(hide) echo "factory_from_target_script=$(TARGET_RELEASETOOL_FACTORY_FROM_TARGET_SCRIPT)" >> $(zip_root)/META/misc_info.txt
 endif
