@@ -414,6 +414,13 @@ else ifeq ($(my_clang),)
     my_clang := true
 endif
 
+my_sdclang := $(strip $(LOCAL_SDCLANG))
+ifeq ($(SDCLANG),true)
+    ifeq ($(my_sdclang),)
+        my_sdclang := true
+    endif
+endif
+
 ifeq ($(LOCAL_C_STD),)
     my_c_std_version := $(DEFAULT_C_STD_VERSION)
 else ifeq ($(LOCAL_C_STD),experimental)
@@ -595,6 +602,14 @@ my_target_global_cflags := $($(LOCAL_2ND_ARCH_VAR_PREFIX)CLANG_$(my_prefix)GLOBA
 my_target_global_conlyflags := $($(LOCAL_2ND_ARCH_VAR_PREFIX)CLANG_$(my_prefix)GLOBAL_CONLYFLAGS) $(my_c_std_conlyflags)
 my_target_global_cppflags := $($(LOCAL_2ND_ARCH_VAR_PREFIX)CLANG_$(my_prefix)GLOBAL_CPPFLAGS) $(my_cpp_std_cppflags)
 my_target_global_ldflags := $($(LOCAL_2ND_ARCH_VAR_PREFIX)CLANG_$(my_prefix)GLOBAL_LDFLAGS)
+ifeq ($(my_sdclang),true)
+    ifeq ($(strip $(my_cc)),)
+        my_cc := $(SDCLANG_PATH)/clang
+    endif
+    ifeq ($(strip $(my_cxx)),)
+        my_cxx := $(SDCLANG_PATH)/clang++
+    endif
+endif
 else
 my_target_global_cflags := $($(LOCAL_2ND_ARCH_VAR_PREFIX)$(my_prefix)GLOBAL_CFLAGS)
 my_target_global_conlyflags := $($(LOCAL_2ND_ARCH_VAR_PREFIX)$(my_prefix)GLOBAL_CONLYFLAGS) $(my_c_std_conlyflags)
