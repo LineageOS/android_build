@@ -33,6 +33,10 @@ ifeq ($(WITH_SU),true)
 print_build_config_vars += \
   WITH_SU
 endif
+ifeq ($(SDCLANG),true)
+print_build_config_vars += \
+  TARGET_USE_SDCLANG
+endif
 ifeq ($(WITH_GMS),true)
 print_build_config_vars += \
   WITH_GMS
