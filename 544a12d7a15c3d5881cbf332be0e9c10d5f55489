@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a486d77_5e0ee735",
+        "filename": "core/config.mk",
+        "patchSetId": 1
+      },
+      "lineNbr": 665,
+      "author": {
+        "id": 4550
+      },
+      "writtenOn": "2017-05-01T10:13:20Z",
+      "side": 1,
+      "message": "This lives in vendor/cm/build now",
+      "revId": "544a12d7a15c3d5881cbf332be0e9c10d5f55489",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    }
+  ]
+}
