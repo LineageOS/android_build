@@ -1626,6 +1626,12 @@ function mk_timer()
     if [ $ret -eq 0 ] ; then
         echo -n "${color_success}#### make completed successfully "
     else
+        echo "${color_failed}             _..------.._     "
+        echo "${color_failed}           .'   .-\"\"-.   '. "
+        echo "${color_failed}           |\   '----'   /|   "
+        echo "${color_failed}           \ \`'--------'\` / "
+        echo "${color_failed}            '._        _.'    "
+        echo "${color_failed}               `\"\"\"\"\"\"` "
         echo -n "${color_failed}#### make failed to build some targets "
     fi
     if [ $hours -gt 0 ] ; then
