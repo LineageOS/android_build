@@ -78,7 +78,7 @@ MMM+++++++++++++++~MM~~M $O,NM88MOMMZ$$MM$$$+++++++++MM777777777MMMM
 
 
       NO. NO. STOP BEING LAZY. SERIOUSLY.
-      DO NOT DO THIS in CM. THIS IS A LIE. IT WILL BREAK THINGS.
+      DO NOT DO THIS in LineageOS. THIS IS A LIE. IT WILL BREAK THINGS.
 
       To submit the revised current.txt to the main Android repository,
       you will need approval.
