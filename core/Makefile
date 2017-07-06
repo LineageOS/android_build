@@ -1750,7 +1750,8 @@ OTATOOLS :=  $(HOST_OUT_EXECUTABLES)/minigzip \
   $(HOST_OUT_EXECUTABLES)/delta_generator \
   $(BLK_ALLOC_TO_BASE_FS) \
   $(FUTILITY) \
-  $(VBOOT_SIGNER)
+  $(VBOOT_SIGNER) \
+  $(BRO)
 
 # Shared libraries.
 OTATOOLS += \
@@ -1779,7 +1780,8 @@ OTATOOLS += \
   $(HOST_LIBRARY_PATH)/libprotobuf-cpp-lite$(HOST_SHLIB_SUFFIX) \
   $(HOST_LIBRARY_PATH)/libssl-host$(HOST_SHLIB_SUFFIX) \
   $(HOST_LIBRARY_PATH)/libz-host$(HOST_SHLIB_SUFFIX) \
-  $(HOST_LIBRARY_PATH)/libbase$(HOST_SHLIB_SUFFIX)
+  $(HOST_LIBRARY_PATH)/libbase$(HOST_SHLIB_SUFFIX) \
+  $(HOST_LIBRARY_PATH)/libbrotli$(HOST_SHLIB_SUFFIX)
 
 .PHONY: otatools
 otatools: $(OTATOOLS)
@@ -2217,6 +2219,10 @@ endif
 
 ifneq ($(BLOCK_BASED_OTA),false)
     $(INTERNAL_OTA_PACKAGE_TARGET): block_based := --block
+endif
+
+ifeq ($(AB_OTA_UPDATER),)
+$(INTERNAL_OTA_PACKAGE_TARGET): $(BRO)
 endif
 
 $(INTERNAL_OTA_PACKAGE_TARGET): $(BUILT_TARGET_FILES_PACKAGE)
