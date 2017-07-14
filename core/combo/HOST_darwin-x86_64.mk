@@ -46,6 +46,13 @@ HOST_TOOLCHAIN_FOR_CLANG := $(HOST_TOOLCHAIN_ROOT)
 
 HOST_AR := $(AR)
 
+ifeq ($(shell brew info llvm 2>&1 | grep -c "Built from source on"), 1)
+# we are using a homebrew clang, need new flags
+llvm_root := /usr/local/opt/llvm
+HOST_GLOBAL_CFLAGS += -isysroot $(llvm_root) -mmacosx-version-min=$(mac_sdk_version) -DMACOSX_DEPLOYMENT_TARGET=$(mac_sdk_version)
+HOST_GLOBAL_CPPFLAGS += -isystem $(llvm_root)/include/c++/v1
+HOST_GLOBAL_LDFLAGS += -isysroot $(llvm_root) -Wl,-syslibroot,$(llvm_root) -mmacosx-version-min=$(mac_sdk_version)
+else
 HOST_GLOBAL_CFLAGS += -isysroot $(mac_sdk_root) -mmacosx-version-min=$(mac_sdk_version) -DMACOSX_DEPLOYMENT_TARGET=$(mac_sdk_version)
 ifeq (,$(wildcard $(mac_sdk_path)/Toolchains/XcodeDefault.xctoolchain/usr/include/c++/v1))
 # libc++ header locations for XCode CLT 7.1+
@@ -55,6 +62,7 @@ else
 HOST_GLOBAL_CPPFLAGS += -isystem $(mac_sdk_path)/Toolchains/XcodeDefault.xctoolchain/usr/include/c++/v1
 endif
 HOST_GLOBAL_LDFLAGS += -isysroot $(mac_sdk_root) -Wl,-syslibroot,$(mac_sdk_root) -mmacosx-version-min=$(mac_sdk_version)
+endif
 
 HOST_GLOBAL_CFLAGS += -fPIC -funwind-tables
 HOST_NO_UNDEFINED_LDFLAGS := -Wl,-undefined,error
