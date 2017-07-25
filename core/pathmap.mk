@@ -68,7 +68,7 @@ endef
 # $(2): path
 #
 define project-set-path
-$(eval pathmap_PROJ += $(1):$(2))
+$(eval pathmap_PROJ := $(1):$(2))
 endef
 
 # Enter variant project path into pathmap
