@@ -8,7 +8,7 @@ ARCH_ARM_HAVE_NEON              := true
 
 local_arch_has_lpae := false
 
-ifneq (,$(filter cortex-a15 denver krait,$(TARGET_$(combo_2nd_arch_prefix)CPU_VARIANT)))
+ifneq (,$(filter cortex-a15 cortex-a53.a57 denver krait,$(TARGET_$(combo_2nd_arch_prefix)CPU_VARIANT)))
 	# TODO: krait is not a cortex-a15, we set the variant to cortex-a15 so that
 	#       hardware divide operations are generated. This should be removed and a
 	#       krait CPU variant added to GCC. For clang we specify -mcpu for krait in
