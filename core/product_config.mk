@@ -453,3 +453,7 @@ $(foreach c,$(PRODUCT_SANITIZER_MODULE_CONFIGS),\
     $(eval cf := $(subst $(_PSMC_SP_PLACE_HOLDER),$(space),$(cf)))\
     $(eval SANITIZER.$(TARGET_PRODUCT).$(m).CONFIG := $(cf))))
 _psmc_modules :=
+
+# Temporarily force Jack back on for a product
+PRODUCT_COMPILE_WITH_JACK := \
+    $(strip $(PRODUCTS.$(INTERNAL_PRODUCT).PRODUCT_COMPILE_WITH_JACK))
