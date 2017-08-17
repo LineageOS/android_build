@@ -45,7 +45,9 @@ PRODUCT_VENDOR_PROPERTIES := \
 PRODUCT_LOCALES := en_US
 
 # Get some sounds
+ifeq ($(LINEAGE_BUILD),)
 $(call inherit-product-if-exists, frameworks/base/data/sounds/AllAudio.mk)
+endif
 
 # Get a list of languages.
 $(call inherit-product, $(SRC_TARGET_DIR)/product/languages_full.mk)
