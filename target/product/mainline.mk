@@ -26,14 +26,21 @@ $(call inherit-product, $(SRC_TARGET_DIR)/product/telephony_system_ext.mk)
 $(call inherit-product, $(SRC_TARGET_DIR)/product/telephony_vendor.mk)
 $(call inherit-product, $(SRC_TARGET_DIR)/product/telephony_product.mk)
 
+ifeq ($(LINEAGE_BUILD),)
 $(call inherit-product, frameworks/base/data/sounds/AllAudio.mk)
 
 PRODUCT_PROPERTY_OVERRIDES += \
     ro.config.ringtone=Ring_Synth_04.ogg \
     ro.com.android.dataroaming=true \
 
+else
+$(call inherit-product, frameworks/base/data/sounds/AudioPackage14.mk)
+endif
+
 PRODUCT_PACKAGES += \
     PhotoTable \
     WallpaperPicker \
 
+ifeq ($(LINEAGE_BUILD),)
 PRODUCT_COPY_FILES += device/sample/etc/apns-full-conf.xml:$(TARGET_COPY_OUT_PRODUCT)/etc/apns-conf.xml
+endif
