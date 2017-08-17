@@ -524,6 +524,8 @@ function _lunch_meat()
 
     [[ -n "${ANDROID_QUIET_BUILD:-}" ]] || echo
 
+    fixup_common_out_dir
+
     set_stuff_for_environment
     [[ -n "${ANDROID_QUIET_BUILD:-}" ]] || printconfig
 
