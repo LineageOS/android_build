@@ -47,7 +47,7 @@ _vendor_owner_whitelist := \
         widevine
 
 
-_restrictions := $(strip $(PRODUCTS.$(INTERNAL_PRODUCT).PRODUCT_RESTRICT_VENDOR_FILES))
+_restrictions := none
 
 ifneq (,$(_restrictions))
 ifneq (,$(PRODUCTS.$(INTERNAL_PRODUCT).VENDOR_PRODUCT_RESTRICT_VENDOR_FILES))
