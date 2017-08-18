@@ -630,6 +630,8 @@ function lunch()
 
     echo
 
+    fixup_common_out_dir
+
     set_stuff_for_environment
     printconfig
     destroy_build_var_cache
