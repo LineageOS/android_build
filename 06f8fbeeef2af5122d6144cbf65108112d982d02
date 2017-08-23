@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3860d283_19df0155",
+        "filename": "core/soong_config.mk",
+        "patchSetId": 2
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 13589
+      },
+      "writtenOn": "2017-08-23T06:08:58Z",
+      "side": 1,
+      "message": "-u is considered unsafe even in the man.\nAny reason we wouldn\u0027t want the default empty file to be created first?",
+      "revId": "06f8fbeeef2af5122d6144cbf65108112d982d02",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    }
+  ]
+}
