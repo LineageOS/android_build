@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8317d2d8_1b45b4ae",
+        "filename": "envsetup.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 618,
+      "author": {
+        "id": 13648
+      },
+      "writtenOn": "2017-08-23T12:24:57Z",
+      "side": 1,
+      "message": "Lineage",
+      "range": {
+        "startLine": 618,
+        "startChar": 61,
+        "endLine": 618,
+        "endChar": 63
+      },
+      "revId": "1bcc622f513c2064e8532dbd06d5495a9d4558ca",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    }
+  ]
+}
