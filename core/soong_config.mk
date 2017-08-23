@@ -16,7 +16,8 @@ endif
 # Create soong.variables with copies of makefile settings.  Runs every build,
 # but only updates soong.variables if it changes
 SOONG_VARIABLES_TMP := $(SOONG_VARIABLES).$$$$
-$(SOONG_VARIABLES): FORCE
+include vendor/lineage/build/soong/soong_config.mk
+$(SOONG_VARIABLES): FORCE lineage_soong
 	$(hide) mkdir -p $(dir $@)
 	$(hide) (\
 	echo '{'; \
@@ -71,8 +72,9 @@ $(SOONG_VARIABLES): FORCE
 	echo ''; \
 	echo '    "ArtUseReadBarrier": $(if $(filter false,$(PRODUCT_ART_USE_READ_BARRIER)),false,true),'; \
 	echo ''; \
-	echo '    "BtConfigIncludeDir": "$(BOARD_BLUETOOTH_BDROID_BUILDCFG_INCLUDE_DIR)"'; \
-	echo '}') > $(SOONG_VARIABLES_TMP); \
+	echo '    "BtConfigIncludeDir": "$(BOARD_BLUETOOTH_BDROID_BUILDCFG_INCLUDE_DIR)"'; > $(SOONG_VARIABLES_TMP); \
+	cat $(LINEAGE_SOONG_VARIABLES_TMP) >> $(SOONG_VARIABLES_TMP); \
+	echo '}') >> $(SOONG_VARIABLES_TMP); \
 	if ! cmp -s $(SOONG_VARIABLES_TMP) $(SOONG_VARIABLES); then \
 	  mv $(SOONG_VARIABLES_TMP) $(SOONG_VARIABLES); \
 	else \
