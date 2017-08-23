@@ -26,11 +26,10 @@ csv_to_json_list = $(call _json_list,$(comma),$(1))
 
 # Create soong.variables with copies of makefile settings.  Runs every build,
 # but only updates soong.variables if it changes
-SOONG_VARIABLES_TMP := $(SOONG_VARIABLES).$$$$
-$(SOONG_VARIABLES): FORCE
-	$(hide) mkdir -p $(dir $@)
+SOONG_VARIABLES_TMP := $(shell mktemp -u)
+include vendor/lineage/build/soong/soong_config.mk
+$(SOONG_VARIABLES): FORCE lineage_soong
 	$(hide) (\
-	echo '{'; \
 	echo '    "Make_suffix": "-$(TARGET_PRODUCT)",'; \
 	echo ''; \
 	echo '    "Platform_sdk_version": $(PLATFORM_SDK_VERSION),'; \
@@ -90,7 +89,7 @@ $(SOONG_VARIABLES): FORCE
 	echo '    "BtConfigIncludeDir": "$(BOARD_BLUETOOTH_BDROID_BUILDCFG_INCLUDE_DIR)",'; \
 	echo ''; \
 	echo '    "DeviceKernelHeaders": $(call json_list,$(strip $(TARGET_PROJECT_SYSTEM_INCLUDES)))'; \
-	echo '}') > $(SOONG_VARIABLES_TMP); \
+	echo '}') >> $(SOONG_VARIABLES_TMP); \
 	if ! cmp -s $(SOONG_VARIABLES_TMP) $(SOONG_VARIABLES); then \
 	  mv $(SOONG_VARIABLES_TMP) $(SOONG_VARIABLES); \
 	else \
