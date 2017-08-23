@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "98e859d2_6820d451",
+        "filename": "tools/releasetools/common.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 1561,
+      "author": {
+        "id": 11604
+      },
+      "writtenOn": "2017-08-23T13:34:55Z",
+      "side": 1,
+      "message": "do we have anything that uses ext2 anymore?",
+      "range": {
+        "startLine": 1561,
+        "startChar": 0,
+        "endLine": 1561,
+        "endChar": 19
+      },
+      "revId": "d384a9dd1e6d4ae20ac1cf7fa02bf928bc19691b",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    }
+  ]
+}
