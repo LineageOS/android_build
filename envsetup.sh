@@ -613,13 +613,37 @@ function lunch()
     fi
 
     check_product $product
+    if [ $? -ne 0 ]
+    then
+        # if we can't find a product, try to grab it off the CM github
+        T=$(gettop)
+        cd $T > /dev/null
+        vendor/lineage/build/tools/roomservice.py $product
+        cd - > /dev/null
+        check_product $product
+    else
+        T=$(gettop)
+        cd $T > /dev/null
+        vendor/lineage/build/tools/roomservice.py $product true
+        cd - > /dev/null
+    fi
 
     TARGET_PRODUCT=$product \
     TARGET_BUILD_VARIANT=$variant \
     TARGET_PLATFORM_VERSION=$version \
     build_build_var_cache
+
     if [ $? -ne 0 ]
     then
+        echo
+        echo "** Don't have a product spec for: '$product'"
+        echo "** Do you have the right repo manifest?"
+        product=
+    fi
+
+    if [ -z "$product" -o -z "$variant" ]
+    then
+        echo
         return 1
     fi
 
