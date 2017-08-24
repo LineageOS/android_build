@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "81a8cc54_0aebacc3",
+        "filename": "core/product_config.mk",
+        "patchSetId": 2
+      },
+      "lineNbr": 371,
+      "author": {
+        "id": 11604
+      },
+      "writtenOn": "2017-08-24T06:07:03Z",
+      "side": 1,
+      "message": "nit: use spaces",
+      "revId": "d29caffe44ca7afdaa7da8259cfb56100a6df04d",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    }
+  ]
+}
