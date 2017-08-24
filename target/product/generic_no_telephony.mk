@@ -24,7 +24,6 @@ PRODUCT_PACKAGES := \
     Gallery2 \
     Music \
     MusicFX \
-    NfcNci \
     OneTimeInitializer \
     Provision \
     SystemUI \
