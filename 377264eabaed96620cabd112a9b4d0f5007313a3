@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "30a087cc_21c8ab1d",
+        "filename": "core/Makefile",
+        "patchSetId": 7
+      },
+      "lineNbr": 2245,
+      "author": {
+        "id": 3671
+      },
+      "writtenOn": "2017-08-25T15:20:14Z",
+      "side": 1,
+      "message": "s/RECOVERY/$(PRIVATE_RECOVERY_OUT)/",
+      "range": {
+        "startLine": 2237,
+        "startChar": 0,
+        "endLine": 2245,
+        "endChar": 5
+      },
+      "revId": "377264eabaed96620cabd112a9b4d0f5007313a3",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    }
+  ]
+}
