@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fea485e0_46416625",
+        "filename": "tools/releasetools/edify_generator.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 303,
+      "author": {
+        "id": 4550
+      },
+      "writtenOn": "2017-08-29T13:07:42Z",
+      "side": 1,
+      "message": "You can probably get rid of this and the change to core/Makefile",
+      "range": {
+        "startLine": 300,
+        "startChar": 0,
+        "endLine": 303,
+        "endChar": 9
+      },
+      "revId": "4c4d5d26664eaeb2d5489538ac327d7d9283be22",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    }
+  ]
+}
