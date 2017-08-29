@@ -15,7 +15,7 @@ endif
 
 # Create soong.variables with copies of makefile settings.  Runs every build,
 # but only updates soong.variables if it changes
-SOONG_VARIABLES_TMP := $(shell mktemp -u)
+SOONG_VARIABLES_TMP := $(shell mktemp)
 include vendor/lineage/build/soong/soong_config.mk
 $(SOONG_VARIABLES): FORCE lineage_soong
 	$(hide) (\
