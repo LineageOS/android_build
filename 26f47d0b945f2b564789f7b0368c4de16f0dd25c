@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f87dac1d_647ce948",
+        "filename": "tools/releasetools/ota_from_target_files.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 548,
+      "author": {
+        "id": 13589
+      },
+      "writtenOn": "2017-08-31T12:32:33Z",
+      "side": 1,
+      "message": "Duplicated call to FullOTA_PostValidate, already partially present in 187332. The function itself is undefined in 187332.",
+      "revId": "26f47d0b945f2b564789f7b0368c4de16f0dd25c",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    }
+  ]
+}
