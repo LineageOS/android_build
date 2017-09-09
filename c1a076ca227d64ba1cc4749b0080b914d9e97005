@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e7ca8f21_a85dfa94",
+        "filename": "tools/releasetools/ota_from_target_files.py",
+        "patchSetId": 6
+      },
+      "lineNbr": 589,
+      "author": {
+        "id": 13648
+      },
+      "writtenOn": "2017-09-09T21:33:10Z",
+      "side": 1,
+      "message": "This one too.",
+      "range": {
+        "startLine": 589,
+        "startChar": 47,
+        "endLine": 589,
+        "endChar": 58
+      },
+      "revId": "c1a076ca227d64ba1cc4749b0080b914d9e97005",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    }
+  ]
+}
