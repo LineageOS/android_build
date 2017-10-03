@@ -535,7 +535,7 @@ endif
 # BISON_PKGDATADIR.
 BISON_PKGDATADIR := $(PWD)/external/bison/data
 ifeq ($(USE_HOST_BISON),yes)
-BISON := bison
+BISON := $(HOST_OUT_EXECUTABLES)/bison
 else
 BISON := prebuilts/misc/$(BUILD_OS)-$(HOST_PREBUILT_ARCH)/bison/bison
 endif
