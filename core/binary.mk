@@ -891,7 +891,7 @@ y_yacc_cs := $(addprefix \
 ifneq ($(y_yacc_cs),)
 $(y_yacc_cs): $(intermediates)/%.c: \
     $(TOPDIR)$(LOCAL_PATH)/%.y \
-    $(my_additional_dependencies)
+    $(my_additional_dependencies) | $(BISON)
 	$(call transform-y-to-c-or-cpp)
 $(call track-src-file-gen,$(y_yacc_sources),$(y_yacc_cs))
 
@@ -904,7 +904,7 @@ yy_yacc_cpps := $(addprefix \
 ifneq ($(yy_yacc_cpps),)
 $(yy_yacc_cpps): $(intermediates)/%$(LOCAL_CPP_EXTENSION): \
     $(TOPDIR)$(LOCAL_PATH)/%.yy \
-    $(my_additional_dependencies)
+    $(my_additional_dependencies) | $(BISON)
 	$(call transform-y-to-c-or-cpp)
 $(call track-src-file-gen,$(yy_yacc_sources),$(yy_yacc_cpps))
 
