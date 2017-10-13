@@ -1852,6 +1852,7 @@ else
 endif
 	$(hide) echo "ota_override_device=$(OTA_SCRIPT_OVERRIDE_DEVICE)" >> $(zip_root)/META/misc_info.txt
 	$(hide) echo "ota_override_prop=$(OTA_SCRIPT_OVERRIDE_PROP)" >> $(zip_root)/META/misc_info.txt
+	$(hide) echo "ota_backuptool=$(OTA_SCRIPT_BACKUPTOOL)" >> $(zip_root)/META/misc_info.txt
 
 ifneq ($(CM_BUILD),)
 ifneq ($(TARGET_BUILD_VARIANT),user)
@@ -1907,12 +1908,12 @@ else
 endif
 
 ifeq ($(WITH_GMS),true)
-    $(INTERNAL_OTA_PACKAGE_TARGET): backuptool := false
+    OTA_SCRIPT_BACKUPTOOL := false
 else
 ifneq ($(CM_BUILD),)
-    $(INTERNAL_OTA_PACKAGE_TARGET): backuptool := true
+    OTA_SCRIPT_BACKUPTOOL := true
 else
-    $(INTERNAL_OTA_PACKAGE_TARGET): backuptool := false
+    OTA_SCRIPT_BACKUPTOOL := false
 endif
 endif
 
@@ -1941,7 +1942,6 @@ $(INTERNAL_OTA_PACKAGE_TARGET): $(BUILT_TARGET_FILES_PACKAGE) $(DISTTOOLS)
 	   $(block_based) \
 	   -p $(HOST_OUT) \
 	   -k $(KEY_CERT_PAIR) \
-	   --backup=$(backuptool) \
 	   $(if $(OEM_OTA_CONFIG), -o $(OEM_OTA_CONFIG)) \
 	   $(BUILT_TARGET_FILES_PACKAGE) $@
 
