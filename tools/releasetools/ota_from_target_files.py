@@ -93,9 +93,6 @@ Usage:  ota_from_target_files [flags] input_target_files output_ota_package
       Specifies the threshold that will be used to compute the maximum
       allowed stash size (defaults to 0.8).
 
-  --backup <boolean>
-      Enable or disable the execution of backuptool.sh.
-      Disabled by default.
 """
 
 from __future__ import print_function
@@ -1679,6 +1676,8 @@ def main(argv):
     OPTIONS.override_device = OPTIONS.info_dict.get("ota_override_device")
   if "ota_override_prop" in OPTIONS.info_dict:
     OPTIONS.override_prop = OPTIONS.info_dict.get("ota_override_prop") == "true"
+  if "ota_backuptool" in OPTIONS.info_dict:
+    OPTIONS.backuptool = OPTIONS.info_dict.get("ota_backuptool") == "true"
 
   # If this image was originally labelled with SELinux contexts, make sure we
   # also apply the labels in our new image. During building, the "file_contexts"
