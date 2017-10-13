@@ -124,10 +124,6 @@ Usage:  ota_from_target_files [flags] input_target_files output_ota_package
 
   --payload_signer_args <args>
       Specify the arguments needed for payload signer.
-
-  --backup <boolean>
-      Enable or disable the execution of backuptool.sh.
-      Disabled by default.
 """
 
 import sys
@@ -2140,6 +2136,8 @@ def main(argv):
 
   if "ota_override_device" in OPTIONS.info_dict:
     OPTIONS.override_device = OPTIONS.info_dict.get("ota_override_device")
+  if "ota_backuptool" in OPTIONS.info_dict:
+    OPTIONS.backuptool = OPTIONS.info_dict.get("ota_backuptool") == "true"
 
   ab_update = OPTIONS.info_dict.get("ab_update") == "true"
 
