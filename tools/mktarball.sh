@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 # $1: path to fs_get_stats program
 # $2: start dir
