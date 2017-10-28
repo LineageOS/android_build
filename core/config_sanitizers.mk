@@ -226,6 +226,10 @@ ifneq ($(my_sanitize),)
 endif
 
 ifneq ($(filter cfi,$(my_sanitize)),)
+  # FIXME: revert this once the cfi sanitizer issue is fixed
+  my_sdclang := false
+  my_sdclang_2 := false
+
   # __cfi_check needs to be built as Thumb (see the code in linker_cfi.cpp).
   # LLVM is not set up to do this on a function basis, so force Thumb on the
   # entire module.
