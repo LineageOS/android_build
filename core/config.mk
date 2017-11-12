@@ -552,7 +552,11 @@ prebuilt_sdk_tools_bin :=
 # Generic tools.
 JACK := $(HOST_OUT_EXECUTABLES)/jack
 
+ifeq ($(USE_HOST_FLEX),yes)
+LEX := flex
+else
 LEX := prebuilts/misc/$(BUILD_OS)-$(HOST_PREBUILT_ARCH)/flex/flex-2.5.39
+endif
 # The default PKGDATADIR built in the prebuilt bison is a relative path
 # external/bison/data.
 # To run bison from elsewhere you need to set up enviromental variable
