@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e291678e_3cf2f7fd",
+        "filename": "tools/releasetools/edify_generator.py",
+        "patchSetId": 9
+      },
+      "lineNbr": 170,
+      "author": {
+        "id": 13648
+      },
+      "writtenOn": "2017-11-18T08:45:33Z",
+      "side": 1,
+      "message": "This data integrity check should be killed with fire. More and more, recovery decryption will be a problem and there may be cases where this verification will fail badly. Tested on flounder (which currently has broken TWRP decrypt when data is encrypted in O): https://hastebin.com/sofoqihavo.vbs.",
+      "range": {
+        "startLine": 167,
+        "startChar": 0,
+        "endLine": 170,
+        "endChar": 203
+      },
+      "revId": "7f62f88ea1e3629b708d72cb7d105b3de48b20e1",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    }
+  ]
+}
