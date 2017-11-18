@@ -22,6 +22,30 @@
       "revId": "7f62f88ea1e3629b708d72cb7d105b3de48b20e1",
       "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "23bea21a_997679f9",
+        "filename": "tools/releasetools/edify_generator.py",
+        "patchSetId": 9
+      },
+      "lineNbr": 170,
+      "author": {
+        "id": 13648
+      },
+      "writtenOn": "2017-11-18T23:30:00Z",
+      "side": 1,
+      "message": "For the record, this is only a problem now in O. I managed to flash and official 14.1 nightly and despite it fails to unmount data, the installation continues: https://hastebin.com/deyuleculo.coffeescript",
+      "parentUuid": "e291678e_3cf2f7fd",
+      "range": {
+        "startLine": 167,
+        "startChar": 0,
+        "endLine": 170,
+        "endChar": 203
+      },
+      "revId": "7f62f88ea1e3629b708d72cb7d105b3de48b20e1",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
     }
   ]
 }
