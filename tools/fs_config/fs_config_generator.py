@@ -524,7 +524,7 @@ class FSConfigFileParser(object):
     _SECTIONS = [('_handle_aid', ('value',)),
                  ('_handle_path', ('mode', 'user', 'group', 'caps'))]
 
-    def __init__(self, config_files, oem_ranges):
+    def __init__(self, config_files, oem_ranges, warn_only=False):
         """
         Args:
             config_files ([str]): The list of config.fs files to parse.
@@ -532,6 +532,7 @@ class FSConfigFileParser(object):
             oem_ranges ([(),()]): range tuples indicating reserved OEM ranges.
         """
 
+        self._warn_only = warn_only
         self._files = []
         self._dirs = []
         self._aids = []
@@ -648,7 +649,10 @@ class FSConfigFileParser(object):
         if not Utils.in_any_range(int(aid.value, 0), self._oem_ranges):
             emsg = '"value" not in valid range %s, got: %s'
             emsg = emsg % (str(self._oem_ranges), value)
-            sys.exit(error_message(emsg))
+            if self._warn_only:
+                sys.stderr.write(error_message(emsg))
+            else:
+                sys.exit(error_message(emsg))
 
         # use the normalized int value in the dict and detect
         # duplicate definitions of the same value
@@ -945,11 +949,19 @@ class FSConfigGen(BaseGenerator):
             help='An android_filesystem_config.h file'
             ' to parse AIDs and OEM Ranges from')
 
+        opt_group.add_argument(
+            '--allow-legacy-aids',
+            action="store_true",
+            required=False,
+            default=False,
+            help='Allow legacy AIDs that fall outside allowed OEM ranges')
+
     def __call__(self, args):
 
         self._base_parser = AIDHeaderParser(args['aid_header'])
         self._oem_parser = FSConfigFileParser(args['fsconfig'],
-                                              self._base_parser.oem_ranges)
+                                              self._base_parser.oem_ranges,
+                                              args['allow_legacy_aids'])
         base_aids = self._base_parser.aids
         oem_aids = self._oem_parser.aids
 
@@ -1173,11 +1185,20 @@ class OEMAidGen(BaseGenerator):
             help='An android_filesystem_config.h file'
             'to parse AIDs and OEM Ranges from')
 
+        opt_group.add_argument(
+            '--allow-legacy-aids',
+            action="store_true",
+            required=False,
+            default=False,
+            help='Allow legacy AIDs that fall outside allowed OEM ranges')
+
     def __call__(self, args):
 
         hdr_parser = AIDHeaderParser(args['aid_header'])
 
-        parser = FSConfigFileParser(args['fsconfig'], hdr_parser.oem_ranges)
+        parser = FSConfigFileParser(args['fsconfig'],
+                                    hdr_parser.oem_ranges,
+                                    args['allow_legacy_aids'])
 
         print OEMAidGen._GENERATED
 
@@ -1228,11 +1249,20 @@ class PasswdGen(BaseGenerator):
             help='An android_filesystem_config.h file'
             'to parse AIDs and OEM Ranges from')
 
+        opt_group.add_argument(
+            '--allow-legacy-aids',
+            action="store_true",
+            required=False,
+            default=False,
+            help='Allow legacy AIDs that fall outside allowed OEM ranges')
+
     def __call__(self, args):
 
         hdr_parser = AIDHeaderParser(args['aid_header'])
 
-        parser = FSConfigFileParser(args['fsconfig'], hdr_parser.oem_ranges)
+        parser = FSConfigFileParser(args['fsconfig'],
+                                    hdr_parser.oem_ranges,
+                                    args['allow_legacy_aids'])
 
         aids = parser.aids
 

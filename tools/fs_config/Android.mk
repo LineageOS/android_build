@@ -72,6 +72,12 @@ else
 my_fs_config_h := $(LOCAL_PATH)/default/$(ANDROID_FS_CONFIG_H)
 endif
 
+ifneq ($(TARGET_FS_CONFIG_GEN),)
+ifeq ($(TARGET_ALLOW_LEGACY_AIDS),true)
+allow_legacy_aids := --allow-legacy-aids
+endif
+endif
+
 ##################################
 include $(CLEAR_VARS)
 LOCAL_SRC_FILES := fs_config_generate.c
@@ -88,7 +94,7 @@ oem := $(local-generated-sources-dir)/generated_oem_aid.h
 $(oem): PRIVATE_LOCAL_PATH := $(LOCAL_PATH)
 $(oem): PRIVATE_TARGET_FS_CONFIG_GEN := $(TARGET_FS_CONFIG_GEN)
 $(oem): PRIVATE_ANDROID_FS_HDR := $(system_android_filesystem_config)
-$(oem): PRIVATE_CUSTOM_TOOL = $(PRIVATE_LOCAL_PATH)/fs_config_generator.py oemaid --aid-header=$(PRIVATE_ANDROID_FS_HDR) $(PRIVATE_TARGET_FS_CONFIG_GEN) > $@
+$(oem): PRIVATE_CUSTOM_TOOL = $(PRIVATE_LOCAL_PATH)/fs_config_generator.py oemaid --aid-header=$(PRIVATE_ANDROID_FS_HDR) $(allow_legacy_aids) $(PRIVATE_TARGET_FS_CONFIG_GEN) > $@
 $(oem): $(TARGET_FS_CONFIG_GEN) $(LOCAL_PATH)/fs_config_generator.py
 	$(transform-generated-source)
 
@@ -97,7 +103,7 @@ gen := $(local-generated-sources-dir)/$(ANDROID_FS_CONFIG_H)
 $(gen): PRIVATE_LOCAL_PATH := $(LOCAL_PATH)
 $(gen): PRIVATE_TARGET_FS_CONFIG_GEN := $(TARGET_FS_CONFIG_GEN)
 $(gen): PRIVATE_ANDROID_FS_HDR := $(system_android_filesystem_config)
-$(gen): PRIVATE_CUSTOM_TOOL = $(PRIVATE_LOCAL_PATH)/fs_config_generator.py fsconfig --aid-header=$(PRIVATE_ANDROID_FS_HDR) $(PRIVATE_TARGET_FS_CONFIG_GEN) > $@
+$(gen): PRIVATE_CUSTOM_TOOL = $(PRIVATE_LOCAL_PATH)/fs_config_generator.py fsconfig --aid-header=$(PRIVATE_ANDROID_FS_HDR) $(allow_legacy_aids) $(PRIVATE_TARGET_FS_CONFIG_GEN) > $@
 $(gen): $(TARGET_FS_CONFIG_GEN) $(system_android_filesystem_config) $(LOCAL_PATH)/fs_config_generator.py
 	$(transform-generated-source)
 
@@ -278,7 +284,7 @@ $(LOCAL_BUILT_MODULE): PRIVATE_TARGET_FS_CONFIG_GEN := $(TARGET_FS_CONFIG_GEN)
 $(LOCAL_BUILT_MODULE): PRIVATE_ANDROID_FS_HDR := $(system_android_filesystem_config)
 $(LOCAL_BUILT_MODULE): $(LOCAL_PATH)/fs_config_generator.py $(TARGET_FS_CONFIG_GEN) $(system_android_filesystem_config)
 	@mkdir -p $(dir $@)
-	$(hide) $< passwd --aid-header=$(PRIVATE_ANDROID_FS_HDR) $(PRIVATE_TARGET_FS_CONFIG_GEN) > $@
+	$(hide) $< passwd --aid-header=$(PRIVATE_ANDROID_FS_HDR) $(allow_legacy_aids) $(PRIVATE_TARGET_FS_CONFIG_GEN) > $@
 
 ##################################
 # Generate the system/etc/group text file for the target
@@ -296,7 +302,7 @@ $(LOCAL_BUILT_MODULE): PRIVATE_TARGET_FS_CONFIG_GEN := $(TARGET_FS_CONFIG_GEN)
 $(LOCAL_BUILT_MODULE): PRIVATE_ANDROID_FS_HDR := $(system_android_filesystem_config)
 $(LOCAL_BUILT_MODULE): $(LOCAL_PATH)/fs_config_generator.py $(TARGET_FS_CONFIG_GEN) $(system_android_filesystem_config)
 	@mkdir -p $(dir $@)
-	$(hide) $< group --aid-header=$(PRIVATE_ANDROID_FS_HDR) $(PRIVATE_TARGET_FS_CONFIG_GEN) > $@
+	$(hide) $< group --aid-header=$(PRIVATE_ANDROID_FS_HDR) $(allow_legacy_aids) $(PRIVATE_TARGET_FS_CONFIG_GEN) > $@
 
 system_android_filesystem_config :=
 endif
