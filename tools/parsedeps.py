@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python2
 # vim: ts=2 sw=2
 
 import optparse
