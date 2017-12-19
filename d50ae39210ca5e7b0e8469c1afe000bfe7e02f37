@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5f499983_40d56fc4",
+        "filename": "envsetup.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 567,
+      "author": {
+        "id": 15175
+      },
+      "writtenOn": "2017-12-19T16:52:09Z",
+      "side": 1,
+      "message": "I should actually point out the missing braces around the variable compared to how they\u0027re written in line 566",
+      "revId": "d50ae39210ca5e7b0e8469c1afe000bfe7e02f37",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": true
+    }
+  ]
+}
