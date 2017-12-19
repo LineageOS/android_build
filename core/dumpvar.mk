@@ -25,6 +25,11 @@ print_build_config_vars := \
   BUILD_ID \
   OUT_DIR
 
+ifeq ($(IS_VEGETARIAN),true)
+print_build_config_vars += \
+  IS_VEGETARIAN
+endif
+
 ifneq ($(RECOVERY_VARIANT),)
 print_build_config_vars += \
   RECOVERY_VARIANT

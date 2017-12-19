@@ -564,7 +564,12 @@ function print_lunch_menu()
     done | column
 
     if [ "z${CM_DEVICES_ONLY}" != "z" ]; then
-       echo "... and don't forget the bacon!"
+       if [ "$IS_VEGETARIAN" == "true" ]; then
+           echo "... and don't forget the aloo!"
+       else
+           echo "... and don't forget the bacon!"
+       fi
+
     fi
 
     echo
