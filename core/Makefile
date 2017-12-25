@@ -362,6 +362,11 @@ FINAL_VENDOR_BUILD_PROPERTIES := $(call uniq-pairs-by-first-component, \
     $(FINAL_VENDOR_BUILD_PROPERTIES),=)
 endif  # property_overrides_split_enabled
 
+ifdef TARGET_VENDOR_PROP
+vendor_prop_file := $(TARGET_VENDOR_PROP)
+else
+vendor_prop_file := $(wildcard $(TARGET_DEVICE_DIR)/vendor.prop)
+endif
 $(INSTALLED_VENDOR_BUILD_PROP_TARGET): $(VENDOR_BUILDINFO_SH) $(intermediate_system_build_prop)
 	@echo Target vendor buildinfo: $@
 	@mkdir -p $(dir $@)
@@ -379,6 +384,14 @@ ifdef property_overrides_split_enabled
 			TARGET_BOOTLOADER_BOARD_NAME="$(TARGET_BOOTLOADER_BOARD_NAME)" \
 			TARGET_BOARD_PLATFORM="$(TARGET_BOARD_PLATFORM)" \
 	        bash $(VENDOR_BUILDINFO_SH) >> $@
+	$(hide) $(foreach file,$(vendor_prop_file), \
+		if [ -f "$(file)" ]; then \
+			echo "#" >> $@; \
+			echo Target buildinfo from: "$(file)"; \
+			echo "# from $(file)" >> $@; \
+			echo "#" >> $@; \
+			cat $(file) >> $@; \
+		fi;)
 	$(hide) echo "#" >> $@; \
 	        echo "# ADDITIONAL VENDOR BUILD PROPERTIES" >> $@; \
 	        echo "#" >> $@;
