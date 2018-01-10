@@ -33,11 +33,10 @@ endif
 
 my_soong_problems :=
 
-# The proper dependency for kernel headers is INSTALLED_KERNEL_HEADERS.
+# The preferred dependency for kernel headers is INSTALLED_KERNEL_HEADERS.
 # However, there are many instances of the old style dependencies in the
-# source tree.  Fix them up and warn the user.
+# source tree so fix them up.
 ifneq (,$(findstring $(TARGET_OUT_INTERMEDIATES)/KERNEL_OBJ/usr,$(LOCAL_ADDITIONAL_DEPENDENCIES)))
-  $(warning $(LOCAL_MODULE) uses deprecated kernel header dependency path.)
   LOCAL_ADDITIONAL_DEPENDENCIES := $(patsubst $(TARGET_OUT_INTERMEDIATES)/KERNEL_OBJ/usr,INSTALLED_KERNEL_HEADERS,$(LOCAL_ADDITIONAL_DEPENDENCIES))
 endif
 
