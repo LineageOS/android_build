@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c7a4ae52_b3504719",
+        "filename": "core/binary.mk",
+        "patchSetId": 4
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 2936
+      },
+      "writtenOn": "2018-01-15T03:33:29Z",
+      "side": 1,
+      "message": "Could make this a little friendlier by checking for whether LOCAL_HEADER_LIBRARIES contains device_kernel_headers, and automatically adding LOCAL_ADDITIONAL_DEPENDENCIES +\u003d INSTALLED_KERNEL_HEADERS for them, that way you can just do LOCAL_HEADER_LIBRARIES +\u003d device_kernel_headers and not have to worry about dependencies afterwards.",
+      "range": {
+        "startLine": 56,
+        "startChar": 2,
+        "endLine": 56,
+        "endChar": 49
+      },
+      "revId": "ba08be07fae0e85fde07b6e423f8136da9520a37",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    }
+  ]
+}
