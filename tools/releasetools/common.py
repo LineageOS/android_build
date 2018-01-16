@@ -1428,7 +1428,7 @@ class BlockDifference(object):
   def required_cache(self):
     return self._required_cache
 
-  def WriteScript(self, script, output_zip, progress=None):
+  def WriteScript(self, script, output_zip, use_brotli, progress=None):
     if not self.src:
       # write the output unconditionally
       script.Print("Patching %s image unconditionally..." % (self.partition,))
@@ -1437,7 +1437,7 @@ class BlockDifference(object):
 
     if progress:
       script.ShowProgress(progress, 0)
-    self._WriteUpdate(script, output_zip)
+    self._WriteUpdate(script, output_zip, use_brotli)
     if OPTIONS.verify:
       self._WritePostInstallVerifyScript(script)
 
@@ -1571,7 +1571,7 @@ class BlockDifference(object):
         'update");\n'
         'endif;' % (code, partition))
 
-  def _WriteUpdate(self, script, output_zip):
+  def _WriteUpdate(self, script, output_zip, use_brotli):
     ZipWrite(output_zip,
              '{}.transfer.list'.format(self.path),
              '{}.transfer.list'.format(self.partition))
@@ -1583,8 +1583,7 @@ class BlockDifference(object):
     #   compressed_size:    942M | 869M (~8% reduced) | 854M
     #   compression_time:   75s  | 265s               | 719s
     #   decompression_time: 15s  | 25s                | 25s
-
-    if not self.src:
+    if use_brotli:
       bro_cmd = ['bro', '--quality', '6',
                  '--input', '{}.new.dat'.format(self.path),
                  '--output', '{}.new.dat.br'.format(self.path)]

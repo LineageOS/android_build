@@ -137,6 +137,9 @@ Usage:  ota_from_target_files [flags] input_target_files output_ota_package
   --backup <boolean>
       Enable or disable the execution of backuptool.sh.
       Disabled by default.
+
+  --no_brotli
+      Conditionally disable support for brotli image compresssion
 """
 
 from __future__ import print_function
@@ -191,6 +194,7 @@ OPTIONS.extracted_input = None
 OPTIONS.key_passwords = []
 OPTIONS.override_device = 'auto'
 OPTIONS.backuptool = False
+OPTIONS.use_brotli = True
 
 METADATA_NAME = 'META-INF/com/android/metadata'
 UNZIP_PATTERN = ['IMAGES/*', 'META/*']
@@ -519,7 +523,7 @@ else if get_stage("%(bcb_dev)s") == "3/3" then
   system_tgt = GetImage("system", OPTIONS.input_tmp)
   system_tgt.ResetFileMap()
   system_diff = common.BlockDifference("system", system_tgt, src=None)
-  system_diff.WriteScript(script, output_zip)
+  system_diff.WriteScript(script, output_zip, OPTIONS.use_brotli)
 
   boot_img = common.GetBootableImage(
       "boot.img", "boot.img", OPTIONS.input_tmp, "BOOT")
@@ -530,7 +534,7 @@ else if get_stage("%(bcb_dev)s") == "3/3" then
     vendor_tgt = GetImage("vendor", OPTIONS.input_tmp)
     vendor_tgt.ResetFileMap()
     vendor_diff = common.BlockDifference("vendor", vendor_tgt)
-    vendor_diff.WriteScript(script, output_zip)
+    vendor_diff.WriteScript(script, output_zip, OPTIONS.use_brotli)
 
   common.CheckSize(boot_img.data, "boot.img", OPTIONS.info_dict)
   common.ZipWriteStr(output_zip, "boot.img", boot_img.data)
@@ -868,11 +872,11 @@ else
 
   device_specific.IncrementalOTA_InstallBegin()
 
-  system_diff.WriteScript(script, output_zip,
+  system_diff.WriteScript(script, output_zip, OPTIONS.use_brotli,
                           progress=0.8 if vendor_diff else 0.9)
 
   if vendor_diff:
-    vendor_diff.WriteScript(script, output_zip, progress=0.1)
+    vendor_diff.WriteScript(script, output_zip, OPTIONS.use_brotli, progress=0.1)
 
   if OPTIONS.two_step:
     common.ZipWriteStr(output_zip, "boot.img", target_boot.data)
@@ -1361,6 +1365,8 @@ def main(argv):
       OPTIONS.override_device = a
     elif o in ("--backup"):
       OPTIONS.backuptool = bool(a.lower() == 'true')
+    elif o in ("--no_brotli"):
+      OPTIONS.use_brotli = False
     else:
       return False
     return True
@@ -1394,6 +1400,7 @@ def main(argv):
                                  "extracted_input_target_files=",
                                  "override_device=",
                                  "backup=",
+                                 "no_brotli",
                              ], extra_option_handler=option_handler)
 
   if len(args) != 2:
