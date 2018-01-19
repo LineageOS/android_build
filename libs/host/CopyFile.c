@@ -213,7 +213,7 @@ static int copyRegular(const char* src, const char* dst, const struct stat* pSrc
 
     DBUG(("--- copying regular '%s' to '%s'\n", src, dst));
 
-    statResult = stat(dst, &dstStat);
+    statResult = lstat(dst, &dstStat);
     if (statResult == 0 && !S_ISREG(dstStat.st_mode)) {
         fprintf(stderr,
             "acp: destination '%s' exists and is not regular file\n",
