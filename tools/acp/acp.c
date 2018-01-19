@@ -181,13 +181,16 @@ int main(int argc, char* const argv[])
     wantUsage = false;
 
     while (1) {
-        ic = getopt(argc, argv, "defprtuv");
+        ic = getopt(argc, argv, "dDefprtuv");
         if (ic < 0)
             break;
 
         switch (ic) {
             case 'd':
                 options |= COPY_NO_DEREFERENCE;
+                break;
+            case 'D':
+                options |= COPY_DEREF_DEST;
                 break;
             case 'e':
                 options |= COPY_TRY_EXE;
@@ -232,7 +235,8 @@ int main(int argc, char* const argv[])
         fprintf(stderr, "Usage: acp [OPTION]... SOURCE DEST\n");
         fprintf(stderr, "  or:  acp [OPTION]... SOURCE... DIRECTORY\n");
         fprintf(stderr, "\nOptions:\n");
-        fprintf(stderr, "  -d  never follow (dereference) symbolic links\n");
+        fprintf(stderr, "  -d  never follow (dereference) source symbolic links\n");
+        fprintf(stderr, "  -D  copy through destination symbolic links\n");
         fprintf(stderr, "  -e  if source file doesn't exist, try adding "
                         "'.exe' [Win32 only]\n");
         fprintf(stderr, "  -f  use force, removing existing file if it's "

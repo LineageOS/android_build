@@ -17,6 +17,7 @@ enum {
     COPY_TIMESTAMPS     = 0x00100000, // preserve mode, ownership, timestamps
     COPY_RECURSIVE      = 0x00200000, // copy directories
     COPY_UPDATE_ONLY    = 0x00400000, // only copy if source file is newer
+    COPY_DEREF_DEST     = 0x00800000, // write through symlink
     COPY_VERBOSE_MASK   = 0x000000ff  // talk lots
 };
 

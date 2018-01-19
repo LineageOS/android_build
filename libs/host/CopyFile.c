@@ -200,9 +200,8 @@ static int setPermissions(const char* dst, const struct stat* pSrcStat, unsigned
 
 /*
  * Copy a regular file.  If the destination file exists and is not a
- * regular file, we fail.  However, we use stat() rather than lstat(),
- * because it's okay to write through a symlink (the noDereference stuff
- * only applies to the source file).
+ * regular file, we fail.  However, we allow writing through symlinks
+ * if specified in the option flags.
  *
  * If the file doesn't exist, create it.  If it does exist, truncate it.
  */
@@ -213,8 +212,9 @@ static int copyRegular(const char* src, const char* dst, const struct stat* pSrc
 
     DBUG(("--- copying regular '%s' to '%s'\n", src, dst));
 
-    statResult = stat(dst, &dstStat);
-    if (statResult == 0 && !S_ISREG(dstStat.st_mode)) {
+    statResult = lstat(dst, &dstStat);
+    if (statResult == 0 && !S_ISREG(dstStat.st_mode)
+            && !(S_ISLNK(dstStat.st_mode) && (options & COPY_DEREF_DEST))) {
         fprintf(stderr,
             "acp: destination '%s' exists and is not regular file\n",
             dst);
