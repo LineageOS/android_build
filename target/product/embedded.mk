@@ -24,6 +24,7 @@ PRODUCT_PACKAGES += \
     android.hidl.allocator@1.0-service \
     android.hidl.memory@1.0-impl \
     atrace \
+    blank_screen \
     bootanimation \
     bootstat \
     charger \
