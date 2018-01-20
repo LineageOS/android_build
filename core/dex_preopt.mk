@@ -35,7 +35,7 @@ endif
 # Conditional to building on linux, as dex2oat currently does not work on darwin.
 ifeq ($(HOST_OS),linux)
   WITH_DEXPREOPT ?= true
-  ifeq (eng,$(TARGET_BUILD_VARIANT))
+  ifneq (user,$(TARGET_BUILD_VARIANT))
     # Don't strip for quick development turnarounds.
     DEX_PREOPT_DEFAULT := nostripping
     # For an eng build only pre-opt the boot image and system server. This gives reasonable performance
