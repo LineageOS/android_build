@@ -32,7 +32,7 @@ ifeq ($(HOST_OS),linux)
   WITH_DEXPREOPT ?= true
 # For an eng build only pre-opt the boot image and system server. This gives reasonable performance
 # and still allows a simple workflow: building in frameworks/base and syncing.
-  ifeq (eng,$(TARGET_BUILD_VARIANT))
+  ifneq (user,$(TARGET_BUILD_VARIANT))
     WITH_DEXPREOPT_BOOT_IMG_AND_SYSTEM_SERVER_ONLY ?= true
   endif
 # Add mini-debug-info to the boot classpath unless explicitly asked not to.
