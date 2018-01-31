@@ -590,17 +590,6 @@ def AddImagesToTargetFiles(filename):
 
   has_recovery = (OPTIONS.info_dict.get("no_recovery") != "true")
 
-  if OPTIONS.info_dict.get("avb_enable") == "true":
-    fp = None
-    if "build.prop" in OPTIONS.info_dict:
-      build_prop = OPTIONS.info_dict["build.prop"]
-      if "ro.build.fingerprint" in build_prop:
-        fp = build_prop["ro.build.fingerprint"]
-      elif "ro.build.thumbprint" in build_prop:
-        fp = build_prop["ro.build.thumbprint"]
-    if fp:
-      OPTIONS.info_dict["avb_salt"] = hashlib.sha256(fp).hexdigest()
-
   # A map between partition names and their paths, which could be used when
   # generating AVB vbmeta image.
   partitions = dict()
