@@ -591,6 +591,15 @@ ifneq ($(LZMA_RAMDISK_TARGETS),)
     TARGET_NOT_USE_GZIP_RECOVERY_RAMDISK := true
   endif
 endif
+ifneq ($(LZ4_RAMDISK_TARGETS),)
+  ifneq (,$(findstring boot,$(LZ4_RAMDISK_TARGETS)))
+    BOOT_RAMDISK_COMPRESSOR := lz4 -f -9
+  endif
+  ifneq (,$(findstring recovery,$(LZ4_RAMDISK_TARGETS)))
+    RECOVERY_RAMDISK_COMPRESSOR := lz4 -f -9
+    TARGET_NOT_USE_GZIP_RECOVERY_RAMDISK := true
+  endif
+endif
 
 INTERNAL_RAMDISK_FILES := $(filter $(TARGET_ROOT_OUT)/%, \
 	$(ALL_GENERATED_SOURCES) \
