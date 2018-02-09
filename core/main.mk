@@ -249,10 +249,10 @@ ifneq (,$(user_variant))
   ifeq ($(user_variant),userdebug)
     # Pick up some extra useful tools
     tags_to_install += debug
-  else
-    # Disable debugging in plain user builds.
-    enable_target_debugging :=
   endif
+
+  # Disable debugging in plain user/userdebug builds.
+  enable_target_debugging :=
 
   # Disallow mock locations by default for user builds
   ADDITIONAL_DEFAULT_PROPERTIES += ro.allow.mock.location=0
