@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fc9206cc_07cc8a52",
+        "filename": "core/main.mk",
+        "patchSetId": 2
+      },
+      "lineNbr": 254,
+      "author": {
+        "id": 3671
+      },
+      "writtenOn": "2018-02-09T19:56:23Z",
+      "side": 1,
+      "message": "s/plain//",
+      "range": {
+        "startLine": 254,
+        "startChar": 25,
+        "endLine": 254,
+        "endChar": 30
+      },
+      "revId": "e9619f947addc99f72e3624ec0ab5444acf7eb36",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    }
+  ]
+}
