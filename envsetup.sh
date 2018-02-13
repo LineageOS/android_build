@@ -1490,18 +1490,21 @@ function cmremote()
     then
         echo .git directory not found. Please run this from the root directory of the Android repository you wish to set up.
     fi
-    GERRIT_REMOTE=$(cat .git/config  | grep -E '(git|http(s)?)://(www\.)?github.com' | awk '{ print $NF }' | sed -r 's#(git|http(s)?)://(www\.)?github.com/##g')
+    GITHUB_REMOTE=$(cat .git/config  | grep -E '(git|http(s)?)://(www\.)?github.com' | awk '{ print $NF }')
+    GERRIT_REMOTE=$(sed -r 's#(git|http(s)?)://(www\.)?github.com/##g' <<< $GITHUB_REMOTE)
     if [ -z "$GERRIT_REMOTE" ]
     then
         echo Unable to set up the git remote, are you in the root of the repo?
         return 0
     fi
     CMUSER=`git config --get review.review.lineageos.org.username`
+
+    git remote add cmremote $GITHUB_REMOTE
     if [ -z "$CMUSER" ]
     then
-        git remote add cmremote ssh://review.lineageos.org:29418/$GERRIT_REMOTE
+        git remote set-url --push cmremote ssh://review.lineageos.org:29418/$GERRIT_REMOTE
     else
-        git remote add cmremote ssh://$CMUSER@review.lineageos.org:29418/$GERRIT_REMOTE
+        git remote set-url --push cmremote ssh://$CMUSER@review.lineageos.org:29418/$GERRIT_REMOTE
     fi
     echo You can now push to "cmremote".
 }
@@ -1914,13 +1917,18 @@ function cmrebase() {
         return
     fi
     cd $dir
-    repo=$(cat .git/config  | grep git://github.com | awk '{ print $NF }' | sed s#git://github.com/##g)
     echo "Starting branch..."
     repo start tmprebase .
     echo "Bringing it up to date..."
     repo sync .
     echo "Fetching change..."
-    git fetch "http://review.lineageos.org/p/$repo" "refs/changes/$refs" && git cherry-pick FETCH_HEAD
+    cmremote 2>&1 > /dev/null
+    if [ "$?" != "0" ]; then
+        echo "Failed to set up cmremote"
+        return
+    fi
+
+    git fetch cmremote "refs/changes/$refs" && git cherry-pick FETCH_HEAD
     if [ "$?" != "0" ]; then
         echo "Error cherry-picking. Not uploading!"
         return
