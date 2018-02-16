@@ -193,7 +193,7 @@ OPTIONS.override_device = 'auto'
 OPTIONS.backuptool = False
 
 METADATA_NAME = 'META-INF/com/android/metadata'
-UNZIP_PATTERN = ['IMAGES/*', 'META/*']
+UNZIP_PATTERN = ['IMAGES/*', 'META/*', 'INSTALL/*', 'SYSTEM/build.prop']
 
 
 def SignOutput(temp_zip_name, output_zip_name):
