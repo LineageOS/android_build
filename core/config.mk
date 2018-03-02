@@ -970,7 +970,12 @@ include $(BUILD_SYSTEM)/ninja_config.mk
 include $(BUILD_SYSTEM)/soong_config.mk
 endif
 
-ifneq ($(LINEAGE_BUILD),)
+WITH_LINEAGE_BITS := $(LINEAGE_BUILD)
+ifneq ($(filter $(TARGET_PRODUCT),aosp_arm64 aosp_arm aosp_x86),)
+WITH_LINEAGE_BITS := true
+endif
+
+ifneq ($(WITH_LINEAGE_BITS),)
 ## We need to be sure the global selinux policies are included
 ## last, to avoid accidental resetting by device configs
 $(eval include device/lineage/sepolicy/common/sepolicy.mk)
