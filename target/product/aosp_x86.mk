@@ -27,5 +27,6 @@ PRODUCT_COPY_FILES += \
     prebuilts/qemu-kernel/x86/3.18/kernel-qemu2:kernel-ranchu
 
 include $(SRC_TARGET_DIR)/product/full_x86.mk
+$(call inherit-product, vendor/lineage/config/common_mini.mk)
 
 PRODUCT_NAME := aosp_x86
