@@ -20,3 +20,8 @@
 define $(combo_var_prefix)transform-shared-lib-to-toc
 $(call _gen_toc_command_for_elf,$(1),$(2))
 endef
+
+# Microsoft Windows Subsystem for Linux
+ifeq ($(HOST_OS_IS_LXSS),true)
+include $(BUILD_COMBOS)/HOST_EXTRA_lxss-x86_64.mk
+endif
