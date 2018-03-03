@@ -98,6 +98,7 @@ endif
 # running on
 
 UNAME := $(shell uname -sm)
+UNAME_R := $(shell uname -r)
 
 # HOST_OS
 ifneq (,$(findstring Linux,$(UNAME)))
@@ -108,6 +109,12 @@ ifneq (,$(findstring Darwin,$(UNAME)))
 endif
 ifneq (,$(findstring Macintosh,$(UNAME)))
   HOST_OS := darwin
+endif
+ifneq (,$(findstring Microsoft,$(UNAME_R)))
+  # Microsoft Windows Subsystem for Linux
+  # The HOST_OS is still Linux but with some limitations.
+  # Assumes that there are no other Microsoft Linux kernels
+  HOST_OS_IS_LXSS := true
 endif
 
 HOST_OS_EXTRA:=$(shell python -c "import platform; print(platform.platform())")
