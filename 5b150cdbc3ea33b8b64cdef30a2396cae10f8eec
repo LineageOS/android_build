@@ -22,6 +22,30 @@
       "revId": "5b150cdbc3ea33b8b64cdef30a2396cae10f8eec",
       "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "27a6a0cd_8f91c69a",
+        "filename": "core/envsetup.mk",
+        "patchSetId": 4
+      },
+      "lineNbr": 119,
+      "author": {
+        "id": 2936
+      },
+      "writtenOn": "2018-03-04T22:39:33Z",
+      "side": 1,
+      "message": "Well, it looks like you\u0027re only using HOST_OS_IS_LXSS in one place so far, so it might be easier to string compare HOST_OS_EXTRA instead of setting your own variable for now.",
+      "parentUuid": "83d53738_6bc73576",
+      "range": {
+        "startLine": 119,
+        "startChar": 0,
+        "endLine": 119,
+        "endChar": 79
+      },
+      "revId": "5b150cdbc3ea33b8b64cdef30a2396cae10f8eec",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
     }
   ]
 }
