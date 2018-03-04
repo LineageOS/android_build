@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4dc3351a_13e427aa",
+        "filename": "core/envsetup.mk",
+        "patchSetId": 3
+      },
+      "lineNbr": 118,
+      "author": {
+        "id": 2936
+      },
+      "writtenOn": "2018-03-04T03:05:19Z",
+      "side": 1,
+      "message": "Should this be a sub-case of the HOST_OS :\u003d linux block?",
+      "range": {
+        "startLine": 113,
+        "startChar": 0,
+        "endLine": 118,
+        "endChar": 5
+      },
+      "revId": "30c6cb9e6e491cc7ccd61506e48adbb31fb30f27",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    }
+  ]
+}
