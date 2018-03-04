@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "83d53738_6bc73576",
+        "filename": "core/envsetup.mk",
+        "patchSetId": 4
+      },
+      "lineNbr": 119,
+      "author": {
+        "id": 15060
+      },
+      "writtenOn": "2018-03-04T12:52:09Z",
+      "side": 1,
+      "message": "another option for checking if we\u0027re on WSL is to check this variable for Microsoft instead of uname -r. Not sure what is preferable",
+      "range": {
+        "startLine": 119,
+        "startChar": 0,
+        "endLine": 119,
+        "endChar": 79
+      },
+      "revId": "5b150cdbc3ea33b8b64cdef30a2396cae10f8eec",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    }
+  ]
+}
