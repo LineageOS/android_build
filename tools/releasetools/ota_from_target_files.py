@@ -800,9 +800,7 @@ else if get_stage("%(bcb_dev)s") != "3/3" then
           GetBuildProp("ro.build.thumbprint", OPTIONS.source_info_dict))
 
   else: # blockimgdiff_version > 2
-    if source_oem_props is None and target_oem_props is None:
-      script.AssertSomeFingerprint(source_fp, target_fp)
-    elif source_oem_props is not None and target_oem_props is not None:
+    if source_oem_props is not None and target_oem_props is not None:
       script.AssertSomeThumbprint(
           GetBuildProp("ro.build.thumbprint", OPTIONS.target_info_dict),
           GetBuildProp("ro.build.thumbprint", OPTIONS.source_info_dict))
