@@ -145,8 +145,8 @@ SDK_HOST_ARCH := x86
 board_config_mk := \
 	$(strip $(sort $(wildcard \
 		$(SRC_TARGET_DIR)/board/$(TARGET_DEVICE)/BoardConfig.mk \
-		$(shell test -d device && find -L device -maxdepth 4 -path '*/$(TARGET_DEVICE)/BoardConfig.mk') \
-		$(shell test -d vendor && find -L vendor -maxdepth 4 -path '*/$(TARGET_DEVICE)/BoardConfig.mk') \
+		$(shell test -d device && find -L device -maxdepth 4 -path '*/*/BoardConfig*.mk' -regex ".*$(TARGET_DEVICE).*") \
+		$(shell test -d vendor && find -L vendor -maxdepth 4 -path '*/*/BoardConfig*.mk' -regex ".*$(TARGET_DEVICE).*") \
 	)))
 ifeq ($(board_config_mk),)
   $(error No config file found for TARGET_DEVICE $(TARGET_DEVICE))
