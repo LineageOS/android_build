@@ -181,10 +181,10 @@ include $(BUILD_SYSTEM)/device.mk
 
 # A CM build needs only the CM product makefiles.
 ifneq ($(CM_BUILD),)
-  all_product_configs := $(shell find device -path "*/$(CM_BUILD)/lineage.mk")
+  all_product_configs := $(shell find device -maxdepth 3 -path "*/$(CM_BUILD)/lineage.mk")
   ifeq ($(all_product_configs),)
     # Fall back to cm.mk
-    all_product_configs := $(shell find device -path "*/$(CM_BUILD)/cm.mk")
+    all_product_configs := $(shell find device -maxdepth 3 -path "*/$(CM_BUILD)/cm.mk")
   endif
 else
   ifneq ($(strip $(TARGET_BUILD_APPS)),)
