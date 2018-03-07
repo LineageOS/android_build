@@ -138,15 +138,18 @@ endif
 
 SDK_HOST_ARCH := x86
 
-# Boards may be defined under $(SRC_TARGET_DIR)/board/$(TARGET_DEVICE)
-# or under vendor/*/$(TARGET_DEVICE).  Search in both places, but
-# make sure only one exists.
-# Real boards should always be associated with an OEM vendor.
+# Normally boards may be defined under $(SRC_TARGET_DIR)/board/$(TARGET_DEVICE)
+# or under vendor/*/$(TARGET_DEVICE), but for flexibility, we actually allow
+# matches on makefile filenames that are suffixed by "-$(TARGET_DEVICE).mk" too.
+# The only restriction is to make sure that only one such makefile matches
+# the pattern search.
+# Real boards should always be associated with an OEM vendor, hence the fixed
+# wildcard format passed to `find -path`.
 board_config_mk := \
 	$(strip $(sort $(wildcard \
 		$(SRC_TARGET_DIR)/board/$(TARGET_DEVICE)/BoardConfig.mk \
-		$(shell test -d device && find -L device -maxdepth 3 -path '*/$(TARGET_DEVICE)/BoardConfig.mk') \
-		$(shell test -d vendor && find -L vendor -maxdepth 3 -path '*/$(TARGET_DEVICE)/BoardConfig.mk') \
+		$(shell test -d device && find -L device -maxdepth 3 -path '*/$(TARGET_DEVICE)/BoardConfig.mk' -o -path '*/BoardConfig-$(TARGET_DEVICE).mk') \
+		$(shell test -d vendor && find -L vendor -maxdepth 3 -path '*/$(TARGET_DEVICE)/BoardConfig.mk' -o -path '*/BoardConfig-$(TARGET_DEVICE).mk') \
 	)))
 ifeq ($(board_config_mk),)
   $(error No config file found for TARGET_DEVICE $(TARGET_DEVICE))
