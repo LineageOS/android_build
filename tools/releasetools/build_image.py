@@ -654,6 +654,7 @@ def ImagePropFromGlobalDict(glob_dict, mount_point):
       "verity_signer_cmd",
       "verity_fec",
       "avb_enable",
+      "avb_disabled_vbmeta",
       "avb_avbtool",
       "avb_salt",
   )
