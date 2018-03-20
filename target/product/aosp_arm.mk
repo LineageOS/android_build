@@ -30,7 +30,6 @@ PRODUCT_PACKAGES += \
     vr_hwc
 
 include $(SRC_TARGET_DIR)/product/full.mk
-$(call inherit-product, vendor/lineage/config/common_mini.mk)
 
 # Needed by Pi newly launched device to pass VtsTrebleSysProp on GSI
 PRODUCT_COMPATIBLE_PROPERTY_OVERRIDE := true
