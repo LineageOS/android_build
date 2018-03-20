@@ -27,6 +27,5 @@ PRODUCT_COPY_FILES += \
     device/generic/goldfish/fstab.ranchu.early.arm:root/fstab.ranchu.early
 
 include $(SRC_TARGET_DIR)/product/full.mk
-$(call inherit-product, vendor/lineage/config/common_mini.mk)
 
 PRODUCT_NAME := aosp_arm
