@@ -1782,6 +1782,11 @@ def WriteABOTAPackageWithBrilloScript(target_file, output_file,
     secondary_payload.Sign(payload_signer)
     secondary_payload.WriteToZip(output_zip)
 
+  target_zip = zipfile.ZipFile(target_file, "r")
+  common.ZipWriteStr(output_zip, "system/build.prop",
+                     target_zip.read("SYSTEM/build.prop"))
+  common.ZipClose(target_zip)
+
   # If dm-verity is supported for the device, copy contents of care_map
   # into A/B OTA package.
   target_zip = zipfile.ZipFile(target_file, "r")
