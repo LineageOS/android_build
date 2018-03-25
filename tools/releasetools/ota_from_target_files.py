@@ -1215,6 +1215,11 @@ def WriteABOTAPackageWithBrilloScript(target_file, output_file,
                   arcname="payload_properties.txt",
                   compress_type=zipfile.ZIP_STORED)
 
+  target_zip = zipfile.ZipFile(target_file, "r")
+  common.ZipWriteStr(output_zip, "system/build.prop",
+                     target_zip.read("SYSTEM/build.prop"))
+  common.ZipClose(target_zip)
+
   # If dm-verity is supported for the device, copy contents of care_map
   # into A/B OTA package.
   target_zip = zipfile.ZipFile(target_file, "r")
