@@ -45,6 +45,11 @@ ifneq ($(USE_CCACHE),)
     CCACHE_HOST_TAG := linux-$(HOST_PREBUILT_ARCH)
   endif
   ccache := prebuilts/misc/$(CCACHE_HOST_TAG)/ccache/ccache
+
+  ifeq ($(USE_HOST_CCACHE),yes)
+    ccache := ccache
+  endif
+
   # Check that the executable is here.
   ccache := $(strip $(wildcard $(ccache)))
   ifdef ccache
