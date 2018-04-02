@@ -17,8 +17,13 @@
 # This is a build configuration for a very minimal build of the
 # Open-Source part of the tree.
 
+ADB_HOST_PATH := $(shell command -v adb 2>/dev/null)
+ifeq ($(ADB_HOST_PATH),)
 PRODUCT_PACKAGES += \
-    adb \
+    adb
+endif
+
+PRODUCT_PACKAGES += \
     adbd \
     atrace \
     bootanimation \
