@@ -18,11 +18,32 @@ ifneq ($(strip $(LOCAL_MODULE_STEM)$(LOCAL_BUILT_MODULE_STEM)),)
 $(error $(LOCAL_PATH): Cannot set module stem for a library)
 endif
 
+$(call target-static-library-hook)
+
+skip_build_from_source :=
+ifdef LOCAL_PREBUILT_MODULE_FILE
+ifeq (,$(call if-build-from-source,$(LOCAL_MODULE),$(LOCAL_PATH)))
+prebuilt_is_cached := true
+include $(BUILD_SYSTEM)/prebuilt_internal.mk
+prebuilt_is_cached :=
+skip_build_from_source := true
+endif
+endif
+
+ifndef skip_build_from_source
+
 include $(BUILD_SYSTEM)/binary.mk
+
+$(LOCAL_BUILT_MODULE) : PRIVATE_INTERMEDIATES_DIR := $(intermediates)
+$(LOCAL_BUILT_MODULE) : PRIVATE_CACHE_DIR := $(cache_dir)
+$(LOCAL_BUILT_MODULE) : PRIVATE_MODULE_PATH := $(LOCAL_PATH)
+$(LOCAL_BUILT_MODULE) : PRIVATE_MODULE_NAME := $(module_relative_name)
+$(LOCAL_BUILT_MODULE) : PRIVATE_SRC_FILES := $(LOCAL_SRC_FILES)
 
 $(LOCAL_BUILT_MODULE) : $(built_whole_libraries)
 $(LOCAL_BUILT_MODULE) : $(all_objects)
 	$(transform-o-to-static-lib)
+	$(target-save-prebuilt-library)
 
 ifeq ($(NATIVE_COVERAGE),true)
 gcno_suffix := .gcnodir
@@ -43,3 +64,5 @@ $(intermediates)/$(GCNO_ARCHIVE) : PRIVATE_INTERMEDIATES_DIR := $(intermediates)
 $(intermediates)/$(GCNO_ARCHIVE) : $(LOCAL_GCNO_FILES) $(built_whole_gcno_libraries)
 	$(transform-o-to-static-lib)
 endif
+
+endif  # skip_build_from_source

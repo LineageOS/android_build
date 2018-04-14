@@ -162,6 +162,8 @@ export_cflags += $(LOCAL_EXPORT_CFLAGS)
 else ifdef LOCAL_EXPORT_CFLAGS
 $(call pretty-error,LOCAL_EXPORT_CFLAGS can only be used by Soong, use LOCAL_EXPORT_C_INCLUDE_DIRS instead)
 endif
+ifeq (,$(prebuilt_is_cached))
+# Other prebuilt
 $(export_includes): PRIVATE_EXPORT_CFLAGS := $(export_cflags)
 $(export_includes): $(LOCAL_EXPORT_C_INCLUDE_DEPS)
 	@echo Export includes file: $< -- $@
@@ -171,6 +173,18 @@ ifdef export_cflags
 else
 	$(hide) touch $@
 endif
+else # prebuilt_is_cached set
+# Cached prebuilt
+$(export_includes): PRIVATE_CACHE_DIR := $(cache_dir)
+$(export_includes): PRIVATE_INTERMEDIATES_DIR := $(intermediates)
+$(export_includes): $(cache_dir)/export_includes
+	@echo Export includes file: $< -- $@
+ifdef LOCAL_IS_HOST_MODULE
+	$(host-load-export-includes)
+else
+	$(target-load-export-includes)
+endif
+endif # prebuilt_is_cached
 export_cflags :=
 
 ifdef LOCAL_SDK_VERSION

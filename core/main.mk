@@ -88,6 +88,9 @@ include $(BUILD_SYSTEM)/cleanbuild.mk
 # Include the google-specific config
 -include vendor/google/build/config.mk
 
+# Include the lineage-specific config
+-include vendor/lineage/build/config.mk
+
 # These are the modifier targets that don't do anything themselves, but
 # change the behavior of the build.
 # (must be defined before including definitions.make)

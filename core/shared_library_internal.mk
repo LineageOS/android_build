@@ -22,10 +22,13 @@ endif
 
 $(call target-shared-library-hook)
 
+
 skip_build_from_source :=
 ifdef LOCAL_PREBUILT_MODULE_FILE
 ifeq (,$(call if-build-from-source,$(LOCAL_MODULE),$(LOCAL_PATH)))
+prebuilt_is_cached := true
 include $(BUILD_SYSTEM)/prebuilt_internal.mk
+prebuilt_is_cached :=
 skip_build_from_source := true
 endif
 endif
@@ -64,6 +67,12 @@ $(linked_module): PRIVATE_TARGET_LIBATOMIC := $(my_target_libatomic)
 $(linked_module): PRIVATE_TARGET_CRTBEGIN_SO_O := $(my_target_crtbegin_so_o)
 $(linked_module): PRIVATE_TARGET_CRTEND_SO_O := $(my_target_crtend_so_o)
 
+$(linked_module): PRIVATE_INTERMEDIATES_DIR := $(intermediates)
+$(linked_module): PRIVATE_CACHE_DIR := $(cache_dir)
+$(linked_module): PRIVATE_MODULE_PATH := $(LOCAL_PATH)
+$(linked_module): PRIVATE_MODULE_NAME := $(module_relative_name)
+$(linked_module): PRIVATE_SRC_FILES := $(LOCAL_SRC_FILES)
+
 $(linked_module): \
         $(all_objects) \
         $(all_libraries) \
@@ -73,6 +82,7 @@ $(linked_module): \
         $(my_target_libatomic) \
         $(LOCAL_ADDITIONAL_DEPENDENCIES)
 	$(transform-o-to-shared-lib)
+	$(target-save-prebuilt-library)
 
 ifeq ($(my_native_coverage),true)
 gcno_suffix := .gcnodir

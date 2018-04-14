@@ -25,7 +25,9 @@ $(call host-shared-library-hook)
 skip_build_from_source :=
 ifdef LOCAL_PREBUILT_MODULE_FILE
 ifeq (,$(call if-build-from-source,$(LOCAL_MODULE),$(LOCAL_PATH)))
+prebuilt_is_cached := true
 include $(BUILD_SYSTEM)/prebuilt_internal.mk
+prebuilt_is_cached :=
 skip_build_from_source := true
 endif
 endif
@@ -41,10 +43,17 @@ include $(BUILD_SYSTEM)/binary.mk
 my_host_libprofile_rt := $($(LOCAL_2ND_ARCH_VAR_PREFIX)$(my_prefix)LIBPROFILE_RT)
 $(LOCAL_BUILD_MODULE): PRIVATE_HOST_LIBPROFILE_RT := $(my_host_libprofile_rt)
 
+$(LOCAL_BUILT_MODULE): PRIVATE_INTERMEDIATES_DIR := $(intermediates)
+$(LOCAL_BUILT_MODULE): PRIVATE_CACHE_DIR := $(cache_dir)
+$(LOCAL_BUILT_MODULE): PRIVATE_MODULE_PATH := $(LOCAL_PATH)
+$(LOCAL_BUILT_MODULE): PRIVATE_MODULE_NAME := $(module_relative_name)
+$(LOCAL_BUILT_MODULE): PRIVATE_SRC_FILES := $(LOCAL_SRC_FILES)
+
 $(LOCAL_BUILT_MODULE): \
         $(all_objects) \
         $(all_libraries) \
         $(LOCAL_ADDITIONAL_DEPENDENCIES)
 	$(transform-host-o-to-shared-lib)
+	$(host-save-prebuilt-library)
 
 endif  # skip_build_from_source
