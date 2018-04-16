@@ -1637,6 +1637,9 @@ endif;
     script.AddToZip(target_zip, output_zip, input_path=OPTIONS.updater_binary)
   metadata["ota-required-cache"] = str(script.required_cache)
 
+  common.ZipWriteStr(output_zip, "system/build.prop",
+                     ""+target_zip.read("SYSTEM/build.prop"))
+
   # We haven't written the metadata entry yet, which will be handled in
   # FinalizeMetadata().
   common.ZipClose(output_zip)
