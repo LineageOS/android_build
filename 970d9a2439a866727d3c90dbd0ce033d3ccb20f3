@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "20aa1f9d_564c91bb",
+        "filename": "core/Makefile",
+        "patchSetId": 1
+      },
+      "lineNbr": 2733,
+      "author": {
+        "id": 13589
+      },
+      "writtenOn": "2018-04-23T19:36:56Z",
+      "side": 0,
+      "message": "For the record, this is the second code occurrence",
+      "revId": "970d9a2439a866727d3c90dbd0ce033d3ccb20f3",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    }
+  ]
+}
