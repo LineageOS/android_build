@@ -147,10 +147,14 @@ endif
 
 # $(1): the input .jar or .apk file
 # $(2): the output .odex file
+ifeq ($(HOST_OS_IS_WSL),true)
+SINGLE_THREAD := "-j1"
+endif
 define dex2oat-one-file
 $(hide) rm -f $(2)
 $(hide) mkdir -p $(dir $(2))
 $(hide) ANDROID_LOG_TAGS="*:e" $(DEX2OAT) \
+	$(SINGLE_THREAD) \
 	--runtime-arg -Xms$(DEX2OAT_XMS) --runtime-arg -Xmx$(DEX2OAT_XMX) \
 	--class-loader-context=$(DEX2OAT_CLASS_LOADER_CONTEXT) \
 	--boot-image=$(PRIVATE_DEX_PREOPT_IMAGE_LOCATION) \
