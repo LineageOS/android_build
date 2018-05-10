@@ -147,6 +147,7 @@ endif
 
 # $(1): the input .jar or .apk file
 # $(2): the output .odex file
+ifneq ($(HOST_OS_IS_LXSS),true)
 define dex2oat-one-file
 $(hide) rm -f $(2)
 $(hide) mkdir -p $(dir $(2))
@@ -171,3 +172,30 @@ $(hide) ANDROID_LOG_TAGS="*:e" $(DEX2OAT) \
 	$(PRIVATE_PROFILE_PREOPT_FLAGS) \
 	$(GLOBAL_DEXPREOPT_FLAGS)
 endef
+else
+define dex2oat-one-file
+$(hide) rm -f $(2)
+$(hide) mkdir -p $(dir $(2))
+$(hide) ANDROID_LOG_TAGS="*:e" $(DEX2OAT) \
+	-j1 \
+	--runtime-arg -Xms$(DEX2OAT_XMS) --runtime-arg -Xmx$(DEX2OAT_XMX) \
+	--class-loader-context=$(DEX2OAT_CLASS_LOADER_CONTEXT) \
+	--boot-image=$(PRIVATE_DEX_PREOPT_IMAGE_LOCATION) \
+	--dex-file=$(1) \
+	--dex-location=$(PRIVATE_DEX_LOCATION) \
+	--oat-file=$(2) \
+	--android-root=$(PRODUCT_OUT)/system \
+	--instruction-set=$($(PRIVATE_2ND_ARCH_VAR_PREFIX)DEX2OAT_TARGET_ARCH) \
+	--instruction-set-variant=$($(PRIVATE_2ND_ARCH_VAR_PREFIX)DEX2OAT_TARGET_CPU_VARIANT) \
+	--instruction-set-features=$($(PRIVATE_2ND_ARCH_VAR_PREFIX)DEX2OAT_TARGET_INSTRUCTION_SET_FEATURES) \
+	--runtime-arg -Xnorelocate --compile-pic \
+	--no-generate-debug-info --generate-build-id \
+	--abort-on-hard-verifier-error \
+	--force-determinism \
+	--no-inline-from=core-oj.jar \
+	$(PRIVATE_DEX_PREOPT_FLAGS) \
+	$(PRIVATE_ART_FILE_PREOPT_FLAGS) \
+	$(PRIVATE_PROFILE_PREOPT_FLAGS) \
+	$(GLOBAL_DEXPREOPT_FLAGS)
+endef
+endif
