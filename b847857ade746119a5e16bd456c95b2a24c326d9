@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9572d408_d1f2209d",
+        "filename": "core/dex_preopt_libart.mk",
+        "patchSetId": 7
+      },
+      "lineNbr": 159,
+      "author": {
+        "id": 15060
+      },
+      "writtenOn": "2018-05-11T18:58:55Z",
+      "side": 1,
+      "message": "open to naming suggestions",
+      "range": {
+        "startLine": 159,
+        "startChar": 3,
+        "endLine": 159,
+        "endChar": 18
+      },
+      "revId": "b847857ade746119a5e16bd456c95b2a24c326d9",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    }
+  ]
+}
