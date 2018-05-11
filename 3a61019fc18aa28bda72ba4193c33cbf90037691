@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "455e3598_5adb43ab",
+        "filename": "core/dex_preopt_libart.mk",
+        "patchSetId": 3
+      },
+      "lineNbr": 180,
+      "author": {
+        "id": 15060
+      },
+      "writtenOn": "2018-05-11T17:44:05Z",
+      "side": 1,
+      "message": "this is the only addition needed for wsl, if there is a way which doesn\u0027t require duplicating the code, it would be better",
+      "range": {
+        "startLine": 180,
+        "startChar": 1,
+        "endLine": 180,
+        "endChar": 4
+      },
+      "revId": "3a61019fc18aa28bda72ba4193c33cbf90037691",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    }
+  ]
+}
