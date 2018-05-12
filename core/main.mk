@@ -325,6 +325,11 @@ ADDITIONAL_BUILD_PROPERTIES += net.bt.name=Android
 # with SIGQUIT. Stack trace dumping is turned on for all android builds.
 ADDITIONAL_BUILD_PROPERTIES += dalvik.vm.stack-trace-dir=/data/anr
 
+
+# ------------------------------------------------------------
+# Include vendor specific additions to build versions properties
+-include vendor/lineage/config/versions.mk
+
 # ------------------------------------------------------------
 # Define a function that, given a list of module tags, returns
 # non-empty if that module should be installed in /system.
