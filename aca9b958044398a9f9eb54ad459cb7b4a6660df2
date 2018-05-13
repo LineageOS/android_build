@@ -22,6 +22,23 @@
       "revId": "aca9b958044398a9f9eb54ad459cb7b4a6660df2",
       "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5d4a92b3_ca6552c7",
+        "filename": "core/main.mk",
+        "patchSetId": 2
+      },
+      "lineNbr": 112,
+      "author": {
+        "id": 13589
+      },
+      "writtenOn": "2018-05-13T19:32:19Z",
+      "side": 1,
+      "message": "You\u0027re not allowed to alter ADDITIONAL_BUILD_PROPERTIES before this location.\n\nI\u0027m appending our versions to ADDITIONAL_BUILD_PROPERTIES after the last property it receives, through a specific inclusion of our versions.mk.",
+      "revId": "aca9b958044398a9f9eb54ad459cb7b4a6660df2",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
     }
   ]
 }
