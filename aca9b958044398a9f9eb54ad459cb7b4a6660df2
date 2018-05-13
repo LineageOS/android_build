@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ed0adcb3_3fd72051",
+        "filename": "core/main.mk",
+        "patchSetId": 2
+      },
+      "lineNbr": 89,
+      "author": {
+        "id": 2936
+      },
+      "writtenOn": "2018-05-13T17:42:55Z",
+      "side": 1,
+      "message": "For some reason I thought we had a similar hook in this file, but I\u0027m not finding it. Maybe it would be best to have the hook being added here be generic, instead of naming it version.mk ?",
+      "range": {
+        "startLine": 88,
+        "startChar": 0,
+        "endLine": 89,
+        "endChar": 38
+      },
+      "revId": "aca9b958044398a9f9eb54ad459cb7b4a6660df2",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    }
+  ]
+}
