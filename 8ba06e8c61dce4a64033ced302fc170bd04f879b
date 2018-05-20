@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a3b1348_07288864",
+        "filename": "core/dex_preopt_libart.mk",
+        "patchSetId": 12
+      },
+      "lineNbr": 152,
+      "author": {
+        "id": 13028
+      },
+      "writtenOn": "2018-05-20T08:52:48Z",
+      "side": 1,
+      "message": "imo this shouldnt split the documentation and the function definition. Is it possible to move this into the define?",
+      "range": {
+        "startLine": 150,
+        "startChar": 0,
+        "endLine": 152,
+        "endChar": 5
+      },
+      "revId": "8ba06e8c61dce4a64033ced302fc170bd04f879b",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    }
+  ]
+}
