@@ -983,14 +983,6 @@ $(eval include device/lineage/sepolicy/common/sepolicy.mk)
 # Include any vendor specific config.mk file
 -include $(TOPDIR)vendor/*/build/core/config.mk
 
-# Include any vendor specific apicheck.mk file
--include $(TOPDIR)vendor/*/build/core/apicheck.mk
-
-# Rules for QCOM targets
--include $(TOPDIR)vendor/lineage/build/core/qcom_target.mk
-
-# Rules for MTK targets
--include $(TOPDIR)vendor/lineage/build/core/mtk_target.mk
 endif
 
 include $(BUILD_SYSTEM)/dumpvar.mk
