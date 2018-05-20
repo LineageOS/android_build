@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "46b63b17_49c9ca82",
+        "filename": "core/config.mk",
+        "patchSetId": 2
+      },
+      "lineNbr": 984,
+      "author": {
+        "id": 2936
+      },
+      "writtenOn": "2018-05-20T21:43:25Z",
+      "side": 1,
+      "message": "This config.mk inclusion can include anything necessary.",
+      "range": {
+        "startLine": 984,
+        "startChar": 1,
+        "endLine": 984,
+        "endChar": 47
+      },
+      "revId": "ee6e2c8254a44f248c76669871694c23fbae0c71",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    }
+  ]
+}
