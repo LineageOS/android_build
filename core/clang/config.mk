@@ -74,6 +74,7 @@ LOCAL_CLANG_EXCEPTION_PROJECTS = \
   bionic/tests/ \
   device/huawei/angler/ \
   device/lge/bullhead/ \
+  device/xiaomi/msm8956-common/ \
   external/gentoo/integration/ \
   hardware/qcom/ \
   test/vts/hals/camera/bullhead/ \
