@@ -14,6 +14,22 @@ else
 endif
 
 # -----------------------------------------------------------------
+# Define rules to create BOARD_SYSTEM_EXTRA_SYMLINKS defined by
+# the product. Very similar in role to the ramdisk board-defined
+# symlinks created in system/core/rootdir/Android.mk.
+# BOARD_SYSTEM_EXTRA_SYMLINKS is a list of <target>:<link_name>.
+ifdef BOARD_SYSTEM_EXTRA_SYMLINKS
+  $(foreach pair, $(BOARD_SYSTEM_EXTRA_SYMLINKS),                             \
+    $(eval target := $(call word-colon,1,$(pair)))                            \
+    $(eval link_name := $(call word-colon,2,$(pair)))                         \
+    $(eval full_link_name := $(call append-path,$(PRODUCT_OUT),$(link_name))) \
+    $(info $(call create-symlink,$(target),$(full_link_name)))             \
+    $(eval $(call create-symlink,$(target),$(full_link_name)))             \
+    $(eval ALL_DEFAULT_INSTALLED_MODULES += $(full_link_name)))
+endif
+
+
+# -----------------------------------------------------------------
 # Define rules to copy PRODUCT_COPY_FILES defined by the product.
 # PRODUCT_COPY_FILES contains words like <source file>:<dest file>[:<owner>].
 # <dest file> is relative to $(PRODUCT_OUT), so it should look like,
