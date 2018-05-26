@@ -2545,6 +2545,17 @@ endef
 ## Commands for copying files
 ###########################################################
 
+# Define a rule to create a symlink.  For use via $(eval).
+# $(1): symlink target
+# $(2): symlink file name
+define create-symlink
+$2:
+	@echo "Symbolic link: $2 -> $1"
+	mkdir -p $(dir $2)
+	rm -rf $2
+	ln -sf $1 $2
+endef
+
 # Define a rule to copy a header.  Used via $(eval) by copy_headers.make.
 # $(1): source header
 # $(2): destination header
