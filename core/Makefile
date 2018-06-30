@@ -2776,7 +2776,15 @@ ifeq ($(WITH_GMS),true)
     $(INTERNAL_OTA_PACKAGE_TARGET): backuptool := false
 else
 ifneq ($(LINEAGE_BUILD),)
-    $(INTERNAL_OTA_PACKAGE_TARGET): backuptool := true
+    ifeq ($(TARGET_BUILD_VARIANT),user)
+        ifeq ($(AB_OTA_UPDATER),true)
+            $(INTERNAL_OTA_PACKAGE_TARGET): backuptool := false
+        else
+            $(INTERNAL_OTA_PACKAGE_TARGET): backuptool := true
+        endif
+    else
+        $(INTERNAL_OTA_PACKAGE_TARGET): backuptool := true
+    endif
 else
     $(INTERNAL_OTA_PACKAGE_TARGET): backuptool := false
 endif
