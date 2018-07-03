@@ -1228,6 +1228,12 @@ else # TARGET_BUILD_APPS
   endif
   endif
 
+  ifeq ($(BOARD_BUILD_SYSTEM_ROOT_IMAGE),true)
+    $(call dist-for-goals, droidcore, \
+      $(INSTALLED_FILES_FILE_ROOT) \
+    )
+  endif
+
   ifeq ($(EMMA_INSTRUMENT),true)
     $(JACOCO_REPORT_CLASSES_ALL) : $(INSTALLED_SYSTEMIMAGE)
     $(call dist-for-goals, dist_files, $(JACOCO_REPORT_CLASSES_ALL))
