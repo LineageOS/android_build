@@ -3366,6 +3366,10 @@ $(INSTALLED_VBMETAIMAGE_TARGET): \
 vbmetaimage-nodeps:
 	$(build-vbmetaimage-target)
 
+else ifdef BOARD_PREBUILT_VBMETAIMAGE
+INSTALLED_VBMETAIMAGE_TARGET := $(PRODUCT_OUT)/vbmeta.img
+$(eval $(call copy-one-file,$(BOARD_PREBUILT_VBMETAIMAGE),$(INSTALLED_VBMETAIMAGE_TARGET)))
+
 endif # BOARD_AVB_ENABLE
 
 # -----------------------------------------------------------------
@@ -4073,6 +4077,10 @@ endif
 ifeq ($(BREAKPAD_GENERATE_SYMBOLS),true)
 	@# If breakpad symbols have been generated, add them to the zip.
 	$(hide) $(ACP) -r $(TARGET_OUT_BREAKPAD) $(zip_root)/BREAKPAD
+endif
+ifdef BOARD_PREBUILT_VBMETAIMAGE
+	$(hide) mkdir -p $(zip_root)/IMAGES
+	$(hide) cp $(INSTALLED_VBMETAIMAGE_TARGET) $(zip_root)/IMAGES/
 endif
 ifdef BOARD_PREBUILT_VENDORIMAGE
 	$(hide) mkdir -p $(zip_root)/IMAGES
