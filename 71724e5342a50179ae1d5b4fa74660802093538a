@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c30dd86d_fa91e648",
+        "filename": "core/Makefile",
+        "patchSetId": 2
+      },
+      "lineNbr": 2152,
+      "author": {
+        "id": 2936
+      },
+      "writtenOn": "2018-07-12T05:36:31Z",
+      "side": 1,
+      "message": "maybe I\u0027m missing something, but why the eval here?",
+      "range": {
+        "startLine": 2152,
+        "startChar": 2,
+        "endLine": 2152,
+        "endChar": 6
+      },
+      "revId": "71724e5342a50179ae1d5b4fa74660802093538a",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    }
+  ]
+}
