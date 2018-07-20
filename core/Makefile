@@ -697,7 +697,6 @@ INTERNAL_RAMDISK_FILES := $(filter $(TARGET_ROOT_OUT)/%, \
 	$(ALL_DEFAULT_INSTALLED_MODULES))
 
 INSTALLED_FILES_FILE_ROOT := $(PRODUCT_OUT)/installed-files-root.txt
-INSTALLED_FILES_JSON_ROOT := $(INSTALLED_FILES_FILE_ROOT:.txt=.json)
 $(INSTALLED_FILES_FILE_ROOT): .KATI_IMPLICIT_OUTPUTS := $(INSTALLED_FILES_JSON_ROOT)
 $(INSTALLED_FILES_FILE_ROOT) : $(INTERNAL_RAMDISK_FILES) $(FILESLIST)
 	@echo Installed file list: $@
@@ -1210,8 +1209,8 @@ $(if $(BOARD_AVB_ENABLE),\
 $(if $(filter true,$(BOARD_USES_RECOVERY_AS_BOOT)),\
     $(hide) echo "recovery_as_boot=true" >> $(1))
 $(if $(filter true,$(BOARD_BUILD_SYSTEM_ROOT_IMAGE)),\
-    $(hide) echo "system_root_image=true" >> $(1);\
-    echo "ramdisk_dir=$(TARGET_ROOT_OUT)" >> $(1))
+    $(hide) echo "system_root_image=true" >> $(1)
+    $(hide) echo "root_dir=$(TARGET_ROOT_OUT)" >> $(1))
 $(if $(2),$(hide) $(foreach kv,$(2),echo "$(kv)" >> $(1);))
 endef
 

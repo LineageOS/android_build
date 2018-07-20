@@ -1214,7 +1214,6 @@ else # TARGET_BUILD_APPS
   ifeq ($(BOARD_BUILD_SYSTEM_ROOT_IMAGE),true)
     $(call dist-for-goals, droidcore, \
       $(INSTALLED_FILES_FILE_ROOT) \
-      $(INSTALLED_FILES_JSON_ROOT) \
     )
   endif
 
