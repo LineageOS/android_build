@@ -1210,9 +1210,22 @@ $(if $(BOARD_AVB_ENABLE),\
 $(if $(filter true,$(BOARD_USES_RECOVERY_AS_BOOT)),\
     $(hide) echo "recovery_as_boot=true" >> $(1))
 $(if $(filter true,$(BOARD_BUILD_SYSTEM_ROOT_IMAGE)),\
-    $(hide) echo "system_root_image=true" >> $(1);\
-    echo "ramdisk_dir=$(TARGET_ROOT_OUT)" >> $(1))
+    $(hide) echo "system_root_image=true" >> $(1)
+    $(hide) echo "root_dir=$(TARGET_ROOT_OUT)" >> $(1))
 $(if $(2),$(hide) $(foreach kv,$(2),echo "$(kv)" >> $(1);))
+endef
+
+# $(1): the path of the output dictionary file
+# $(2): additional "key=value" pairs to append to the dictionary file.
+define generate-userimage-prop-dictionary
+$(call generate-image-prop-dictionary,$(1),system vendor cache userdata product productservices oem,$(2))
+endef
+
+# $(1): the path of the input dictionary file, where each line has the format key=value
+# $(2): the key to look up
+define read-image-prop-dictionary
+$$(grep '$(2)=' $(1) | cut -f2- -d'=')
+>>>>>>> 8bfd3c748... releasetools: Rename the ramdisk_dir in prop dict to root_dir.
 endef
 
 # $(1): modules list
