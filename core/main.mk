@@ -1101,6 +1101,9 @@ productimage: $(INSTALLED_PRODUCTIMAGE_TARGET)
 .PHONY: systemotherimage
 systemotherimage: $(INSTALLED_SYSTEMOTHERIMAGE_TARGET)
 
+.PHONY: superimage
+superimage: $(INSTALLED_SUPERIMAGE_TARGET)
+
 .PHONY: bootimage
 bootimage: $(INSTALLED_BOOTIMAGE_TARGET)
 
