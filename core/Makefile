@@ -2673,6 +2673,7 @@ endif
 ifdef BOARD_PREBUILT_VBMETAIMAGE
 	$(hide) mkdir -p $(zip_root)/IMAGES
 	$(hide) cp $(INSTALLED_VBMETAIMAGE_TARGET) $(zip_root)/IMAGES/
+	$(hide) echo "avb_prebuilt_vbmeta=true" >> $(zip_root)/META/misc_info.txt
 endif
 ifdef BOARD_PREBUILT_VENDORIMAGE
 	$(hide) mkdir -p $(zip_root)/IMAGES
