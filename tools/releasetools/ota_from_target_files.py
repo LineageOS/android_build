@@ -163,6 +163,10 @@ Usage:  ota_from_target_files [flags] input_target_files output_ota_package
   --backup <boolean>
       Enable or disable the execution of backuptool.sh.
       Disabled by default.
+
+  --system_root_build <boolean>
+      Specify whether the build uses a system-as-root layout.
+      Disabled by default.
 """
 
 from __future__ import print_function
@@ -216,6 +220,7 @@ OPTIONS.key_passwords = []
 OPTIONS.skip_postinstall = False
 OPTIONS.override_device = 'auto'
 OPTIONS.backuptool = False
+OPTIONS.system_root_image = False
 
 
 METADATA_NAME = 'META-INF/com/android/metadata'
@@ -829,9 +834,14 @@ else if get_stage("%(bcb_dev)s") == "3/3" then
   script.SetPermissionsRecursive("/tmp/install/bin", 0, 0, 0755, 0755, None, None)
 
   if OPTIONS.backuptool:
-    script.Mount("/system")
-    script.RunBackup("backup")
-    script.Unmount("/system")
+    if OPTIONS.system_root_image:
+      script.Mount("/system_image")
+      script.RunBackup("backup")
+      script.Unmount("/system_image")
+    else:
+      script.Mount("/system")
+      script.RunBackup("backup")
+      script.Unmount("/system")
 
   system_progress = 0.75
 
@@ -876,9 +886,14 @@ else if get_stage("%(bcb_dev)s") == "3/3" then
 
   if OPTIONS.backuptool:
     script.ShowProgress(0.02, 10)
-    script.Mount("/system")
-    script.RunBackup("restore")
-    script.Unmount("/system")
+    if OPTIONS.system_root_image:
+      script.Mount("/system_image")
+      script.RunBackup("restore")
+      script.Unmount("/system_image")
+    else:
+      script.Mount("/system")
+      script.RunBackup("restore")
+      script.Unmount("/system")
 
   script.ShowProgress(0.05, 5)
   script.WriteRawImage("/boot", "boot.img")
@@ -1880,6 +1895,8 @@ def main(argv):
       OPTIONS.override_device = a
     elif o in ("--backup"):
       OPTIONS.backuptool = bool(a.lower() == 'true')
+    elif o in ("--system_root_build"):
+      OPTIONS.system_root_image = bool(a.lower() == 'true')
     else:
       return False
     return True
@@ -1912,6 +1929,7 @@ def main(argv):
                                  "skip_postinstall",
                                  "override_device=",
                                  "backup=",
+                                 "system_root_build=",
                              ], extra_option_handler=option_handler)
 
   if len(args) != 2:
