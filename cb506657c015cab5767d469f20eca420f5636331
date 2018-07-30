@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "58d9ad51_31fd105f",
+        "filename": "tools/releasetools/ota_from_target_files.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 490,
+      "author": {
+        "id": 11883
+      },
+      "writtenOn": "2018-07-30T07:53:12Z",
+      "side": 1,
+      "message": "too",
+      "range": {
+        "startLine": 490,
+        "startChar": 0,
+        "endLine": 490,
+        "endChar": 78
+      },
+      "revId": "cb506657c015cab5767d469f20eca420f5636331",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": true
+    }
+  ]
+}
