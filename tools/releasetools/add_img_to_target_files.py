@@ -436,6 +436,20 @@ def AddDisabledVBMeta(output_zip):
   assert p.returncode == 0, "avbtool make_vbmeta_image failed"
   img.Write()
 
+def AddPrebuiltVBMeta(output_zip, prefix="IMAGES/"):
+  prebuilt_dir = os.path.join(OPTIONS.input_tmp, prefix)
+  prebuilt_path = os.path.join(prebuilt_dir, "vbmeta.img")
+
+  if not os.path.exists(prebuilt_path):
+    print("Adding vbmeta.img from OUT")
+    vbmeta_path = os.path.join(os.getenv('OUT'), "vbmeta.img")
+    shutil.copyfile(vbmeta_path, os.path.join(OPTIONS.input_tmp, prefix, "vbmeta.img"))
+  else:
+    print("Adding vbmeta.img from %s" % (prefix,))
+
+  vbmetafile = common.File.FromLocalFile("IMAGES/vbmeta.img", prebuilt_path)
+  vbmetafile.AddToZip(output_zip)
+
 def AddPartitionTable(output_zip, prefix="IMAGES/"):
   """Create a partition table image and store it in output_zip."""
 
@@ -660,6 +674,10 @@ def AddImagesToTargetFiles(filename):
   if OPTIONS.info_dict.get("avb_disabled_vbmeta") == "true":
     banner("vbmeta")
     AddDisabledVBMeta(output_zip)
+
+  if OPTIONS.info_dict.get("avb_prebuilt_vbmeta") == "true":
+    banner("vbmeta")
+    AddPrebuiltVBMeta(output_zip)
 
   # For devices using A/B update, copy over images from RADIO/ and/or
   # VENDOR_IMAGES/ to IMAGES/ and make sure we have all the needed
