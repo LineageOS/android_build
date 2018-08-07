@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "35eef7a4_557079f9",
+        "filename": "core/config.mk",
+        "patchSetId": 1
+      },
+      "lineNbr": 1097,
+      "author": {
+        "id": 11883
+      },
+      "writtenOn": "2018-08-07T19:39:33Z",
+      "side": 1,
+      "message": "can probably be removed",
+      "range": {
+        "startLine": 1097,
+        "startChar": 9,
+        "endLine": 1097,
+        "endChar": 18
+      },
+      "revId": "a783b60f9173fd53c545fdb6efbdddafbedee72b",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5039c720_ab31905c",
+        "filename": "core/product_config.mk",
+        "patchSetId": 1
+      },
+      "lineNbr": 178,
+      "author": {
+        "id": 11883
+      },
+      "writtenOn": "2018-08-07T19:39:33Z",
+      "side": 1,
+      "message": "I would like to drop lineage.mk, given the fact AOSP AndroidProducts.mk just works",
+      "revId": "a783b60f9173fd53c545fdb6efbdddafbedee72b",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": true
+    }
+  ]
+}
