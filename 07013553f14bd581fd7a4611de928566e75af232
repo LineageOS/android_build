@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "aa862a1d_02cfd7b6",
+        "filename": "tools/releasetools/common.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 1104,
+      "author": {
+        "id": 4550
+      },
+      "writtenOn": "2018-08-07T21:19:51Z",
+      "side": 1,
+      "message": "Space after #",
+      "range": {
+        "startLine": 1104,
+        "startChar": 10,
+        "endLine": 1104,
+        "endChar": 11
+      },
+      "revId": "07013553f14bd581fd7a4611de928566e75af232",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    }
+  ]
+}
