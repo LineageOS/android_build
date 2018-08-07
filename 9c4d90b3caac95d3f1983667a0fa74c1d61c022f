@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2171cdb9_79322a50",
+        "filename": "core/config.mk",
+        "patchSetId": 1
+      },
+      "lineNbr": 230,
+      "author": {
+        "id": 11883
+      },
+      "writtenOn": "2018-08-07T19:57:58Z",
+      "side": 1,
+      "message": "oh well, squash it!",
+      "revId": "9c4d90b3caac95d3f1983667a0fa74c1d61c022f",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": true
+    }
+  ]
+}
