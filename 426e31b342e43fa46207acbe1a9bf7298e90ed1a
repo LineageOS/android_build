@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9ff4e056_5938d752",
+        "filename": "core/config.mk",
+        "patchSetId": 1
+      },
+      "lineNbr": 230,
+      "author": {
+        "id": 11883
+      },
+      "writtenOn": "2018-08-07T19:57:30Z",
+      "side": 1,
+      "message": "since we already have recovery up there without LINEAGE_BUILD check you can simply strip the check",
+      "range": {
+        "startLine": 230,
+        "startChar": 0,
+        "endLine": 230,
+        "endChar": 1
+      },
+      "revId": "426e31b342e43fa46207acbe1a9bf7298e90ed1a",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": true
+    }
+  ]
+}
