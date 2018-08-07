@@ -46,6 +46,24 @@
       "revId": "edd58a0bec9f9db0e91dd9f58a6bd7304273c5c5",
       "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "37253b5d_c241dff3",
+        "filename": "tools/releasetools/common.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 1779,
+      "author": {
+        "id": 11883
+      },
+      "writtenOn": "2018-08-07T20:55:44Z",
+      "side": 1,
+      "message": "ew.",
+      "parentUuid": "7f5c8c3f_fe946a7f",
+      "revId": "edd58a0bec9f9db0e91dd9f58a6bd7304273c5c5",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
     }
   ]
 }
