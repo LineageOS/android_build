@@ -111,9 +111,13 @@ LOCAL_ADDITIONAL_DEPENDENCIES := $(filter-out %.mk,$(LOCAL_ADDITIONAL_DEPENDENCI
 
 my_bad_deps := $(strip $(foreach dep,$(filter-out | ||,$(LOCAL_ADDITIONAL_DEPENDENCIES)),\
                  $(if $(findstring /,$(dep)),,$(dep))))
+my_bad_deps_sans_kernel := $(strip $(foreach dep,$(filter-out | ||,$(my_bad_deps)),\
+                 $(if $(findstring KERNEL_OBJ,$(dep)),,$(dep))))
+ifeq ($(my_bad_deps_sans_kernel),)
 ifneq ($(my_bad_deps),)
 $(call pretty-warning,"Bad LOCAL_ADDITIONAL_DEPENDENCIES: $(my_bad_deps)")
 $(call pretty-error,"LOCAL_ADDITIONAL_DEPENDENCIES must only contain paths (not module names)")
+endif
 endif
 
 ###########################################################
