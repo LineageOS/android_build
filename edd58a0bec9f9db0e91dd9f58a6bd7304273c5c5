@@ -22,6 +22,30 @@
       "revId": "edd58a0bec9f9db0e91dd9f58a6bd7304273c5c5",
       "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7f5c8c3f_fe946a7f",
+        "filename": "tools/releasetools/common.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 1779,
+      "author": {
+        "id": 4550
+      },
+      "writtenOn": "2018-08-07T20:54:20Z",
+      "side": 1,
+      "message": "Some old motos use ext3 iirc. Doesn\u0027t hurt to leave this here I think",
+      "parentUuid": "5b650209_82a05b32",
+      "range": {
+        "startLine": 1778,
+        "startChar": 1,
+        "endLine": 1779,
+        "endChar": 19
+      },
+      "revId": "edd58a0bec9f9db0e91dd9f58a6bd7304273c5c5",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": true
     }
   ]
 }
