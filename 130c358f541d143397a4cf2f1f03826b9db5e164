@@ -22,6 +22,30 @@
       "revId": "130c358f541d143397a4cf2f1f03826b9db5e164",
       "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "824ea924_c377f66f",
+        "filename": "core/config.mk",
+        "patchSetId": 1
+      },
+      "lineNbr": 673,
+      "author": {
+        "id": 4550
+      },
+      "writtenOn": "2018-08-07T21:12:06Z",
+      "side": 1,
+      "message": "Unrelated, it\u0027s for omap something",
+      "parentUuid": "c79bf542_4d84b1b3",
+      "range": {
+        "startLine": 673,
+        "startChar": 0,
+        "endLine": 673,
+        "endChar": 1
+      },
+      "revId": "130c358f541d143397a4cf2f1f03826b9db5e164",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": true
     }
   ]
 }
