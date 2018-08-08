@@ -45,6 +45,30 @@
       "revId": "93898bf192287bbf60845c94807113963affd6cd",
       "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "4271c363_2656bc71",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 12604
+      },
+      "writtenOn": "2018-08-08T19:14:43Z",
+      "side": 1,
+      "message": "Ok, so we should take a closer look at CVE-2018-9447 as well.",
+      "parentUuid": "7e786d0c_257b45f6",
+      "range": {
+        "startLine": 36,
+        "startChar": 0,
+        "endLine": 40,
+        "endChar": 37
+      },
+      "revId": "93898bf192287bbf60845c94807113963affd6cd",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
     }
   ]
 }
