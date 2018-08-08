@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "14e335b0_b10e8da0",
+        "filename": "core/binary.mk",
+        "patchSetId": 3
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 5503
+      },
+      "writtenOn": "2018-08-08T16:00:44Z",
+      "side": 1,
+      "message": "Remove \"and warn the user\".",
+      "revId": "ccee95c8f11445e7755122863247cfc957893f59",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    }
+  ]
+}
