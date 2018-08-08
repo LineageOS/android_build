@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "175b3797_73e24df0",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 15173
+      },
+      "writtenOn": "2018-08-08T18:47:53Z",
+      "side": 1,
+      "message": "We have this: https://review.lineageos.org/#/c/LineageOS/android_external_libavc/+/222865/",
+      "range": {
+        "startLine": 35,
+        "startChar": 0,
+        "endLine": 35,
+        "endChar": 52
+      },
+      "revId": "93898bf192287bbf60845c94807113963affd6cd",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7e786d0c_257b45f6",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 15173
+      },
+      "writtenOn": "2018-08-08T18:47:53Z",
+      "side": 1,
+      "message": "If you are to trust google, then you could say \"No impact\", as opposed to \"not implemented\". But I have a hard time understanding why I83a5e94acdae4287e6a62558cffb586d35930b47 (A-79995313) wouldn\u0027t be relevant to 7.1.2",
+      "range": {
+        "startLine": 36,
+        "startChar": 0,
+        "endLine": 40,
+        "endChar": 37
+      },
+      "revId": "93898bf192287bbf60845c94807113963affd6cd",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    }
+  ]
+}
