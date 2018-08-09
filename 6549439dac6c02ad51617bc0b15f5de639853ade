@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e4d7856c_65b1bff4",
+        "filename": "core/Makefile",
+        "patchSetId": 5
+      },
+      "lineNbr": 2621,
+      "author": {
+        "id": 13648
+      },
+      "writtenOn": "2018-08-09T12:20:22Z",
+      "side": 1,
+      "message": "This isn\u0027t getting copied to OTA zip.",
+      "range": {
+        "startLine": 2621,
+        "startChar": 41,
+        "endLine": 2621,
+        "endChar": 59
+      },
+      "revId": "6549439dac6c02ad51617bc0b15f5de639853ade",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    }
+  ]
+}
