@@ -1125,6 +1125,8 @@ droidcore: files \
 	$(INSTALLED_FILES_FILE_VENDOR) \
 	$(INSTALLED_FILES_FILE_PRODUCT) \
 	$(INSTALLED_FILES_FILE_SYSTEMOTHER) \
+	$(INSTALLED_FILES_FILE_RAMDISK) \
+	$(INSTALLED_FILES_FILE_ROOT) \
 	soong_docs
 
 # dist_files only for putting your library into the dist directory with a full build.
@@ -1211,9 +1213,13 @@ else # TARGET_BUILD_APPS
   endif
   endif
 
-  ifeq ($(BOARD_BUILD_SYSTEM_ROOT_IMAGE),true)
+  $(call dist-for-goals, droidcore, \
+    $(INSTALLED_FILES_FILE_ROOT) \
+  )
+
+  ifneq ($(BOARD_BUILD_SYSTEM_ROOT_IMAGE),true)
     $(call dist-for-goals, droidcore, \
-      $(INSTALLED_FILES_FILE_ROOT) \
+      $(INSTALLED_FILES_FILE_RAMDISK) \
     )
   endif
 
