@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a59b17ae_eea5db24",
+        "filename": "core/binary.mk",
+        "patchSetId": 1
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 11883
+      },
+      "writtenOn": "2018-08-09T14:24:27Z",
+      "side": 1,
+      "message": "Do we really want to warn something we aren\u0027t going to fix?",
+      "revId": "9ab5df33d1ac805ade6814d669fb7898673e8d54",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": true
+    }
+  ]
+}
