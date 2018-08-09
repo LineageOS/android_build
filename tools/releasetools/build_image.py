@@ -455,12 +455,14 @@ def BuildImage(in_dir, prop_dict, out_file, target_out=None):
   Returns:
     True iff the image is built successfully.
   """
-  # system_root_image=true: build a system.img that combines the contents of
-  # /system and root, which should be mounted at the root of the file system.
   origin_in = in_dir
   fs_config = prop_dict.get("fs_config")
-  if (prop_dict.get("system_root_image") == "true" and
-      prop_dict["mount_point"] == "system"):
+
+  if prop_dict["mount_point"] == "system_other":
+    prop_dict["mount_point"] = "system"
+  elif prop_dict["mount_point"] != "system":
+    # Stub
+  else:
     in_dir = common.MakeTempDir()
     # Change the mount point to "/".
     prop_dict["mount_point"] = "/"
@@ -751,7 +753,6 @@ def ImagePropFromGlobalDict(glob_dict, mount_point):
   elif mount_point == "system_other":
     # We inherit the selinux policies of /system since we contain some of its
     # files.
-    d["mount_point"] = "system"
     copy_prop("avb_system_hashtree_enable", "avb_hashtree_enable")
     copy_prop("avb_system_add_hashtree_footer_args",
               "avb_add_hashtree_footer_args")
