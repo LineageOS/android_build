@@ -39,6 +39,24 @@
       "revId": "a783b60f9173fd53c545fdb6efbdddafbedee72b",
       "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "28b316e4_3832a7d0",
+        "filename": "core/product_config.mk",
+        "patchSetId": 1
+      },
+      "lineNbr": 178,
+      "author": {
+        "id": 13648
+      },
+      "writtenOn": "2018-08-10T12:00:42Z",
+      "side": 1,
+      "message": "I would love to see that happen, given the fact that flounder and flounder_lte could be merged together.",
+      "parentUuid": "5039c720_ab31905c",
+      "revId": "a783b60f9173fd53c545fdb6efbdddafbedee72b",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": true
     }
   ]
 }
