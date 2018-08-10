@@ -16,6 +16,24 @@
       "revId": "9ab5df33d1ac805ade6814d669fb7898673e8d54",
       "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "631dd555_2ca424d7",
+        "filename": "core/binary.mk",
+        "patchSetId": 1
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 4550
+      },
+      "writtenOn": "2018-08-10T21:16:23Z",
+      "side": 1,
+      "message": "We fixed this in the few places it failed. This is different than the other warning that appered everywhere",
+      "parentUuid": "a59b17ae_eea5db24",
+      "revId": "9ab5df33d1ac805ade6814d669fb7898673e8d54",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": true
     }
   ]
 }
