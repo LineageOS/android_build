@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a0656ff2_8b82ccb0",
+        "filename": "tools/releasetools/ota_from_target_files.py",
+        "patchSetId": 11
+      },
+      "lineNbr": 223,
+      "author": {
+        "id": 4550
+      },
+      "writtenOn": "2018-08-10T21:39:31Z",
+      "side": 1,
+      "message": "Move this to https://review.lineageos.org/#/c/LineageOS/android_build/+/222748/\n\nand \u0027SYSTEM/build.prop\u0027 to https://review.lineageos.org/#/c/LineageOS/android_build/+/222777/",
+      "range": {
+        "startLine": 223,
+        "startChar": 39,
+        "endLine": 223,
+        "endChar": 50
+      },
+      "revId": "1eea6791bc5edd106f8a640b42014011c909996f",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    }
+  ]
+}
