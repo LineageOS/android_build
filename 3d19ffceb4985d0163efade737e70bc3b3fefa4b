@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "82449aec_52bc2b57",
+        "filename": "tools/releasetools/common.py",
+        "patchSetId": 11
+      },
+      "lineNbr": 443,
+      "author": {
+        "id": 13648
+      },
+      "writtenOn": "2018-08-13T09:11:31Z",
+      "side": 1,
+      "message": "Does it matter so much? Why do we now try to insanely trim long-time committed stuff?",
+      "parentUuid": "c3f4b115_2dd7166c",
+      "revId": "3d19ffceb4985d0163efade737e70bc3b3fefa4b",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "c3b56184_89b49577",
         "filename": "tools/releasetools/common.py",
         "patchSetId": 11
