@@ -55,6 +55,24 @@
     },
     {
       "key": {
+        "uuid": "1716177c_bb57dd68",
+        "filename": "tools/releasetools/common.py",
+        "patchSetId": 11
+      },
+      "lineNbr": 443,
+      "author": {
+        "id": 13648
+      },
+      "writtenOn": "2018-08-13T09:26:04Z",
+      "side": 1,
+      "message": "Wait, isn\u0027t this part of CAF squash?",
+      "parentUuid": "d00dd34e_f66ea042",
+      "revId": "3d19ffceb4985d0163efade737e70bc3b3fefa4b",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "c3b56184_89b49577",
         "filename": "tools/releasetools/common.py",
         "patchSetId": 11
