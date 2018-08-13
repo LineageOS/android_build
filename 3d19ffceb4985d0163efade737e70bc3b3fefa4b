@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c3f4b115_2dd7166c",
+        "filename": "tools/releasetools/common.py",
+        "patchSetId": 11
+      },
+      "lineNbr": 443,
+      "author": {
+        "id": 11883
+      },
+      "writtenOn": "2018-08-13T09:09:40Z",
+      "side": 1,
+      "message": "is anyone using these?",
+      "revId": "3d19ffceb4985d0163efade737e70bc3b3fefa4b",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c3b56184_89b49577",
+        "filename": "tools/releasetools/common.py",
+        "patchSetId": 11
+      },
+      "lineNbr": 448,
+      "author": {
+        "id": 11883
+      },
+      "writtenOn": "2018-08-13T09:09:40Z",
+      "side": 1,
+      "message": ".",
+      "revId": "3d19ffceb4985d0163efade737e70bc3b3fefa4b",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": true
+    }
+  ]
+}
