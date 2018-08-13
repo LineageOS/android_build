@@ -51,6 +51,24 @@
       "revId": "3d19ffceb4985d0163efade737e70bc3b3fefa4b",
       "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "84f0bcf4_8ee42c3f",
+        "filename": "tools/releasetools/common.py",
+        "patchSetId": 11
+      },
+      "lineNbr": 448,
+      "author": {
+        "id": 13648
+      },
+      "writtenOn": "2018-08-13T09:15:19Z",
+      "side": 1,
+      "message": "https://github.com/LineageOS/android_device_htc_msm8974-common/blob/lineage-15.1/BoardConfigCommon.mk#L58\nHappy now?",
+      "parentUuid": "c3b56184_89b49577",
+      "revId": "3d19ffceb4985d0163efade737e70bc3b3fefa4b",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": true
     }
   ]
 }
