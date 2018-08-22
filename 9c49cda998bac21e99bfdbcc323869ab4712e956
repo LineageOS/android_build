@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d9efb095_59182e35",
+        "filename": "tools/releasetools/add_img_to_target_files.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 439,
+      "author": {
+        "id": 11883
+      },
+      "writtenOn": "2018-08-22T14:31:43Z",
+      "side": 1,
+      "message": "output_zip, prefix\u003d\"IMAGES/\"",
+      "range": {
+        "startLine": 439,
+        "startChar": 22,
+        "endLine": 439,
+        "endChar": 32
+      },
+      "revId": "9c49cda998bac21e99bfdbcc323869ab4712e956",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "94d1a9ec_28ebc162",
+        "filename": "tools/releasetools/add_img_to_target_files.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 445,
+      "author": {
+        "id": 11883
+      },
+      "writtenOn": "2018-08-22T14:31:43Z",
+      "side": 1,
+      "message": "prefix",
+      "range": {
+        "startLine": 445,
+        "startChar": 50,
+        "endLine": 445,
+        "endChar": 58
+      },
+      "revId": "9c49cda998bac21e99bfdbcc323869ab4712e956",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6bf2d447_de4e432a",
+        "filename": "tools/releasetools/add_img_to_target_files.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 454,
+      "author": {
+        "id": 11883
+      },
+      "writtenOn": "2018-08-22T14:31:43Z",
+      "side": 1,
+      "message": "img \u003d OutputFile(output_zip, OPTIONS.input_tmp, prefix, \"vbmeta.img\")\n  if os.path.exists(img.input_name):\n    print(\"vbmeta.img already exists in %s, no need to rebuild...\" % (prefix,))\n    return img.input_name\n\n  vbmeta_prebuilt_path \u003d os.path.join(\n      OPTIONS.input_tmp, \"IMAGES\", \"vbmeta.img\")\n  assert os.path.exists(dtbo_prebuilt_path)\n  shutil.copy(vbmeta_prebuilt_path, img.name)\n\n  img.Write()",
+      "range": {
+        "startLine": 446,
+        "startChar": 0,
+        "endLine": 454,
+        "endChar": 87
+      },
+      "revId": "9c49cda998bac21e99bfdbcc323869ab4712e956",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": true
+    }
+  ]
+}
