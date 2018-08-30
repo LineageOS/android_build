@@ -48,6 +48,23 @@
     },
     {
       "key": {
+        "uuid": "a5291637_fb9d0519",
+        "filename": "tools/releasetools/add_img_to_target_files.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 447,
+      "author": {
+        "id": 19253
+      },
+      "writtenOn": "2018-08-30T16:05:37Z",
+      "side": 1,
+      "message": "vbmeta_dir \u003d os.path.join(OPTIONS.input_tmp, \"IMAGES\")\nif not os.path.isdir(vbmeta_dir):\n  os.mkdir(vbmeta_dir)",
+      "revId": "9c49cda998bac21e99bfdbcc323869ab4712e956",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "6bf2d447_de4e432a",
         "filename": "tools/releasetools/add_img_to_target_files.py",
         "patchSetId": 5
