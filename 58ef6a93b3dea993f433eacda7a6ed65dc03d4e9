@@ -16,6 +16,24 @@
       "revId": "58ef6a93b3dea993f433eacda7a6ed65dc03d4e9",
       "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "2afbddd1_79ee8070",
+        "filename": "tools/releasetools/build_image.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 464,
+      "author": {
+        "id": 11883
+      },
+      "writtenOn": "2018-09-05T06:05:04Z",
+      "side": 1,
+      "message": "Don\u0027t think so, I have to do nothing under this block, and not passthrough",
+      "parentUuid": "ad392f05_445d2088",
+      "revId": "58ef6a93b3dea993f433eacda7a6ed65dc03d4e9",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
     }
   ]
 }
