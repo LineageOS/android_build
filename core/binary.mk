@@ -33,20 +33,24 @@ endif
 
 my_soong_problems :=
 
-# The proper dependency for kernel headers is INSTALLED_KERNEL_HEADERS.
-# However, there are many instances of the old style dependencies in the
-# source tree.  Fix them up and warn the user.
-ifneq (,$(findstring $(TARGET_OUT_INTERMEDIATES)/KERNEL_OBJ/usr,$(LOCAL_ADDITIONAL_DEPENDENCIES)))
-  LOCAL_ADDITIONAL_DEPENDENCIES := $(patsubst $(TARGET_OUT_INTERMEDIATES)/KERNEL_OBJ/usr,INSTALLED_KERNEL_HEADERS,$(LOCAL_ADDITIONAL_DEPENDENCIES))
+# Automatically replace the old-style kernel header include with a dependency
+# on the generated_kernel_headers header library
+ifneq (,$(findstring $(TARGET_OUT_INTERMEDIATES)/KERNEL_OBJ/usr/include,$(LOCAL_C_INCLUDES)))
+  LOCAL_C_INCLUDES := $(patsubst $(TARGET_OUT_INTERMEDIATES)/KERNEL_OBJ/usr/include,,$(LOCAL_C_INCLUDES))
+  LOCAL_HEADER_LIBRARIES += generated_kernel_headers
 endif
 
-# Many qcom modules don't correctly set a dependency on the kernel headers. Fix it for them,
-# but warn the user.
-ifneq (,$(findstring $(TARGET_OUT_INTERMEDIATES)/KERNEL_OBJ/usr/include,$(LOCAL_C_INCLUDES)))
-  ifeq (,$(findstring INSTALLED_KERNEL_HEADERS,$(LOCAL_ADDITIONAL_DEPENDENCIES)))
-    $(warning $(LOCAL_MODULE) uses kernel headers, but does not depend on them!)
-    LOCAL_ADDITIONAL_DEPENDENCIES += INSTALLED_KERNEL_HEADERS
-  endif
+# Some qcom binaries use this weird -isystem include...
+ifneq (,$(findstring $(TARGET_OUT_INTERMEDIATES)/KERNEL_OBJ/usr/include,$(LOCAL_CFLAGS)))
+  LOCAL_CFLAGS := $(patsubst -isystem $(TARGET_OUT_INTERMEDIATES)/KERNEL_OBJ/usr/include,,$(LOCAL_CFLAGS))
+  LOCAL_HEADER_LIBRARIES += generated_kernel_headers
+endif
+
+# Remove KERNEL_OBJ/usr from any LOCAL_ADDITIONAL_DEPENDENCIES, we will
+# just include generated_kernel_headers which already has the proper
+# dependency
+ifneq (,$(findstring $(TARGET_OUT_INTERMEDIATES)/KERNEL_OBJ/usr,$(LOCAL_ADDITIONAL_DEPENDENCIES)))
+  LOCAL_ADDITIONAL_DEPENDENCIES := $(patsubst $(TARGET_OUT_INTERMEDIATES)/KERNEL_OBJ/usr,,$(LOCAL_ADDITIONAL_DEPENDENCIES))
 endif
 
 # The following LOCAL_ variables will be modified in this file.
