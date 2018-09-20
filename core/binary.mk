@@ -34,6 +34,30 @@ endif
 
 my_soong_problems :=
 
+# Automatically replace the old-style kernel header include with a dependency
+# on the generated_kernel_headers header library
+ifneq (,$(findstring $(TARGET_OUT_INTERMEDIATES)/KERNEL_OBJ/usr/include,$(LOCAL_C_INCLUDES)))
+  LOCAL_C_INCLUDES := $(patsubst $(TARGET_OUT_INTERMEDIATES)/KERNEL_OBJ/usr/include,,$(LOCAL_C_INCLUDES))
+  LOCAL_HEADER_LIBRARIES += generated_kernel_headers
+endif
+ifneq (,$(findstring $(TARGET_OUT_INTERMEDIATES)/KERNEL_OBJ/usr/techpack/audio/include,$(LOCAL_C_INCLUDES)))
+  LOCAL_C_INCLUDES := $(patsubst $(TARGET_OUT_INTERMEDIATES)/KERNEL_OBJ/usr/techpack/audio/include,,$(LOCAL_C_INCLUDES))
+  LOCAL_HEADER_LIBRARIES += generated_kernel_headers
+endif
+
+# Some qcom binaries use this weird -isystem include...
+ifneq (,$(findstring $(TARGET_OUT_INTERMEDIATES)/KERNEL_OBJ/usr/include,$(LOCAL_CFLAGS)))
+  LOCAL_CFLAGS := $(patsubst -isystem $(TARGET_OUT_INTERMEDIATES)/KERNEL_OBJ/usr/include,,$(LOCAL_CFLAGS))
+  LOCAL_HEADER_LIBRARIES += generated_kernel_headers
+endif
+
+# Remove KERNEL_OBJ/usr from any LOCAL_ADDITIONAL_DEPENDENCIES, we will
+# just include generated_kernel_headers which already has the proper
+# dependency
+ifneq (,$(findstring $(TARGET_OUT_INTERMEDIATES)/KERNEL_OBJ/usr,$(LOCAL_ADDITIONAL_DEPENDENCIES)))
+  LOCAL_ADDITIONAL_DEPENDENCIES := $(patsubst $(TARGET_OUT_INTERMEDIATES)/KERNEL_OBJ/usr,,$(LOCAL_ADDITIONAL_DEPENDENCIES))
+endif
+
 # The following LOCAL_ variables will be modified in this file.
 # Because the same LOCAL_ variables may be used to define modules for both 1st arch and 2nd arch,
 # we can't modify them in place.
