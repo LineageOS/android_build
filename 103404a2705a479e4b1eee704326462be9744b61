@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf7c294f_50e7b424",
+        "filename": "core/Makefile",
+        "patchSetId": 2
+      },
+      "lineNbr": 730,
+      "author": {
+        "id": 14403
+      },
+      "writtenOn": "2018-09-21T01:57:07Z",
+      "side": 1,
+      "message": "ok but we need to add a rules for skip this",
+      "range": {
+        "startLine": 730,
+        "startChar": 0,
+        "endLine": 730,
+        "endChar": 64
+      },
+      "revId": "103404a2705a479e4b1eee704326462be9744b61",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    }
+  ]
+}
