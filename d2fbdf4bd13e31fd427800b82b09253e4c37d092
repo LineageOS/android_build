@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dce3caac_337963ef",
+        "filename": "core/binary.mk",
+        "patchSetId": 3
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 2936
+      },
+      "writtenOn": "2018-09-23T20:15:12Z",
+      "side": 1,
+      "message": "If you check out Google\u0027s kernel header setup, they use -isystem to add the kernel headers specified in hardware/qcom/msm8xxx.",
+      "range": {
+        "startLine": 43,
+        "startChar": 37,
+        "endLine": 43,
+        "endChar": 44
+      },
+      "revId": "d2fbdf4bd13e31fd427800b82b09253e4c37d092",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": true
+    }
+  ]
+}
