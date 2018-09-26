@@ -29,7 +29,6 @@ PRODUCT_PACKAGES += \
     libfilterpack_imageproc \
     libgabi++ \
     libmdnssd \
-    libnfc_ndef \
     libpowermanager \
     libspeexresampler \
     libstagefright_soft_aacdec \
