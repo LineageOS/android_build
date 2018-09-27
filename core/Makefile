@@ -605,7 +605,9 @@ endif
 
 INTERNAL_RAMDISK_FILES := $(filter $(TARGET_ROOT_OUT)/%, \
 	$(ALL_GENERATED_SOURCES) \
-	$(ALL_DEFAULT_INSTALLED_MODULES))
+	$(ALL_DEFAULT_INSTALLED_MODULES)) \
+	$(if $(BOARD_BOOT_KERNEL_MODULES), \
+	$(BOARD_BOOT_KERNEL_MODULES) $(DEPMOD))
 
 BUILT_RAMDISK_TARGET := $(PRODUCT_OUT)/ramdisk.img
 
@@ -613,6 +615,10 @@ BUILT_RAMDISK_TARGET := $(PRODUCT_OUT)/ramdisk.img
 INSTALLED_RAMDISK_TARGET := $(BUILT_RAMDISK_TARGET)
 $(INSTALLED_RAMDISK_TARGET): $(MKBOOTFS) $(INTERNAL_RAMDISK_FILES) | $(MINIGZIP)
 	$(call pretty,"Target ram disk: $@")
+	$(if $(BOARD_BOOT_KERNEL_MODULES), \
+	  $(call build-image-kernel-modules, \
+	  $(BOARD_BOOT_KERNEL_MODULES),$(TARGET_ROOT_OUT),, \
+	  $(call intermediates-dir-for,PACKAGING,depmod_boot)))
 	$(hide) $(MKBOOTFS) -d $(TARGET_OUT) $(TARGET_ROOT_OUT) | $(BOOT_RAMDISK_COMPRESSOR) > $@
 
 .PHONY: ramdisk-nodeps
@@ -1092,6 +1098,10 @@ ifneq (,$(INSTALLED_RECOVERYIMAGE_TARGET)$(filter true,$(BOARD_USES_RECOVERY_AS_
 INTERNAL_RECOVERYIMAGE_FILES := $(filter $(TARGET_RECOVERY_OUT)/%, \
     $(ALL_DEFAULT_INSTALLED_MODULES))
 
+# Passed into rsync from non-recovery root to recovery root, to avoid conflicts with recovery-specific
+IGNORE_BOOT_KERNEL_MODULES := $(addprefix --exclude=lib/modules/,$(notdir \
+    $(BOARD_BOOT_KERNEL_MODULES)) modules.{alias,dep}) --prune-empty-dirs
+
 recovery_initrc := $(call project-path-for,recovery)/etc/init.rc
 recovery_sepolicy := \
     $(TARGET_RECOVERY_ROOT_OUT)/sepolicy \
@@ -1254,7 +1264,7 @@ define build-recoveryramdisk
   $(hide) mkdir -p $(TARGET_RECOVERY_ROOT_OUT)/etc $(TARGET_RECOVERY_ROOT_OUT)/sdcard $(TARGET_RECOVERY_ROOT_OUT)/tmp
   @echo Copying baseline ramdisk...
   # Use rsync because "cp -Rf" fails to overwrite broken symlinks on Mac.
-  $(hide) rsync -a --exclude=etc --exclude=sdcard --exclude=vendor $(IGNORE_RECOVERY_SEPOLICY) $(IGNORE_CACHE_LINK) $(TARGET_ROOT_OUT) $(TARGET_RECOVERY_OUT)
+  $(hide) rsync -a --exclude=etc --exclude=sdcard --exclude=vendor $(IGNORE_BOOT_KERNEL_MODULES) $(IGNORE_RECOVERY_SEPOLICY) $(IGNORE_CACHE_LINK) $(TARGET_ROOT_OUT) $(TARGET_RECOVERY_OUT)
   # Copy adbd from system/bin to recovery/root/sbin
   $(hide) cp -f $(TARGET_OUT_EXECUTABLES)/adbd $(TARGET_RECOVERY_ROOT_OUT)/sbin/adbd
   @echo Modifying ramdisk contents...
