@@ -845,23 +845,18 @@ endif # PRODUCT_SUPPORTS_VBOOT
 endif # TARGET_BOOTIMAGE_USE_EXT2 / BOARD_CUSTOM_BOOTIMG_MK
 endif # BOARD_USES_RECOVERY_AS_BOOT
 
-else	# TARGET_NO_KERNEL
+else # TARGET_NO_KERNEL == "true"
 ifdef BOARD_PREBUILT_BOOTIMAGE
 ifneq ($(BOARD_BUILD_SYSTEM_ROOT_IMAGE),true)
 # Remove when b/63676296 is resolved.
 $(error Prebuilt bootimage is only supported for AB targets)
 endif
 $(eval $(call copy-one-file,$(BOARD_PREBUILT_BOOTIMAGE),$(INSTALLED_BOOTIMAGE_TARGET)))
-else
+else # BOARD_PREBUILT_BOOTIMAGE not defined
 INTERNAL_KERNEL_CMDLINE := $(strip $(BOARD_KERNEL_CMDLINE))
-# HACK: The top-level targets depend on the bootimage.  Not all targets
-# can produce a bootimage, though, and emulator targets need the ramdisk
-# instead.  Fake it out by calling the ramdisk the bootimage.
-# TODO: make the emulator use bootimages, and make mkbootimg accept
-#       kernel-less inputs.
-INSTALLED_BOOTIMAGE_TARGET := $(INSTALLED_RAMDISK_TARGET)
-endif
-endif
+INSTALLED_BOOTIMAGE_TARGET :=
+endif # BOARD_PREBUILT_BOOTIMAGE
+endif # TARGET_NO_KERNEL
 
 # -----------------------------------------------------------------
 # NOTICE files
@@ -1700,6 +1695,7 @@ SYSTEMIMAGE_SOURCE_DIR := $(TARGET_OUT)
 # as the source (since they are very similar).  Generate the patch so
 # we can see how big it's going to be, and include that in the system
 # image size check calculation.
+ifneq ($(INSTALLED_BOOTIMAGE_TARGET),)
 ifneq ($(INSTALLED_RECOVERYIMAGE_TARGET),)
 ifneq ($(BOARD_USES_FULL_RECOVERY_IMAGE),true)
 ifneq (,$(filter true, $(BOARD_BUILD_SYSTEM_ROOT_IMAGE) $(BOARD_INCLUDE_RECOVERY_DTBO)))
@@ -1722,9 +1718,9 @@ $(RECOVERY_FROM_BOOT_PATCH): \
 	$(PRIVATE_DIFF_TOOL) $(INSTALLED_BOOTIMAGE_TARGET) $(INSTALLED_RECOVERYIMAGE_TARGET) $@
 else # $(BOARD_USES_FULL_RECOVERY_IMAGE) == true
 RECOVERY_FROM_BOOT_PATCH := $(INSTALLED_RECOVERYIMAGE_TARGET)
-endif
-endif
-
+endif # BOARD_USES_FULL_RECOVERY_IMAGE
+endif # INSTALLED_RECOVERYIMAGE_TARGET
+endif # INSTALLED_BOOTIMAGE_TARGET
 
 $(INSTALLED_SYSTEMIMAGE): $(BUILT_SYSTEMIMAGE) $(RECOVERY_FROM_BOOT_PATCH)
 	@echo "Install system fs image: $@"
@@ -2291,11 +2287,13 @@ $(eval _footer_args := $(PART)_FOOTER_ARGS)
 $(eval $($(_footer_args)) += --rollback_index $($(_rollback_index)))
 endef
 
+ifdef INSTALLED_BOOTIMAGE_TARGET
 ifdef BOARD_AVB_BOOT_KEY_PATH
 $(eval $(call check-and-set-avb-chain-args,BOOT))
 else
 INTERNAL_AVB_MAKE_VBMETA_IMAGE_ARGS += \
     --include_descriptors_from_image $(INSTALLED_BOOTIMAGE_TARGET)
+endif
 endif
 
 ifdef BOARD_AVB_SYSTEM_KEY_PATH
@@ -2357,10 +2355,6 @@ ifdef BOARD_AVB_ROLLBACK_INDEX
 BOARD_AVB_MAKE_VBMETA_IMAGE_ARGS += --rollback_index $(BOARD_AVB_ROLLBACK_INDEX)
 endif
 
-ifndef BOARD_BOOTIMAGE_PARTITION_SIZE
-  $(error BOARD_BOOTIMAGE_PARTITION_SIZE must be set for BOARD_AVB_ENABLE)
-endif
-
 # $(1): the directory to extract public keys to
 define extract-avb-chain-public-keys
   $(if $(BOARD_AVB_BOOT_KEY_PATH),\
@@ -2410,14 +2404,6 @@ $(INSTALLED_VBMETAIMAGE_TARGET): \
 .PHONY: vbmetaimage-nodeps
 vbmetaimage-nodeps:
 	$(build-vbmetaimage-target)
-
-else ifeq (true,$(BOARD_BUILD_DISABLED_VBMETAIMAGE))
-BUILT_DISABLED_VBMETAIMAGE := $(PRODUCT_OUT)/vbmeta.img
-
-INSTALLED_VBMETAIMAGE_TARGET := $(BUILT_DISABLED_VBMETAIMAGE)
-$(INSTALLED_VBMETAIMAGE_TARGET): $(AVBTOOL)
-	$(hide) $(AVBTOOL) make_vbmeta_image \
-	  --flag 2 --padding_size 4096 --output $@
 
 endif # BOARD_AVB_ENABLE
 
@@ -2529,33 +2515,40 @@ endif
 # -----------------------------------------------------------------
 # host tools needed to build dist and OTA packages
 
+# set build_ota_package, and allow opt-out below
 build_ota_package := true
 ifeq ($(TARGET_SKIP_OTA_PACKAGE),true)
-build_ota_package := false
+  build_ota_package := false
 endif
 ifneq ($(strip $(SANITIZE_TARGET)),)
-build_ota_package := false
+    build_ota_package := false
 endif
 ifeq ($(TARGET_PRODUCT),sdk)
-build_ota_package := false
+    build_ota_package := false
 endif
 ifneq ($(filter generic%,$(TARGET_DEVICE)),)
-build_ota_package := false
+    build_ota_package := false
 endif
 ifeq ($(TARGET_NO_KERNEL),true)
-build_ota_package := false
+    build_ota_package := false
 endif
 ifeq ($(recovery_fstab),)
-build_ota_package := false
+    build_ota_package := false
 endif
 ifeq ($(TARGET_BUILD_PDK),true)
-build_ota_package := false
+    build_ota_package := false
+endif
+
+# set build_otatools_package, and allow opt-out below
+build_otatools_package := true
+ifeq ($(TARGET_SKIP_OTATOOLS_PACKAGE),true)
+    build_otatools_package := false
 endif
 ifeq ($(TARGET_FORCE_OTA_PACKAGE),true)
 build_ota_package := true
 endif
 
-ifeq ($(build_ota_package),true)
+ifeq ($(build_otatools_package),true)
 OTATOOLS :=  $(HOST_OUT_EXECUTABLES)/minigzip \
   $(HOST_OUT_EXECUTABLES)/aapt \
   $(HOST_OUT_EXECUTABLES)/adb \
@@ -2670,7 +2663,7 @@ $(BUILT_OTATOOLS_PACKAGE): $(OTATOOLS) $(OTATOOLS_DEPS) $(OTATOOLS_RELEASETOOLS)
 .PHONY: otatools-package
 otatools-package: $(BUILT_OTATOOLS_PACKAGE)
 
-endif # build_ota_package
+endif # build_otatools_package
 
 # -----------------------------------------------------------------
 # A zip of the directories that map to the target filesystem.
@@ -2759,6 +2752,7 @@ endef
 # Depending on the various images guarantees that the underlying
 # directories are up-to-date.
 $(BUILT_TARGET_FILES_PACKAGE): \
+		$(INSTALLED_RAMDISK_TARGET) \
 		$(INSTALLED_BOOTIMAGE_TARGET) \
 		$(INSTALLED_RADIOIMAGE_TARGET) \
 		$(INSTALLED_RECOVERYIMAGE_TARGET) \
@@ -3037,14 +3031,6 @@ ifeq ($(BREAKPAD_GENERATE_SYMBOLS),true)
 	$(hide) $(ACP) -r $(TARGET_OUT_BREAKPAD) $(zip_root)/BREAKPAD
 endif
 	$(hide) echo "ota_override_device=$(OTA_SCRIPT_OVERRIDE_DEVICE)" >> $(zip_root)/META/misc_info.txt
-# BOARD_BUILD_DISABLED_VBMETAIMAGE is used to build a special vbmeta.img
-# that disables AVB verification. The content is fixed and we can just copy
-# it to $(zip_root)/IMAGES without passing some info into misc_info.txt for
-# regeneration.
-ifeq (true,$(BOARD_BUILD_DISABLED_VBMETAIMAGE))
-	$(hide) mkdir -p $(zip_root)/IMAGES
-	$(hide) cp $(INSTALLED_VBMETAIMAGE_TARGET) $(zip_root)/IMAGES/
-endif
 ifdef BOARD_PREBUILT_VENDORIMAGE
 	$(hide) mkdir -p $(zip_root)/IMAGES
 	$(hide) cp $(INSTALLED_VENDORIMAGE_TARGET) $(zip_root)/IMAGES/
@@ -3223,6 +3209,7 @@ SYMBOLS_ZIP := $(PRODUCT_OUT)/$(name).zip
 # For apps_only build we'll establish the dependency later in build/make/core/main.mk.
 ifndef TARGET_BUILD_APPS
 $(SYMBOLS_ZIP): $(INSTALLED_SYSTEMIMAGE) \
+		$(INSTALLED_RAMDISK_TARGET) \
 		$(INSTALLED_BOOTIMAGE_TARGET) \
 		$(INSTALLED_USERDATAIMAGE_TARGET) \
 		$(INSTALLED_VENDORIMAGE_TARGET) \
@@ -3247,6 +3234,7 @@ name := $(name)-coverage-$(FILE_NAME_TAG)
 COVERAGE_ZIP := $(PRODUCT_OUT)/$(name).zip
 ifndef TARGET_BUILD_APPS
 $(COVERAGE_ZIP): $(INSTALLED_SYSTEMIMAGE) \
+		$(INSTALLED_RAMDISK_TARGET) \
 		$(INSTALLED_BOOTIMAGE_TARGET) \
 		$(INSTALLED_USERDATAIMAGE_TARGET) \
 		$(INSTALLED_VENDORIMAGE_TARGET) \
