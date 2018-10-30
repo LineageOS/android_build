@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a6b8f365_8df2ff64",
+        "filename": "tools/releasetools/edify_generator.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 243,
+      "author": {
+        "id": 13648
+      },
+      "writtenOn": "2018-10-30T16:16:40Z",
+      "side": 0,
+      "message": "Shouldn\u0027t we keep this?",
+      "range": {
+        "startLine": 242,
+        "startChar": 0,
+        "endLine": 243,
+        "endChar": 34
+      },
+      "revId": "98850e3f5ccbdbaaeb44fc8d86d29dfdd9a9f6bc",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    }
+  ]
+}
