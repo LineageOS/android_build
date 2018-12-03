@@ -220,14 +220,9 @@ include build/make/core/pdk_config.mk
 
 #
 # -----------------------------------------------------------------
-# Enable dynamic linker warnings for userdebug, eng and non-REL builds
-ifneq ($(TARGET_BUILD_VARIANT),user)
+# Enable dynamic linker warnings for eng builds
+ifeq ($(TARGET_BUILD_VARIANT),eng)
   ADDITIONAL_BUILD_PROPERTIES += ro.bionic.ld.warning=1
-else
-# Enable it for user builds as long as they are not final.
-ifneq ($(PLATFORM_VERSION_CODENAME),REL)
-  ADDITIONAL_BUILD_PROPERTIES += ro.bionic.ld.warning=1
-endif
 endif
 
 ADDITIONAL_BUILD_PROPERTIES += ro.treble.enabled=${PRODUCT_FULL_TREBLE}
