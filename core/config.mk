@@ -58,6 +58,11 @@ $(warning The build system needs unmodified output of grep.)
 $(error Please remove --color=always from your  $$GREP_OPTIONS)
 endif
 
+# Set all locale settings
+# export replace var , dont need to 'if'
+$(shell export LANG=en_US.utf8)
+$(shell export LC_ALL=C)
+
 # Standard source directories.
 SRC_DOCS:= $(TOPDIR)docs
 # TODO: Enforce some kind of layering; only add include paths
