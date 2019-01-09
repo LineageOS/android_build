@@ -63,9 +63,11 @@ include $(BUILD_SYSTEM)/clang/config.mk
 # Write the build number to a file so it can be read back in
 # without changing the command line every time.  Avoids rebuilds
 # when using ninja.
-$(shell mkdir -p $(OUT_DIR) && \
-    echo -n $(BUILD_NUMBER) > $(OUT_DIR)/build_number.txt)
 BUILD_NUMBER_FILE := $(OUT_DIR)/build_number.txt
+ifneq ($(shell cat $(BUILD_NUMBER_FILE)),$(BUILD_NUMBER))
+$(shell mkdir -p $(OUT_DIR) && \
+    echo -n $(BUILD_NUMBER) > $(BUILD_NUMBER_FILE))
+endif
 
 ifeq ($(HOST_OS),darwin)
 DATE_FROM_FILE := date -r $(BUILD_DATETIME_FROM_FILE)
