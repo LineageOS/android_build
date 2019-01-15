@@ -21,6 +21,6 @@ $(MODULE_INFO_JSON):
 # If ONE_SHOT_MAKEFILE is set, our view of the world is smaller, so don't
 # rewrite the file in that came.
 ifndef ONE_SHOT_MAKEFILE
-files: $(MODULE_INFO_JSON)
+droidcore: $(MODULE_INFO_JSON)
 endif
 
