@@ -1442,6 +1442,16 @@ define build-recoveryramdisk
   $(hide) find $(TARGET_RECOVERY_ROOT_OUT) -maxdepth 1 -name 'init*.rc' -type f -not -name "init.recovery.*.rc" | xargs rm -f
   $(hide) cp -f $(recovery_initrc) $(TARGET_RECOVERY_ROOT_OUT)/
   $(hide) cp $(TARGET_ROOT_OUT)/init.recovery.*.rc $(TARGET_RECOVERY_ROOT_OUT)/ || true # Ignore error when the src file doesn't exist.
+  # If charger is not needed in recovery, do the following:
+  #   * Remove the charger service from recovery init.rc.
+  #   # Remove the charger binary and root symlink.
+  $(if $(BOARD_NEEDS_CHARGER_IN_RECOVERY),,\
+    $(hide) cat $(TARGET_RECOVERY_ROOT_OUT)/init.rc | \
+              awk '/^service/ { elide=0; } /^service charger/ { elide=1; } { if (elide==0) { print; } }' > \
+              $(TARGET_RECOVERY_ROOT_OUT)/.init.rc.tmp && \
+            mv $(TARGET_RECOVERY_ROOT_OUT)/.init.rc.tmp $(TARGET_RECOVERY_ROOT_OUT)/init.rc
+    $(hide) rm -f $(TARGET_RECOVERY_ROOT_OUT)/sbin/charger
+    $(hide) rm -f $(TARGET_RECOVERY_ROOT_OUT)/charger)
   $(hide) mkdir -p $(TARGET_RECOVERY_ROOT_OUT)/res
   $(hide) rm -rf $(TARGET_RECOVERY_ROOT_OUT)/res/*
   $(hide) cp -rf $(recovery_resources_common)/* $(TARGET_RECOVERY_ROOT_OUT)/res
