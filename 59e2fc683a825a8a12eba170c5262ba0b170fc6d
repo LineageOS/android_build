@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9fa9bae8_d78a3f7b",
+        "filename": "target/product/verity.mk",
+        "patchSetId": 1
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 2195
+      },
+      "writtenOn": "2019-01-25T18:08:55Z",
+      "side": 1,
+      "message": "Could change the \u0027:\u003d\u0027 to \u0027?\u003d\u0027 instead, and avoid the ifeq",
+      "revId": "59e2fc683a825a8a12eba170c5262ba0b170fc6d",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": true
+    }
+  ]
+}
