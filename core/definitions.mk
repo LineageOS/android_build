@@ -2368,7 +2368,7 @@ $(hide) rm -f $@ $@.tmp
 $(hide) $(JAVA) \
     $(if $(USE_OPENJDK9),--add-opens java.base/java.lang.invoke=ALL-UNNAMED,) \
     -Djdk.internal.lambda.dumpProxyClasses=$(abspath $(dir $@))/desugar_dumped_classes \
-    -jar $(DESUGAR) \
+    -jar $(DESUGAR) $(DEX_FLAGS) \
     $(addprefix --bootclasspath_entry ,$(PRIVATE_BOOTCLASSPATH)) \
     $(addprefix --classpath_entry ,$(PRIVATE_SHARED_JAVA_HEADER_LIBRARIES)) \
     --min_sdk_version $(call codename-or-sdk-to-sdk,$(PRIVATE_MIN_SDK_VERSION)) \
@@ -2383,7 +2383,7 @@ define transform-classes.jar-to-dex
 @echo "target Dex: $(PRIVATE_MODULE)"
 @mkdir -p $(dir $@)
 $(hide) rm -f $(dir $@)classes*.dex
-$(hide) $(DX_COMMAND) \
+$(hide) $(DX_COMMAND) $(DEX_FLAGS) \
     --dex --output=$(dir $@) \
     --min-sdk-version=$(PRIVATE_MIN_SDK_VERSION) \
     $(if $(NO_OPTIMIZE_DX), \
@@ -2402,7 +2402,7 @@ define transform-classes-d8.jar-to-dex
 @mkdir -p $(dir $@)
 $(hide) rm -f $(dir $@)classes*.dex $(dir $@)d8_input.jar
 $(hide) $(ZIP2ZIP) -j -i $< -o $(dir $@)d8_input.jar "**/*.class"
-$(hide) $(DX_COMMAND) \
+$(hide) $(DX_COMMAND) $(DEX_FLAGS) \
     --output $(dir $@) \
     --min-api $(PRIVATE_MIN_SDK_VERSION) \
     $(subst --main-dex-list=, --main-dex-list , \
@@ -2827,7 +2827,8 @@ endef
 else
 define transform-jar-to-proguard
 @echo Proguard: $@
-$(hide) $(PROGUARD) -injars $< -outjars $@ $(PRIVATE_PROGUARD_FLAGS) \
+$(hide) $(PROGUARD) $(DEX_FLAGS) \
+    -injars $< -outjars $@ $(PRIVATE_PROGUARD_FLAGS) \
     $(addprefix -injars , $(PRIVATE_EXTRA_INPUT_JAR))
 endef
 endif
@@ -2838,7 +2839,8 @@ endif
 ###########################################################
 define transform-jar-to-dex-r8
 @echo R8: $@
-$(hide) $(R8_COMPAT_PROGUARD) -injars '$<' \
+$(hide) $(R8_COMPAT_PROGUARD) $(DEX_FLAGS) \
+    -injars '$<' \
     --min-api $(PRIVATE_MIN_SDK_VERSION) \
     --force-proguard-compatibility --output $(subst classes.dex,,$@) \
     $(PRIVATE_PROGUARD_FLAGS) \
