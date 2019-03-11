@@ -41,6 +41,10 @@ Usage:  add_img_to_target_files [flag] target_files
   --is_signing
       Skip building & adding the images for "userdata" and "cache" if we
       are signing the target files.
+
+  --lzma_targets
+      Compress image targets using lzma instead of minigzip.
+      Supports boot, recovery for now.
 """
 
 from __future__ import print_function
@@ -75,6 +79,7 @@ OPTIONS.replace_updated_files_list = []
 OPTIONS.replace_verity_public_key = False
 OPTIONS.replace_verity_private_key = False
 OPTIONS.is_signing = False
+OPTIONS.lzma_targets = []
 
 
 class OutputFile(object):
@@ -584,12 +589,18 @@ def AddImagesToTargetFiles(filename):
     banner("boot")
     print("boot.img already exists in IMAGES/, no need to rebuild...")
     if OPTIONS.rebuild_recovery:
+      # account for devices with recovery as boot
+      boot_target = "recovery" if not has_recovery else "boot"
       boot_image = common.GetBootableImage(
-          "IMAGES/boot.img", "boot.img", OPTIONS.input_tmp, "BOOT")
+          "IMAGES/boot.img", "boot.img", OPTIONS.input_tmp, "BOOT",
+          compressor=("lzma" if boot_target in OPTIONS.lzma_targets else "minigzip"))
   else:
     banner("boot")
+    # account for devices with recovery as boot
+    boot_target = "recovery" if not has_recovery else "boot"
     boot_image = common.GetBootableImage(
-        "IMAGES/boot.img", "boot.img", OPTIONS.input_tmp, "BOOT")
+        "IMAGES/boot.img", "boot.img", OPTIONS.input_tmp, "BOOT",
+        compressor=("lzma" if boot_target in OPTIONS.lzma_targets else "minigzip"))
     if boot_image:
       if output_zip:
         boot_image.AddToZip(output_zip)
@@ -604,11 +615,12 @@ def AddImagesToTargetFiles(filename):
       print("recovery.img already exists in IMAGES/, no need to rebuild...")
       if OPTIONS.rebuild_recovery:
         recovery_image = common.GetBootableImage(
-            "IMAGES/recovery.img", "recovery.img", OPTIONS.input_tmp,
-            "RECOVERY")
+            "IMAGES/recovery.img", "recovery.img", OPTIONS.input_tmp, "RECOVERY",
+            compressor=("lzma" if "recovery" in OPTIONS.lzma_targets else "minigzip"))
     else:
       recovery_image = common.GetBootableImage(
-          "IMAGES/recovery.img", "recovery.img", OPTIONS.input_tmp, "RECOVERY")
+          "IMAGES/recovery.img", "recovery.img", OPTIONS.input_tmp, "RECOVERY",
+          compressor=("lzma" if "recovery" in OPTIONS.lzma_targets else "minigzip"))
       if recovery_image:
         if output_zip:
           recovery_image.AddToZip(output_zip)
@@ -771,6 +783,8 @@ def main(argv):
       OPTIONS.replace_verity_public_key = (True, a)
     elif o == "--is_signing":
       OPTIONS.is_signing = True
+    elif o == "--lzma_targets":
+      OPTIONS.lzma_targets = a.split(',')
     else:
       return False
     return True
@@ -780,7 +794,8 @@ def main(argv):
       extra_long_opts=["add_missing", "rebuild_recovery",
                        "replace_verity_public_key=",
                        "replace_verity_private_key=",
-                       "is_signing"],
+                       "is_signing",
+                       "lzma_targets="],
       extra_option_handler=option_handler)
 
 
