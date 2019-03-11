@@ -361,7 +361,8 @@ def AppendAVBSigningArgs(cmd, partition):
 
 
 def _BuildBootableImage(sourcedir, fs_config_file, info_dict=None,
-                        has_ramdisk=False, two_step_image=False):
+                        has_ramdisk=False, two_step_image=False,
+                        compressor="minigzip"):
   """Build a bootable image from the specified sourcedir.
 
   Take a kernel, cmdline, and optionally a ramdisk directory from the input (in
@@ -373,7 +374,7 @@ def _BuildBootableImage(sourcedir, fs_config_file, info_dict=None,
   for building the requested image.
   """
 
-  def make_ramdisk():
+  def make_ramdisk(compressor):
     ramdisk_img = tempfile.NamedTemporaryFile()
 
     if os.access(fs_config_file, os.F_OK):
@@ -382,12 +383,12 @@ def _BuildBootableImage(sourcedir, fs_config_file, info_dict=None,
     else:
       cmd = ["mkbootfs", os.path.join(sourcedir, "RAMDISK")]
     p1 = Run(cmd, stdout=subprocess.PIPE)
-    p2 = Run(["minigzip"], stdin=p1.stdout, stdout=ramdisk_img.file.fileno())
+    p2 = Run([compressor], stdin=p1.stdout, stdout=ramdisk_img.file.fileno())
 
     p2.wait()
     p1.wait()
     assert p1.returncode == 0, "mkbootfs of %s ramdisk failed" % (sourcedir,)
-    assert p2.returncode == 0, "minigzip of %s ramdisk failed" % (sourcedir,)
+    assert p2.returncode == 0, compressor + " of %s ramdisk failed" % (sourcedir,)
 
     return ramdisk_img
 
@@ -403,7 +404,7 @@ def _BuildBootableImage(sourcedir, fs_config_file, info_dict=None,
   img = tempfile.NamedTemporaryFile()
 
   if has_ramdisk:
-    ramdisk_img = make_ramdisk()
+    ramdisk_img = make_ramdisk(compressor)
 
   # use MKBOOTIMG from environ, or "mkbootimg" if empty or not set
   mkbootimg = os.getenv('MKBOOTIMG') or "mkbootimg"
@@ -535,7 +536,8 @@ def _BuildBootableImage(sourcedir, fs_config_file, info_dict=None,
 
 
 def GetBootableImage(name, prebuilt_name, unpack_dir, tree_subdir,
-                     info_dict=None, two_step_image=False):
+                     info_dict=None, two_step_image=False,
+                     compressor="minigzip"):
   """Return a File object with the desired bootable image.
 
   Look for it in 'unpack_dir'/BOOTABLE_IMAGES under the name 'prebuilt_name',
@@ -567,7 +569,8 @@ def GetBootableImage(name, prebuilt_name, unpack_dir, tree_subdir,
   fs_config = "META/" + tree_subdir.lower() + "_filesystem_config.txt"
   data = _BuildBootableImage(os.path.join(unpack_dir, tree_subdir),
                              os.path.join(unpack_dir, fs_config),
-                             info_dict, has_ramdisk, two_step_image)
+                             info_dict, has_ramdisk, two_step_image,
+                             compressor)
   if data:
     return File(name, data)
   return None
