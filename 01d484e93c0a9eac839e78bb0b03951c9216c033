@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7e983563_56a920de",
+        "filename": "tools/releasetools/add_img_to_target_files.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 587,
+      "author": {
+        "id": 11883
+      },
+      "writtenOn": "2019-03-17T16:52:23Z",
+      "side": 1,
+      "message": "move here\n    # account for devices with recovery as boot\n    boot_target \u003d \"recovery\" if not has_recovery else \"boot\"",
+      "revId": "01d484e93c0a9eac839e78bb0b03951c9216c033",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "43ba0831_62de8d1a",
+        "filename": "tools/releasetools/add_img_to_target_files.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 593,
+      "author": {
+        "id": 11883
+      },
+      "writtenOn": "2019-03-17T16:52:23Z",
+      "side": 1,
+      "message": "remove",
+      "range": {
+        "startLine": 592,
+        "startChar": 0,
+        "endLine": 593,
+        "endChar": 62
+      },
+      "revId": "01d484e93c0a9eac839e78bb0b03951c9216c033",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": true
+    }
+  ]
+}
