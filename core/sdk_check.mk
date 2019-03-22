@@ -28,8 +28,8 @@ ifeq ($(LOCAL_SDK_VERSION)$(LOCAL_PRIVATE_PLATFORM_APIS),)
   endif
 else ifneq ($(LOCAL_SDK_VERSION),)
   ifneq ($(LOCAL_PRIVATE_PLATFORM_APIS),)
-    my_message := Specifies both LOCAL_SDK_VERSION ($(LOCAL_SDK_VERSION)) and
-    my_message += LOCAL_PRIVATE_PLATFORM_APIS ($(LOCAL_PRIVATE_PLATFORM_APIS))
+    my_message := Specifies both LOCAL_SDK_VERSION \($(LOCAL_SDK_VERSION)\) and
+    my_message += LOCAL_PRIVATE_PLATFORM_APIS \($(LOCAL_PRIVATE_PLATFORM_APIS)\)
     my_message += but should specify only one
     $(call pretty-error,$(my_message))
     my_message :=
