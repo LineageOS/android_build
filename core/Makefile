@@ -2734,9 +2734,15 @@ ifdef BUILT_VENDOR_MATRIX
 endif
 endif
 
+ifneq ($(LZMA_RAMDISK_TARGETS),)
 	$(hide) PATH=$(foreach p,$(INTERNAL_USERIMAGES_BINARY_PATHS),$(p):)$$PATH MKBOOTIMG=$(MKBOOTIMG) \
 	    ./build/tools/releasetools/add_img_to_target_files -a -v --lzma_targets $(shell echo "$(LZMA_RAMDISK_TARGETS)" | sed -e 's/ /,/g') \
 	        -p $(HOST_OUT) $(zip_root)
+else
+	$(hide) PATH=$(foreach p,$(INTERNAL_USERIMAGES_BINARY_PATHS),$(p):)$$PATH MKBOOTIMG=$(MKBOOTIMG) \
+	    ./build/tools/releasetools/add_img_to_target_files -a -v \
+	        -p $(HOST_OUT) $(zip_root)
+endif
 	@# Zip everything up, preserving symlinks and placing META/ files first to
 	@# help early validation of the .zip file while uploading it.
 	$(hide) find $(zip_root)/META | sort >$@.list
