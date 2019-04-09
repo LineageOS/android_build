@@ -322,6 +322,7 @@ class CommonZipTest(test_utils.ReleaseToolsTestCase):
     finally:
       os.remove(zip_file_name)
 
+  @test_utils.SkipIfExternalToolsUnavailable()
   def test_ZipDelete(self):
     zip_file = tempfile.NamedTemporaryFile(delete=False, suffix='.zip')
     output_zip = zipfile.ZipFile(zip_file.name, 'w',
@@ -383,6 +384,7 @@ class CommonZipTest(test_utils.ReleaseToolsTestCase):
     common.ZipClose(output_zip)
     return zip_file
 
+  @test_utils.SkipIfExternalToolsUnavailable()
   def test_UnzipTemp(self):
     zip_file = self._test_UnzipTemp_createZipFile()
     unzipped_dir = common.UnzipTemp(zip_file)
@@ -392,6 +394,7 @@ class CommonZipTest(test_utils.ReleaseToolsTestCase):
     self.assertTrue(os.path.exists(os.path.join(unzipped_dir, 'Bar4')))
     self.assertTrue(os.path.exists(os.path.join(unzipped_dir, 'Dir5/Baz5')))
 
+  @test_utils.SkipIfExternalToolsUnavailable()
   def test_UnzipTemp_withPatterns(self):
     zip_file = self._test_UnzipTemp_createZipFile()
 
@@ -432,6 +435,7 @@ class CommonZipTest(test_utils.ReleaseToolsTestCase):
     self.assertFalse(os.path.exists(os.path.join(unzipped_dir, 'Bar4')))
     self.assertFalse(os.path.exists(os.path.join(unzipped_dir, 'Dir5/Baz5')))
 
+  @test_utils.SkipIfExternalToolsUnavailable()
   def test_UnzipTemp_withPartiallyMatchingPatterns(self):
     zip_file = self._test_UnzipTemp_createZipFile()
     unzipped_dir = common.UnzipTemp(zip_file, ['Test*', 'Nonexistent*'])
@@ -582,6 +586,7 @@ class CommonApkUtilsTest(test_utils.ReleaseToolsTestCase):
     wrong_input = os.path.join(self.testdata_dir, 'testkey.pk8')
     self.assertRaises(AssertionError, common.ExtractPublicKey, wrong_input)
 
+  @test_utils.SkipIfExternalToolsUnavailable()
   def test_ExtractAvbPublicKey(self):
     privkey = os.path.join(self.testdata_dir, 'testkey.key')
     pubkey = os.path.join(self.testdata_dir, 'testkey.pubkey.pem')
@@ -602,18 +607,22 @@ class CommonApkUtilsTest(test_utils.ReleaseToolsTestCase):
       actual = common.ParseCertificate(cert_fp.read())
     self.assertEqual(expected, actual)
 
+  @test_utils.SkipIfExternalToolsUnavailable()
   def test_GetMinSdkVersion(self):
     test_app = os.path.join(self.testdata_dir, 'TestApp.apk')
     self.assertEqual('24', common.GetMinSdkVersion(test_app))
 
+  @test_utils.SkipIfExternalToolsUnavailable()
   def test_GetMinSdkVersion_invalidInput(self):
     self.assertRaises(
         common.ExternalError, common.GetMinSdkVersion, 'does-not-exist.apk')
 
+  @test_utils.SkipIfExternalToolsUnavailable()
   def test_GetMinSdkVersionInt(self):
     test_app = os.path.join(self.testdata_dir, 'TestApp.apk')
     self.assertEqual(24, common.GetMinSdkVersionInt(test_app, {}))
 
+  @test_utils.SkipIfExternalToolsUnavailable()
   def test_GetMinSdkVersionInt_invalidInput(self):
     self.assertRaises(
         common.ExternalError, common.GetMinSdkVersionInt, 'does-not-exist.apk',
@@ -625,6 +634,7 @@ class CommonUtilsTest(test_utils.ReleaseToolsTestCase):
   def setUp(self):
     self.testdata_dir = test_utils.get_testdata_dir()
 
+  @test_utils.SkipIfExternalToolsUnavailable()
   def test_GetSparseImage_emptyBlockMapFile(self):
     target_files = common.MakeTempFile(prefix='target_files-', suffix='.zip')
     with zipfile.ZipFile(target_files, 'w') as target_files_zip:
@@ -657,6 +667,7 @@ class CommonUtilsTest(test_utils.ReleaseToolsTestCase):
         AssertionError, common.GetSparseImage, 'unknown', self.testdata_dir,
         None, False)
 
+  @test_utils.SkipIfExternalToolsUnavailable()
   def test_GetSparseImage_missingBlockMapFile(self):
     target_files = common.MakeTempFile(prefix='target_files-', suffix='.zip')
     with zipfile.ZipFile(target_files, 'w') as target_files_zip:
@@ -675,6 +686,7 @@ class CommonUtilsTest(test_utils.ReleaseToolsTestCase):
           AssertionError, common.GetSparseImage, 'system', tempdir, input_zip,
           False)
 
+  @test_utils.SkipIfExternalToolsUnavailable()
   def test_GetSparseImage_sharedBlocks_notAllowed(self):
     """Tests the case of having overlapping blocks but disallowed."""
     target_files = common.MakeTempFile(prefix='target_files-', suffix='.zip')
@@ -697,6 +709,7 @@ class CommonUtilsTest(test_utils.ReleaseToolsTestCase):
           AssertionError, common.GetSparseImage, 'system', tempdir, input_zip,
           False)
 
+  @test_utils.SkipIfExternalToolsUnavailable()
   def test_GetSparseImage_sharedBlocks_allowed(self):
     """Tests the case for target using BOARD_EXT4_SHARE_DUP_BLOCKS := true."""
     target_files = common.MakeTempFile(prefix='target_files-', suffix='.zip')
@@ -739,6 +752,7 @@ class CommonUtilsTest(test_utils.ReleaseToolsTestCase):
     self.assertFalse(sparse_image.file_map['__NONZERO-0'].extra)
     self.assertFalse(sparse_image.file_map['/system/file1'].extra)
 
+  @test_utils.SkipIfExternalToolsUnavailable()
   def test_GetSparseImage_incompleteRanges(self):
     """Tests the case of ext4 images with holes."""
     target_files = common.MakeTempFile(prefix='target_files-', suffix='.zip')
@@ -762,6 +776,7 @@ class CommonUtilsTest(test_utils.ReleaseToolsTestCase):
     self.assertFalse(sparse_image.file_map['/system/file1'].extra)
     self.assertTrue(sparse_image.file_map['/system/file2'].extra['incomplete'])
 
+  @test_utils.SkipIfExternalToolsUnavailable()
   def test_GetSparseImage_systemRootImage_filenameWithExtraLeadingSlash(self):
     target_files = common.MakeTempFile(prefix='target_files-', suffix='.zip')
     with zipfile.ZipFile(target_files, 'w') as target_files_zip:
@@ -789,6 +804,7 @@ class CommonUtilsTest(test_utils.ReleaseToolsTestCase):
     self.assertTrue(
         sparse_image.file_map['/system/app/file3'].extra['incomplete'])
 
+  @test_utils.SkipIfExternalToolsUnavailable()
   def test_GetSparseImage_systemRootImage_nonSystemFiles(self):
     target_files = common.MakeTempFile(prefix='target_files-', suffix='.zip')
     with zipfile.ZipFile(target_files, 'w') as target_files_zip:
@@ -811,6 +827,7 @@ class CommonUtilsTest(test_utils.ReleaseToolsTestCase):
     self.assertFalse(sparse_image.file_map['//system/file1'].extra)
     self.assertTrue(sparse_image.file_map['//init.rc'].extra['incomplete'])
 
+  @test_utils.SkipIfExternalToolsUnavailable()
   def test_GetSparseImage_fileNotFound(self):
     target_files = common.MakeTempFile(prefix='target_files-', suffix='.zip')
     with zipfile.ZipFile(target_files, 'w') as target_files_zip:
@@ -830,6 +847,7 @@ class CommonUtilsTest(test_utils.ReleaseToolsTestCase):
           AssertionError, common.GetSparseImage, 'system', tempdir, input_zip,
           False)
 
+  @test_utils.SkipIfExternalToolsUnavailable()
   def test_GetAvbChainedPartitionArg(self):
     pubkey = os.path.join(self.testdata_dir, 'testkey.pubkey.pem')
     info_dict = {
@@ -843,6 +861,7 @@ class CommonUtilsTest(test_utils.ReleaseToolsTestCase):
     self.assertEqual('2', args[1])
     self.assertTrue(os.path.exists(args[2]))
 
+  @test_utils.SkipIfExternalToolsUnavailable()
   def test_GetAvbChainedPartitionArg_withPrivateKey(self):
     key = os.path.join(self.testdata_dir, 'testkey.key')
     info_dict = {
@@ -856,6 +875,7 @@ class CommonUtilsTest(test_utils.ReleaseToolsTestCase):
     self.assertEqual('2', args[1])
     self.assertTrue(os.path.exists(args[2]))
 
+  @test_utils.SkipIfExternalToolsUnavailable()
   def test_GetAvbChainedPartitionArg_withSpecifiedKey(self):
     info_dict = {
         'avb_avbtool': 'avbtool',
@@ -870,6 +890,7 @@ class CommonUtilsTest(test_utils.ReleaseToolsTestCase):
     self.assertEqual('2', args[1])
     self.assertTrue(os.path.exists(args[2]))
 
+  @test_utils.SkipIfExternalToolsUnavailable()
   def test_GetAvbChainedPartitionArg_invalidKey(self):
     pubkey = os.path.join(self.testdata_dir, 'testkey_with_passwd.x509.pem')
     info_dict = {
@@ -930,6 +951,7 @@ class CommonUtilsTest(test_utils.ReleaseToolsTestCase):
       self.assertIn('/', loaded_dict['fstab'])
       self.assertIn('/system', loaded_dict['fstab'])
 
+  @test_utils.SkipIfExternalToolsUnavailable()
   def test_LoadInfoDict_dirInput(self):
     target_files = self._test_LoadInfoDict_createTargetFiles(
         self.INFO_DICT_DEFAULT,
@@ -941,6 +963,7 @@ class CommonUtilsTest(test_utils.ReleaseToolsTestCase):
     self.assertIn('/', loaded_dict['fstab'])
     self.assertIn('/system', loaded_dict['fstab'])
 
+  @test_utils.SkipIfExternalToolsUnavailable()
   def test_LoadInfoDict_dirInput_legacyRecoveryFstabPath(self):
     target_files = self._test_LoadInfoDict_createTargetFiles(
         self.INFO_DICT_DEFAULT,
@@ -998,6 +1021,7 @@ class CommonUtilsTest(test_utils.ReleaseToolsTestCase):
       self.assertEqual(2, loaded_dict['fstab_version'])
       self.assertIsNone(loaded_dict['fstab'])
 
+  @test_utils.SkipIfExternalToolsUnavailable()
   def test_LoadInfoDict_missingMetaMiscInfoTxt(self):
     target_files = self._test_LoadInfoDict_createTargetFiles(
         self.INFO_DICT_DEFAULT,
@@ -1006,6 +1030,7 @@ class CommonUtilsTest(test_utils.ReleaseToolsTestCase):
     with zipfile.ZipFile(target_files, 'r') as target_files_zip:
       self.assertRaises(ValueError, common.LoadInfoDict, target_files_zip)
 
+  @test_utils.SkipIfExternalToolsUnavailable()
   def test_LoadInfoDict_repacking(self):
     target_files = self._test_LoadInfoDict_createTargetFiles(
         self.INFO_DICT_DEFAULT,
@@ -1074,6 +1099,7 @@ class InstallRecoveryScriptFormatTest(test_utils.ReleaseToolsTestCase):
     validate_target_files.ValidateInstallRecoveryScript(self._tempdir,
                                                         self._info)
 
+  @test_utils.SkipIfExternalToolsUnavailable()
   def test_recovery_from_boot(self):
     recovery_image = common.File("recovery.img", self.recovery_data)
     self._out_tmp_sink("recovery.img", recovery_image.data, "IMAGES")
