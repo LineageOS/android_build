@@ -1548,7 +1548,7 @@ $(recovery_uncompressed_ramdisk): $(MKBOOTFS) $(ADBD) \
 		$(DEPMOD)
 		$(call build-recoveryramdisk)
 		@echo ----- Making uncompressed recovery ramdisk ------
-		$(hide) $(MKBOOTFS) $(TARGET_RECOVERY_ROOT_OUT) > $@
+		$(hide) $(MKBOOTFS) -d $(TARGET_OUT) $(TARGET_RECOVERY_ROOT_OUT) > $@
 
 $(recovery_ramdisk): $(MINIGZIP) \
 		$(recovery_uncompressed_ramdisk)
