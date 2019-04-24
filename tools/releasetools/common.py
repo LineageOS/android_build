@@ -347,8 +347,12 @@ def LoadRecoveryFSTab(read_helper, fstab_version, recovery_fstab_path,
   # system. Other areas assume system is always at "/system" so point /system
   # at /.
   if system_root_image:
-    assert not d.has_key("/system") and d.has_key("/")
-    d["/system"] = d["/"]
+    if d.has_key("/"):
+      assert not d.has_key("/system") and d.has_key("/")
+      d["/system"] = d["/"]
+    elif d.has_key("/system_root"):
+      assert not d.has_key("/system") and d.has_key("/system_root")
+      d["/system"] = d["/system_root"]
   return d
 
 
