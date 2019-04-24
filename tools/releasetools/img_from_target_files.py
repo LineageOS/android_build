@@ -15,11 +15,18 @@
 # limitations under the License.
 
 """
-Given a target-files zipfile, produces an image zipfile suitable for
-use with 'fastboot update'.
+Given target-files, produces an image zipfile suitable for use
+with 'fastboot update'.
 
 Usage:  img_from_target_files [flags] input_target_files output_image_zip
 
+input_target_files: one of the following:
+  - directory containing extracted target files. It will load info from
+    OTA/android-info.txt and build the image zipfile using images from IMAGES/.
+  - target files package. Same as above, but extracts the archive before
+    building the image zipfile.
+
+Flags:
   -z  (--bootable_zip)
       Include only the bootable images (eg 'boot' and 'recovery') in
       the output.
@@ -164,10 +171,19 @@ def main(argv):
 
   common.InitLogging()
 
-  # We need files under IMAGES/, OTA/, META/ for img_from_target_files.py.
-  # However, common.LoadInfoDict() may read additional files under BOOT/,
-  # RECOVERY/ and ROOT/. So unzip everything from the target_files.zip.
-  OPTIONS.input_tmp = common.UnzipTemp(args[0])
+  target_files = args[0]
+  if os.path.isdir(target_files):
+    logger.info("Building image zip from extracted target files.")
+    OPTIONS.input_tmp = target_files
+  elif zipfile.is_zipfile(target_files):
+    logger.info("Building image zip from target files zip.")
+    # We need files under IMAGES/, OTA/, META/ for img_from_target_files.py.
+    # However, common.LoadInfoDict() may read additional files under BOOT/,
+    # RECOVERY/ and ROOT/. So unzip everything from the target_files.zip.
+    OPTIONS.input_tmp = common.UnzipTemp(target_files)
+  else:
+    raise ValueError("%s is not a valid path." % target_files)
+
   LoadOptions(OPTIONS.input_tmp)
   output_zip = zipfile.ZipFile(args[1], "w", compression=zipfile.ZIP_DEFLATED,
                                allowZip64=not OPTIONS.sparse_userimages)
