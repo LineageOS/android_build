@@ -343,12 +343,15 @@ def LoadRecoveryFSTab(read_helper, fstab_version, recovery_fstab_path,
         d[mount_point] = Partition(mount_point=mount_point, fs_type=pieces[2],
                                    device=pieces[0], length=length, context=context)
 
+  global system_as_system
+  system_as_system = True
   # / is used for the system mount point when the root directory is included in
   # system. Other areas assume system is always at "/system" so point /system
   # at /.
   if system_root_image:
-    assert not d.has_key("/system") and d.has_key("/")
-    d["/system"] = d["/"]
+    if not d.has_key("/system"):
+      system_as_system = False
+      d["/system"] = d["/"]
   return d
 
 
