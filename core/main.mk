@@ -360,6 +360,17 @@ BUILD_WITHOUT_PV := true
 
 ADDITIONAL_BUILD_PROPERTIES += net.bt.name=Android
 
+# QCV: initialize property - used to detect framework type
+ifeq ($(TARGET_FWK_SUPPORTS_FULL_VALUEADDS), true)
+  ADDITIONAL_BUILD_PROPERTIES += \
+        ro.vendor.qti.va_aosp.support=1
+  $(warning "Compile using modified AOSP tree supporting full vendor value-adds")
+else
+  ADDITIONAL_BUILD_PROPERTIES += \
+        ro.vendor.qti.va_aosp.support=0
+  $(warning "Compile using pure AOSP tree")
+endif
+
 # ------------------------------------------------------------
 # Include vendor specific additions to build properties
 -include vendor/lineage/build/core/main.mk
