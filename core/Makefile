@@ -1384,6 +1384,9 @@ else
 RECOVERY_RESOURCE_ZIP :=
 endif
 
+# Declare this empty so we can append to it later
+RECOVERYIMAGE_EXTRA_DEPS :=
+
 INTERNAL_RECOVERYIMAGE_ARGS := \
 	$(addprefix --second ,$(INSTALLED_2NDBOOTLOADER_TARGET)) \
 	--kernel $(recovery_kernel) \
@@ -1399,12 +1402,13 @@ endif
 ifdef BOARD_KERNEL_PAGESIZE
   INTERNAL_RECOVERYIMAGE_ARGS += --pagesize $(BOARD_KERNEL_PAGESIZE)
 endif
-ifdef BOARD_INCLUDE_RECOVERY_DTBO
+ifeq ($(strip $(BOARD_INCLUDE_RECOVERY_DTBO)),true)
   INTERNAL_RECOVERYIMAGE_ARGS += --recovery_dtbo $(BOARD_PREBUILT_DTBOIMAGE)
+  RECOVERYIMAGE_EXTRA_DEPS    += $(BOARD_PREBUILT_DTBOIMAGE)
 endif
 ifeq ($(strip $(BOARD_KERNEL_SEPARATED_DT)),true)
   INTERNAL_RECOVERYIMAGE_ARGS += --dt $(INSTALLED_DTIMAGE_TARGET)
-  RECOVERYIMAGE_EXTRA_DEPS    := $(INSTALLED_DTIMAGE_TARGET)
+  RECOVERYIMAGE_EXTRA_DEPS    += $(INSTALLED_DTIMAGE_TARGET)
 endif
 
 # Keys authorized to sign OTA packages this build will accept.  The
