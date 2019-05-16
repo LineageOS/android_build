@@ -85,11 +85,11 @@ function destroy_build_var_cache()
 {
     unset BUILD_VAR_CACHE_READY
     local v
-    for v in $cached_vars; do
+    for v in $(echo "$cached_vars"); do
       unset var_cache_$v
     done
     unset cached_vars
-    for v in $cached_abs_vars; do
+    for v in $(echo "$cached_abs_vars"); do
       unset abs_var_cache_$v
     done
     unset cached_abs_vars
