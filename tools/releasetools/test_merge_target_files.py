@@ -43,7 +43,8 @@ class MergeTargetFilesTest(test_utils.ReleaseToolsTestCase):
         'ROOT/*',
         'SYSTEM/*',
     ]
-    self.assertItemsEqual(system_item_list, expected_system_item_list)
+    self.assertEqual(sorted(system_item_list),
+                     sorted(expected_system_item_list))
 
   def test_validate_config_lists_ReturnsFalseIfMissingDefaultItem(self):
     system_item_list = default_system_item_list[:]
