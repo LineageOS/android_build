@@ -312,6 +312,19 @@ $(error TARGET_COPY_OUT_ODM must be either 'odm' or '$(TARGET_COPY_OUT_VENDOR)/o
 endif
 PRODUCT_COPY_FILES := $(subst $(_odm_path_placeholder),$(TARGET_COPY_OUT_ODM),$(PRODUCT_COPY_FILES))
 
+BOARD_USES_ODMIMAGE :=
+ifdef BOARD_PREBUILT_ODMIMAGE
+BOARD_USES_ODMIMAGE := true
+endif
+ifdef BOARD_ODMIMAGE_FILE_SYSTEM_TYPE
+BOARD_USES_ODMIMAGE := true
+endif
+ifeq ($(TARGET_COPY_OUT_ODM),odm)
+BOARD_USES_ODMIMAGE := true
+else ifdef BOARD_USES_ODMIMAGE
+$(error TARGET_COPY_OUT_ODM must be set to 'odm' to use an odm image)
+endif
+
 ###########################################
 # Now we can substitute with the real value of TARGET_COPY_OUT_PRODUCT
 ifeq ($(TARGET_COPY_OUT_PRODUCT),$(_product_path_placeholder))
