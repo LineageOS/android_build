@@ -115,6 +115,9 @@ ifdef TARGET_DEVICE_DIR
   .KATI_READONLY := TARGET_DEVICE_DIR
 endif
 
+ONE_SHOT_MAKEFILE :=
+.KATI_READONLY := ONE_SHOT_MAKEFILE
+
 # Set up efficient math functions which are used in make.
 # Here since this file is included by envsetup as well as during build.
 include $(BUILD_SYSTEM_COMMON)/math.mk
@@ -441,9 +444,6 @@ ifeq ($(TARGET_BUILD_PDK),true)
 ALLOW_MISSING_DEPENDENCIES := true
 endif
 ifneq ($(filter true,$(SOONG_ALLOW_MISSING_DEPENDENCIES)),)
-ALLOW_MISSING_DEPENDENCIES := true
-endif
-ifneq ($(ONE_SHOT_MAKEFILE),)
 ALLOW_MISSING_DEPENDENCIES := true
 endif
 .KATI_READONLY := ALLOW_MISSING_DEPENDENCIES
