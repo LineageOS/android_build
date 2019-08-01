@@ -2403,6 +2403,7 @@ $(hide) \
   PACKAGING=$(TARGET_OUT_COMMON_INTERMEDIATES)/PACKAGING ANDROID_LOG_TAGS="*:e" art/tools/veridex/appcompat.sh --dex-file=$@ --api-flags=$(INTERNAL_PLATFORM_HIDDENAPI_FLAGS) 2>&1 >> $(PRODUCT_OUT)/appcompat/$(PRIVATE_MODULE).log
 endef
 appcompat-files = \
+  $(AAPT2) \
   art/tools/veridex/appcompat.sh \
   $(INTERNAL_PLATFORM_HIDDENAPI_FLAGS) \
   $(HOST_OUT_EXECUTABLES)/veridex \
