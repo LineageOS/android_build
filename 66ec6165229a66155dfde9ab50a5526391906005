@@ -46,6 +46,30 @@
       "revId": "66ec6165229a66155dfde9ab50a5526391906005",
       "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4698506a_0b1227d6",
+        "filename": "core/version_defaults.mk",
+        "patchSetId": 1
+      },
+      "lineNbr": 234,
+      "author": {
+        "id": 15173
+      },
+      "writtenOn": "2019-08-06T18:44:52Z",
+      "side": 1,
+      "message": "Pixels shipped with -01, but one of the platform-wide -05 changes was in there: https://github.com/haggertk/android_frameworks_av/commit/97fa3267af541d6c5fe0cafb53592056b4c10c2e (A-124899895/CVE-2019-2127)\n\nPer those with access to the mailing lists, this month was a hot mess, and that referenced change was one that was originally in -01 and then administratively moved to -05 late in the game.",
+      "parentUuid": "f627de05_3910437b",
+      "range": {
+        "startLine": 234,
+        "startChar": 33,
+        "endLine": 234,
+        "endChar": 43
+      },
+      "revId": "66ec6165229a66155dfde9ab50a5526391906005",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": true
     }
   ]
 }
