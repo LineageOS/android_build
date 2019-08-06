@@ -22,6 +22,30 @@
       "revId": "66ec6165229a66155dfde9ab50a5526391906005",
       "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f627de05_3910437b",
+        "filename": "core/version_defaults.mk",
+        "patchSetId": 1
+      },
+      "lineNbr": 234,
+      "author": {
+        "id": 11883
+      },
+      "writtenOn": "2019-08-06T08:02:31Z",
+      "side": 1,
+      "message": "Did Pixels ship with -01 or -05 level?\n-01 means they didn\u0027t fix vendor specific issues, likely due the incoming Q release",
+      "parentUuid": "93582ca2_0fd5af91",
+      "range": {
+        "startLine": 234,
+        "startChar": 33,
+        "endLine": 234,
+        "endChar": 43
+      },
+      "revId": "66ec6165229a66155dfde9ab50a5526391906005",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": true
     }
   ]
 }
