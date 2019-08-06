@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "93582ca2_0fd5af91",
+        "filename": "core/version_defaults.mk",
+        "patchSetId": 1
+      },
+      "lineNbr": 234,
+      "author": {
+        "id": 15173
+      },
+      "writtenOn": "2019-08-06T01:28:02Z",
+      "side": 1,
+      "message": "Wat? This isn\u0027t what they normally do... but it was on purpose: https://android.googlesource.com/platform/build/+/b5aba5f2e13cdd7b447cc2f135fbddd0a198fa84",
+      "range": {
+        "startLine": 234,
+        "startChar": 33,
+        "endLine": 234,
+        "endChar": 43
+      },
+      "revId": "66ec6165229a66155dfde9ab50a5526391906005",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": true
+    }
+  ]
+}
