@@ -1186,7 +1186,7 @@ DEFAULT_DATA_OUT_MODULES := ltp $(ltp_packages) $(kselftest_modules)
 ifneq ($(LINEAGE_BUILD),)
 ## We need to be sure the global selinux policies are included
 ## last, to avoid accidental resetting by device configs
-$(eval include device/lineage/sepolicy/common/sepolicy.mk)
+# TODO # $(eval include device/lineage/sepolicy/common/sepolicy.mk)
 endif
 
 # Include any vendor specific config.mk file
