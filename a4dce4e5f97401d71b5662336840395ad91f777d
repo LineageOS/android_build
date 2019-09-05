@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a7546473_e57df861",
+        "filename": "target/product/gsi_common.mk",
+        "patchSetId": 1
+      },
+      "lineNbr": 91,
+      "author": {
+        "id": 13648
+      },
+      "writtenOn": "2019-09-05T14:03:03Z",
+      "side": 1,
+      "message": "This renders commit message a bit misleading.",
+      "range": {
+        "startLine": 89,
+        "startChar": 0,
+        "endLine": 91,
+        "endChar": 5
+      },
+      "revId": "a4dce4e5f97401d71b5662336840395ad91f777d",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": true
+    }
+  ]
+}
