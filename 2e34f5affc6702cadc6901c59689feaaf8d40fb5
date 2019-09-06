@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e3e0e7de_09e1af2d",
+        "filename": "tools/releasetools/common.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 644,
+      "author": {
+        "id": 11883
+      },
+      "writtenOn": "2019-09-06T09:35:31Z",
+      "side": 1,
+      "message": "the first 2 items seems unrelated. split the changes and upstream this one",
+      "revId": "2e34f5affc6702cadc6901c59689feaaf8d40fb5",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": true
+    }
+  ]
+}
