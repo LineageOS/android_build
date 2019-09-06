@@ -1618,6 +1618,17 @@ validate_current_shell
 source_vendorsetup
 addcompletions
 
+# check and set ccache path on envsetup
+if [ -z ${CCACHE_EXEC} ]; then
+    ccache_path=$(which ccache)
+    if [ ! -z "$ccache_path" ]; then
+        export CCACHE_EXEC="$ccache_path"
+        echo "ccache found and CCACHE_EXEC has been set to : $ccache_path"
+    else
+        echo "ccache not found/installed!"
+    fi
+fi
+
 export ANDROID_BUILD_TOP=$(gettop)
 
 . $ANDROID_BUILD_TOP/vendor/lineage/build/envsetup.sh
