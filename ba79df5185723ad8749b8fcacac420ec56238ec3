@@ -46,6 +46,30 @@
       "revId": "ba79df5185723ad8749b8fcacac420ec56238ec3",
       "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "09a20348_b326f135",
+        "filename": "target/product/media_system.mk",
+        "patchSetId": 1
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 3075
+      },
+      "writtenOn": "2019-09-09T23:33:15Z",
+      "side": 1,
+      "message": "done",
+      "parentUuid": "536bb93d_e665c8a2",
+      "range": {
+        "startLine": 55,
+        "startChar": 0,
+        "endLine": 55,
+        "endChar": 28
+      },
+      "revId": "ba79df5185723ad8749b8fcacac420ec56238ec3",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
     }
   ]
 }
