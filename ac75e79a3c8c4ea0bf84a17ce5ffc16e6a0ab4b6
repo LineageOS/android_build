@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "315ce1fb_022d75d4",
+        "filename": "tools/fs_config/fs_config_generator.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 1139,
+      "author": {
+        "id": 18205
+      },
+      "writtenOn": "2019-09-10T08:36:16Z",
+      "side": 1,
+      "message": "so how about\nif skip_partition \u0026\u0026 [...]",
+      "revId": "ac75e79a3c8c4ea0bf84a17ce5ffc16e6a0ab4b6",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": true
+    }
+  ]
+}
