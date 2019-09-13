@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "645085dc_117b0bf4",
+        "filename": "core/Makefile",
+        "patchSetId": 1
+      },
+      "lineNbr": 2728,
+      "author": {
+        "id": 2936
+      },
+      "writtenOn": "2019-09-13T05:08:50Z",
+      "side": 1,
+      "message": "Can\u0027t you express this in the vendor/lineage/tasks/kernel.mk ?",
+      "range": {
+        "startLine": 2728,
+        "startChar": 0,
+        "endLine": 2728,
+        "endChar": 59
+      },
+      "revId": "fd91f6c914aab9046daa9e039652a386300cdc81",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": true
+    }
+  ]
+}
