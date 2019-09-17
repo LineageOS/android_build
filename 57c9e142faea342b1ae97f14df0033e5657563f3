@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2365eb8e_84e201ca",
+        "filename": "target/product/mainline.mk",
+        "patchSetId": 3
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 18836
+      },
+      "writtenOn": "2019-09-17T15:01:41Z",
+      "side": 0,
+      "message": "Unintended removal?",
+      "revId": "57c9e142faea342b1ae97f14df0033e5657563f3",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": true
+    }
+  ]
+}
