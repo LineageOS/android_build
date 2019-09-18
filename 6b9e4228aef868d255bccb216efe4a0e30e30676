@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "37908d91_01c1589d",
+        "filename": "tools/releasetools/ota_from_target_files.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 961,
+      "author": {
+        "id": 13648
+      },
+      "writtenOn": "2019-09-18T20:46:15Z",
+      "side": 1,
+      "message": "AttributeError: \u0027EdifyGenerator\u0027 object has no attribute \u0027UnpackPackageDir\u0027",
+      "revId": "6b9e4228aef868d255bccb216efe4a0e30e30676",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": true
+    }
+  ]
+}
