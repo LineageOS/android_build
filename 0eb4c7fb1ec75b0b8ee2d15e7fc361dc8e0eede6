@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "05646f91_d7075f3b",
+        "filename": "target/product/gsi_common.mk",
+        "patchSetId": 7
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 15060
+      },
+      "writtenOn": "2019-09-21T02:47:06Z",
+      "side": 1,
+      "message": ":triggered:",
+      "range": {
+        "startLine": 34,
+        "startChar": 47,
+        "endLine": 34,
+        "endChar": 48
+      },
+      "revId": "0eb4c7fb1ec75b0b8ee2d15e7fc361dc8e0eede6",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": true
+    }
+  ]
+}
