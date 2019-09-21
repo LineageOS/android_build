@@ -32,6 +32,7 @@ ifeq ($(LINEAGE_BUILD),)
 PRODUCT_PRODUCT_PROPERTIES += \
     ro.config.ringtone=Ring_Synth_04.ogg \
     ro.config.notification_sound=pixiedust.ogg \
+
 endif
 
 # The mainline checking whitelist, should be clean up
