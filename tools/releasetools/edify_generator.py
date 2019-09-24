@@ -153,9 +153,11 @@ class EdifyGenerator(object):
            ");")
     self.script.append(self.WordWrap(cmd))
 
-  def RunBackup(self, command, system_path):
-    self.script.append(('run_program("/tmp/install/bin/backuptool.sh", "%s", "%s");' % (
-        command, system_path)))
+  def MountSys(self, command, mount_point):
+    fstab = self.fstab
+    if fstab:
+      p = fstab[mount_point]
+    self.script.append('run_program("/tmp/install/bin/system-mount.sh", "%s", "%s");' % (command, p.device))
 
   def ShowProgress(self, frac, dur):
     """Update the progress bar, advancing it over 'frac' over the next
@@ -228,12 +230,6 @@ class EdifyGenerator(object):
           p.fs_type, common.PARTITION_TYPES[p.fs_type], p.device,
           p.mount_point, mount_flags))
       self.mounts.add(p.mount_point)
-
-  def Unmount(self, mount_point):
-    """Unmount the partition with the given mount_point."""
-    if mount_point in self.mounts:
-      self.mounts.remove(mount_point)
-      self.script.append('unmount("%s");' % (mount_point,))
 
   def UnpackPackageDir(self, src, dst):
     """Unpack a given directory from the OTA package into the given
