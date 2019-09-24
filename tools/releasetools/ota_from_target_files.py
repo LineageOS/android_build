@@ -820,13 +820,6 @@ else if get_stage("%(bcb_dev)s") == "3/3" then
   # Dump fingerprints
   script.Print("Target: {}".format(target_info.fingerprint))
 
-  is_system_as_root = target_info.get("system_root_image") == "true"
-  if is_system_as_root and not common.system_as_system:
-    system_mount_point = "/system_root"
-  else:
-    system_mount_point = "/system"
-
-  script.AppendExtra("ifelse(is_mounted(\"{0}\"), unmount(\"{0}\"));".format(system_mount_point))
   device_specific.FullOTA_InstallBegin()
 
   CopyInstallTools(output_zip)
@@ -834,17 +827,13 @@ else if get_stage("%(bcb_dev)s") == "3/3" then
   script.SetPermissionsRecursive("/tmp/install", 0, 0, 0755, 0644, None, None)
   script.SetPermissionsRecursive("/tmp/install/bin", 0, 0, 0755, 0755, None, None)
 
+  if target_info.get("system_root_image") == "true":
+    sysmount = "/"
+  else:
+    sysmount = "/system"
+
   if OPTIONS.backuptool:
-    if is_system_as_root:
-      script.fstab["/system"].mount_point = system_mount_point
-    script.Mount("/system")
-    if is_system_as_root and common.system_as_system:
-      script.RunBackup("backup", "/system/system")
-    else:
-      script.RunBackup("backup", "/system")
-    script.Unmount(system_mount_point)
-    if is_system_as_root:
-      script.fstab["/system"].mount_point = "/"
+    script.RunBackup("backup", sysmount)
 
   system_progress = 0.75
 
@@ -889,16 +878,7 @@ else if get_stage("%(bcb_dev)s") == "3/3" then
 
   if OPTIONS.backuptool:
     script.ShowProgress(0.02, 10)
-    if is_system_as_root:
-      script.fstab["/system"].mount_point = system_mount_point
-    script.Mount("/system")
-    if is_system_as_root and common.system_as_system:
-      script.RunBackup("restore", "/system/system")
-    else:
-      script.RunBackup("restore", "/system")
-    script.Unmount(system_mount_point)
-    if is_system_as_root:
-      script.fstab["/system"].mount_point = "/"
+    script.RunBackup("restore", sysmount)
 
   script.ShowProgress(0.05, 5)
   script.WriteRawImage("/boot", "boot.img")
