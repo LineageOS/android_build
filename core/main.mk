@@ -218,12 +218,7 @@ TARGET_BUILD_JAVA_SUPPORT_LEVEL := platform
 # The pdk (Platform Development Kit) build
 include build/make/core/pdk_config.mk
 
-#
 # -----------------------------------------------------------------
-# Enable dynamic linker warnings for eng builds
-ifeq ($(TARGET_BUILD_VARIANT),eng)
-  ADDITIONAL_BUILD_PROPERTIES += ro.bionic.ld.warning=1
-endif
 
 ADDITIONAL_BUILD_PROPERTIES += ro.treble.enabled=${PRODUCT_FULL_TREBLE}
 
