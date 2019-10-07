@@ -363,7 +363,6 @@ PRODUCT_PACKAGES_DEBUG := \
     sqlite3 \
     ss \
     strace \
-    su \
     sanitizer-status \
     tracepath \
     tracepath6 \
