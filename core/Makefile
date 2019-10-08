@@ -4138,6 +4138,10 @@ endif # BOARD_SUPER_PARTITION_GROUPS
 	@# TODO(b/134525174): Remove `-r` after addressing the issue with recovery patch generation.
 	$(hide) PATH=$(foreach p,$(INTERNAL_USERIMAGES_BINARY_PATHS),$(p):)$$PATH MKBOOTIMG=$(MKBOOTIMG) \
 	    build/make/tools/releasetools/add_img_to_target_files -a -r -v -p $(HOST_OUT) $(zip_root)
+ifdef TARGET_INSTALL_SCRIPTS
+	$(hide) mkdir -p $(zip_root)/META/extra_scripts
+	$(hide) cp $(TARGET_INSTALL_SCRIPTS) $(zip_root)/META/extra_scripts
+endif
 	@# Zip everything up, preserving symlinks and placing META/ files first to
 	@# help early validation of the .zip file while uploading it.
 	$(hide) find $(zip_root)/META | sort >$@.list

@@ -1027,6 +1027,16 @@ else if get_stage("%(bcb_dev)s") == "3/3" then
   script.ShowProgress(0.2, 10)
   device_specific.FullOTA_InstallEnd()
 
+  names = input_zip.namelist()
+  extras = []
+  for n in names:
+    if n[0:18] != "META/extra_scripts":
+      continue
+    extras.append(n)
+  extras = sorted(extras)
+  for s in extras:
+    script.AppendExtra(input_zip.read(s))
+
   if OPTIONS.extra_script is not None:
     script.AppendExtra(OPTIONS.extra_script)
 
@@ -1829,6 +1839,16 @@ else
 
   # Do device-specific installation (eg, write radio image).
   device_specific.IncrementalOTA_InstallEnd()
+
+  names = source_zip.namelist()
+  extras = []
+  for n in names:
+    if n[0:18] != "META/extra_scripts":
+      continue
+    extras.append(n)
+  extras = sorted(extras)
+  for s in extras:
+    script.AppendExtra(source_zip.read(s))
 
   if OPTIONS.extra_script is not None:
     script.AppendExtra(OPTIONS.extra_script)
