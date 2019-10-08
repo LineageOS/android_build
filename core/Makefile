@@ -2743,6 +2743,10 @@ else
 	    ./build/tools/releasetools/add_img_to_target_files -a -v \
 	        -p $(HOST_OUT) $(zip_root)
 endif
+ifdef TARGET_INSTALL_SCRIPTS
+	$(hide) mkdir -p $(zip_root)/META/extra_scripts
+	$(hide) cp $(TARGET_INSTALL_SCRIPTS) $(zip_root)/META/extra_scripts
+endif
 	@# Zip everything up, preserving symlinks and placing META/ files first to
 	@# help early validation of the .zip file while uploading it.
 	$(hide) find $(zip_root)/META | sort >$@.list
