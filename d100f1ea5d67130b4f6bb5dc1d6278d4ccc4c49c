@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "675e8785_95fca55f",
+        "filename": "tools/releasetools/edify_generator.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 156,
+      "author": {
+        "id": 18106
+      },
+      "writtenOn": "2019-10-10T13:19:50Z",
+      "side": 1,
+      "message": "I\u0027ve been using MountSys mostly because the first time this function is called it\u0027s to check whether system is mounted or not, and that doesn\u0027t have basically anything to do with backuptool.",
+      "parentUuid": "7a221c5c_ef342a9b",
+      "revId": "d100f1ea5d67130b4f6bb5dc1d6278d4ccc4c49c",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "34c5c910_660c0191",
         "filename": "tools/releasetools/edify_generator.py",
         "patchSetId": 3
@@ -30,6 +48,24 @@
       "writtenOn": "2019-10-09T22:57:40Z",
       "side": 1,
       "message": "Wrong level of indentation.  If fstab is None (unlikely, but since this check is the same as elsewhere) then p will be undefined.  Technically if fstab doesn\u0027t have the appropriate system_path this will also fail, but that isn\u0027t checked for elsewhere either.\n\nIf you\u0027re going to touch this line, then replace the use of \"%\" formatting with the use of .format() (work is underway to increase Python 3 compatibility and keeping that in mind helps).",
+      "revId": "d100f1ea5d67130b4f6bb5dc1d6278d4ccc4c49c",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "07d52a3b_4c6a17b0",
+        "filename": "tools/releasetools/edify_generator.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 160,
+      "author": {
+        "id": 18106
+      },
+      "writtenOn": "2019-10-10T13:19:50Z",
+      "side": 1,
+      "message": "About the python 3 thing, I\u0027ve simply used the same coding style as the definition of Mount, and of course it compiles fine with py3.",
+      "parentUuid": "34c5c910_660c0191",
       "revId": "d100f1ea5d67130b4f6bb5dc1d6278d4ccc4c49c",
       "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
       "unresolved": true
