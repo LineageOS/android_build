@@ -258,3 +258,7 @@ org\.lineageos\.platform\.internal
 org\.codeaurora\.ims.*
 # telephony-ext:
 org\.codeaurora\.internal.*
+
+###################################################
+# IFAA Manager used for Alipay and/or WeChat payment
+org\.ifaa\.android\.manager.*
