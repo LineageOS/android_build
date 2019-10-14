@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "eae6361a_ccbbcaeb",
+        "filename": "tools/releasetools/edify_generator.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 156,
+      "author": {
+        "id": 18177
+      },
+      "writtenOn": "2019-10-14T05:32:38Z",
+      "side": 1,
+      "message": "\u003e I\u0027ve been using MountSys mostly because the first time this function is called it\u0027s to check whether system is mounted or not, and that doesn\u0027t have basically anything to do with backuptool.\n\nSimilar to the other commit, this makes it sound like there should perhaps be a \"def CheckMount(self, mount_point)\" function, and RunBackup() should remain the way it is.",
+      "parentUuid": "675e8785_95fca55f",
+      "revId": "d100f1ea5d67130b4f6bb5dc1d6278d4ccc4c49c",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "34c5c910_660c0191",
         "filename": "tools/releasetools/edify_generator.py",
         "patchSetId": 3
