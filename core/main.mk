@@ -1058,7 +1058,8 @@ define resolve-product-relative-paths
     $(subst $(_product_path_placeholder),$(TARGET_COPY_OUT_PRODUCT),\
       $(subst $(_product_services_path_placeholder),$(TARGET_COPY_OUT_PRODUCT_SERVICES),\
         $(subst $(_odm_path_placeholder),$(TARGET_COPY_OUT_ODM),\
-          $(foreach p,$(1),$(call append-path,$(PRODUCT_OUT),$(p)$(2)))))))
+          $(subst $(_vendor_overlay_path_placeholder),$(TARGET_COPY_OUT_VENDOR_OVERLAY),\
+            $(foreach p,$(1),$(call append-path,$(PRODUCT_OUT),$(p)$(2))))))))
 endef
 
 # Returns modules included automatically as a result of certain BoardConfig
