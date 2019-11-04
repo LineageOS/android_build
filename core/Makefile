@@ -2549,6 +2549,7 @@ ASAN_OUT_DIRS_FOR_SYSTEM_INSTALL := $(sort $(patsubst $(PRODUCT_OUT)/%,%,\
   $(TARGET_OUT_SHARED_LIBRARIES) \
   $(2ND_TARGET_OUT_SHARED_LIBRARIES) \
   $(TARGET_OUT_VENDOR_SHARED_LIBRARIES) \
+  $(TARGET_OUT_VENDOR_OVERLAY_SHARED_LIBRARIES) \
   $(2ND_TARGET_OUT_VENDOR_SHARED_LIBRARIES)))
 # Extra options: Enforce the system user for the files to avoid having to change ownership.
 ASAN_SYSTEM_INSTALL_OPTIONS := --owner=1000 --group=1000
