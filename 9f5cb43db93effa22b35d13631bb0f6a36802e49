@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7ca0fd05_4990f970",
+        "filename": "core/Makefile",
+        "patchSetId": 3
+      },
+      "lineNbr": 862,
+      "author": {
+        "id": 3671
+      },
+      "writtenOn": "2019-11-11T03:19:03Z",
+      "side": 1,
+      "message": "use prebuilts/tools-lineage/${HOST_OS}-x86/bin/lzma and you wont have to whitelist lzma for the host",
+      "range": {
+        "startLine": 862,
+        "startChar": 31,
+        "endLine": 862,
+        "endChar": 35
+      },
+      "revId": "9f5cb43db93effa22b35d13631bb0f6a36802e49",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": true
+    }
+  ]
+}
