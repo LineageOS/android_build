@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d38a1209_91c11093",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 15173
+      },
+      "writtenOn": "2019-11-14T13:41:27Z",
+      "side": 1,
+      "message": "https://review.lineageos.org/c/LineageOS/android_packages_providers_TvProvider/+/264272",
+      "range": {
+        "startLine": 39,
+        "startChar": 0,
+        "endLine": 39,
+        "endChar": 50
+      },
+      "revId": "d866fed4e8c08a7873c3d787f939fc0c84c42327",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": true
+    }
+  ]
+}
