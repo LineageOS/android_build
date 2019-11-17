@@ -859,6 +859,7 @@ INSTALLED_BOOTIMAGE_TARGET :=
 endif # BOARD_PREBUILT_BOOTIMAGE
 endif # TARGET_NO_KERNEL
 
+ifneq ($(LOCAL_BUILD),true)
 # -----------------------------------------------------------------
 # NOTICE files
 #
@@ -990,6 +991,8 @@ ifeq ($(ONE_SHOT_MAKEFILE),)
   endif
 endif
 endif  # TARGET_BUILD_APPS
+
+endif  # Check for local build
 
 # The kernel isn't really a module, so to get its module file in there, we
 # make the target NOTICE files depend on this particular file too, which will

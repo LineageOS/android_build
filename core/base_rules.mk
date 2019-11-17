@@ -764,4 +764,6 @@ endif
 ## NOTICE files
 ###########################################################
 
+ifneq ($(LOCAL_BUILD),true)
 include $(BUILD_NOTICE_FILE)
+endif
