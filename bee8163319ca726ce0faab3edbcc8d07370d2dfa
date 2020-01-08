@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e8d7215a_699aa2b3",
+        "filename": "tools/releasetools/edify_generator.py",
+        "patchSetId": 8
+      },
+      "lineNbr": 238,
+      "author": {
+        "id": 10258
+      },
+      "writtenOn": "2020-01-08T08:21:29Z",
+      "side": 1,
+      "message": "shadows L370",
+      "range": {
+        "startLine": 234,
+        "startChar": 0,
+        "endLine": 238,
+        "endChar": 59
+      },
+      "revId": "bee8163319ca726ce0faab3edbcc8d07370d2dfa",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "178d3725_5c20731b",
+        "filename": "tools/releasetools/edify_generator.py",
+        "patchSetId": 8
+      },
+      "lineNbr": 373,
+      "author": {
+        "id": 10258
+      },
+      "writtenOn": "2020-01-08T08:21:29Z",
+      "side": 1,
+      "message": "h",
+      "range": {
+        "startLine": 370,
+        "startChar": 0,
+        "endLine": 373,
+        "endChar": 0
+      },
+      "revId": "bee8163319ca726ce0faab3edbcc8d07370d2dfa",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": true
+    }
+  ]
+}
