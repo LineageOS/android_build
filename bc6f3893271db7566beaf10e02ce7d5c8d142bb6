@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3c12b641_4de05361",
+        "filename": "tools/releasetools/edify_generator.py",
+        "patchSetId": 9
+      },
+      "lineNbr": 366,
+      "author": {
+        "id": 10258
+      },
+      "writtenOn": "2020-01-09T02:06:26Z",
+      "side": 1,
+      "message": "I\u0027m not sure if we really want to touch aosp code (maybe upstream it?), it\u0027s just a sanity check and won\u0027t affect the final output.",
+      "range": {
+        "startLine": 366,
+        "startChar": 4,
+        "endLine": 366,
+        "endChar": 34
+      },
+      "revId": "bc6f3893271db7566beaf10e02ce7d5c8d142bb6",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": true
+    }
+  ]
+}
