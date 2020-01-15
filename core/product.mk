@@ -344,7 +344,7 @@ _product_var_list += PRODUCT_UPDATABLE_BOOT_LOCATIONS
 
 # Whether the product would like to check prebuilt ELF files.
 _product_var_list += PRODUCT_CHECK_ELF_FILES
-.KATI_READONLY := _product_var_list
+# .KATI_READONLY := _product_var_list
 
 define dump-product
 $(warning ==== $(1) ====)\
@@ -505,7 +505,6 @@ _readonly_early_variables := $(filter-out $(_readonly_late_variables),$(_product
 define readonly-variables
 $(foreach v,$(1), \
   $(eval $(v) ?=) \
-  $(eval .KATI_READONLY := $(v)) \
  )
 endef
 define readonly-product-vars
