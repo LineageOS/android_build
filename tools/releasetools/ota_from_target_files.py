@@ -184,6 +184,12 @@ A/B OTA specific options
   --backup <boolean>
       Enable or disable the execution of backuptool.sh.
       Disabled by default.
+
+  --build_without_vendor <boolean>
+      Whether the current build is system-only or not. When set to true,
+      this will disable all remove commands in dynamic_partitions_op_list,
+      in order to keep the official partitions intact.
+      Disabled by default.
 """
 
 from __future__ import print_function
@@ -244,6 +250,7 @@ OPTIONS.skip_compatibility_check = False
 OPTIONS.output_metadata_path = None
 OPTIONS.override_device = 'auto'
 OPTIONS.backuptool = False
+OPTIONS.build_without_vendor = False
 
 
 METADATA_NAME = 'META-INF/com/android/metadata'
@@ -1086,7 +1093,8 @@ else if get_stage("%(bcb_dev)s") == "3/3" then
     dynamic_partitions_diff = common.DynamicPartitionsDifference(
         info_dict=OPTIONS.info_dict,
         block_diffs=block_diff_dict.values(),
-        progress_dict=progress_dict)
+        progress_dict=progress_dict,
+        build_without_vendor=OPTIONS.build_without_vendor)
     dynamic_partitions_diff.WriteScript(script, output_zip,
                                         write_verify_script=OPTIONS.verify)
   else:
@@ -2261,6 +2269,8 @@ def main(argv):
       OPTIONS.override_device = a
     elif o in ("--backup"):
       OPTIONS.backuptool = bool(a.lower() == 'true')
+    elif o in ("--build_without_vendor"):
+      OPTIONS.build_without_vendor = bool(a.lower() == 'true')
     else:
       return False
     return True
@@ -2297,6 +2307,7 @@ def main(argv):
                                  "output_metadata_path=",
                                  "override_device=",
                                  "backup=",
+                                 "build_without_vendor="
                              ], extra_option_handler=option_handler)
 
   if len(args) != 2:
