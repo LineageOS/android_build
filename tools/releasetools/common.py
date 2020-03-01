@@ -2420,13 +2420,15 @@ class DynamicGroupUpdate(object):
 
 class DynamicPartitionsDifference(object):
   def __init__(self, info_dict, block_diffs, progress_dict=None,
-               source_info_dict=None):
+               source_info_dict=None, build_without_vendor=False):
     if progress_dict is None:
       progress_dict = dict()
 
+    self._build_without_vendor = build_without_vendor
     self._remove_all_before_apply = False
     if source_info_dict is None:
-      self._remove_all_before_apply = True
+      if not build_without_vendor:
+        self._remove_all_before_apply = True
       source_info_dict = dict()
 
     block_diff_dict = {e.partition:e for e in block_diffs}
@@ -2550,6 +2552,17 @@ class DynamicPartitionsDifference(object):
       comment('Remove all existing dynamic partitions and groups before '
               'applying full OTA')
       append('remove_all_groups')
+
+    if self._build_without_vendor:
+      comment('System-only build, keep original vendor partitions')
+      # When building without vendor, we do not want to override
+      # any partition already existing. In this case, we can only
+      # resize, but not remove / create / re-create any other
+      # partition.
+      for p, u in self._partition_updates.items():
+        comment('Resize partition %s to %s' % (p, u.tgt_size))
+        append('resize %s %s' % (p, u.tgt_size))
+      return
 
     for p, u in self._partition_updates.items():
       if u.src_group and not u.tgt_group:
