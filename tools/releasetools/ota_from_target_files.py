@@ -1086,7 +1086,14 @@ else if get_stage("%(bcb_dev)s") == "3/3" then
     dynamic_partitions_diff = common.DynamicPartitionsDifference(
         info_dict=OPTIONS.info_dict,
         block_diffs=block_diff_dict.values(),
-        progress_dict=progress_dict)
+        progress_dict=progress_dict,
+        # In DynamicPartitionsDifference, we have no direct information
+        # whether the package is FullOTA or not, so we should pass the
+        # build_without_vendor parameter here instead of detecting it
+        # automatically in DynamicPartitionsDifference.
+        # (A non-FullOTA build may also contain no vendor image if there
+        #  is no change)
+        build_without_vendor=('vendor' not in block_diff_dict.keys()))
     dynamic_partitions_diff.WriteScript(script, output_zip,
                                         write_verify_script=OPTIONS.verify)
   else:
@@ -2296,7 +2303,7 @@ def main(argv):
                                  "skip_compatibility_check",
                                  "output_metadata_path=",
                                  "override_device=",
-                                 "backup=",
+                                 "backup="
                              ], extra_option_handler=option_handler)
 
   if len(args) != 2:
