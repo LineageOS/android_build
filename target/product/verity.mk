@@ -23,7 +23,12 @@ PRODUCT_SUPPORTS_VERITY_FEC := true
 # The dev key is used to sign boot and recovery images, and the verity
 # metadata table. Actual product deliverables will be re-signed by hand.
 # We expect this file to exist with the suffixes ".x509.pem" and ".pk8".
+
+ifneq ($(filter %river,$(TARGET_PRODUCT)),)
 PRODUCT_VERITY_SIGNING_KEY := build/make/target/product/security/verity
+else
+PRODUCT_VERITY_SIGNING_KEY := vendor/certs/verity
+endif
 
 PRODUCT_PACKAGES += \
         verity_key
