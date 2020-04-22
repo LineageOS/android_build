@@ -488,6 +488,19 @@ ifdef BOARD_PREBUILT_DTBIMAGE_DIR
   endif
 endif
 
+# Check if correct header_version is set
+ifdef BOARD_INCLUDE_DTB_IN_BOOTIMG
+  ifneq ($(BOARD_BOOTIMG_HEADER_VERSION),2)
+    $(error BOARD_BOOTIMG_HEADER_VERSION must be 2 in order to use BOARD_INCLUDE_DTB_IN_BOOTIMG)
+  endif
+endif
+
+ifneq ($(or $(BOARD_INCLUDE_RECOVERY_DTBO),$(BOARD_INCLUDE_RECOVERY_ACPIO)),)
+  ifeq ($(filter 1 2,$(BOARD_BOOTIMG_HEADER_VERSION)),)
+    $(error BOARD_BOOTIMG_HEADER_VERSION must be 1 or 2 in order to use BOARD_INCLUDE_RECOVERY_DTBO/ACPIO)
+  endif
+endif
+
 # Check BOARD_VNDK_VERSION
 define check_vndk_version
   $(eval vndk_path := prebuilts/vndk/v$(1)) \
