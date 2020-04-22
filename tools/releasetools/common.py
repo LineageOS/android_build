@@ -651,9 +651,14 @@ def _BuildBootableImage(sourcedir, fs_config_file, info_dict=None,
     cmd.append("--pagesize")
     cmd.append(open(fn).read().rstrip("\n"))
 
-  fn = os.path.join(sourcedir, "tagsaddr")
+  fn = os.path.join(sourcedir, "header_version")
   if os.access(fn, os.F_OK):
-    cmd.append("--tags-addr")
+    cmd.append("--header_version")
+    cmd.append(fn)
+
+  fn = os.path.join(sourcedir, "tags_offset")
+  if os.access(fn, os.F_OK):
+    cmd.append("--tags_offset")
     cmd.append(open(fn).read().rstrip("\n"))
 
   fn = os.path.join(sourcedir, "ramdisk_offset")
