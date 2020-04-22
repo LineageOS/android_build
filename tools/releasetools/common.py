@@ -631,6 +631,11 @@ def _BuildBootableImage(sourcedir, fs_config_file, info_dict=None,
     cmd.append("--second")
     cmd.append(fn)
 
+  fn = os.path.join(sourcedir, "header_version")
+  if os.access(fn, os.F_OK):
+    cmd.append("--header_version")
+    cmd.append(fn)
+
   fn = os.path.join(sourcedir, "dtb")
   if os.access(fn, os.F_OK):
     cmd.append("--dtb")
