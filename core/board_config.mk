@@ -313,7 +313,9 @@ endif
 
 ###########################################
 # Now we can substitute with the real value of TARGET_COPY_OUT_VENDOR
-ifeq ($(TARGET_COPY_OUT_VENDOR),$(_vendor_path_placeholder))
+ifneq ($(TARGET_COPY_OUT_VENDOR_OVERLAY),)
+  TARGET_COPY_OUT_VENDOR := $(TARGET_COPY_OUT_VENDOR_OVERLAY)
+else ifeq ($(TARGET_COPY_OUT_VENDOR),$(_vendor_path_placeholder))
   TARGET_COPY_OUT_VENDOR := system/vendor
 else ifeq ($(filter vendor system/vendor,$(TARGET_COPY_OUT_VENDOR)),)
   $(error TARGET_COPY_OUT_VENDOR must be either 'vendor' or 'system/vendor', seeing '$(TARGET_COPY_OUT_VENDOR)'.)
@@ -327,7 +329,7 @@ endif
 ifdef BOARD_VENDORIMAGE_FILE_SYSTEM_TYPE
   BOARD_USES_VENDORIMAGE := true
 endif
-ifeq ($(TARGET_COPY_OUT_VENDOR),vendor)
+ifeq ($(filter vendor $(TARGET_COPY_OUT_VENDOR_OVERLAY),$(TARGET_COPY_OUT_VENDOR)),)
   BOARD_USES_VENDORIMAGE := true
 else ifdef BOARD_USES_VENDORIMAGE
   $(error TARGET_COPY_OUT_VENDOR must be set to 'vendor' to use a vendor image)
