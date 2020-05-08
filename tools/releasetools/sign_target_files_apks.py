@@ -566,7 +566,7 @@ def ProcessTargetFiles(input_tf_zip, output_tf_zip, misc_info,
     ReplaceVerityPrivateKey(misc_info, OPTIONS.replace_verity_private_key[1])
 
   if OPTIONS.replace_verity_public_key:
-    dest = "ROOT/verity_key" if system_root_image else "BOOT/RAMDISK/verity_key"
+    dest = "ROOT/verity_key"
     # We are replacing the one in boot image only, since the one under
     # recovery won't ever be needed.
     ReplaceVerityPublicKey(
