@@ -1345,7 +1345,7 @@ function refreshmod() {
     mkdir -p $ANDROID_PRODUCT_OUT || return 1
 
     # Note, can't use absolute path because of the way make works.
-    m out/target/product/$(get_build_var TARGET_DEVICE)/module-info.json \
+    m ${ANDROID_PRODUCT_OUT#$ANDROID_BUILD_TOP/}/module-info.json \
         > $ANDROID_PRODUCT_OUT/module-info.json.build.log 2>&1
 }
 
