@@ -907,16 +907,27 @@ $(INSTALLED_FILES_FILE_RAMDISK) : $(INTERNAL_RAMDISK_FILES) $(FILESLIST)
 $(call dist-for-goals, sdk win_sdk sdk_addon, $(INSTALLED_FILES_FILE_RAMDISK))
 BUILT_RAMDISK_TARGET := $(PRODUCT_OUT)/ramdisk.img
 
+ifeq ($(BOARD_RAMDISK_USE_LZ4),true)
+# -l enables the legacy format used by the Linux kernel
+COMPRESSION_COMMAND_DEPS := $(LZ4)
+COMPRESSION_COMMAND := $(LZ4) -l -12 --favor-decSpeed
+RAMDISK_EXT := .lz4
+else
+COMPRESSION_COMMAND_DEPS := $(MINIGZIP)
+COMPRESSION_COMMAND := $(MINIGZIP)
+RAMDISK_EXT := .gz
+endif
+
 # We just build this directly to the install location.
 INSTALLED_RAMDISK_TARGET := $(BUILT_RAMDISK_TARGET)
-$(INSTALLED_RAMDISK_TARGET): $(MKBOOTFS) $(INTERNAL_RAMDISK_FILES) $(INSTALLED_FILES_FILE_RAMDISK) | $(MINIGZIP)
+$(INSTALLED_RAMDISK_TARGET): $(MKBOOTFS) $(INTERNAL_RAMDISK_FILES) $(INSTALLED_FILES_FILE_RAMDISK) | $(COMPRESSION_COMMAND_DEPS)
 	$(call pretty,"Target ram disk: $@")
-	$(hide) $(MKBOOTFS) -d $(TARGET_OUT) $(TARGET_RAMDISK_OUT) | $(MINIGZIP) > $@
+	$(hide) $(MKBOOTFS) -d $(TARGET_OUT) $(TARGET_RAMDISK_OUT) | $(COMPRESSION_COMMAND) > $@
 
 .PHONY: ramdisk-nodeps
-ramdisk-nodeps: $(MKBOOTFS) | $(MINIGZIP)
+ramdisk-nodeps: $(MKBOOTFS) | $(COMPRESSION_COMMAND_DEPS)
 	@echo "make $@: ignoring dependencies"
-	$(hide) $(MKBOOTFS) -d $(TARGET_OUT) $(TARGET_RAMDISK_OUT) | $(MINIGZIP) > $(INSTALLED_RAMDISK_TARGET)
+	$(hide) $(MKBOOTFS) -d $(TARGET_OUT) $(TARGET_RAMDISK_OUT) | $(COMPRESSION_COMMAND) > $(INSTALLED_RAMDISK_TARGET)
 
 endif # BUILDING_RAMDISK_IMAGE
 
@@ -1781,7 +1792,8 @@ endif
 #      (BOARD_INCLUDE_RECOVERY_ACPIO = true).
 
 ifeq (,$(filter true, $(BOARD_USES_FULL_RECOVERY_IMAGE) $(BOARD_USES_RECOVERY_AS_BOOT) \
-  $(BOARD_BUILD_SYSTEM_ROOT_IMAGE) $(BOARD_INCLUDE_RECOVERY_DTBO) $(BOARD_INCLUDE_RECOVERY_ACPIO)))
+  $(BOARD_BUILD_SYSTEM_ROOT_IMAGE) $(BOARD_INCLUDE_RECOVERY_DTBO) $(BOARD_INCLUDE_RECOVERY_ACPIO) \
+  $(BOARD_RAMDISK_USE_LZ4)))
 # Named '.dat' so we don't attempt to use imgdiff for patching it.
 RECOVERY_RESOURCE_ZIP := $(TARGET_OUT)/etc/recovery-resource.dat
 else
@@ -1972,7 +1984,7 @@ ifdef BOARD_INCLUDE_DTB_IN_BOOTIMG
 $(INSTALLED_BOOTIMAGE_TARGET): $(INSTALLED_DTBIMAGE_TARGET)
 endif
 
-$(INSTALLED_BOOTIMAGE_TARGET): $(MKBOOTFS) $(MKBOOTIMG) $(MINIGZIP) \
+$(INSTALLED_BOOTIMAGE_TARGET): $(MKBOOTFS) $(MKBOOTIMG) $(COMPRESSION_COMMAND_DEPS) \
 	    $(INTERNAL_ROOT_FILES) \
 	    $(INSTALLED_RAMDISK_TARGET) \
 	    $(INTERNAL_RECOVERYIMAGE_FILES) \
@@ -1986,7 +1998,7 @@ $(INSTALLED_BOOTIMAGE_TARGET): $(MKBOOTFS) $(MKBOOTIMG) $(MINIGZIP) \
 	    $(DEPMOD)
 	$(call pretty,"Target boot image from recovery: $@")
 	$(call build-recoveryramdisk)
-	$(hide) $(MKBOOTFS) -d $(TARGET_OUT) $(TARGET_RECOVERY_ROOT_OUT) | $(MINIGZIP) > $(recovery_ramdisk)
+	$(hide) $(MKBOOTFS) -d $(TARGET_OUT) $(TARGET_RECOVERY_ROOT_OUT) | $(COMPRESSION_COMMAND) > $(recovery_ramdisk)
 	$(call build-recoveryimage-target, $@)
 endif # BOARD_USES_RECOVERY_AS_BOOT
 
@@ -2021,10 +2033,10 @@ $(recovery_uncompressed_ramdisk): $(MKBOOTFS) $(ADBD) \
 	@echo ----- Making uncompressed recovery ramdisk ------
 	$(hide) $(MKBOOTFS) $(TARGET_RECOVERY_ROOT_OUT) > $@
 
-$(recovery_ramdisk): $(MINIGZIP) \
+$(recovery_ramdisk): $(COMPRESSION_COMMAND_DEPS) \
 	$(recovery_uncompressed_ramdisk)
 	@echo ----- Making compressed recovery ramdisk ------
-	$(hide) $(MINIGZIP) < $(recovery_uncompressed_ramdisk) > $@
+	$(hide) $(COMPRESSION_COMMAND) < $(recovery_uncompressed_ramdisk) > $@
 
 ifndef BOARD_CUSTOM_BOOTIMG_MK
 $(INSTALLED_RECOVERYIMAGE_TARGET): $(MKBOOTIMG) $(recovery_ramdisk) $(recovery_kernel) \
@@ -2044,7 +2056,7 @@ endif
 recoveryimage-nodeps:
 	@echo "make $@: ignoring dependencies"
 	$(call build-recoveryramdisk)
-	$(hide) $(MKBOOTFS) -d $(TARGET_OUT) $(TARGET_RECOVERY_ROOT_OUT) | $(MINIGZIP) > $(recovery_ramdisk)
+	$(hide) $(MKBOOTFS) -d $(TARGET_OUT) $(TARGET_RECOVERY_ROOT_OUT) | $(COMPRESSION_COMMAND) > $(recovery_ramdisk)
 	$(call build-recoveryimage-target, $(INSTALLED_RECOVERYIMAGE_TARGET))
 
 else # INSTALLED_RECOVERYIMAGE_TARGET not defined
@@ -2120,22 +2132,22 @@ else
 # Depends on ramdisk.img, note that some target has ramdisk.img but no boot.img, e.g., emulator.
 $(INSTALLED_DEBUG_RAMDISK_TARGET): $(INSTALLED_RAMDISK_TARGET)
 endif # BOARD_USES_RECOVERY_AS_BOOT
-$(INSTALLED_DEBUG_RAMDISK_TARGET): $(MKBOOTFS) $(INTERNAL_DEBUG_RAMDISK_FILES) | $(MINIGZIP)
+$(INSTALLED_DEBUG_RAMDISK_TARGET): $(MKBOOTFS) $(INTERNAL_DEBUG_RAMDISK_FILES) | $(COMPRESSION_COMMAND_DEPS)
 	$(call pretty,"Target debug ram disk: $@")
 	mkdir -p $(TARGET_DEBUG_RAMDISK_OUT)
 	touch $(TARGET_DEBUG_RAMDISK_OUT)/force_debuggable
 	rsync -a $(DEBUG_RAMDISK_SYNC_DIR)/ $(DEBUG_RAMDISK_ROOT_DIR)
-	$(MKBOOTFS) -d $(TARGET_OUT) $(DEBUG_RAMDISK_ROOT_DIR) | $(MINIGZIP) > $@
+	$(MKBOOTFS) -d $(TARGET_OUT) $(DEBUG_RAMDISK_ROOT_DIR) | $(COMPRESSION_COMMAND) > $@
 
 .PHONY: ramdisk_debug-nodeps
 ramdisk_debug-nodeps: DEBUG_RAMDISK_SYNC_DIR := $(my_debug_ramdisk_sync_dir)
 ramdisk_debug-nodeps: DEBUG_RAMDISK_ROOT_DIR := $(my_debug_ramdisk_root_dir)
-ramdisk_debug-nodeps: $(MKBOOTFS) | $(MINIGZIP)
+ramdisk_debug-nodeps: $(MKBOOTFS) | $(COMPRESSION_COMMAND_DEPS)
 	echo "make $@: ignoring dependencies"
 	mkdir -p $(TARGET_DEBUG_RAMDISK_OUT)
 	touch $(TARGET_DEBUG_RAMDISK_OUT)/force_debuggable
 	rsync -a $(DEBUG_RAMDISK_SYNC_DIR)/ $(DEBUG_RAMDISK_ROOT_DIR)
-	$(MKBOOTFS) -d $(TARGET_OUT) $(DEBUG_RAMDISK_ROOT_DIR) | $(MINIGZIP) > $(INSTALLED_DEBUG_RAMDISK_TARGET)
+	$(MKBOOTFS) -d $(TARGET_OUT) $(DEBUG_RAMDISK_ROOT_DIR) | $(COMPRESSION_COMMAND) > $(INSTALLED_DEBUG_RAMDISK_TARGET)
 
 my_debug_ramdisk_sync_dir :=
 my_debug_ramdisk_root_dir :=
@@ -2344,7 +2356,8 @@ INSTALLED_SYSTEMIMAGE := $(INSTALLED_SYSTEMIMAGE_TARGET)
 ifneq ($(INSTALLED_BOOTIMAGE_TARGET),)
 ifneq ($(INSTALLED_RECOVERYIMAGE_TARGET),)
 ifneq ($(BOARD_USES_FULL_RECOVERY_IMAGE),true)
-ifneq (,$(filter true, $(BOARD_BUILD_SYSTEM_ROOT_IMAGE) $(BOARD_INCLUDE_RECOVERY_DTBO) $(BOARD_INCLUDE_RECOVERY_ACPIO)))
+ifneq (,$(filter true, $(BOARD_BUILD_SYSTEM_ROOT_IMAGE) $(BOARD_INCLUDE_RECOVERY_DTBO) $(BOARD_INCLUDE_RECOVERY_ACPIO) \
+      $(BOARD_RAMDISK_USE_LZ4)))
 diff_tool := $(HOST_OUT_EXECUTABLES)/bsdiff
 else
 diff_tool := $(HOST_OUT_EXECUTABLES)/imgdiff
