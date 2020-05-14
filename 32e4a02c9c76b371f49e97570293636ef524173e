@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "02040e72_60b30b2c",
+        "filename": "envsetup.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 2195
+      },
+      "writtenOn": "2020-05-14T22:44:57Z",
+      "side": 1,
+      "message": "Add it here",
+      "revId": "32e4a02c9c76b371f49e97570293636ef524173e",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": true
+    }
+  ]
+}
