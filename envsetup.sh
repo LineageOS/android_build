@@ -1398,6 +1398,38 @@ print(module_info[module]['path'][0])" 2>/dev/null)
     fi
 }
 
+function modinstalled() {
+    if [ ! "$ANDROID_PRODUCT_OUT" ]; then
+        echo "No ANDROID_PRODUCT_OUT. Try running 'lunch' first." >&2
+        return 1
+    fi
+
+    if [[ $# -ne 1 ]]; then
+        echo "usage: modinstalled <installed path>" >&2
+        return 1
+    fi
+
+    if [ ! -f "$ANDROID_PRODUCT_OUT/module-info.json" ]; then
+        echo "Could not find module-info.json. It will only be built once, and it can be updated with 'refreshmod'" >&2
+        refreshmod || return 1
+    fi
+
+    local mod=$(python -c "import json, os
+path = '$ANDROID_PRODUCT_OUT/$1'
+module_info = json.load(open('$ANDROID_PRODUCT_OUT/module-info.json'))
+for module in module_info:
+    for installed_path in module_info[module]['installed']:
+        if path in installed_path:
+            print(module)
+exit(1)")
+    if [ -z "$mod" ]; then
+        echo "Could not find a module for '$1' (try 'refreshmod' if there have been build changes?)." >&2
+        return 1
+    else
+        echo "$mod"
+    fi
+}
+
 # Go to a specific module in the android tree, as cached in module-info.json. If any build change
 # is made, and it should be reflected in the output, you should run 'refreshmod' first.
 function gomod() {
