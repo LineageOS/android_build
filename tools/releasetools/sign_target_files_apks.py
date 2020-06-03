@@ -103,6 +103,12 @@ Usage:  sign_target_files_apks [flags] input_target_files output_target_files
       Specify any additional args that are needed to AVB-sign the image
       (e.g. "--signing_helper /path/to/helper"). The args will be appended to
       the existing ones in info dict.
+
+  --prebuilts_path <path to prebuild image files>
+      Specify a path that contains one or more image files, to be added to the
+      signed_target-files.zip.  Note, this directory must contain *only* .img
+      files that you want to add. All other files in the directory will be
+      added as well.
 """
 
 from __future__ import print_function
@@ -151,6 +157,7 @@ OPTIONS.tag_changes = ("-test-keys", "-dev-keys", "+release-keys")
 OPTIONS.avb_keys = {}
 OPTIONS.avb_algorithms = {}
 OPTIONS.avb_extra_args = {}
+OPTIONS.prebuiltis_path = ""
 
 
 def GetApkCerts(certmap):
@@ -1124,6 +1131,8 @@ def main(argv):
       OPTIONS.avb_extra_args['vbmeta_vendor'] = a
     elif o == "--avb_apex_extra_args":
       OPTIONS.avb_extra_args['apex'] = a
+    elif o == "--prebuilts_path":
+      OPTIONS.prebuilts_path = a
     else:
       return False
     return True
@@ -1167,6 +1176,7 @@ def main(argv):
           "avb_vbmeta_vendor_algorithm=",
           "avb_vbmeta_vendor_key=",
           "avb_vbmeta_vendor_extra_args=",
+          "prebuilts_path=",
       ],
       extra_option_handler=option_handler)
 
@@ -1207,6 +1217,12 @@ def main(argv):
                      platform_api_level, codename_to_api_level_map,
                      compressed_extension)
 
+  if OPTIONS.prebuilts_path:
+    prebuilt_list = os.listdir(OPTIONS.prebuilts_path)
+
+    for prebuilt_image in prebuilt_list:
+      common.ZipWrite(output_zip, os.path.join(OPTIONS.prebuilts_path, prebuilt_image), os.path.join("IMAGES/", prebuilt_image))
+
   common.ZipClose(input_zip)
   common.ZipClose(output_zip)
 
@@ -1216,6 +1232,10 @@ def main(argv):
   # recovery patch is guaranteed to be regenerated there.
   if OPTIONS.rebuild_recovery:
     new_args.append("--rebuild_recovery")
+
+  if OPTIONS.prebuilts_path:
+    new_args.append("--add_missing")
+
   new_args.append(args[1])
   add_img_to_target_files.main(new_args)
 
