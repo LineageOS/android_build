@@ -157,7 +157,7 @@ OPTIONS.tag_changes = ("-test-keys", "-dev-keys", "+release-keys")
 OPTIONS.avb_keys = {}
 OPTIONS.avb_algorithms = {}
 OPTIONS.avb_extra_args = {}
-OPTIONS.prebuiltis_path = ""
+OPTIONS.prebuilts_path = ""
 
 
 def GetApkCerts(certmap):
