@@ -74,7 +74,7 @@ ifneq ($(filter STATIC_LIBRARIES SHARED_LIBRARIES HEADER_LIBRARIES,$(LOCAL_MODUL
     $(my_all_targets): $(LOCAL_BUILT_MODULE).toc
   endif
 
-  SOONG_ALREADY_CONV := $(SOONG_ALREADY_CONV) $(LOCAL_MODULE)
+  SOONG_ALREADY_CONV += $(LOCAL_MODULE)
 
   my_link_type := $(LOCAL_SOONG_LINK_TYPE)
   my_warn_types :=
