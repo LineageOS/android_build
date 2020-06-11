@@ -788,11 +788,14 @@ def ExtractFromInputFile(input_file, fn):
 class RamdiskFormat(object):
   LZ4 = 1
   GZ = 2
+  XZ = 3
 
 
 def GetRamdiskFormat(info_dict):
   if info_dict.get('lz4_ramdisks') == 'true':
     ramdisk_format = RamdiskFormat.LZ4
+  elif info_dict.get('xz_ramdisks') == 'true':
+    ramdisk_format = RamdiskFormat.XZ
   else:
     ramdisk_format = RamdiskFormat.GZ
   return ramdisk_format
@@ -1629,10 +1632,13 @@ def _MakeRamdisk(sourcedir, fs_config_file=None,
   if ramdisk_format == RamdiskFormat.LZ4:
     p2 = Run(["lz4", "-l", "-12", "--favor-decSpeed"], stdin=p1.stdout,
              stdout=ramdisk_img.file.fileno())
+  elif ramdisk_format == RamdiskFormat.XZ:
+    p2 = Run(["xz", "-f", "-c", "--check=crc32", "--lzma2=dict=32MiB"], stdin=p1.stdout,
+             stdout=ramdisk_img.file.fileno())
   elif ramdisk_format == RamdiskFormat.GZ:
     p2 = Run(["minigzip"], stdin=p1.stdout, stdout=ramdisk_img.file.fileno())
   else:
-    raise ValueError("Only support lz4 or minigzip ramdisk format.")
+    raise ValueError("Only support lz4, xz, or minigzip ramdisk format.")
 
   p2.wait()
   p1.wait()
@@ -4113,8 +4119,14 @@ def GetBootImageBuildProp(boot_img, ramdisk_format=RamdiskFormat.LZ4):
           p2 = Run(['minigzip', '-d'], stdin=input_stream.fileno(),
                    stdout=output_stream.fileno())
           p2.wait()
+    elif ramdisk_format == RamdiskFormat.XZ:
+      with open(ramdisk, 'rb') as input_stream:
+        with open(uncompressed_ramdisk, 'wb') as output_stream:
+          p2 = Run(['xz', '-d'], stdin=input_stream.fileno(),
+                   stdout=output_stream.fileno())
+          p2.wait()
     else:
-      logger.error('Only support lz4 or minigzip ramdisk format.')
+      logger.error('Only support lz4, xz, or minigzip ramdisk format.')
       return None
 
     abs_uncompressed_ramdisk = os.path.abspath(uncompressed_ramdisk)
