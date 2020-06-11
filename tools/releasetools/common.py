@@ -711,11 +711,14 @@ def ExtractFromInputFile(input_file, fn):
 class RamdiskFormat(object):
   LZ4 = 1
   GZ = 2
+  XZ = 3
 
 
 def _GetRamdiskFormat(info_dict):
   if info_dict.get('lz4_ramdisks') == 'true':
     ramdisk_format = RamdiskFormat.LZ4
+  if info_dict.get('xz_ramdisks') == 'true':
+    ramdisk_format = RamdiskFormat.XZ
   else:
     ramdisk_format = RamdiskFormat.GZ
   return ramdisk_format
@@ -1531,6 +1534,9 @@ def _MakeRamdisk(sourcedir, fs_config_file=None,
   p1 = Run(cmd, stdout=subprocess.PIPE)
   if ramdisk_format == RamdiskFormat.LZ4:
     p2 = Run(["lz4", "-l", "-12", "--favor-decSpeed"], stdin=p1.stdout,
+             stdout=ramdisk_img.file.fileno())
+  elif ramdisk_format == RamdiskFormat.XZ:
+    p2 = Run(["xz", "-f", "-c", "--check=crc32", "--lzma2=dict=32MiB"], stdin=p1.stdout,
              stdout=ramdisk_img.file.fileno())
   elif ramdisk_format == RamdiskFormat.GZ:
     p2 = Run(["minigzip"], stdin=p1.stdout, stdout=ramdisk_img.file.fileno())
