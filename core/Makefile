@@ -1154,6 +1154,10 @@ ifeq ($(BOARD_RAMDISK_USE_LZ4),true)
 COMPRESSION_COMMAND_DEPS := $(LZ4)
 COMPRESSION_COMMAND := $(LZ4) -l -12 --favor-decSpeed
 RAMDISK_EXT := .lz4
+else ifeq ($(BOARD_RAMDISK_USE_XZ),true)
+COMPRESSION_COMMAND_DEPS := $(XZ)
+COMPRESSION_COMMAND := $(XZ) -f -c --check=crc32
+RAMDISK_EXT := .xz
 else
 COMPRESSION_COMMAND_DEPS := $(MINIGZIP)
 COMPRESSION_COMMAND := $(MINIGZIP)
@@ -2093,7 +2097,12 @@ endif
 #      (BOARD_INCLUDE_RECOVERY_ACPIO = true).
 
 ifeq (,$(filter true, $(BOARD_USES_FULL_RECOVERY_IMAGE) $(BOARD_USES_RECOVERY_AS_BOOT) \
+<<<<<<< HEAD   (9d2242 Version bump to RP1A.200720.009 [core/build_id.mk])
   $(BOARD_BUILD_SYSTEM_ROOT_IMAGE) $(BOARD_INCLUDE_RECOVERY_DTBO) $(BOARD_INCLUDE_RECOVERY_ACPIO)))
+=======
+  $(BOARD_BUILD_SYSTEM_ROOT_IMAGE) $(BOARD_INCLUDE_RECOVERY_DTBO) $(BOARD_INCLUDE_RECOVERY_ACPIO) \
+  $(BOARD_RAMDISK_USE_LZ4) $(BOARD_RAMDISK_USE_XZ)))
+>>>>>>> CHANGE (1f9ad6 Add build support for XZ ramdisks)
 # Named '.dat' so we don't attempt to use imgdiff for patching it.
 RECOVERY_RESOURCE_ZIP := $(TARGET_OUT_VENDOR)/etc/recovery-resource.dat
 ALL_DEFAULT_INSTALLED_MODULES += $(RECOVERY_RESOURCE_ZIP)
@@ -2747,7 +2756,12 @@ INSTALLED_SYSTEMIMAGE := $(INSTALLED_SYSTEMIMAGE_TARGET)
 ifneq ($(INSTALLED_BOOTIMAGE_TARGET),)
 ifneq ($(INSTALLED_RECOVERYIMAGE_TARGET),)
 ifneq ($(BOARD_USES_FULL_RECOVERY_IMAGE),true)
+<<<<<<< HEAD   (9d2242 Version bump to RP1A.200720.009 [core/build_id.mk])
 ifneq (,$(filter true, $(BOARD_BUILD_SYSTEM_ROOT_IMAGE) $(BOARD_INCLUDE_RECOVERY_DTBO) $(BOARD_INCLUDE_RECOVERY_ACPIO)))
+=======
+ifneq (,$(filter true, $(BOARD_BUILD_SYSTEM_ROOT_IMAGE) $(BOARD_INCLUDE_RECOVERY_DTBO) $(BOARD_INCLUDE_RECOVERY_ACPIO) \
+      $(BOARD_RAMDISK_USE_LZ4) $(BOARD_RAMDISK_USE_XZ)))
+>>>>>>> CHANGE (1f9ad6 Add build support for XZ ramdisks)
 diff_tool := $(HOST_OUT_EXECUTABLES)/bsdiff
 else
 diff_tool := $(HOST_OUT_EXECUTABLES)/imgdiff
@@ -4751,7 +4765,56 @@ ifneq ($(tool_extension),)
 endif
 	$(hide) echo "$(PRODUCT_OTA_PUBLIC_KEYS)" > $(zip_root)/META/otakeys.txt
 	$(hide) cp $(SELINUX_FC) $(zip_root)/META/file_contexts.bin
+<<<<<<< HEAD   (9d2242 Version bump to RP1A.200720.009 [core/build_id.mk])
 	$(hide) cp $(INSTALLED_MISC_INFO_TARGET) $(zip_root)/META/misc_info.txt
+=======
+	$(hide) echo "recovery_api_version=$(PRIVATE_RECOVERY_API_VERSION)" > $(zip_root)/META/misc_info.txt
+	$(hide) echo "fstab_version=$(PRIVATE_RECOVERY_FSTAB_VERSION)" >> $(zip_root)/META/misc_info.txt
+ifdef BOARD_FLASH_BLOCK_SIZE
+	$(hide) echo "blocksize=$(BOARD_FLASH_BLOCK_SIZE)" >> $(zip_root)/META/misc_info.txt
+endif
+ifdef BOARD_BOOTIMAGE_PARTITION_SIZE
+	$(hide) echo "boot_size=$(BOARD_BOOTIMAGE_PARTITION_SIZE)" >> $(zip_root)/META/misc_info.txt
+endif
+ifeq ($(BOARD_RAMDISK_USE_LZ4),true)
+	$(hide) echo "lz4_ramdisks=true" >> $(zip_root)/META/misc_info.txt
+endif
+ifeq ($(BOARD_RAMDISK_USE_XZ),true)
+	$(hide) echo "xz_ramdisks=true" >> $(zip_root)/META/misc_info.txt
+endif
+ifeq ($(INSTALLED_RECOVERYIMAGE_TARGET),)
+	$(hide) echo "no_recovery=true" >> $(zip_root)/META/misc_info.txt
+endif
+ifdef BOARD_INCLUDE_RECOVERY_DTBO
+	$(hide) echo "include_recovery_dtbo=true" >> $(zip_root)/META/misc_info.txt
+endif
+ifdef BOARD_INCLUDE_RECOVERY_ACPIO
+	$(hide) echo "include_recovery_acpio=true" >> $(zip_root)/META/misc_info.txt
+endif
+ifdef BOARD_RECOVERYIMAGE_PARTITION_SIZE
+	$(hide) echo "recovery_size=$(BOARD_RECOVERYIMAGE_PARTITION_SIZE)" >> $(zip_root)/META/misc_info.txt
+endif
+ifdef TARGET_RECOVERY_FSTYPE_MOUNT_OPTIONS
+	@# TARGET_RECOVERY_FSTYPE_MOUNT_OPTIONS can be empty to indicate that nothing but defaults should be used.
+	$(hide) echo "recovery_mount_options=$(TARGET_RECOVERY_FSTYPE_MOUNT_OPTIONS)" >> $(zip_root)/META/misc_info.txt
+else
+	$(hide) echo "recovery_mount_options=$(DEFAULT_TARGET_RECOVERY_FSTYPE_MOUNT_OPTIONS)" >> $(zip_root)/META/misc_info.txt
+endif
+	$(hide) echo "tool_extensions=$(PRIVATE_TOOL_EXTENSIONS)" >> $(zip_root)/META/misc_info.txt
+	$(hide) echo "default_system_dev_certificate=$(DEFAULT_SYSTEM_DEV_CERTIFICATE)" >> $(zip_root)/META/misc_info.txt
+ifdef PRODUCT_EXTRA_RECOVERY_KEYS
+	$(hide) echo "extra_recovery_keys=$(PRODUCT_EXTRA_RECOVERY_KEYS)" >> $(zip_root)/META/misc_info.txt
+endif
+	$(hide) echo 'mkbootimg_args=$(BOARD_MKBOOTIMG_ARGS)' >> $(zip_root)/META/misc_info.txt
+	$(hide) echo 'mkbootimg_version_args=$(INTERNAL_MKBOOTIMG_VERSION_ARGS)' >> $(zip_root)/META/misc_info.txt
+	$(hide) echo "use_set_metadata=1" >> $(zip_root)/META/misc_info.txt
+	$(hide) echo "multistage_support=1" >> $(zip_root)/META/misc_info.txt
+	$(hide) echo "blockimgdiff_versions=3,4" >> $(zip_root)/META/misc_info.txt
+ifneq ($(OEM_THUMBPRINT_PROPERTIES),)
+	# OTA scripts are only interested in fingerprint related properties
+	$(hide) echo "oem_fingerprint_properties=$(OEM_THUMBPRINT_PROPERTIES)" >> $(zip_root)/META/misc_info.txt
+endif
+>>>>>>> CHANGE (1f9ad6 Add build support for XZ ramdisks)
 ifneq ($(PRODUCT_SYSTEM_BASE_FS_PATH),)
 	$(hide) cp $(PRODUCT_SYSTEM_BASE_FS_PATH) \
 	  $(zip_root)/META/$(notdir $(PRODUCT_SYSTEM_BASE_FS_PATH))

@@ -1191,12 +1191,38 @@ def _BuildBootableImage(image_name, sourcedir, fs_config_file, info_dict=None,
   # "boot" or "recovery", without extension.
   partition_name = os.path.basename(sourcedir).lower()
 
+<<<<<<< HEAD   (9d2242 Version bump to RP1A.200720.009 [core/build_id.mk])
   if partition_name == "recovery":
     kernel = "kernel"
   else:
     kernel = image_name.replace("boot", "kernel")
     kernel = kernel.replace(".img","")
   if not os.access(os.path.join(sourcedir, kernel), os.F_OK):
+=======
+    if os.access(fs_config_file, os.F_OK):
+      cmd = ["mkbootfs", "-f", fs_config_file,
+             os.path.join(sourcedir, "RAMDISK")]
+    else:
+      cmd = ["mkbootfs", os.path.join(sourcedir, "RAMDISK")]
+    p1 = Run(cmd, stdout=subprocess.PIPE)
+    if info_dict.get("lz4_ramdisks") == 'true':
+      p2 = Run(["lz4", "-l", "-12" , "--favor-decSpeed"], stdin=p1.stdout,
+               stdout=ramdisk_img.file.fileno())
+    elif info_dict.get("xz_ramdisks") == 'true':
+      p2 = Run(["xz", "-f", "-c", "--check=crc32"], stdin=p1.stdout,
+               stdout=ramdisk_img.file.fileno())
+    else:
+      p2 = Run(["minigzip"], stdin=p1.stdout, stdout=ramdisk_img.file.fileno())
+
+    p2.wait()
+    p1.wait()
+    assert p1.returncode == 0, "mkbootfs of %s ramdisk failed" % (sourcedir,)
+    assert p2.returncode == 0, "compression of %s ramdisk failed" % (sourcedir,)
+
+    return ramdisk_img
+
+  if not os.access(os.path.join(sourcedir, "kernel"), os.F_OK):
+>>>>>>> CHANGE (1f9ad6 Add build support for XZ ramdisks)
     return None
 
   if has_ramdisk and not os.access(os.path.join(sourcedir, "RAMDISK"), os.F_OK):
