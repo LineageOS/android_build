@@ -601,6 +601,9 @@ def _BuildBootableImage(sourcedir, fs_config_file, info_dict=None,
     if info_dict.get("lz4_ramdisks") == 'true':
       p2 = Run(["lz4", "-l", "-12" , "--favor-decSpeed"], stdin=p1.stdout,
                stdout=ramdisk_img.file.fileno())
+    elif info_dict.get("lzma_ramdisks") == 'true':
+      p2 = Run(["lzma", "-f", "-c"], stdin=p1.stdout,
+               stdout=ramdisk_img.file.fileno())
     else:
       p2 = Run(["minigzip"], stdin=p1.stdout, stdout=ramdisk_img.file.fileno())
 
@@ -2316,7 +2319,7 @@ def MakeRecoveryPatch(input_dir, output_sink, recovery_img, boot_img,
     # With system-root-image, boot and recovery images will have mismatching
     # entries (only recovery has the ramdisk entry) (Bug: 72731506). Use bsdiff
     # to handle such a case.
-    if system_root_image:
+    if system_root_image or info_dict.get("lzma_ramdisks") == 'true':
       diff_program = ["bsdiff"]
       bonus_args = ""
       assert not os.path.exists(path)
