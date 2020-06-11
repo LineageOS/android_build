@@ -912,6 +912,10 @@ ifeq ($(BOARD_RAMDISK_USE_LZ4),true)
 COMPRESSION_COMMAND_DEPS := $(LZ4)
 COMPRESSION_COMMAND := $(LZ4) -l -12 --favor-decSpeed
 RAMDISK_EXT := .lz4
+else ifeq ($(BOARD_RAMDISK_USE_XZ),true)
+COMPRESSION_COMMAND_DEPS := $(XZ)
+COMPRESSION_COMMAND := $(XZ) -f -c --check=crc32
+RAMDISK_EXT := .xz
 else
 COMPRESSION_COMMAND_DEPS := $(MINIGZIP)
 COMPRESSION_COMMAND := $(MINIGZIP)
@@ -1793,7 +1797,7 @@ endif
 
 ifeq (,$(filter true, $(BOARD_USES_FULL_RECOVERY_IMAGE) $(BOARD_USES_RECOVERY_AS_BOOT) \
   $(BOARD_BUILD_SYSTEM_ROOT_IMAGE) $(BOARD_INCLUDE_RECOVERY_DTBO) $(BOARD_INCLUDE_RECOVERY_ACPIO) \
-  $(BOARD_RAMDISK_USE_LZ4)))
+  $(BOARD_RAMDISK_USE_LZ4) $(BOARD_RAMDISK_USE_XZ)))
 # Named '.dat' so we don't attempt to use imgdiff for patching it.
 RECOVERY_RESOURCE_ZIP := $(TARGET_OUT)/etc/recovery-resource.dat
 else
@@ -2357,7 +2361,7 @@ ifneq ($(INSTALLED_BOOTIMAGE_TARGET),)
 ifneq ($(INSTALLED_RECOVERYIMAGE_TARGET),)
 ifneq ($(BOARD_USES_FULL_RECOVERY_IMAGE),true)
 ifneq (,$(filter true, $(BOARD_BUILD_SYSTEM_ROOT_IMAGE) $(BOARD_INCLUDE_RECOVERY_DTBO) $(BOARD_INCLUDE_RECOVERY_ACPIO) \
-      $(BOARD_RAMDISK_USE_LZ4)))
+      $(BOARD_RAMDISK_USE_LZ4) $(BOARD_RAMDISK_USE_XZ)))
 diff_tool := $(HOST_OUT_EXECUTABLES)/bsdiff
 else
 diff_tool := $(HOST_OUT_EXECUTABLES)/imgdiff
@@ -3985,6 +3989,9 @@ ifdef BOARD_BOOTIMAGE_PARTITION_SIZE
 endif
 ifeq ($(BOARD_RAMDISK_USE_LZ4),true)
 	$(hide) echo "lz4_ramdisks=true" >> $(zip_root)/META/misc_info.txt
+endif
+ifeq ($(BOARD_RAMDISK_USE_XZ),true)
+	$(hide) echo "xz_ramdisks=true" >> $(zip_root)/META/misc_info.txt
 endif
 ifeq ($(INSTALLED_RECOVERYIMAGE_TARGET),)
 	$(hide) echo "no_recovery=true" >> $(zip_root)/META/misc_info.txt

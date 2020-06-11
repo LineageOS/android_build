@@ -601,6 +601,9 @@ def _BuildBootableImage(sourcedir, fs_config_file, info_dict=None,
     if info_dict.get("lz4_ramdisks") == 'true':
       p2 = Run(["lz4", "-l", "-12" , "--favor-decSpeed"], stdin=p1.stdout,
                stdout=ramdisk_img.file.fileno())
+    elif info_dict.get("xz_ramdisks") == 'true':
+      p2 = Run(["xz", "-f", "-c", "--check=crc32"], stdin=p1.stdout,
+               stdout=ramdisk_img.file.fileno())
     else:
       p2 = Run(["minigzip"], stdin=p1.stdout, stdout=ramdisk_img.file.fileno())
 
