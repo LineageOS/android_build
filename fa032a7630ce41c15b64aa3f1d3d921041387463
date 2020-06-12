@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f0d94989_178c8cf6",
+        "filename": "tools/releasetools/ota_from_target_files.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 981,
+      "author": {
+        "id": 11883
+      },
+      "writtenOn": "2020-06-12T15:51:10Z",
+      "side": 1,
+      "message": "RunBackup(args, target_info.get(\u0027use_dynamic_partitions\u0027) \u003d\u003d \"true\")\nand remove the if checks",
+      "revId": "fa032a7630ce41c15b64aa3f1d3d921041387463",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": true
+    }
+  ]
+}
