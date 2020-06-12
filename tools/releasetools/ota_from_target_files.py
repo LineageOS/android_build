@@ -978,7 +978,7 @@ else if get_stage("%(bcb_dev)s") == "3/3" then
     sysmount = "/system"
 
   if OPTIONS.backuptool:
-    script.RunBackup("backup", sysmount)
+    script.RunBackup("backup", sysmount, target_info.get('use_dynamic_partitions') == "true")
 
   system_progress = 0.75
 
@@ -1042,7 +1042,7 @@ else if get_stage("%(bcb_dev)s") == "3/3" then
 
   if OPTIONS.backuptool:
     script.ShowProgress(0.02, 10)
-    script.RunBackup("restore", sysmount)
+    script.RunBackup("restore", sysmount, target_info.get('use_dynamic_partitions') == "true")
 
   script.ShowProgress(0.05, 5)
   script.WriteRawImage("/boot", "boot.img")
