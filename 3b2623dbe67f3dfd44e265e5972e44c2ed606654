@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "cdc8f8a3_0897a21d",
+        "filename": "tools/releasetools/edify_generator.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 159,
+      "author": {
+        "id": 11883
+      },
+      "writtenOn": "2020-06-12T15:14:12Z",
+      "side": 1,
+      "message": "add a dynamic \u003d false parameter to the function and move the new code under an if",
+      "revId": "3b2623dbe67f3dfd44e265e5972e44c2ed606654",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": true
+    }
+  ]
+}
