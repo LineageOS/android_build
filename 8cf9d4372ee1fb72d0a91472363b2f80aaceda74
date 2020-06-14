@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2c844682_c76edb22",
+        "filename": "tools/releasetools/common.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 605,
+      "author": {
+        "id": 444
+      },
+      "writtenOn": "2020-06-14T22:47:54Z",
+      "side": 1,
+      "message": "For the build to not fail, I had to whitelist lzma as a host tool.\nIdeally I guess we should build it from external/lzma if it\u0027s possible.\nAfaik Google only made changes to build the lib.",
+      "revId": "8cf9d4372ee1fb72d0a91472363b2f80aaceda74",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": true
+    }
+  ]
+}
