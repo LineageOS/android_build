@@ -16,6 +16,24 @@
       "revId": "8cf9d4372ee1fb72d0a91472363b2f80aaceda74",
       "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d72088ef_436b746f",
+        "filename": "tools/releasetools/common.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 605,
+      "author": {
+        "id": 11883
+      },
+      "writtenOn": "2020-06-15T06:44:05Z",
+      "side": 1,
+      "message": "indeed, I\u0027ll make it build able.\nthis means before all images were compressed with gzip.",
+      "parentUuid": "2c844682_c76edb22",
+      "revId": "8cf9d4372ee1fb72d0a91472363b2f80aaceda74",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
     }
   ]
 }
