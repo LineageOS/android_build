@@ -34,6 +34,24 @@
       "revId": "8cf9d4372ee1fb72d0a91472363b2f80aaceda74",
       "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "b774deb7_bb64249c",
+        "filename": "tools/releasetools/common.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 605,
+      "author": {
+        "id": 11883
+      },
+      "writtenOn": "2020-06-15T07:34:03Z",
+      "side": 1,
+      "message": "Sadly our lzma repository doesn\u0027t contain \"lzma\" it\u0027s just the library with APIs\nI\u0027ll try to find a way to get our prebuilt",
+      "parentUuid": "d72088ef_436b746f",
+      "revId": "8cf9d4372ee1fb72d0a91472363b2f80aaceda74",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
     }
   ]
 }
