@@ -4161,6 +4161,12 @@ endif # BOARD_PREBUILT_DTBOIMAGE
 	    echo $(part) >> $(zip_root)/META/pack_radioimages.txt;)
 	@# Run fs_config on all the system, vendor, boot ramdisk,
 	@# and recovery ramdisk files in the zip, and save the output
+ifdef BOARD_PREBUILT_IMAGES
+	@# Copy any other prebuilt images in to the IMAGES directory for packaging.
+	$(hide) mkdir -p $(zip_root)/IMAGES
+	$(hide) $(foreach image,$(BOARD_PREBUILT_IMAGES), \
+	    cp $(BOARD_PREBUILT_IMAGES_PATH)/$(image).img $(zip_root)/IMAGES/$(image).img;)
+endif
 ifdef BUILDING_SYSTEM_IMAGE
 	$(hide) $(call fs_config,$(zip_root)/SYSTEM,system/) > $(zip_root)/META/filesystem_config.txt
 endif
