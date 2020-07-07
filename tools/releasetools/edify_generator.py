@@ -159,7 +159,6 @@ class EdifyGenerator(object):
     if dynamic:
       self.script.append(('run_program("/tmp/install/bin/backuptool.sh", "%s", map_partition("%s"), "%s");' % (
           command, p.device, p.fs_type)))
-      self.script.append(('unmap_partition("%s");' % (p.device)))
     else:
       self.script.append(('run_program("/tmp/install/bin/backuptool.sh", "%s", "%s", "%s");' % (
           command, p.device, p.fs_type)))
