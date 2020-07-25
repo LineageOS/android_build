@@ -40,6 +40,7 @@ import zipfile
 from hashlib import sha1, sha256
 
 import blockimgdiff
+import filesystemdiff
 import sparse_img
 
 logger = logging.getLogger(__name__)
@@ -389,6 +390,8 @@ def LoadInfoDict(input_file, repacking=False):
   makeint("boot_size")
   makeint("fstab_version")
 
+  has_vendor = "vendor_fs_type" in d
+
   # We changed recovery.fstab path in Q, from ../RAMDISK/etc/recovery.fstab to
   # ../RAMDISK/system/etc/recovery.fstab. LoadInfoDict() has to handle both
   # cases, since it may load the info_dict from an old build (e.g. when
@@ -404,7 +407,7 @@ def LoadInfoDict(input_file, repacking=False):
       if not os.path.exists(path):
         recovery_fstab_path = "RECOVERY/RAMDISK/etc/recovery.fstab"
     d["fstab"] = LoadRecoveryFSTab(
-        read_helper, d["fstab_version"], recovery_fstab_path, system_root_image)
+        read_helper, d["fstab_version"], recovery_fstab_path, system_root_image, has_vendor)
 
   elif d.get("recovery_as_boot") == "true":
     recovery_fstab_path = "BOOT/RAMDISK/system/etc/recovery.fstab"
@@ -416,7 +419,7 @@ def LoadInfoDict(input_file, repacking=False):
       if not os.path.exists(path):
         recovery_fstab_path = "BOOT/RAMDISK/etc/recovery.fstab"
     d["fstab"] = LoadRecoveryFSTab(
-        read_helper, d["fstab_version"], recovery_fstab_path, system_root_image)
+        read_helper, d["fstab_version"], recovery_fstab_path, system_root_image, has_vendor)
 
   else:
     d["fstab"] = None
@@ -472,7 +475,7 @@ def LoadDictionaryFromLines(lines):
 
 
 def LoadRecoveryFSTab(read_helper, fstab_version, recovery_fstab_path,
-                      system_root_image=False):
+                      system_root_image=False, force_vendor=False):
   class Partition(object):
     def __init__(self, mount_point, fs_type, device, length, context):
       self.mount_point = mount_point
@@ -533,6 +536,18 @@ def LoadRecoveryFSTab(read_helper, fstab_version, recovery_fstab_path,
   if system_root_image:
     assert '/system' not in d and '/' in d
     d["/system"] = d["/"]
+
+  if force_vendor and not d.has_key("/vendor"):
+    system_part = d["/system"]
+    vendor_part = Partition(mount_point = "/vendor",
+                            fs_type = system_part.fs_type,
+                            device = system_part.device.replace("system", "vendor"),
+                            length = 0,
+                            context = system_part.context)
+    vendor_part.mount_point = "/vendor"
+    vendor_part.device = system_part.device.replace("system", "vendor")
+    d["/vendor"] = vendor_part
+
   return d
 
 
@@ -2198,6 +2213,31 @@ class BlockDifference(object):
       ctx.update(zero_block)
 
     return ctx.hexdigest()
+
+
+# This is just a little wrapper around FileSystemDiff.
+# It really isn't needed except to maintain consistency with upstream
+# BlockDifference and BlockImageDiff.
+class FileSystemDifference(object):
+  def __init__(self, partition, tgt, src):
+    self.tgt = tgt
+    self.src = src
+    self.partition = partition
+    self.diff = filesystemdiff.FileSystemDiff(partition, tgt, src, threads=OPTIONS.worker_threads)
+
+    if src is None:
+      _, self.device = GetTypeAndDevice("/" + partition, OPTIONS.info_dict)
+    else:
+      _, self.device = GetTypeAndDevice("/" + partition,
+                                        OPTIONS.source_info_dict)
+
+  def WriteScript(self, script, output_zip, progress=None):
+    script.Print("Updating %s." % (self.partition,))
+
+    if progress:
+      script.ShowProgress(progress, 0)
+
+    self.diff.Compute(script, output_zip)
 
 
 DataImage = blockimgdiff.DataImage

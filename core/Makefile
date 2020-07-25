@@ -3721,10 +3721,9 @@ $(BUILT_TARGET_FILES_PACKAGE): PRIVATE_TOOL_EXTENSION := $(tool_extension)
 
 ifeq ($(AB_OTA_UPDATER),true)
 updater_dep := system/update_engine/update_engine.conf
-else
-# Build OTA tools if not using the AB Updater.
-updater_dep := $(built_ota_tools)
 endif
+# Always build OTA tools.
+updater_dep += $(built_ota_tools)
 $(BUILT_TARGET_FILES_PACKAGE): $(updater_dep)
 
 # If we are using recovery as boot, output recovery files to BOOT/.
@@ -3962,11 +3961,9 @@ endif
 	@# Extra contents of the OTA package
 	$(hide) mkdir -p $(zip_root)/OTA
 	$(hide) cp $(INSTALLED_ANDROID_INFO_TXT_TARGET) $(zip_root)/OTA/
-ifneq ($(AB_OTA_UPDATER),true)
 ifneq ($(built_ota_tools),)
 	$(hide) mkdir -p $(zip_root)/OTA/bin
 	$(hide) cp $(PRIVATE_OTA_TOOLS) $(zip_root)/OTA/bin/
-endif
 endif
 	@# Files that do not end up in any images, but are necessary to
 	@# build them.
