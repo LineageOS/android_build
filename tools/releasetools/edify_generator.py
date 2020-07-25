@@ -377,3 +377,38 @@ class EdifyGenerator(object):
       data = open(input_path, "rb").read()
     common.ZipWriteStr(output_zip, "META-INF/com/google/android/update-binary",
                        data, perms=0o755)
+
+  def CreateDirectory(self, target_path, uid, gid, mode, selabel, capabilities):
+    self.script.append(
+        'mkdir("%s", %d, %d, %o, "selabel", "%s", "capabilities", 0x%x);' %
+            (target_path, uid, gid, mode, selabel, capabilities))
+
+  def DeleteDirectory(self, target_path):
+    self.script.append(
+        'rmdir("%s");' % (target_path))
+
+  def CreateFile(self, target_path, zip_file, uid, gid, mode, selabel, capabilities):
+    self.script.append(
+        'create("%s", "%s", %d, %d, %o, "selabel", %s, "capabilities", 0x%x);' %
+            (target_path, zip_file, uid, gid, mode, selabel, capabilities))
+
+  def CreateSymbolicLink(self, link_path, target_path, uid, gid):
+    self.script.append(
+        'symlink("%s", "%s", %d, %d);' % (link_path, target_path, uid, gid))
+
+  def PatchFile(self, target_path, zip_file, old_hash):
+    self.script.append(
+        'patch("%s", "%s", "%s");' % (target_path, zip_file, old_hash))
+
+  def DeleteFile(self, target_path):
+    self.script.append(
+        'unlink("%s");' % (target_path))
+
+  def ChangeOwner(self, target_path, uid, gid):
+    self.script.append(
+        'chown("%s", %d, %d);' % (target_path, uid, gid))
+
+  def ChangeMetadata(self, target_path, uid, gid, mode, selabel, capabilities):
+    self.script.append(
+        'chmeta("%s", %d, %d, %o, "selabel", "%s", "capabilities", 0x%x);' %
+            (target_path, uid, gid, mode, selabel, capabilities))
