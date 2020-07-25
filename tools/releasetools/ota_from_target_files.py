@@ -121,6 +121,13 @@ Usage:  ota_from_target_files [flags] input_target_files output_ota_package
       default for all non-A/B devices. Keeping this flag here to not break
       existing callers.
 
+  --file
+      Generate file-based OTA instead of block-based OTA.
+
+      This is currently not compatible with full OTA (only incremental).
+
+      This is currently not compatible with two-step OTA.
+
   -b  (--binary)  <file>
       Use the given binary as the update-binary in the output package,
       instead of the binary in the build's target_files.  Use for
@@ -200,6 +207,7 @@ OPTIONS.two_step = False
 OPTIONS.include_secondary = False
 OPTIONS.no_signing = False
 OPTIONS.block_based = True
+OPTIONS.file_based = False
 OPTIONS.updater_binary = None
 OPTIONS.oem_source = None
 OPTIONS.oem_no_mount = False
@@ -1673,6 +1681,156 @@ endif;
   FinalizeMetadata(metadata, staging_file, output_file, needed_property_files)
 
 
+def WriteFileIncrementalOTAPackage(target_zip, source_zip, output_file):
+  target_info = BuildInfo(OPTIONS.target_info_dict, OPTIONS.oem_dicts)
+  source_info = BuildInfo(OPTIONS.source_info_dict, OPTIONS.oem_dicts)
+
+  target_api_version = target_info["recovery_api_version"]
+  source_api_version = source_info["recovery_api_version"]
+  if source_api_version == 0:
+    print("WARNING: generating edify script for a source that "
+          "can't install it.")
+
+  script = edify_generator.EdifyGenerator(
+      source_api_version, target_info, fstab=source_info["fstab"])
+
+  if target_info.oem_props or source_info.oem_props:
+    if not OPTIONS.oem_no_mount:
+      source_info.WriteMountOemScript(script)
+
+  metadata = GetPackageMetadata(target_info, source_info)
+
+  if not OPTIONS.no_signing:
+    staging_file = common.MakeTempFile(suffix='.zip')
+  else:
+    staging_file = output_file
+
+  output_zip = zipfile.ZipFile(
+      staging_file, "w", compression=zipfile.ZIP_DEFLATED)
+
+  device_specific = common.DeviceSpecificParams(
+      source_zip=source_zip,
+      source_version=source_api_version,
+      target_zip=target_zip,
+      target_version=target_api_version,
+      output_zip=output_zip,
+      script=script,
+      metadata=metadata,
+      info_dict=source_info)
+
+  source_boot = common.GetBootableImage(
+      "/tmp/boot.img", "boot.img", OPTIONS.source_tmp, "BOOT", source_info)
+  target_boot = common.GetBootableImage(
+      "/tmp/boot.img", "boot.img", OPTIONS.target_tmp, "BOOT", target_info)
+  updating_boot = (source_boot.data != target_boot.data)
+
+  target_recovery = common.GetBootableImage(
+      "/tmp/recovery.img", "recovery.img", OPTIONS.target_tmp, "RECOVERY")
+
+  system_diff = common.FileSystemDifference("system", target_zip, source_zip)
+
+  if HasVendorPartition(target_zip):
+    if not HasVendorPartition(source_zip):
+      raise RuntimeError("can't generate incremental that adds /vendor")
+
+    vendor_diff = common.FileSystemDifference("vendor", target_zip, source_zip)
+
+  else:
+    vendor_diff = None
+
+  # Assertions (e.g. device properties check).
+  target_info.WriteDeviceAssertions(script, OPTIONS.oem_no_mount)
+  device_specific.IncrementalOTA_Assertions()
+
+  # Dump fingerprints
+  script.Print("Source: {}".format(source_info.fingerprint))
+  script.Print("Target: {}".format(target_info.fingerprint))
+
+  device_specific.IncrementalOTA_VerifyBegin()
+
+  WriteFingerprintAssertion(script, target_info, source_info)
+
+  device_specific.IncrementalOTA_VerifyEnd()
+
+  script.Comment("---- start making changes here ----")
+
+  device_specific.IncrementalOTA_InstallBegin()
+
+  script.AppendExtra('slotcopy("source", "target");')
+
+  is_system_as_root = target_info.get("system_root_image") == "true"
+
+  system_src_partition = source_info["fstab"]["/system"]
+  system_fstype = system_src_partition.fs_type
+  if is_system_as_root:
+    script.AppendExtra('mkdir("/system_root", "0", "0", "0700");')
+    script.AppendExtra('symlink("system_root/system", "/system", "0", "0");')
+    script.AppendExtra('slotmount("target", "system", "/system_root", "%s", "rw");' % (system_fstype))
+  else:
+    script.AppendExtra('mkdir("/system", "0", "0", "0700")')
+    script.AppendExtra('slotmount("target", "system", "/system", "%s", "rw");' % (system_fstype))
+
+  if HasVendorPartition(target_zip):
+    vendor_src_partition = source_info["fstab"]["/vendor"]
+    vendor_fstype = vendor_src_partition.fs_type
+    script.AppendExtra('mkdir("/vendor", "0", "0", "0700");')
+    script.AppendExtra('slotmount("target", "vendor", "/vendor", "%s", "rw");' % (vendor_fstype))
+
+  system_diff.WriteScript(script, output_zip,
+                          progress=0.8 if vendor_diff else 0.9)
+
+  if vendor_diff:
+    vendor_diff.WriteScript(script, output_zip, progress=0.1)
+
+  if is_system_as_root:
+    script.AppendExtra('slotunmount("target", "/system_root");')
+    script.AppendExtra('unlink("/system");')
+    script.AppendExtra('rmdir("/system_root");')
+  else:
+    script.AppendExtra('slotunmount("target", "/system");')
+    script.AppendExtra('rmdir("/system");')
+
+  if HasVendorPartition(target_zip):
+    script.AppendExtra('slotunmount("target", "/vendor");')
+    script.AppendExtra('rmdir("/vendor");')
+
+  if updating_boot:
+    print("boot image changed; including full.")
+    script.Print("Installing boot image...")
+    script.AppendExtra('slotwriteimg("target", "boot", "boot.img");')
+    common.ZipWriteStr(output_zip, "boot.img", target_boot.data)
+  else:
+    print("boot image unchanged; skipping.")
+
+  # Do device-specific installation (eg, write radio image).
+  device_specific.IncrementalOTA_InstallEnd()
+
+  if OPTIONS.extra_script is not None:
+    script.AppendExtra(OPTIONS.extra_script)
+
+  if OPTIONS.wipe_user_data:
+    script.Print("Erasing user data...")
+    script.FormatPartition("/data")
+
+  script.SetProgress(1)
+  # For downgrade OTAs, we prefer to use the update-binary in the source
+  # build that is actually newer than the one in the target build.
+  if OPTIONS.downgrade:
+    script.AddToZip(source_zip, output_zip, input_path=OPTIONS.updater_binary)
+  else:
+    script.AddToZip(target_zip, output_zip, input_path=OPTIONS.updater_binary)
+  metadata["ota-required-cache"] = str(script.required_cache)
+
+  # We haven't written the metadata entry yet, which will be handled in
+  # FinalizeMetadata().
+  common.ZipClose(output_zip)
+
+  # Sign the generated zip package unless no_signing is specified.
+  needed_property_files = (
+      NonAbOtaPropertyFiles(),
+  )
+  FinalizeMetadata(metadata, staging_file, output_file, needed_property_files)
+
 def GetTargetFilesZipForSecondaryImages(input_file, skip_postinstall=False):
   """Returns a target-files.zip file for generating secondary payload.
 
@@ -1878,6 +2036,10 @@ def main(argv):
       OPTIONS.verify = True
     elif o == "--block":
       OPTIONS.block_based = True
+      OPTIONS.file_based = False
+    elif o == "--file":
+      OPTIONS.block_based = False
+      OPTIONS.file_based = True
     elif o in ("-b", "--binary"):
       OPTIONS.updater_binary = a
     elif o == "--stash_threshold":
@@ -1920,6 +2082,7 @@ def main(argv):
                                  "include_secondary",
                                  "no_signing",
                                  "block",
+                                 "file",
                                  "binary=",
                                  "oem_settings=",
                                  "oem_no_mount",
@@ -1944,6 +2107,12 @@ def main(argv):
     # OTA package.
     if OPTIONS.incremental_source is None:
       raise ValueError("Cannot generate downgradable full OTAs")
+
+  if OPTIONS.file_based:
+    if OPTIONS.incremental_source is None:
+      raise ValueError("Cannot generate file based full OTA")
+    if OPTIONS.two_step:
+      raise ValueError("Cannot generate file based two-step OTA")
 
   # Load the build info dicts from the zip directly or the extracted input
   # directory. We don't need to unzip the entire target-files zips, because they
@@ -1991,7 +2160,7 @@ def main(argv):
     # Get signing keys
     OPTIONS.key_passwords = common.GetKeyPasswords([OPTIONS.package_key])
 
-  if ab_update:
+  if ab_update and not OPTIONS.file_based:
     WriteABOTAPackageWithBrilloScript(
         target_file=args[0],
         output_file=args[1],
@@ -2000,14 +2169,9 @@ def main(argv):
     print("done.")
     return
 
-  # Sanity check the loaded info dicts first.
-  if OPTIONS.info_dict.get("no_recovery") == "true":
-    raise common.ExternalError(
-        "--- target build has specified no recovery ---")
-
   # Non-A/B OTAs rely on /cache partition to store temporary files.
   cache_size = OPTIONS.info_dict.get("cache_size")
-  if cache_size is None:
+  if not ab_update and cache_size is None:
     print("--- can't determine the cache partition size ---")
   OPTIONS.cache_size = cache_size
 
@@ -2051,10 +2215,16 @@ def main(argv):
         OPTIONS.incremental_source, UNZIP_PATTERN)
     with zipfile.ZipFile(args[0], 'r') as input_zip, \
         zipfile.ZipFile(OPTIONS.incremental_source, 'r') as source_zip:
-      WriteBlockIncrementalOTAPackage(
-          input_zip,
-          source_zip,
-          output_file=args[1])
+      if OPTIONS.file_based:
+          WriteFileIncrementalOTAPackage(
+              input_zip,
+              source_zip,
+              output_file=args[1])
+      else:
+        WriteBlockIncrementalOTAPackage(
+            input_zip,
+            source_zip,
+            output_file=args[1])
 
     if OPTIONS.log_diff:
       with open(OPTIONS.log_diff, 'w') as out_file:
