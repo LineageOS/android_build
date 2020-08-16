@@ -1070,6 +1070,8 @@ else if get_stage("%(bcb_dev)s") == "3/3" then
     sysmount = "/system"
 
   if OPTIONS.backuptool:
+    if "/product" in target_info["fstab"]:
+      script.Mount("/product")
     script.RunBackup("backup", sysmount, target_info.get('use_dynamic_partitions') == "true")
 
   # All other partitions as well as the data wipe use 10% of the progress, and
@@ -1108,6 +1110,8 @@ else if get_stage("%(bcb_dev)s") == "3/3" then
   if OPTIONS.backuptool:
     script.ShowProgress(0.02, 10)
     script.RunBackup("restore", sysmount, target_info.get('use_dynamic_partitions') == "true")
+    if "/product" in target_info["fstab"]:
+      script.Unmount("/product")
 
   script.WriteRawImage("/boot", "boot.img")
 
