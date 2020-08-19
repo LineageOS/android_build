@@ -651,6 +651,11 @@ def _BuildBootableImage(sourcedir, fs_config_file, info_dict=None,
     cmd.append("--pagesize")
     cmd.append(open(fn).read().rstrip("\n"))
 
+  fn = os.path.join(sourcedir, "header_version")
+  if os.access(fn, os.F_OK):
+    cmd.append("--header_version")
+    cmd.append(fn)
+
   fn = os.path.join(sourcedir, "tagsaddr")
   if os.access(fn, os.F_OK):
     cmd.append("--tags-addr")

@@ -962,6 +962,10 @@ ifdef BOARD_KERNEL_PAGESIZE
   INTERNAL_BOOTIMAGE_ARGS += --pagesize $(BOARD_KERNEL_PAGESIZE)
 endif
 
+ifdef BOARD_BOOTIMG_HEADER_VERSION
+  INTERNAL_BOOTIMAGE_ARGS += --header_version $(BOARD_BOOTIMG_HEADER_VERSION)
+endif
+
 ifeq ($(PRODUCT_SUPPORTS_VERITY),true)
 ifeq ($(BOARD_BUILD_SYSTEM_ROOT_IMAGE),true)
 VERITY_KEYID := veritykeyid=id:`openssl x509 -in $(PRODUCT_VERITY_SIGNING_KEY).x509.pem -text \
@@ -1879,6 +1883,10 @@ ifdef BOARD_INCLUDE_RECOVERY_ACPIO
 endif
 ifdef BOARD_INCLUDE_DTB_IN_BOOTIMG
   INTERNAL_RECOVERYIMAGE_ARGS += --dtb $(INSTALLED_DTBIMAGE_TARGET)
+endif
+
+ifdef BOARD_BOOTIMG_HEADER_VERSION
+  INTERNAL_RECOVERYIMAGE_ARGS += --header_version $(BOARD_BOOTIMG_HEADER_VERSION)
 endif
 
 ifeq ($(strip $(BOARD_KERNEL_SEPARATED_DT)),true)
@@ -3866,6 +3874,9 @@ endif
 ifdef BOARD_KERNEL_PAGESIZE
 	$(hide) echo "$(BOARD_KERNEL_PAGESIZE)" > $(zip_root)/$(PRIVATE_RECOVERY_OUT)/pagesize
 endif
+ifdef BOARD_BOOTIMG_HEADER_VERSION
+	$(hide) echo $(BOARD_BOOTIMG_HEADER_VERSION) $(zip_root)/$(PRIVATE_RECOVERY_OUT)/header_version
+endif
 ifdef BOARD_KERNEL_TAGS_ADDR
 	$(hide) echo "$(BOARD_KERNEL_TAGS_ADDR)" > $(zip_root)/$(PRIVATE_RECOVERY_OUT)/tagsaddr
 endif
@@ -3904,6 +3915,9 @@ ifdef BOARD_KERNEL_BASE
 endif
 ifdef BOARD_KERNEL_PAGESIZE
 	$(hide) echo "$(BOARD_KERNEL_PAGESIZE)" > $(zip_root)/BOOT/pagesize
+endif
+ifdef BOARD_BOOTIMG_HEADER_VERSION
+	$(hide) echo $(BOARD_BOOTIMG_HEADER_VERSION) $(zip_root)/BOOT/header_version
 endif
 ifdef BOARD_KERNEL_TAGS_ADDR
 	$(hide) echo "$(BOARD_KERNEL_TAGS_ADDR)" > $(zip_root)/BOOT/tagsaddr
