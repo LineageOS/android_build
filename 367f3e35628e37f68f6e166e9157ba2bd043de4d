@@ -16,6 +16,24 @@
       "revId": "367f3e35628e37f68f6e166e9157ba2bd043de4d",
       "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e528e4ba_5d4823a3",
+        "filename": "tools/releasetools/common.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 540,
+      "author": {
+        "id": 5503
+      },
+      "writtenOn": "2020-08-19T13:24:40Z",
+      "side": 1,
+      "message": "In SaR systems, there will not be an entry for /vendor in the fstab.  But we need an entry for /vendor in order to mount /vendor in WriteFileIncrementalOTAPackage().",
+      "parentUuid": "d7b94102_b7cb7980",
+      "revId": "367f3e35628e37f68f6e166e9157ba2bd043de4d",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": true
     }
   ]
 }
