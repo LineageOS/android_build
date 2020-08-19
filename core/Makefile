@@ -966,6 +966,10 @@ ifdef BOARD_BOOTIMG_HEADER_VERSION
   INTERNAL_BOOTIMAGE_ARGS += --header_version $(BOARD_BOOTIMG_HEADER_VERSION)
 endif
 
+ifdef BOARD_KERNEL_TAGS_OFFSET
+  INTERNAL_BOOTIMAGE_ARGS += --tags_offset $(BOARD_KERNEL_TAGS_OFFSET)
+endif
+
 ifeq ($(PRODUCT_SUPPORTS_VERITY),true)
 ifeq ($(BOARD_BUILD_SYSTEM_ROOT_IMAGE),true)
 VERITY_KEYID := veritykeyid=id:`openssl x509 -in $(PRODUCT_VERITY_SIGNING_KEY).x509.pem -text \
@@ -1887,6 +1891,10 @@ endif
 
 ifdef BOARD_BOOTIMG_HEADER_VERSION
   INTERNAL_RECOVERYIMAGE_ARGS += --header_version $(BOARD_BOOTIMG_HEADER_VERSION)
+endif
+
+ifdef BOARD_KERNEL_TAGS_OFFSET
+  INTERNAL_RECOVERYIMAGE_ARGS += --tags_offset $(BOARD_KERNEL_TAGS_OFFSET)
 endif
 
 ifeq ($(strip $(BOARD_KERNEL_SEPARATED_DT)),true)
@@ -3877,8 +3885,8 @@ endif
 ifdef BOARD_BOOTIMG_HEADER_VERSION
 	$(hide) echo $(BOARD_BOOTIMG_HEADER_VERSION) $(zip_root)/$(PRIVATE_RECOVERY_OUT)/header_version
 endif
-ifdef BOARD_KERNEL_TAGS_ADDR
-	$(hide) echo "$(BOARD_KERNEL_TAGS_ADDR)" > $(zip_root)/$(PRIVATE_RECOVERY_OUT)/tagsaddr
+ifdef BOARD_KERNEL_TAGS_OFFSET
+	$(hide) echo "$(BOARD_KERNEL_TAGS_OFFSET)" > $(zip_root)/$(PRIVATE_RECOVERY_OUT)/tags_offset
 endif
 ifdef BOARD_RAMDISK_OFFSET
 	$(hide) echo "$(BOARD_RAMDISK_OFFSET)" > $(zip_root)/$(PRIVATE_RECOVERY_OUT)/ramdisk_offset
@@ -3919,8 +3927,8 @@ endif
 ifdef BOARD_BOOTIMG_HEADER_VERSION
 	$(hide) echo $(BOARD_BOOTIMG_HEADER_VERSION) $(zip_root)/BOOT/header_version
 endif
-ifdef BOARD_KERNEL_TAGS_ADDR
-	$(hide) echo "$(BOARD_KERNEL_TAGS_ADDR)" > $(zip_root)/BOOT/tagsaddr
+ifdef BOARD_KERNEL_TAGS_OFFSET
+	$(hide) echo "$(BOARD_KERNEL_TAGS_OFFSET)" > $(zip_root)/BOOT/tags_offset
 endif
 ifdef BOARD_RAMDISK_OFFSET
 	$(hide) echo "$(BOARD_RAMDISK_OFFSET)" > $(zip_root)/BOOT/ramdisk_offset
