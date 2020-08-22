@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f8394cf7_156cbe19",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 15173
+      },
+      "writtenOn": "2020-08-22T02:42:04Z",
+      "side": 1,
+      "message": "Pretty sure this is relevant. Code was refactored in O via ref 13ac8845e73, which pulled the preferences into their own class, but N looks to be still vulnerable.\n\nPlease see https://review.lineageos.org/c/LineageOS/android_packages_apps_Settings/+/284512 and test for regressions.",
+      "range": {
+        "startLine": 30,
+        "startChar": 0,
+        "endLine": 30,
+        "endChar": 71
+      },
+      "revId": "04beba1145d3d65b07436eb67034937d0bd19f1c",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": true
+    }
+  ]
+}
