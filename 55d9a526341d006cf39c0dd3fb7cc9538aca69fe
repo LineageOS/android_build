@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1b0ea73b_c44c65ff",
+        "filename": "core/Makefile",
+        "patchSetId": 2
+      },
+      "lineNbr": 2851,
+      "author": {
+        "id": 17793
+      },
+      "writtenOn": "2020-09-07T19:16:07Z",
+      "side": 1,
+      "message": "why is this line added here?",
+      "revId": "55d9a526341d006cf39c0dd3fb7cc9538aca69fe",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": true
+    }
+  ]
+}
