@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5f3a64ba_ab327f6a",
+        "filename": "core/Makefile",
+        "patchSetId": 3
+      },
+      "lineNbr": 2849,
+      "author": {
+        "id": 17793
+      },
+      "writtenOn": "2020-09-10T13:49:00Z",
+      "side": 1,
+      "message": "there\u0027s no flag with this name \"BOARD_PREBUILT_IMAGEPATH\" it should be \"BOARD_PREBUILT_IMAGES_PATH\", but anyway why would you want to copy this image to PRODUCT_OUT?\nalso it should be $(image), with one $ to work",
+      "range": {
+        "startLine": 2849,
+        "startChar": 67,
+        "endLine": 2849,
+        "endChar": 91
+      },
+      "revId": "2813c77914ef290a2458cad234d31beece4d0206",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "252ae38d_19aa4ef5",
+        "filename": "core/Makefile",
+        "patchSetId": 3
+      },
+      "lineNbr": 4174,
+      "author": {
+        "id": 17793
+      },
+      "writtenOn": "2020-09-10T13:49:00Z",
+      "side": 1,
+      "message": "this apparently doesn\u0027t work at all\n`cp: out/target/product/Aphone_6s/obj/PACKAGING/target_files_intermediates/lineage_Aphone_6s-target_files-23/IMAGES/scp.img: No such file or directory`",
+      "revId": "2813c77914ef290a2458cad234d31beece4d0206",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": true
+    }
+  ]
+}
