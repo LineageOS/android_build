@@ -593,7 +593,13 @@ def ProcessTargetFiles(input_tf_zip, output_tf_zip, misc_info,
         filename in (
             "BOOT/RAMDISK/system/etc/security/otacerts.zip",
             "RECOVERY/RAMDISK/system/etc/security/otacerts.zip",
+<<<<<<< HEAD   (8c8f42 releasetools: Add script to sign zips)
             "SYSTEM/etc/security/otacerts.zip")):
+=======
+            "RECOVERY/RAMDISK/system/etc/update_engine/update-payload-key.pub.pem",
+            "SYSTEM/etc/security/otacerts.zip",
+            "SYSTEM/etc/update_engine/update-payload-key.pub.pem")):
+>>>>>>> CHANGE (53540a sign_target_apks: Replace update-payload-key.pub.pem in RECO)
       pass
 
     # Skip META/misc_info.txt since we will write back the new values later.
@@ -872,6 +878,31 @@ def ReplaceOtaKeys(input_tf_zip, output_tf_zip, misc_info):
   # We DO NOT include the extra_recovery_keys (if any) here.
   WriteOtacerts(output_tf_zip, "SYSTEM/etc/security/otacerts.zip", mapped_keys)
 
+<<<<<<< HEAD   (8c8f42 releasetools: Add script to sign zips)
+=======
+  # For A/B devices, update the payload verification key.
+  if misc_info.get("ab_update") == "true":
+    # Unlike otacerts.zip that may contain multiple keys, we can only specify
+    # ONE payload verification key.
+    if len(mapped_keys) > 1:
+      print("\n  WARNING: Found more than one OTA keys; Using the first one"
+            " as payload verification key.\n\n")
+
+    print("Using %s for payload verification." % (mapped_keys[0],))
+    pubkey = common.ExtractPublicKey(mapped_keys[0])
+    common.ZipWriteStr(
+        output_tf_zip,
+        "SYSTEM/etc/update_engine/update-payload-key.pub.pem",
+        pubkey)
+    common.ZipWriteStr(
+        output_tf_zip,
+        "BOOT/RAMDISK/system/etc/update_engine/update-payload-key.pub.pem",
+        pubkey)
+    common.ZipWriteStr(
+        output_tf_zip,
+        "RECOVERY/RAMDISK/system/etc/update_engine/update-payload-key.pub.pem",
+        pubkey)
+>>>>>>> CHANGE (53540a sign_target_apks: Replace update-payload-key.pub.pem in RECO)
 
 
 def ReplaceVerityPublicKey(output_zip, filename, key_path):
