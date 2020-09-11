@@ -28,8 +28,7 @@ $(if $(filter true,$(BUILD_BROKEN_VINTF_PRODUCT_COPY_FILES)),, \
   $(if $(filter $(TARGET_COPY_OUT_SYSTEM_EXT)/etc/vintf/%,$(2)), \
     $(error VINTF metadata found in PRODUCT_COPY_FILES: $(1), \
       use vintf_compatibility_matrix / vintf_fragments instead!)) \
-  $(if $(filter $(TARGET_COPY_OUT_VENDOR)/etc/vintf/% \
-                $(TARGET_COPY_OUT_VENDOR)/manifest.xml \
+  $(if $(filter $(TARGET_COPY_OUT_VENDOR)/manifest.xml \
                 $(TARGET_COPY_OUT_VENDOR)/compatibility_matrix.xml,$(2)), \
     $(error VINTF metadata found in PRODUCT_COPY_FILES: $(1), \
       use DEVICE_MANIFEST_FILE / DEVICE_MATRIX_FILE / vintf_compatibility_matrix / vintf_fragments instead!)) \
