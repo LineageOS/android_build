@@ -53,7 +53,7 @@ def main(argv):
   if board_uses_vendorimage:
     target_files_dir = "VENDOR"
   else:
-    target_files_dir = "SYSTEM"
+    target_files_dir = "SYSTEM/vendor"
 
   def output_sink(fn, data):
     with open(os.path.join(output_dir, target_files_dir,
