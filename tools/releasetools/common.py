@@ -3478,12 +3478,10 @@ def MakeRecoveryPatch(input_dir, output_sink, recovery_img, boot_img,
     # In this case, the output sink is rooted at VENDOR
     recovery_img_path = "etc/recovery.img"
     recovery_resource_dat_path = "VENDOR/etc/recovery-resource.dat"
-    sh_dir = "bin"
   else:
     # In this case the output sink is rooted at SYSTEM
     recovery_img_path = "vendor/etc/recovery.img"
     recovery_resource_dat_path = "SYSTEM/vendor/etc/recovery-resource.dat"
-    sh_dir = "vendor/bin"
 
   if full_recovery_image:
     output_sink(recovery_img_path, recovery_img.data)
@@ -3566,11 +3564,7 @@ fi
 
   # The install script location moved from /system/etc to /system/bin in the L
   # release. In the R release it is in VENDOR/bin or SYSTEM/vendor/bin.
-  sh_location = os.path.join(sh_dir, "install-recovery.sh")
-
-  logger.info("putting script in %s", sh_location)
-
-  output_sink(sh_location, sh.encode())
+  output_sink("bin/install-recovery.sh", sh.encode())
 
 
 class DynamicPartitionUpdate(object):
