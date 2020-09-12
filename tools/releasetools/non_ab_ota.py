@@ -663,11 +663,16 @@ def _WriteRecoveryImageToBoot(script, output_zip):
 
 def HasRecoveryPatch(target_files_zip, info_dict):
   board_uses_vendorimage = info_dict.get("board_uses_vendorimage") == "true"
+  board_builds_vendorimage = info_dict.get("board_builds_vendorimage") == "true"
+  target_files_dir = None
 
-  if board_uses_vendorimage:
+  if board_builds_vendorimage:
     target_files_dir = "VENDOR"
-  else:
+  elif not board_uses_vendorimage:
     target_files_dir = "SYSTEM/vendor"
+
+  if target_files_dir is None:
+    return True
 
   patch = "%s/recovery-from-boot.p" % target_files_dir
   img = "%s/etc/recovery.img" % target_files_dir
