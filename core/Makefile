@@ -4304,6 +4304,9 @@ endif
 ifeq ($(BOARD_USES_FULL_RECOVERY_IMAGE),true)
 	$(hide) echo "full_recovery_image=true" >> $@
 endif
+ifdef BUILDING_VENDOR_IMAGE
+	$(hide) echo "board_builds_vendorimage=true" >> $@
+endif
 ifdef BOARD_USES_VENDORIMAGE
 	$(hide) echo "board_uses_vendorimage=true" >> $@
 endif
