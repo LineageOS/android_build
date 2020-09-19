@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c37419d7_2d1983d5",
+        "filename": "core/Makefile",
+        "patchSetId": 1
+      },
+      "lineNbr": 2229,
+      "author": {
+        "id": 18205
+      },
+      "writtenOn": "2020-09-19T12:32:23Z",
+      "side": 0,
+      "message": "not sure why we\u0027ve been removing this in all previous branches, but i\u0027ve ported it as it was",
+      "range": {
+        "startLine": 2229,
+        "startChar": 13,
+        "endLine": 2229,
+        "endChar": 30
+      },
+      "revId": "d905e4ed7f97376b8c45a8dae4e886b83b520d59",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": true
+    }
+  ]
+}
