@@ -445,7 +445,7 @@ def LoadInfoDict(input_file, repacking=False):
       elif "ro.build.thumbprint" in build_prop:
         fp = build_prop["ro.build.thumbprint"]
     if fp:
-      d["avb_salt"] = sha256(fp).hexdigest()
+      d["avb_salt"] = sha256(fp.encode()).hexdigest()
 
   return d
 
