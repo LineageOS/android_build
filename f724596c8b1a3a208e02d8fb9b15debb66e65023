@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "14ce2ae0_e4faa257",
+        "filename": "target/product/mainline.mk",
+        "patchSetId": 9
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 13648
+      },
+      "writtenOn": "2020-10-04T21:28:27Z",
+      "side": 1,
+      "message": "Sorry for missing it before, but you can do the same here. Move to the end:\n\nelse\n$(call inherit-product, frameworks/base/data/sounds/AudioPackage14.mk)\nendif",
+      "range": {
+        "startLine": 29,
+        "startChar": 0,
+        "endLine": 40,
+        "endChar": 5
+      },
+      "revId": "f724596c8b1a3a208e02d8fb9b15debb66e65023",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": true
+    }
+  ]
+}
