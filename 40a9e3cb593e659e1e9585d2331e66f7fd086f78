@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "57747403_7d843801",
+        "filename": "target/product/aosp_product.mk",
+        "patchSetId": 8
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 13648
+      },
+      "writtenOn": "2020-10-04T21:04:34Z",
+      "side": 1,
+      "message": "Could be simplified if you move this to the end:\n\nelse\n$(call inherit-product-if-exists, frameworks/base/data/sounds/AudioPackage14.mk)\nendif",
+      "range": {
+        "startLine": 22,
+        "startChar": 0,
+        "endLine": 35,
+        "endChar": 5
+      },
+      "revId": "40a9e3cb593e659e1e9585d2331e66f7fd086f78",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": true
+    }
+  ]
+}
