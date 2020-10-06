@@ -387,7 +387,7 @@ PRODUCT_PACKAGES_DEBUG := \
     unwind_symbols \
 
 ifneq ($(LINEAGE_BUILD),)
-PRODUCT_PACKAGES_DEBUG := \
+PRODUCT_PACKAGES_DEBUG += \
     su
 endif
 
