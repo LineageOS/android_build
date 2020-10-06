@@ -386,8 +386,8 @@ PRODUCT_PACKAGES_DEBUG := \
     unwind_reg_info \
     unwind_symbols \
 
-ifneq ($(LINEAGE_BUILD),)
-PRODUCT_PACKAGES_DEBUG := \
+ifeq ($(LINEAGE_BUILD),)
+PRODUCT_PACKAGES_DEBUG += \
     su
 endif
 
