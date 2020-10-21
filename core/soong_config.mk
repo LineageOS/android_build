@@ -154,6 +154,9 @@ $(call add_json_list, DeviceSystemSdkVersions,           $(BOARD_SYSTEMSDK_VERSI
 $(call add_json_str,  RecoverySnapshotVersion,           $(RECOVERY_SNAPSHOT_VERSION))
 $(call add_json_list, Platform_systemsdk_versions,       $(PLATFORM_SYSTEMSDK_VERSIONS))
 $(call add_json_bool, Malloc_low_memory,                 $(findstring true,$(MALLOC_SVELTE) $(MALLOC_LOW_MEMORY)))
+$(call add_json_bool, Malloc_low_memory_libc32,          $(if $(MALLOC_SVELTE_FOR_LIBC32),\
+                                                            $(filter true,$(MALLOC_SVELTE_FOR_LIBC32)),\
+                                                            $(findstring true,$(MALLOC_SVELTE) $(MALLOC_LOW_MEMORY))))
 $(call add_json_bool, Malloc_zero_contents,              $(call invert_bool,$(filter false,$(MALLOC_ZERO_CONTENTS))))
 $(call add_json_bool, Malloc_pattern_fill_contents,      $(MALLOC_PATTERN_FILL_CONTENTS))
 $(call add_json_str,  Override_rs_driver,                $(OVERRIDE_RS_DRIVER))
