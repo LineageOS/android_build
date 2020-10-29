@@ -574,7 +574,7 @@ $(foreach v,$(1), \
  )
 endef
 define readonly-product-vars
-$(call readonly-variables,$(_readonly_early_variables))
+
 endef
 
 define readonly-final-product-vars
