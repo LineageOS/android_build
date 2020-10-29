@@ -41,10 +41,11 @@ allowed_file := build/make/core/tasks/check_boot_jars/package_allowed_list.txt
 
 $(stamp): PRIVATE_BOOT_JARS := $(built_boot_jars)
 $(stamp): PRIVATE_SCRIPT := $(script)
+$(stamp): PRIVATE_DEXDUMP := $(DEXDUMP)
 $(stamp): PRIVATE_ALLOWED := $(allowed_file)
 $(stamp) : $(built_boot_jars) $(script) $(allowed_file)
 	@echo "Check package name for $(PRIVATE_BOOT_JARS)"
-	$(hide) $(PRIVATE_SCRIPT) $(PRIVATE_ALLOWED) $(PRIVATE_BOOT_JARS)
+	$(hide) $(PRIVATE_SCRIPT) $(PRIVATE_DEXDUMP) $(PRIVATE_ALLOWED) $(PRIVATE_BOOT_JARS)
 	$(hide) mkdir -p $(dir $@) && touch $@
 
 .PHONY: check-boot-jars
