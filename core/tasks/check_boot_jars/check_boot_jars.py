@@ -10,6 +10,7 @@ import os.path
 import re
 import subprocess
 import sys
+import xml.etree.ElementTree
 
 
 # The compiled allow list RE.
@@ -38,46 +39,40 @@ def LoadAllowList(filename):
     return False
   return True
 
-# Pattern that matches the class descriptor in a "Class descriptor" line output
-# by dexdump and extracts the class name - with / instead of .
-CLASS_DESCRIPTOR_RE = re.compile("'L([^;]+);'")
-
 def CheckDexJar(dexdump_path, allow_list_path, jar):
   """Check a dex jar file.
   """
-  # Get the class descriptor lines in the dexdump output. This filters out lines
-  # that do not contain class descriptors to reduce the size of the data read by
-  # this script.
-  p = subprocess.Popen(args='%s %s | grep "Class descriptor "' % (dexdump_path, jar),
+  # Use dexdump to generate the XML representation of the dex jar file.
+  p = subprocess.Popen(args='%s -l xml %s' % (dexdump_path, jar),
       stdout=subprocess.PIPE, shell=True)
   stdout, _ = p.communicate()
   if p.returncode != 0:
     return False
-  # Split the output into lines
-  lines = stdout.split('\n')
-  classes = 0
-  for line in lines:
-    # The last line will be empty
-    if line == '':
-      continue
-    # Try and find the descriptor on the line. Fail immediately if it cannot be found
-    # as the dexdump output has probably changed.
-    found = CLASS_DESCRIPTOR_RE.search(line)
-    if not found:
-      print >> sys.stderr, ('Could not find class descriptor in line `%s`' % line)
-      return False
-    # Extract the class name (using / instead of .) from the class descriptor line
-    f = found.group(1)
-    classes += 1
-    package_name = os.path.dirname(f)
-    package_name = package_name.replace('/', '.')
+
+  packages = 0
+  try:
+    # TODO(b/172063475) - improve performance
+    root = xml.etree.ElementTree.fromstring(stdout)
+  except xml.etree.ElementTree.ParseError as e:
+    print >> sys.stderr, 'Error processing jar %s - %s' % (jar, e)
+    print >> sys.stderr, stdout
+    return False
+  for package_elt in root.iterfind('package'):
+    packages += 1
+    package_name = package_elt.get('name')
     if not package_name or not allow_list_re.match(package_name):
+      # Report the name of a class in the package as it is easier to navigate to
+      # the source of a concrete class than to a package which is often required
+      # to investigate this failure.
+      class_name = package_elt[0].get('name')
+      if package_name != "":
+        class_name = package_name + "." + class_name
       print >> sys.stderr, ('Error: %s contains class file %s, whose package name "%s" is empty or'
                             ' not in the allow list %s of packages allowed on the bootclasspath.'
-                            % (jar, f, package_name, allow_list_path))
+                            % (jar, class_name, package_name, allow_list_path))
       return False
-  if classes == 0:
-    print >> sys.stderr, ('Error: %s does not contain any class files.' % jar)
+  if packages == 0:
+    print >> sys.stderr, ('Error: %s does not contain any packages.' % jar)
     return False
   return True
 
