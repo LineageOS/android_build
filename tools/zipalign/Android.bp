@@ -13,7 +13,7 @@ cc_binary_host {
         "ZipFile.cpp",
     ],
 
-    cflags: ["-Wall", "-Werror"],
+    cflags: ["-Wall"],
 
     // NOTE: Do not add any shared_libs dependencies because they will break the
     // static_sdk_tools target.

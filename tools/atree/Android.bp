@@ -9,6 +9,6 @@ cc_binary_host {
         "files.cpp",
         "fs.cpp",
     ],
-    cflags: ["-Wall", "-Werror"],
+    cflags: ["-Wall"],
     static_libs: ["libhost"],
 }

@@ -17,5 +17,5 @@ cc_binary_host {
     srcs: [
         "makeparallel.cpp",
     ],
-    cflags: ["-Wall", "-Werror"],
+    cflags: ["-Wall"],
 }

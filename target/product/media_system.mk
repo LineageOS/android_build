@@ -68,16 +68,6 @@ PRODUCT_COPY_FILES += $(call add-to-product-copy-files-if-exists,\
 PRODUCT_COPY_FILES += $(call add-to-product-copy-files-if-exists,\
     frameworks/base/dirty-image-objects-phone:system/etc/dirty-image-objects)
 
-# On userdebug builds, collect more tombstones by default.
-ifneq (,$(filter userdebug eng,$(TARGET_BUILD_VARIANT)))
-PRODUCT_SYSTEM_DEFAULT_PROPERTIES += \
-    tombstoned.max_tombstone_count=50
-endif
-
-PRODUCT_DEFAULT_PROPERTY_OVERRIDES += \
-    ro.logd.size.stats=64K \
-    log.tag.stats_log=I
-
 # Enable CFI for security-sensitive components
 $(call inherit-product, $(SRC_TARGET_DIR)/product/cfi-common.mk)
 $(call inherit-product-if-exists, vendor/google/products/cfi-vendor.mk)

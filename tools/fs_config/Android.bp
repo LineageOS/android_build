@@ -32,7 +32,6 @@ cc_binary_host {
         "libcutils",
         "libselinux",
     ],
-    cflags: ["-Werror"],
 }
 
 target_fs_config_gen_filegroup {

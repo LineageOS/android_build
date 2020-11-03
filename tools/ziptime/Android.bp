@@ -27,7 +27,7 @@ cc_binary_host {
     ],
 
     name: "ziptime",
-    cflags: ["-Wall", "-Werror"],
+    cflags: ["-Wall"],
     target: {
         windows: {
             enabled: true,

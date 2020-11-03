@@ -1507,7 +1507,7 @@ ifneq (HEADER_LIBRARIES,$(LOCAL_MODULE_CLASS))
       ifeq (,$(filter -Werror,$(my_all_cflags)))
         # Add -Wall -Werror unless the project is in the WARNING_ALLOWED project list.
         ifeq (,$(strip $(call find_warning_allowed_projects,$(LOCAL_PATH))))
-          my_cflags := -Wall -Werror $(my_cflags)
+          my_cflags := -Wall $(my_cflags)
         else
           $(eval MODULES_ADDED_WALL := $(MODULES_ADDED_WALL) $(LOCAL_MODULE_MAKEFILE):$(LOCAL_MODULE))
           my_cflags := -Wall $(my_cflags)

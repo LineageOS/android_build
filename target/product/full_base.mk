@@ -24,8 +24,7 @@ PRODUCT_PACKAGES := \
     WAPPushManager
 
 PRODUCT_PACKAGES += \
-    LiveWallpapersPicker \
-    PhotoTable
+    LiveWallpapersPicker
 
 # Bluetooth:
 #   audio.a2dp.default is a system module. Generic system image includes

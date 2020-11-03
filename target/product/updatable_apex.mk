@@ -18,6 +18,5 @@
 
 ifneq ($(OVERRIDE_TARGET_FLATTEN_APEX),true)
   PRODUCT_PROPERTY_OVERRIDES := ro.apex.updatable=true
-  PRODUCT_PACKAGES := com.android.apex.cts.shim.v1_prebuilt
   TARGET_FLATTEN_APEX := false
 endif

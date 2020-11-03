@@ -34,7 +34,6 @@ PRODUCT_PACKAGES += \
     app_process \
     appwidget \
     ashmemd \
-    atrace \
     audioserver \
     BackupRestoreConfirmation \
     bcc \
@@ -45,8 +44,6 @@ PRODUCT_PACKAGES += \
     bootstat \
     bpfloader \
     bu \
-    bugreport \
-    bugreportz \
     cgroups.json \
     charger \
     cmd \
@@ -58,10 +55,6 @@ PRODUCT_PACKAGES += \
     com.android.tzdata \
     ContactsProvider \
     content \
-    crash_dump \
-    CtsShimPrebuilt \
-    CtsShimPrivPrebuilt \
-    debuggerd\
     device_config \
     dmctl \
     dnsmasq \
@@ -69,7 +62,6 @@ PRODUCT_PACKAGES += \
     dpm \
     dumpstate \
     dumpsys \
-    DynamicSystemInstallationService \
     e2fsck \
     ExtServices \
     ExtShared \
@@ -82,8 +74,6 @@ PRODUCT_PACKAGES += \
     fs_config_dirs_system \
     gsid \
     gsi_tool \
-    heapprofd \
-    heapprofd_client \
     gatekeeperd \
     gpuservice \
     hid \
@@ -249,9 +239,6 @@ PRODUCT_PACKAGES += \
     tc \
     telecom \
     telephony-common \
-    tombstoned \
-    traced \
-    traced_probes \
     tune2fs \
     tzdatacheck \
     uiautomator \
@@ -261,7 +248,6 @@ PRODUCT_PACKAGES += \
     viewcompiler \
     voip-common \
     vold \
-    WallpaperBackup \
     watchdogd \
     wificond \
     wifi-service \
@@ -274,7 +260,6 @@ PRODUCT_PACKAGES += \
 
 # Host tools to install
 PRODUCT_HOST_PACKAGES += \
-    BugReport \
     adb \
     art-tools \
     atest \
@@ -371,8 +356,7 @@ PRODUCT_PACKAGES_DEBUG := \
 
 # The set of packages whose code can be loaded by the system server.
 PRODUCT_SYSTEM_SERVER_APPS += \
-    SettingsProvider \
-    WallpaperBackup
+    SettingsProvider
 
 # Packages included only for eng/userdebug builds, when building with SANITIZE_TARGET=address
 PRODUCT_PACKAGES_DEBUG_ASAN := \
