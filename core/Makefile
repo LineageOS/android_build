@@ -2021,11 +2021,6 @@ generated_recovery_text_files := \
   $(RECOVERY_ERASING_TEXT_FILE) \
   $(RECOVERY_ERROR_TEXT_FILE) \
   $(RECOVERY_NO_COMMAND_TEXT_FILE) \
-  $(RECOVERY_CANCEL_WIPE_DATA_TEXT_FILE) \
-  $(RECOVERY_FACTORY_DATA_RESET_TEXT_FILE) \
-  $(RECOVERY_TRY_AGAIN_TEXT_FILE) \
-  $(RECOVERY_WIPE_DATA_CONFIRMATION_TEXT_FILE) \
-  $(RECOVERY_WIPE_DATA_MENU_HEADER_TEXT_FILE)
 
 resource_dir := $(call include-path-for, recovery)/tools/recovery_l10n/res/
 image_generator_jar := $(HOST_OUT_JAVA_LIBRARIES)/RecoveryImageGenerator.jar
