@@ -2483,23 +2483,12 @@ RECOVERY_ERASING_TEXT_FILE := $(dir $(RECOVERY_INSTALLING_TEXT_FILE))/erasing_te
 RECOVERY_ERROR_TEXT_FILE := $(dir $(RECOVERY_INSTALLING_TEXT_FILE))/error_text.png
 RECOVERY_NO_COMMAND_TEXT_FILE := $(dir $(RECOVERY_INSTALLING_TEXT_FILE))/no_command_text.png
 
-RECOVERY_CANCEL_WIPE_DATA_TEXT_FILE := $(dir $(RECOVERY_INSTALLING_TEXT_FILE))/cancel_wipe_data_text.png
-RECOVERY_FACTORY_DATA_RESET_TEXT_FILE := $(dir $(RECOVERY_INSTALLING_TEXT_FILE))/factory_data_reset_text.png
-RECOVERY_TRY_AGAIN_TEXT_FILE := $(dir $(RECOVERY_INSTALLING_TEXT_FILE))/try_again_text.png
-RECOVERY_WIPE_DATA_CONFIRMATION_TEXT_FILE := $(dir $(RECOVERY_INSTALLING_TEXT_FILE))/wipe_data_confirmation_text.png
-RECOVERY_WIPE_DATA_MENU_HEADER_TEXT_FILE := $(dir $(RECOVERY_INSTALLING_TEXT_FILE))/wipe_data_menu_header_text.png
-
 generated_recovery_text_files := \
   $(RECOVERY_INSTALLING_TEXT_FILE) \
   $(RECOVERY_INSTALLING_SECURITY_TEXT_FILE) \
   $(RECOVERY_ERASING_TEXT_FILE) \
   $(RECOVERY_ERROR_TEXT_FILE) \
   $(RECOVERY_NO_COMMAND_TEXT_FILE) \
-  $(RECOVERY_CANCEL_WIPE_DATA_TEXT_FILE) \
-  $(RECOVERY_FACTORY_DATA_RESET_TEXT_FILE) \
-  $(RECOVERY_TRY_AGAIN_TEXT_FILE) \
-  $(RECOVERY_WIPE_DATA_CONFIRMATION_TEXT_FILE) \
-  $(RECOVERY_WIPE_DATA_MENU_HEADER_TEXT_FILE)
 
 resource_dir := bootable/recovery/tools/recovery_l10n/res/
 resource_dir_deps := $(sort $(shell find $(resource_dir) -name *.xml -not -name .*))
@@ -2517,12 +2506,6 @@ $(RECOVERY_INSTALLING_TEXT_FILE): PRIVATE_RECOVERY_BACKGROUND_TEXT_LIST := \
   recovery_erasing \
   recovery_error \
   recovery_no_command
-$(RECOVERY_INSTALLING_TEXT_FILE): PRIVATE_RECOVERY_WIPE_DATA_TEXT_LIST := \
-  recovery_cancel_wipe_data \
-  recovery_factory_data_reset \
-  recovery_try_again \
-  recovery_wipe_data_menu_header \
-  recovery_wipe_data_confirmation
 $(RECOVERY_INSTALLING_TEXT_FILE): .KATI_IMPLICIT_OUTPUTS := $(filter-out $(RECOVERY_INSTALLING_TEXT_FILE),$(generated_recovery_text_files))
 $(RECOVERY_INSTALLING_TEXT_FILE): $(image_generator_jar) $(resource_dir_deps) $(recovery_noto-fonts_dep) $(recovery_roboto-fonts_dep) $(zopflipng)
 	# Prepares the font directory.
@@ -2531,7 +2514,7 @@ $(RECOVERY_INSTALLING_TEXT_FILE): $(image_generator_jar) $(resource_dir_deps) $(
 	$(foreach filename,$(PRIVATE_SOURCE_FONTS), cp $(filename) $(PRIVATE_RECOVERY_FONT_FILES_DIR) &&) true
 	@rm -rf $(dir $@)
 	@mkdir -p $(dir $@)
-	$(foreach text_name,$(PRIVATE_RECOVERY_BACKGROUND_TEXT_LIST) $(PRIVATE_RECOVERY_WIPE_DATA_TEXT_LIST), \
+	$(foreach text_name,$(PRIVATE_RECOVERY_BACKGROUND_TEXT_LIST), \
 	  $(eval output_file := $(dir $@)/$(patsubst recovery_%,%_text.png,$(text_name))) \
 	  $(eval center_alignment := $(if $(filter $(text_name),$(PRIVATE_RECOVERY_BACKGROUND_TEXT_LIST)), --center_alignment)) \
 	  java -jar $(PRIVATE_IMAGE_GENERATOR_JAR) \
@@ -2547,11 +2530,6 @@ RECOVERY_INSTALLING_SECURITY_TEXT_FILE :=
 RECOVERY_ERASING_TEXT_FILE :=
 RECOVERY_ERROR_TEXT_FILE :=
 RECOVERY_NO_COMMAND_TEXT_FILE :=
-RECOVERY_CANCEL_WIPE_DATA_TEXT_FILE :=
-RECOVERY_FACTORY_DATA_RESET_TEXT_FILE :=
-RECOVERY_TRY_AGAIN_TEXT_FILE :=
-RECOVERY_WIPE_DATA_CONFIRMATION_TEXT_FILE :=
-RECOVERY_WIPE_DATA_MENU_HEADER_TEXT_FILE :=
 endif # TARGET_RECOVERY_UI_SCREEN_WIDTH
 
 ifneq ($(TARGET_RECOVERY_DEVICE_DIRS),)
