@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e92dc85b_e9fea33a",
+        "filename": "core/Makefile",
+        "patchSetId": 3
+      },
+      "lineNbr": 2023,
+      "author": {
+        "id": 13648
+      },
+      "writtenOn": "2020-12-08T20:44:08Z",
+      "side": 0,
+      "message": "Do you want to remove this too or leave it?",
+      "range": {
+        "startLine": 2023,
+        "startChar": 34,
+        "endLine": 2023,
+        "endChar": 36
+      },
+      "revId": "3ea384c9bdfae6a2c0b0af07dceeb2cf03c23a8f",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": true
+    }
+  ]
+}
