@@ -1213,9 +1213,11 @@ $(call dist-for-goals,droidcore,$(CERTIFICATE_VIOLATION_MODULES_FILENAME))
     $(eval allowed_patterns := $(call resolve-product-relative-paths,$(allowed))) \
     $(eval files := $(call product-installed-files, $(makefile))) \
     $(eval offending_files := $(filter-out $(path_patterns) $(allowed_patterns) $(static_allowed_patterns),$(files))) \
-    $(call maybe-print-list-and-error,$(offending_files),\
-      $(makefile) produces files outside its artifact path requirement. \
-      Allowed paths are $(subst $(space),$(comma)$(space),$(addsuffix *,$(requirements)))) \
+    $(eval enforcement := $(PRODUCT_ENFORCE_ARTIFACT_PATH_REQUIREMENTS)) \
+    $(if $(enforcement),\
+      $(call maybe-print-list-and-error,$(offending_files),\
+        $(makefile) produces files outside its artifact path requirement. \
+        Allowed paths are $(subst $(space),$(comma)$(space),$(addsuffix *,$(requirements))))) \
     $(eval unused_allowed := $(filter-out $(files),$(allowed_patterns))) \
     $(call maybe-print-list-and-error,$(unused_allowed),$(makefile) includes redundant allowed entries in its artifact path requirement.) \
     $(eval ### Optionally verify that nothing else produces files inside this artifact path requirement.) \
