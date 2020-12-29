@@ -133,6 +133,12 @@ _base_mk_allowed_list :=
 
 _my_allowed_list := $(_base_mk_allowed_list)
 
+# vendor.lineage.power@1.0 currently violates the artifact path requirements
+# Exclude it from the check for now
+_my_allowed_list += \
+  $(TARGET_COPY_OUT_SYSTEM_EXT)/lib/vendor.lineage.power@1.0.so \
+  $(TARGET_COPY_OUT_SYSTEM_EXT)/lib64/vendor.lineage.power@1.0.so \
+
 # For mainline, system.img should be mounted at /, so we include ROOT here.
 _my_paths := \
   $(TARGET_COPY_OUT_ROOT)/ \
