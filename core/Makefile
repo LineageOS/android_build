@@ -4757,8 +4757,10 @@ ifdef BOARD_CUSTOM_BOOTIMG
 endif
 ifdef BUILDING_SYSTEM_IMAGE
 	@# Contents of the system image
+	$(hide) mkdir -p $(zip_root)/SYSTEM/vendor/bin
 	$(hide) $(call package_files-copy-root, \
-	    $(SYSTEMIMAGE_SOURCE_DIR),$(zip_root)/SYSTEM)
+	    $(SYSTEMIMAGE_SOURCE_DIR)/addon.d,$(zip_root)/SYSTEM/addon.d)
+	$(hide) cp -f $(SYSTEMIMAGE_SOURCE_DIR)/build.prop $(zip_root)/SYSTEM/build.prop
 endif
 ifdef BUILDING_USERDATA_IMAGE
 	@# Contents of the data image
