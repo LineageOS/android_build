@@ -1953,7 +1953,7 @@ else
 # Set recovery_density to a density bucket based on TARGET_SCREEN_DENSITY, PRODUCT_AAPT_PREF_CONFIG,
 # or mdpi, in order of preference. We support both specific buckets (e.g. xdpi) and numbers,
 # which get remapped to a bucket.
-recovery_density := $(or $(TARGET_SCREEN_DENSITY),$(PRODUCT_AAPT_PREF_CONFIG),mdpi)
+recovery_density := $(or $(TARGET_RECOVERY_UI_SCREEN_DENSITY),$(TARGET_SCREEN_DENSITY),$(PRODUCT_AAPT_PREF_CONFIG),mdpi)
 ifeq (,$(filter xxxhdpi xxhdpi xhdpi hdpi mdpi,$(recovery_density)))
 recovery_density_value := $(patsubst %dpi,%,$(recovery_density))
 # We roughly use the medium point between the primary densities to split buckets.
@@ -2124,6 +2124,7 @@ $(INSTALLED_RECOVERY_BUILD_PROP_TARGET): PRIVATE_RECOVERY_UI_PROPERTIES := \
     TARGET_RECOVERY_UI_MARGIN_WIDTH:margin_width \
     TARGET_RECOVERY_UI_MENU_UNUSABLE_ROWS:menu_unusable_rows \
     TARGET_RECOVERY_UI_PROGRESS_BAR_BASELINE:progress_bar_baseline \
+    TARGET_RECOVERY_UI_SCREEN_DENSITY:screen_density \
     TARGET_RECOVERY_UI_TOUCH_LOW_THRESHOLD:touch_low_threshold \
     TARGET_RECOVERY_UI_TOUCH_HIGH_THRESHOLD:touch_high_threshold \
     TARGET_RECOVERY_UI_VR_STEREO_OFFSET:vr_stereo_offset
