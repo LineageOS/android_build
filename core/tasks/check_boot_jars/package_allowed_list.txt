@@ -267,3 +267,9 @@ org\.codeaurora\.internal.*
 ###################################################
 # IFAA Manager used for Alipay and/or WeChat payment
 org\.ifaa\.android\.manager.*
+
+###################################################
+# Nvidia services
+com\.nvidia\.*
+com\.nvidia\.profilemanager\.*
+com\.nvidia\.NvCPLSvc\.*
