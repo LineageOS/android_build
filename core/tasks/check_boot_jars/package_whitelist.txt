@@ -248,3 +248,16 @@ org\.chromium\.arc
 org\.codeaurora\.ims.*
 # telephony-ext:
 org\.codeaurora\.internal.*
+<<<<<<< HEAD   (b5aa4e Bump Security String to 2021-01-05)
+=======
+
+###################################################
+# IFAA Manager used for Alipay and/or WeChat payment
+org\.ifaa\.android\.manager.*
+
+###################################################
+# Nvidia services
+com\.nvidia\.*
+com\.nvidia\.profilemanager\.*
+com\.nvidia\.NvCPLSvc\.*
+>>>>>>> CHANGE (d7f120 check_boot_jars: Add Nvidia services to whitelist)
