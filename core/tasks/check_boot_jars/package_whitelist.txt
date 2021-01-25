@@ -248,3 +248,9 @@ org\.chromium\.arc
 org\.codeaurora\.ims.*
 # telephony-ext:
 org\.codeaurora\.internal.*
+
+###################################################
+# Nvidia services
+com\.nvidia\.*
+com\.nvidia\.profilemanager\.*
+com\.nvidia\.NvCPLSvc\.*
