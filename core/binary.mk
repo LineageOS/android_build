@@ -45,7 +45,8 @@ endif
 my_soong_problems :=
 
 # Automatically replace the old-style kernel header include with a dependency
-# on the generated_kernel_headers header library
+# on the generated_kernel_headers header library when building inline
+ifeq ($(INLINE_KERNEL_BUILDING),true)
 ifneq (,$(findstring $(TARGET_OUT_INTERMEDIATES)/KERNEL_OBJ/usr/include,$(LOCAL_C_INCLUDES)))
   LOCAL_C_INCLUDES := $(patsubst $(TARGET_OUT_INTERMEDIATES)/KERNEL_OBJ/usr/include,,$(LOCAL_C_INCLUDES))
   LOCAL_HEADER_LIBRARIES += generated_kernel_headers
@@ -62,6 +63,7 @@ endif
 # dependency
 ifneq (,$(findstring $(TARGET_OUT_INTERMEDIATES)/KERNEL_OBJ/usr,$(LOCAL_ADDITIONAL_DEPENDENCIES)))
   LOCAL_ADDITIONAL_DEPENDENCIES := $(patsubst $(TARGET_OUT_INTERMEDIATES)/KERNEL_OBJ/usr,,$(LOCAL_ADDITIONAL_DEPENDENCIES))
+endif
 endif
 
 # The following LOCAL_ variables will be modified in this file.
