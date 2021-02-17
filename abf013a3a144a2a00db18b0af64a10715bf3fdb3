@@ -22,6 +22,30 @@
       "revId": "abf013a3a144a2a00db18b0af64a10715bf3fdb3",
       "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2406f438_4f455256",
+        "filename": "tools/releasetools/common.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 514,
+      "author": {
+        "id": 14048
+      },
+      "writtenOn": "2021-02-17T20:28:30Z",
+      "side": 1,
+      "message": "Because that uses potentially blacklisted properties as well. For tegra, I blacklist device, model, name, and fingerprint. Then set them in a vendor context service on early-init.",
+      "parentUuid": "d4eaeb16_fd0c4d0c",
+      "range": {
+        "startLine": 514,
+        "startChar": 17,
+        "endLine": 514,
+        "endChar": 39
+      },
+      "revId": "abf013a3a144a2a00db18b0af64a10715bf3fdb3",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": true
     }
   ]
 }
