@@ -4232,6 +4232,8 @@ ifeq (true,$(PRODUCT_SUPPORTS_VBOOT))
 INTERNAL_OTATOOLS_PACKAGE_FILES += \
   $(sort $(shell find external/vboot_reference/tests/devkeys -type f))
 endif
+INTERNAL_OTATOOLS_PACKAGE_FILES += \
+  frameworks/base/packages/OsuLogin/certs/com.android.hotspot2.osulogin.x509.pem
 
 INTERNAL_OTATOOLS_RELEASETOOLS := \
   $(sort $(shell find build/make/tools/releasetools -name "*.pyc" -prune -o \
