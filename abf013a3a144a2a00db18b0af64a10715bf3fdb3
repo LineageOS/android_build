@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d4eaeb16_fd0c4d0c",
+        "filename": "tools/releasetools/common.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 514,
+      "author": {
+        "id": 17401
+      },
+      "writtenOn": "2021-02-17T20:20:54Z",
+      "side": 1,
+      "message": "wouldnt `CalculatePartitionFingerprint(partition)` make more sense?",
+      "range": {
+        "startLine": 514,
+        "startChar": 17,
+        "endLine": 514,
+        "endChar": 39
+      },
+      "revId": "abf013a3a144a2a00db18b0af64a10715bf3fdb3",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": true
+    }
+  ]
+}
