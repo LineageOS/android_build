@@ -616,7 +616,10 @@ class BuildInfo(object):
     return self.GetBuildProp(key)
 
   def GetPartitionFingerprint(self, partition):
-    return self._partition_fingerprints.get(partition, None)
+    ret = self._partition_fingerprints.get(partition, None)
+    if ret is None:
+      ret = self.CalculateFingerprint()
+    return ret
 
   def CalculatePartitionFingerprint(self, partition):
     try:
