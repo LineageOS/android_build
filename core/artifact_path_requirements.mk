@@ -31,12 +31,12 @@ $(foreach makefile,$(ARTIFACT_PATH_REQUIREMENT_PRODUCTS),\
   $(eval allowed_patterns := $(call resolve-product-relative-paths,$(allowed))) \
   $(eval files := $(call product-installed-files, $(makefile))) \
   $(eval offending_files := $(filter-out $(path_patterns) $(allowed_patterns) $(static_allowed_patterns),$(files))) \
-  $(call maybe-print-list-and-error,$(offending_files),\
+  $(call maybe-print-list-and-warn,$(offending_files),\
     $(makefile) produces files outside its artifact path requirement. \
     Allowed paths are $(subst $(space),$(comma)$(space),$(addsuffix *,$(requirements)))) \
   $(eval unused_allowed := $(filter-out $(files),$(allowed_patterns))) \
   $(if $(PRODUCTS.$(makefile).ARTIFACT_PATH_REQUIREMENT_IS_RELAXED),, \
-    $(call maybe-print-list-and-error,$(unused_allowed),$(makefile) includes redundant allowed entries in its artifact path requirement.) \
+    $(call maybe-print-list-and-warn,$(unused_allowed),$(makefile) includes redundant allowed entries in its artifact path requirement.) \
   ) \
   $(eval ### Optionally verify that nothing else produces files inside this artifact path requirement.) \
   $(eval extra_files := $(filter-out $(files) $(HOST_OUT)/%,$(product_target_FILES))) \
@@ -47,12 +47,12 @@ $(foreach makefile,$(ARTIFACT_PATH_REQUIREMENT_PRODUCTS),\
   $(eval offending_files := $(filter-out $(allowed_patterns),$(files_in_requirement))) \
   $(eval enforcement := $(PRODUCT_ENFORCE_ARTIFACT_PATH_REQUIREMENTS)) \
   $(if $(enforcement),\
-    $(call maybe-print-list-and-error,$(offending_files),\
+    $(call maybe-print-list-and-warn,$(offending_files),\
       $(INTERNAL_PRODUCT) produces files inside $(makefile)s artifact path requirement. \
       $(PRODUCT_ARTIFACT_PATH_REQUIREMENT_HINT)) \
     $(eval unused_allowed := $(if $(filter true strict,$(enforcement)),\
       $(foreach p,$(allowed_patterns),$(if $(filter $(p),$(extra_files)),,$(p))))) \
-    $(call maybe-print-list-and-error,$(unused_allowed),$(INTERNAL_PRODUCT) includes redundant artifact path requirement allowed list entries.) \
+    $(call maybe-print-list-and-warn,$(unused_allowed),$(INTERNAL_PRODUCT) includes redundant artifact path requirement allowed list entries.) \
   ) \
 )
 $(PRODUCT_OUT)/offending_artifacts.txt:

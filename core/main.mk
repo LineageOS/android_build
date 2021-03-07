@@ -1275,10 +1275,19 @@ endef
 # $(2): heading to print on failure
 define maybe-print-list-and-error
 $(if $(strip $(1)), \
+  $(call maybe-print-list-and-warn,$(1),$(2)) \
+  $(error Build failed) \
+)
+endef
+
+# Warns if the given list is non-empty, and prints it entries (stripping PRODUCT_OUT).
+# $(1): list of files to print
+# $(2): heading to print
+define maybe-print-list-and-warn
+$(if $(strip $(1)), \
   $(warning $(2)) \
   $(info Offending entries:) \
   $(foreach e,$(sort $(1)),$(info    $(patsubst $(PRODUCT_OUT)/%,%,$(e)))) \
-  $(error Build failed) \
 )
 endef
 
