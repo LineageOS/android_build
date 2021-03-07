@@ -1112,12 +1112,22 @@ endef
 # $(2): heading to print on failure
 define maybe-print-list-and-error
 $(if $(strip $(1)), \
-  $(warning $(2)) \
-  $(info Offending entries:) \
-  $(foreach e,$(sort $(1)),$(info    $(patsubst $(PRODUCT_OUT)/%,%,$(e)))) \
+  $(call maybe-print-list-and-warn,$(1),$(2)) \
   $(error Build failed) \
 )
 endef
+
+# Warns if the given list is non-empty, and prints it entries (stripping PRODUCT_OUT).
+# $(1): list of files to print
+# $(2): heading to print
+define maybe-print-list-and-warn
+$(if $(strip $(1)), \
+  $(warning $(2)) \
+  $(info Offending entries:) \
+  $(foreach e,$(sort $(1)),$(info    $(patsubst $(PRODUCT_OUT)/%,%,$(e)))) \
+)
+endef
+
 
 ifdef FULL_BUILD
   ifneq (true,$(ALLOW_MISSING_DEPENDENCIES))
@@ -1217,7 +1227,7 @@ $(call dist-for-goals,droidcore,$(CERTIFICATE_VIOLATION_MODULES_FILENAME))
       $(makefile) produces files outside its artifact path requirement. \
       Allowed paths are $(subst $(space),$(comma)$(space),$(addsuffix *,$(requirements)))) \
     $(eval unused_allowed := $(filter-out $(files),$(allowed_patterns))) \
-    $(call maybe-print-list-and-error,$(unused_allowed),$(makefile) includes redundant allowed entries in its artifact path requirement.) \
+    $(call maybe-print-list-and-warn,$(unused_allowed),$(makefile) includes redundant allowed entries in its artifact path requirement.) \
     $(eval ### Optionally verify that nothing else produces files inside this artifact path requirement.) \
     $(eval extra_files := $(filter-out $(files) $(HOST_OUT)/%,$(product_target_FILES))) \
     $(eval files_in_requirement := $(filter $(path_patterns),$(extra_files))) \
