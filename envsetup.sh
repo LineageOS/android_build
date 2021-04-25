@@ -1590,7 +1590,7 @@ function enable_zsh_completion() {
 }
 
 function validate_current_shell() {
-    local current_sh="$(ps -o command -p $$)"
+    local current_sh="$(command ps -o command -p $$)"
     case "$current_sh" in
         *bash*)
             function check_type() { type -t "$1"; }
