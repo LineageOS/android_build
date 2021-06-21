@@ -39,14 +39,14 @@ PRODUCT_PACKAGES += \
     preinstalled-packages-platform-aosp-product.xml \
     WallpaperPicker \
 
+ifeq ($(LINEAGE_BUILD),)
 # Telephony:
 #   Provide a APN configuration to GSI product
-ifeq ($(LINEAGE_BUILD),)
 PRODUCT_COPY_FILES += \
     device/sample/etc/apns-full-conf.xml:$(TARGET_COPY_OUT_PRODUCT)/etc/apns-conf.xml
-endif
 
 # NFC:
 #   Provide a libnfc-nci.conf to GSI product
 PRODUCT_COPY_FILES += \
     device/generic/common/nfc/libnfc-nci.conf:$(TARGET_COPY_OUT_PRODUCT)/etc/libnfc-nci.conf
+endif
