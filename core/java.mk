@@ -233,11 +233,8 @@ endif
 # For user / userdebug builds, strip the local variable table and the local variable
 # type table. This has no bearing on stack traces, but will leave less information
 # available via JDWP.
-ifneq (,$(PRODUCT_MINIMIZE_JAVA_DEBUG_INFO))
-ifneq (,$(filter userdebug user,$(TARGET_BUILD_VARIANT)))
-LOCAL_JAVACFLAGS+= -g:source,lines
-endif
-endif
+
+LOCAL_JAVACFLAGS+= -g:none
 
 # List of dependencies for anything that needs all java sources in place
 java_sources_deps := \
