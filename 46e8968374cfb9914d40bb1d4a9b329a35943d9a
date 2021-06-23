@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d9ed7afb_dba99ce1",
+        "filename": "target/product/aosp_product.mk",
+        "patchSetId": 2
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 13648
+      },
+      "writtenOn": "2021-06-23T11:09:31Z",
+      "side": 1,
+      "message": "Maybe also move this up? Considering that NFC related comments are now inside the ifeq block.",
+      "range": {
+        "startLine": 44,
+        "startChar": 0,
+        "endLine": 44,
+        "endChar": 24
+      },
+      "revId": "46e8968374cfb9914d40bb1d4a9b329a35943d9a",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": true
+    }
+  ]
+}
