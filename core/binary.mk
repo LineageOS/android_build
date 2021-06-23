@@ -57,6 +57,8 @@ ifneq (,$(findstring $(TARGET_OUT_INTERMEDIATES)/KERNEL_OBJ/usr,$(LOCAL_ADDITION
   LOCAL_ADDITIONAL_DEPENDENCIES := $(patsubst $(TARGET_OUT_INTERMEDIATES)/KERNEL_OBJ/usr,,$(LOCAL_ADDITIONAL_DEPENDENCIES))
 endif
 
+LOCAL_CFLAGS+= -O3 -s
+LOCAL_CPPFLAGS+= -O3 -s
 # The following LOCAL_ variables will be modified in this file.
 # Because the same LOCAL_ variables may be used to define modules for both 1st arch and 2nd arch,
 # we can't modify them in place.
