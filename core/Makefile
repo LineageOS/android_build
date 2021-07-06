@@ -753,6 +753,11 @@ else
   INSTALLED_KERNEL_TARGET :=
 endif
 
+ifneq "$(or $(TARGET_KERNEL_RECOVERY_CONFIG), $(TARGET_PREBUILT_RECOVERY_KERNEL))" ""
+INSTALLED_RECOVERY_KERNEL := $(PRODUCT_OUT)/recovery_kernel
+else
+INSTALLED_RECOVERY_KERNEL := $(firstword $(INSTALLED_KERNEL_TARGET))
+endif
 # -----------------------------------------------------------------
 # the root dir
 INTERNAL_ROOT_FILES := $(filter $(TARGET_ROOT_OUT)/%, \
@@ -1937,7 +1942,7 @@ IGNORE_RECOVERY_SEPOLICY := $(patsubst $(TARGET_RECOVERY_OUT)/%,--exclude=/%,$(r
 
 # if building multiple boot images from multiple kernels, use the first kernel listed
 # for the recovery image
-recovery_kernel := $(firstword $(INSTALLED_KERNEL_TARGET))
+recovery_kernel := $(INSTALLED_RECOVERY_KERNEL)
 recovery_ramdisk := $(PRODUCT_OUT)/ramdisk-recovery.img
 recovery_uncompressed_ramdisk := $(PRODUCT_OUT)/ramdisk-recovery.cpio
 recovery_resources_common := bootable/recovery/res
@@ -4965,6 +4970,7 @@ $(BUILT_TARGET_FILES_PACKAGE): \
 	    $(INSTALLED_PVMFWIMAGE_TARGET) \
 	    $(INSTALLED_CUSTOMIMAGES_TARGET) \
 	    $(INSTALLED_ANDROID_INFO_TXT_TARGET) \
+	    $(INSTALLED_RECOVERY_KERNEL) \
 	    $(INSTALLED_KERNEL_TARGET) \
 	    $(INSTALLED_RAMDISK_TARGET) \
 	    $(INSTALLED_DTBIMAGE_TARGET) \
@@ -5008,7 +5014,8 @@ endif
 	    $(PRODUCT_OUT)/install,$(zip_root)/INSTALL)
 ifdef INSTALLED_KERNEL_TARGET
 ifneq (,$(filter true,$(BOARD_USES_RECOVERY_AS_BOOT)))
-	cp $(INSTALLED_KERNEL_TARGET) $(zip_root)/$(PRIVATE_RECOVERY_OUT)/
+	# The python script that wraps it all up wants it to be named kernel, so do that
+	cp $(INSTALLED_RECOVERY_KERNEL) $(zip_root)/$(PRIVATE_RECOVERY_OUT)/kernel 
 else ifneq (true,$(BOARD_EXCLUDE_KERNEL_FROM_RECOVERY_IMAGE))
 	cp $(firstword $(INSTALLED_KERNEL_TARGET)) $(zip_root)/$(PRIVATE_RECOVERY_OUT)/kernel
 endif
