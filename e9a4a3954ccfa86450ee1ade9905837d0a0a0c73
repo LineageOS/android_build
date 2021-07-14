@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf90bf45_f18162cf",
+        "filename": "core/Makefile",
+        "patchSetId": 2
+      },
+      "lineNbr": 4629,
+      "author": {
+        "id": 25732
+      },
+      "writtenOn": "2021-07-14T19:47:06Z",
+      "side": 1,
+      "message": "ditto",
+      "range": {
+        "startLine": 4629,
+        "startChar": 0,
+        "endLine": 4629,
+        "endChar": 2
+      },
+      "revId": "e9a4a3954ccfa86450ee1ade9905837d0a0a0c73",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": true
+    }
+  ]
+}
