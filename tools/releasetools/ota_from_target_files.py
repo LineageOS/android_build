@@ -1097,6 +1097,8 @@ def GenerateAbOtaPackage(target_file, output_file, source_file=None):
     target_info.info_dict['ab_partitions'] = zfp.read(
         AB_PARTITIONS).decode().strip().split("\n")
 
+  CheckVintfIfTrebleEnabled(target_file, target_info)
+
   # Metadata to comply with Android OTA package format.
   metadata = GetPackageMetadata(target_info, source_info)
   # Generate payload.
@@ -1180,8 +1182,6 @@ def GenerateAbOtaPackage(target_file, output_file, source_file=None):
     logger.warning("target_file doesn't contain apex_info.pb %s", target_file)
 
   common.ZipClose(target_zip)
-
-  CheckVintfIfTrebleEnabled(target_file, target_info)
 
   # We haven't written the metadata entry yet, which will be handled in
   # FinalizeMetadata().
