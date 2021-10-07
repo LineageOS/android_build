@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "0bde2ffb_bd91e18f",
+        "filename": "core/Makefile",
+        "patchSetId": 2
+      },
+      "lineNbr": 2240,
+      "author": {
+        "id": 21290
+      },
+      "writtenOn": "2021-10-07T12:23:16Z",
+      "side": 1,
+      "message": "this needs to be a tab instead of two spaces",
+      "range": {
+        "startLine": 2240,
+        "startChar": 0,
+        "endLine": 2240,
+        "endChar": 2
+      },
+      "revId": "fcf12fcf939ddcbfc0d095d07d6a0ffbaebca29a",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": true
+    }
+  ]
+}
