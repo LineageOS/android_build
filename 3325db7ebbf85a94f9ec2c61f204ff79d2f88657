@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8c284e7f_a52d14dd",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 14010
+      },
+      "writtenOn": "2021-11-15T08:52:05Z",
+      "side": 1,
+      "message": "This is needed on mata to allow me to restore touchscreen support in recovery.",
+      "revId": "3325db7ebbf85a94f9ec2c61f204ff79d2f88657",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
+    }
+  ]
+}
