@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "025a1716_ee78f836",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 22176
+      },
+      "writtenOn": "2021-11-26T18:12:49Z",
+      "side": 1,
+      "message": "2021-11-26 19:18:20 - common.py - WARNING : Unable to get boot image build props: Failed to run command \u0027[\u0027unpack_bootimg\u0027, \u0027--boot_img\u0027, \u0027/home/mba/12/out/target/product/klteduos/obj/PACKAGING/target_files_intermediates/lineage_klteduos-target_files-eng.mba/IMAGES/boot.img\u0027, \u0027--out\u0027, \u0027/home/mba/12/out/soong/.temp/boot_VB8RS1.img\u0027]\u0027 (exit code \n\nseems decoding ",
+      "revId": "9f5d8a397ebd9aa92dd1d6a41485246f82d464f1",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e2fc01eb_0c4a17ef",
+        "filename": "tools/releasetools/common.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 3849,
+      "author": {
+        "id": 22176
+      },
+      "writtenOn": "2021-11-26T18:12:49Z",
+      "side": 1,
+      "message": "i got \nUnable to get boot image build props: Failed to run command \u0027[\u0027unpack_bootimg\u0027, \u0027--boot_img\u0027,\n\nseems xz support not completely and we need more since\nhttps://github.com/LineageOS/android_build/commit/f3f842b676a2ffec7382153b4f874432795d4381\n\nsomething like this or more\nelif ramdisk_format \u003d\u003d RamdiskFormat.XZ:\n      RunAndCheckOutput([\u0027xz\u0027, \u0027-d\u0027, ramdisk, uncompressed_ramdisk])",
+      "revId": "9f5d8a397ebd9aa92dd1d6a41485246f82d464f1",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
+    }
+  ]
+}
