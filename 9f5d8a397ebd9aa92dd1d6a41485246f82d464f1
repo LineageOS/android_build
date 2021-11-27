@@ -18,6 +18,23 @@
       "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a6fac990_bf2d9840",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 19979
+      },
+      "writtenOn": "2021-11-27T02:53:01Z",
+      "side": 1,
+      "message": "Try reverting the current patch and picking https://github.com/Evervolv/android_build/commit/1039e3e697dc53c48ccfd9bfbef74a814d27e7e3",
+      "revId": "9f5d8a397ebd9aa92dd1d6a41485246f82d464f1",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e2fc01eb_0c4a17ef",
