@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "32c6f5c3_41373b82",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 16914
+      },
+      "writtenOn": "2021-12-14T16:55:05Z",
+      "side": 1,
+      "message": "Entire topic (including the revert of 320289) builds and runs OK on pro1",
+      "revId": "20c6c9c323a883f961386306734b6867e6c548d2",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
+    }
+  ]
+}
