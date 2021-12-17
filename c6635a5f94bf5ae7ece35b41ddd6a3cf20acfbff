@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e1c67edf_83c9b3c9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 16914
+      },
+      "writtenOn": "2021-12-17T03:55:55Z",
+      "side": 1,
+      "message": "Entire topic builds and runs OK on gts28vewifi",
+      "revId": "c6635a5f94bf5ae7ece35b41ddd6a3cf20acfbff",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
+    }
+  ]
+}
