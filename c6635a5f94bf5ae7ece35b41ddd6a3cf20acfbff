@@ -33,6 +33,23 @@
       "message": "All good on ys/fugu.",
       "revId": "c6635a5f94bf5ae7ece35b41ddd6a3cf20acfbff",
       "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4c36ea23_8f896279",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 23518
+      },
+      "writtenOn": "2021-12-18T13:37:27Z",
+      "side": 1,
+      "message": "All good on LG G4 - Thank you for your continuing support.",
+      "revId": "c6635a5f94bf5ae7ece35b41ddd6a3cf20acfbff",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
     }
   ]
 }
