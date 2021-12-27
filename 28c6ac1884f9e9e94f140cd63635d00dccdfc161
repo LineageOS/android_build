@@ -33,6 +33,23 @@
       "message": "Any update here?",
       "revId": "28c6ac1884f9e9e94f140cd63635d00dccdfc161",
       "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "712b0dd0_ba02fe07",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 26658
+      },
+      "writtenOn": "2021-12-27T08:21:13Z",
+      "side": 1,
+      "message": "\u003e I\u0027ll review and merge the security-relevant changes, but I WILL NOT merge this or any later security string updates without the v8 vuln being fixed.\n\nAre you still going to do this?",
+      "revId": "28c6ac1884f9e9e94f140cd63635d00dccdfc161",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
     }
   ]
 }
