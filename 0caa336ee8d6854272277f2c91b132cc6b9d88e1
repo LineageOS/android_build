@@ -16,6 +16,23 @@
       "message": "Thanks for mergring the patches.",
       "revId": "0caa336ee8d6854272277f2c91b132cc6b9d88e1",
       "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cc009030_e5f97c66",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 15173
+      },
+      "writtenOn": "2021-12-27T16:22:09Z",
+      "side": 1,
+      "message": "There is no such thing as an assessed 2021-12-05 security patch level for anything less than Android 9.0. There will be no further SPL updates for lineage-15.1.",
+      "revId": "0caa336ee8d6854272277f2c91b132cc6b9d88e1",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
     }
   ]
 }
