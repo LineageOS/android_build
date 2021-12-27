@@ -50,6 +50,24 @@
       "message": "Hi Kevin,\n\nwas this officially announced somewhere? Why would one not bump the patch level when the changes are merged?",
       "revId": "0caa336ee8d6854272277f2c91b132cc6b9d88e1",
       "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "65a9f4ad_7c395852",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 15173
+      },
+      "writtenOn": "2021-12-27T16:37:11Z",
+      "side": 1,
+      "message": "lineage-15.1 is officially discontinued, so this is as good as an official announcement.\n\nThat aside, it is irresponsible to bump a patch level when there is no more assessment being performed by the group that defines the patch levels. It\u0027s entirely possible, certain even, that there are vulnerabilities in \u003c\u003d A8.1 that are reported and unfixed in A8.1 that would be documented in an ASB if Google still maintained the branch. Bottom line, there is no such thing as a set of changes to A8.1 that make up anything beyond 2021-10-05. Bumping the patch level should never have been done in the past on any other branches.",
+      "parentUuid": "aee11d51_b5d75698",
+      "revId": "0caa336ee8d6854272277f2c91b132cc6b9d88e1",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
     }
   ]
 }
