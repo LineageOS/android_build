@@ -16,6 +16,23 @@
       "message": "\u003e Patch Set 6:\n\u003e \n\u003e This does not work with spaces:\n\u003e \n\u003e [ 99% 197/198] finishing build rules ...\n\u003e FAILED: \n\u003e build/make/core/Makefile:2240: error: missing separator.\n\u003e 15:00:23 ckati failed with: exit status 1\n\nhold, this needs to be addressed",
       "revId": "0ae64d84a6a3b3a07049f0d2e5cb24cfa3877bd2",
       "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "850d40d1_4cf73c2c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 10067
+      },
+      "writtenOn": "2022-01-06T20:02:57Z",
+      "side": 1,
+      "message": "so much for +Verified.",
+      "revId": "0ae64d84a6a3b3a07049f0d2e5cb24cfa3877bd2",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
     }
   ]
 }
