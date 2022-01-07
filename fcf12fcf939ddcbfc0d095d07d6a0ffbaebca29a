@@ -1,6 +1,7 @@
 {
   "comments": [
     {
+      "unresolved": true,
       "key": {
         "uuid": "0bde2ffb_bd91e18f",
         "filename": "core/Makefile",
@@ -20,8 +21,31 @@
         "endChar": 2
       },
       "revId": "fcf12fcf939ddcbfc0d095d07d6a0ffbaebca29a",
-      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
-      "unresolved": true
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "64e885b8_bd14077e",
+        "filename": "core/Makefile",
+        "patchSetId": 2
+      },
+      "lineNbr": 2240,
+      "author": {
+        "id": 21290
+      },
+      "writtenOn": "2022-01-07T08:54:08Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0bde2ffb_bd91e18f",
+      "range": {
+        "startLine": 2240,
+        "startChar": 0,
+        "endLine": 2240,
+        "endChar": 2
+      },
+      "revId": "fcf12fcf939ddcbfc0d095d07d6a0ffbaebca29a",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
     }
   ]
 }
