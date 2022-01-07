@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "afb61cbd_9f25eece",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 19907
+      },
+      "writtenOn": "2022-01-07T17:19:55Z",
+      "side": 1,
+      "message": "https://review.lineageos.org/c/LineageOS/android_system_tools_mkbootimg/+/319780",
+      "revId": "6a2d48eb424a91fc619b8e12e3a85741246ca3f4",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
+    }
+  ]
+}
