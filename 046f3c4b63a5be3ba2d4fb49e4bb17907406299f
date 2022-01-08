@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2f14f5b6_7878e400",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 22176
+      },
+      "writtenOn": "2022-01-08T18:05:58Z",
+      "side": 1,
+      "message": "ok. this time i can confirm device with xz ramdisk works fine",
+      "revId": "046f3c4b63a5be3ba2d4fb49e4bb17907406299f",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
+    }
+  ]
+}
