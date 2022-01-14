@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "721a5a3a_49af01ce",
+        "filename": "tools/releasetools/common.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 622,
+      "author": {
+        "id": 10067
+      },
+      "writtenOn": "2022-01-14T10:33:15Z",
+      "side": 1,
+      "message": "`return self._partition_fingerprints.get(partition, self.CalculateFingerprint())` or `return self._partition_fingerprints.get(partition, None) or self.CalculateFingerprint()`",
+      "range": {
+        "startLine": 619,
+        "startChar": 4,
+        "endLine": 622,
+        "endChar": 14
+      },
+      "revId": "f20bcf72697b2bd440b8c61234c4cacb20c462b9",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
+    }
+  ]
+}
