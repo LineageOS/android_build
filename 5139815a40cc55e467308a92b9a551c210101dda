@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "178cae73_d447a4f6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 17311
+      },
+      "writtenOn": "2022-01-19T18:26:06Z",
+      "side": 1,
+      "message": "Works fine on shamu, hammerhead, oneplus3 \u0026 vs995",
+      "revId": "5139815a40cc55e467308a92b9a551c210101dda",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
+    }
+  ]
+}
