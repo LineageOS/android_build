@@ -16,6 +16,23 @@
       "message": "Works fine on shamu, hammerhead, oneplus3 \u0026 vs995",
       "revId": "5139815a40cc55e467308a92b9a551c210101dda",
       "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b0a36cea_d76734a8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 16914
+      },
+      "writtenOn": "2022-01-19T18:49:27Z",
+      "side": 1,
+      "message": "Entire topic builds and runs OK on pro1. Has Qualcomm not published a version of 321269 we could apply to LineageOS/android_vendor_qcom_opensource_system_bt?",
+      "revId": "5139815a40cc55e467308a92b9a551c210101dda",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
     }
   ]
 }
