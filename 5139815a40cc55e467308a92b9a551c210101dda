@@ -67,6 +67,24 @@
       "message": "mata, gta4xl{,wifi}, klte, hltetmo",
       "revId": "5139815a40cc55e467308a92b9a551c210101dda",
       "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6816dcb0_5ad8d710",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 15173
+      },
+      "writtenOn": "2022-01-20T14:24:45Z",
+      "side": 1,
+      "message": "No, there\u0027s nothing seemingly related in the latest LA.QSSI.11.0.r1 tag, released today. Which is a reminder that it\u0027s probably not a terrible idea to do a CAF merge, since it\u0027s been about 7 months. Only problem would be getting attention to an \"old branch\" from \"maintainers\" who are shipping devices on 18...",
+      "parentUuid": "b0a36cea_d76734a8",
+      "revId": "5139815a40cc55e467308a92b9a551c210101dda",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
     }
   ]
 }
