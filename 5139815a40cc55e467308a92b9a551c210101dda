@@ -33,6 +33,23 @@
       "message": "Entire topic builds and runs OK on pro1. Has Qualcomm not published a version of 321269 we could apply to LineageOS/android_vendor_qcom_opensource_system_bt?",
       "revId": "5139815a40cc55e467308a92b9a551c210101dda",
       "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4cca5c84_53bd1695",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 4550
+      },
+      "writtenOn": "2022-01-20T11:03:28Z",
+      "side": 1,
+      "message": "Good on aura \u0026 kebab",
+      "revId": "5139815a40cc55e467308a92b9a551c210101dda",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
     }
   ]
 }
