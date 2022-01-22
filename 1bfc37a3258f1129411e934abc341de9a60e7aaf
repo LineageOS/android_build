@@ -33,6 +33,23 @@
       "message": "All good on Moto G LTE Peregrine and LG G4",
       "revId": "1bfc37a3258f1129411e934abc341de9a60e7aaf",
       "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6b5fad0e_3324bc30",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 26658
+      },
+      "writtenOn": "2022-01-22T16:37:08Z",
+      "side": 1,
+      "message": "Builds fine for potter",
+      "revId": "1bfc37a3258f1129411e934abc341de9a60e7aaf",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
     }
   ]
 }
