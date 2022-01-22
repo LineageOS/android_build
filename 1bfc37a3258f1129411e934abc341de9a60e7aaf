@@ -16,6 +16,23 @@
       "message": "Entire topic builds and runs OK on gts28vewifi",
       "revId": "1bfc37a3258f1129411e934abc341de9a60e7aaf",
       "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "96225623_91527ba9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 23518
+      },
+      "writtenOn": "2022-01-22T14:34:58Z",
+      "side": 1,
+      "message": "All good on Moto G LTE Peregrine and LG G4",
+      "revId": "1bfc37a3258f1129411e934abc341de9a60e7aaf",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
     }
   ]
 }
