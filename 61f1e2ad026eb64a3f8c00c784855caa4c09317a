@@ -16,6 +16,23 @@
       "message": "Entire topic builds and runs OK on pro1",
       "revId": "61f1e2ad026eb64a3f8c00c784855caa4c09317a",
       "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b9593683_e28e5106",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 26658
+      },
+      "writtenOn": "2022-01-22T16:36:54Z",
+      "side": 1,
+      "message": "Builds fine for potter and sargo",
+      "revId": "61f1e2ad026eb64a3f8c00c784855caa4c09317a",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
     }
   ]
 }
