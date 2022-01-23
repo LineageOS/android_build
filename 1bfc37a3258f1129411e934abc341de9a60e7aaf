@@ -50,6 +50,23 @@
       "message": "Builds fine for potter",
       "revId": "1bfc37a3258f1129411e934abc341de9a60e7aaf",
       "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a0881364_75ccbee0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 11409
+      },
+      "writtenOn": "2022-01-23T08:30:23Z",
+      "side": 1,
+      "message": "Topic builds fine and runs for gtaxllte.",
+      "revId": "1bfc37a3258f1129411e934abc341de9a60e7aaf",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
     }
   ]
 }
