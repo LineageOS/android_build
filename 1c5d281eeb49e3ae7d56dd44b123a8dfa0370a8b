@@ -34,6 +34,24 @@
       "parentUuid": "9c087cff_c79199c4",
       "revId": "1c5d281eeb49e3ae7d56dd44b123a8dfa0370a8b",
       "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b10a1da7_02bcfb4b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 11883
+      },
+      "writtenOn": "2022-02-01T16:39:57Z",
+      "side": 1,
+      "message": "The other change seems more proper to me.\nUsing $(shell) and \"normal\" makefile behavior, instead of calling bash, but it\u0027s broken",
+      "parentUuid": "4a9bc867_03d623d0",
+      "revId": "1c5d281eeb49e3ae7d56dd44b123a8dfa0370a8b",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
     }
   ]
 }
