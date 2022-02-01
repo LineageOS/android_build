@@ -26,6 +26,8 @@ endif
 BUILDINFO_SH := build/make/tools/buildinfo.sh
 POST_PROCESS_PROPS := $(HOST_OUT_EXECUTABLES)/post_process_props$(HOST_EXECUTABLE_SUFFIX)
 
+PRODUCT_BUILD_PROP_OVERRIDES ?= echo
+
 # Emits a set of sysprops common to all partitions to a file.
 # $(1): Partition name
 # $(2): Output file name
