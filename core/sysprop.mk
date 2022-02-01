@@ -31,7 +31,7 @@ POST_PROCESS_PROPS := $(HOST_OUT_EXECUTABLES)/post_process_props$(HOST_EXECUTABL
 # $(2): Output file name
 define generate-common-build-props
     bash -c '\
-    $(PRODUCT_BUILD_PROP_OVERRIDES);\
+    $(or $(PRODUCT_BUILD_PROP_OVERRIDES),:);\
     echo "####################################" >> $(2);\
     echo "# from generate-common-build-props" >> $(2);\
     echo "# These properties identify this partition image." >> $(2);\
