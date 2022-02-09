@@ -16,6 +16,24 @@
       "message": "huh, they actually updated the ASB with links already?",
       "revId": "186033b20523fc3b0caef15d21337c62ce4cc992",
       "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ac6c32b4_3e422195",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 4550
+      },
+      "writtenOn": "2022-02-09T23:00:55Z",
+      "side": 1,
+      "message": "Yes and the ones with no links/asterisk can be also found on gerrit in January patch, for example https://review.lineageos.org/q/message:197228210",
+      "parentUuid": "5e010c22_9fb8d6a1",
+      "revId": "186033b20523fc3b0caef15d21337c62ce4cc992",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
     }
   ]
 }
