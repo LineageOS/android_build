@@ -16,6 +16,23 @@
       "message": "Topic Q_asb_2022-02 builds OK for Hammerhead and Sargo",
       "revId": "42762d918f8ef6b36b5bddf900ac3cb698397c72",
       "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "dadc4654_d65d87e9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 16914
+      },
+      "writtenOn": "2022-02-10T22:10:13Z",
+      "side": 1,
+      "message": "Entire topic builds and runs OK on pro1",
+      "revId": "42762d918f8ef6b36b5bddf900ac3cb698397c72",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
     }
   ]
 }
