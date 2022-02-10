@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2252f182_3c1c0235",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 15173
+      },
+      "writtenOn": "2022-02-10T13:38:31Z",
+      "side": 1,
+      "message": "Just adding the traceability to the prior-implemented changes",
+      "revId": "38c4b8666e18b74c595754a4bac7626a432bfbf2",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
+    }
+  ]
+}
