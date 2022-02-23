@@ -67,6 +67,23 @@
       "message": "Topic builds fine and runs for gtaxllte.",
       "revId": "1bfc37a3258f1129411e934abc341de9a60e7aaf",
       "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "93902b51_5afdcfd2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 18682
+      },
+      "writtenOn": "2022-02-23T00:19:29Z",
+      "side": 1,
+      "message": "it will still Bump Security String to 2022-02-05 \n",
+      "revId": "1bfc37a3258f1129411e934abc341de9a60e7aaf",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
     }
   ]
 }
