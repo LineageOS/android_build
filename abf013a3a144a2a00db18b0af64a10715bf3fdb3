@@ -1,6 +1,7 @@
 {
   "comments": [
     {
+      "unresolved": true,
       "key": {
         "uuid": "d4eaeb16_fd0c4d0c",
         "filename": "tools/releasetools/common.py",
@@ -20,10 +21,10 @@
         "endChar": 39
       },
       "revId": "abf013a3a144a2a00db18b0af64a10715bf3fdb3",
-      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
-      "unresolved": true
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
     },
     {
+      "unresolved": true,
       "key": {
         "uuid": "2406f438_4f455256",
         "filename": "tools/releasetools/common.py",
@@ -44,8 +45,31 @@
         "endChar": 39
       },
       "revId": "abf013a3a144a2a00db18b0af64a10715bf3fdb3",
-      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
-      "unresolved": true
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ba5d6f44_61132a5b",
+        "filename": "tools/releasetools/common.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 514,
+      "author": {
+        "id": 16185
+      },
+      "writtenOn": "2022-03-03T15:50:58Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2406f438_4f455256",
+      "range": {
+        "startLine": 514,
+        "startChar": 17,
+        "endLine": 514,
+        "endChar": 39
+      },
+      "revId": "abf013a3a144a2a00db18b0af64a10715bf3fdb3",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
     }
   ]
 }
