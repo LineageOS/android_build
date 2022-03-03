@@ -16,6 +16,23 @@
       "message": "Verified on tegra",
       "revId": "aa126e0332874940936292e3427ded799fee65e9",
       "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "324f10a8_5de19ce0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 11801
+      },
+      "writtenOn": "2022-03-03T17:47:42Z",
+      "side": 1,
+      "message": "This seems so unnecessary to me. Just do it the normal way. You have hacks on top of hacks to make this work as opposed to just following the path for other unified devices.",
+      "revId": "aa126e0332874940936292e3427ded799fee65e9",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
     }
   ]
 }
