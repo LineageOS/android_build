@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "01c0c1ab_0dbe03e1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 14048
+      },
+      "writtenOn": "2022-03-03T06:04:00Z",
+      "side": 1,
+      "message": "Verified on tegra, which blacklists several vendor props as part of a unified build.\n\nLuk, can you take a look at this and the 18.1 copy, please?",
+      "revId": "775363de41daea8988228d71d3e324e058a7d881",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
+    }
+  ]
+}
