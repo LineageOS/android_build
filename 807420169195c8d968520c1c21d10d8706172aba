@@ -16,6 +16,23 @@
       "message": "Topic Q_asb_2022-03 builds OK for sargo.",
       "revId": "807420169195c8d968520c1c21d10d8706172aba",
       "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c6c80597_7b145b1b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 16914
+      },
+      "writtenOn": "2022-03-11T20:37:06Z",
+      "side": 1,
+      "message": "Entire topic builds and runs OK on pro1",
+      "revId": "807420169195c8d968520c1c21d10d8706172aba",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
     }
   ]
 }
