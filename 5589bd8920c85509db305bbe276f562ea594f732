@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "992c6d3d_c2d37962",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 2195
+      },
+      "writtenOn": "2022-03-24T18:00:00Z",
+      "side": 1,
+      "message": "trusty was too old to compile modern cpp code, aka SigScan.\n\nIf Google updates this I\u0027ll deal with conflicts or move it to vendor/lineage then.\n",
+      "revId": "5589bd8920c85509db305bbe276f562ea594f732",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
+    }
+  ]
+}
