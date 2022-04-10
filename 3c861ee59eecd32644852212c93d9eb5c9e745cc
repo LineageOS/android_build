@@ -16,6 +16,23 @@
       "message": "Entire topic builds and runs OK on pro1",
       "revId": "3c861ee59eecd32644852212c93d9eb5c9e745cc",
       "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b0407b5e_09a1e635",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 24080
+      },
+      "writtenOn": "2022-04-10T12:28:18Z",
+      "side": 1,
+      "message": "Topic R_asb_2022-04 builds OK for sargo \u0026 sunfish.",
+      "revId": "3c861ee59eecd32644852212c93d9eb5c9e745cc",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
     }
   ]
 }
