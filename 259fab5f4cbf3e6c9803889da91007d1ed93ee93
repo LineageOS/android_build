@@ -16,6 +16,23 @@
       "message": "Entire topic builds and runs OK on pro1",
       "revId": "259fab5f4cbf3e6c9803889da91007d1ed93ee93",
       "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "78d5008f_ac616178",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 26658
+      },
+      "writtenOn": "2022-04-10T19:06:35Z",
+      "side": 1,
+      "message": "Whole topic builds fine for potter.",
+      "revId": "259fab5f4cbf3e6c9803889da91007d1ed93ee93",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
     }
   ]
 }
