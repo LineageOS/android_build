@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ff8e1a6b_66910ba4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 31013
+      },
+      "writtenOn": "2022-05-06T16:03:07Z",
+      "side": 1,
+      "message": "Builds on alioth.",
+      "revId": "2f98aeef023f88dabc9c25cffe31e33d85703b51",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
+    }
+  ]
+}
