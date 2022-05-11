@@ -110,7 +110,7 @@ class ApexApkSigner(object):
       # signed apk file.
       unsigned_apk = common.MakeTempFile()
       os.rename(apk_path, unsigned_apk)
-      common.SignFile(unsigned_apk, apk_path, key_name, self.key_passwords,
+      common.SignFile(unsigned_apk, apk_path, key_name, self.key_passwords[key_name],
                       codename_to_api_level_map=self.codename_to_api_level_map)
       has_signed_apk = True
     return payload_dir, has_signed_apk
@@ -283,7 +283,7 @@ def ParseApexPayloadInfo(avbtool, payload_path):
 
 
 def SignApex(avbtool, apex_data, payload_key, container_key, container_pw,
-             apk_keys, codename_to_api_level_map,
+             key_passwords, apk_keys, codename_to_api_level_map,
              no_hashtree, signing_args=None):
   """Signs the current APEX with the given payload/container keys.
 
@@ -308,7 +308,7 @@ def SignApex(avbtool, apex_data, payload_key, container_key, container_pw,
 
   # 1. Extract the apex payload image and sign the containing apk files. Repack
   # the apex file after signing.
-  apk_signer = ApexApkSigner(apex_file, container_pw,
+  apk_signer = ApexApkSigner(apex_file, key_passwords,
                              codename_to_api_level_map)
   apex_file = apk_signer.ProcessApexFile(apk_keys, payload_key, signing_args)
 
