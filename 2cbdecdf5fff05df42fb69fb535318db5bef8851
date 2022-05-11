@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "afc94708_6b5ac1d8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 7118
+      },
+      "writtenOn": "2022-05-11T21:09:10Z",
+      "side": 1,
+      "message": "looks like there\u0027s already a fix for this upstream.  have you tried it?\nhttps://android.googlesource.com/platform/build/+/e555ab18481114f61a603fbe6274b311758af14a%5E%21/",
+      "revId": "2cbdecdf5fff05df42fb69fb535318db5bef8851",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
+    }
+  ]
+}
