@@ -16,6 +16,23 @@
       "message": "looks like there\u0027s already a fix for this upstream.  have you tried it?\nhttps://android.googlesource.com/platform/build/+/e555ab18481114f61a603fbe6274b311758af14a%5E%21/",
       "revId": "2cbdecdf5fff05df42fb69fb535318db5bef8851",
       "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cd2f67be_d1148383",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 31041
+      },
+      "writtenOn": "2022-05-11T21:20:43Z",
+      "side": 1,
+      "message": "Thanks.\nYou\u0027re right. By the looks of it it seems to do the same thing.\nI cannot verify it right now though.\n\nP.S.: Honestly I didn\u0027t really know were to look for a patch and the coding seemed to be in this state for quite a long time now. So I thought it wasn\u0027t a common error.",
+      "revId": "2cbdecdf5fff05df42fb69fb535318db5bef8851",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
     }
   ]
 }
