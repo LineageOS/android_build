@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9d7ff49f_fc82c7d2",
+        "filename": ".gitupstream-aosp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 2195
+      },
+      "writtenOn": "2022-05-30T20:33:28Z",
+      "side": 1,
+      "message": "Could also just skip the tag here.\n\nOr only specify it when we\u0027re using something custom / not default.",
+      "revId": "67244c67cbbc7954f0cb1da900079f22de6dcd57",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f5382c97_9fdcb0eb",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 2195
+      },
+      "writtenOn": "2022-05-30T20:33:28Z",
+      "side": 1,
+      "message": "I don\u0027t forsee needing to add this file to all repos given we have aosp-merger.sh already and for most repos (including this one) sed s/platform/android/g and sed s#/#_#g - but anywhere that part doesn\u0027t work could have this to make scripting aospremote easier.",
+      "revId": "67244c67cbbc7954f0cb1da900079f22de6dcd57",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
+    }
+  ]
+}
