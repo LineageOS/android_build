@@ -487,7 +487,9 @@ endif
 ifeq ($(PRODUCT_OTA_ENFORCE_VINTF_KERNEL_REQUIREMENTS),)
   ifdef PRODUCT_SHIPPING_API_LEVEL
     ifeq (true,$(call math_gt_or_eq,$(PRODUCT_SHIPPING_API_LEVEL),29))
-      PRODUCT_OTA_ENFORCE_VINTF_KERNEL_REQUIREMENTS := true
+      ifneq ($(KERNEL_LTO),none)
+	      PRODUCT_OTA_ENFORCE_VINTF_KERNEL_REQUIREMENTS := true
+      endif
     endif
   endif
 endif
