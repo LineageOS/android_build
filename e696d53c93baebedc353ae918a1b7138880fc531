@@ -16,6 +16,24 @@
       "message": "Don\u0027t really like the idea of build repo changes for something like this",
       "revId": "e696d53c93baebedc353ae918a1b7138880fc531",
       "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "870bc230_2bf66cd0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 2195
+      },
+      "writtenOn": "2022-05-31T08:13:04Z",
+      "side": 1,
+      "message": "Sure, we can try to do it somewhere in vendor/lineage too.\n\nI don\u0027t know if tasks/kernel.mk would work, but maybe some other place?\n\nI don\u0027t mind it either way tbh",
+      "parentUuid": "aa8dd18d_c0c79626",
+      "revId": "e696d53c93baebedc353ae918a1b7138880fc531",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
     }
   ]
 }
