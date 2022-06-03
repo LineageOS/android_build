@@ -34,6 +34,24 @@
       "parentUuid": "aa8dd18d_c0c79626",
       "revId": "e696d53c93baebedc353ae918a1b7138880fc531",
       "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e1baf4fa_038b78a2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 31176
+      },
+      "writtenOn": "2022-06-03T08:50:32Z",
+      "side": 1,
+      "message": "Fix up the kernel configuration to allow LTO:\n\u003cstart with a suitable kernel configuration\u003e\n./source/scripts/config --disable function_tracer \\\n\t\t\t--disable function_graph_tracer \\\n\t\t\t--disable stack_tracer --enable lto_menu \\\n                        --disable lto_disable \\\n\t\t\t--disable gcov \\\n\t\t\t--disable kallsyms_all \\\n\t\t\t--disable modversions\nmake oldconfig\nThen you can build with\n# The COMPILER_PATH is needed to let gcc use the new binutils\n# as the LTO plugin linker\n# if you installed gcc in a separate directory like below also\n# add it to the PATH line below before the regular $PATH\n# The COMPILER_PATH setting is only needed if the gcc was not built\n# with --with-plugin-ld pointing to the Linux binutils ld\n# The AR/NM setting works around a Makefile bug\nCOMPILER_PATH\u003d/opt/binutils-VERSION/bin PATH\u003d$COMPILER_PATH:$PATH \\\nmake -j$(getconf _NPROCESSORS_ONLN) AR\u003dgcc-ar NM\u003dgcc-nm",
+      "parentUuid": "870bc230_2bf66cd0",
+      "revId": "e696d53c93baebedc353ae918a1b7138880fc531",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
     }
   ]
 }
