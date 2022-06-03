@@ -69,6 +69,24 @@
       "message": "Can\u0027t you edit kernel/configs to allow LTO instead? It\u0027s not really cool to disable VINTF checks altogether",
       "revId": "e696d53c93baebedc353ae918a1b7138880fc531",
       "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5aecddb9_3163b754",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 25732
+      },
+      "writtenOn": "2022-06-03T09:01:47Z",
+      "side": 1,
+      "message": "*allow disabled LTO",
+      "parentUuid": "cf74610e_16aa3e61",
+      "revId": "e696d53c93baebedc353ae918a1b7138880fc531",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
     }
   ]
 }
