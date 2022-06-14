@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "35216bb4_89bc2ae1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 4550
+      },
+      "writtenOn": "2022-06-14T01:12:51Z",
+      "side": 1,
+      "message": "AOSP commit: https://review.lineageos.org/c/LineageOS/android_build/+/332709",
+      "revId": "0ea3baa9339e54660ffbc7ea51e0547f767fc017",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
+    }
+  ]
+}
