@@ -34,6 +34,24 @@
       "parentUuid": "644c5d70_37484ac3",
       "revId": "1557ef3aa1fbdf50ff03e24fbb60227da5cde3cd",
       "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bcd4f759_ea608d26",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 15173
+      },
+      "writtenOn": "2022-06-23T13:54:33Z",
+      "side": 1,
+      "message": "Because no one has actually voted representing that it *functions* correctly. Saying it builds is hardly helpful because I test that before uploading.\n\nIn these situations, I\u0027ll normally yolo submit when it\u0027s time to merge the next tag.",
+      "parentUuid": "bf5f1e94_489ea3d1",
+      "revId": "1557ef3aa1fbdf50ff03e24fbb60227da5cde3cd",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
     }
   ]
 }
