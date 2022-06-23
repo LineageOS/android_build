@@ -16,6 +16,24 @@
       "message": "Builds fine for potter.",
       "revId": "1557ef3aa1fbdf50ff03e24fbb60227da5cde3cd",
       "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bf5f1e94_489ea3d1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 31277
+      },
+      "writtenOn": "2022-06-23T08:26:28Z",
+      "side": 1,
+      "message": "Is there any reason for the Q_asb_2022-06 not to be merged?",
+      "parentUuid": "644c5d70_37484ac3",
+      "revId": "1557ef3aa1fbdf50ff03e24fbb60227da5cde3cd",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
     }
   ]
 }
