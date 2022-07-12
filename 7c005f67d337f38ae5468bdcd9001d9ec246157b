@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "823d7f83_74db4133",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 13648
+      },
+      "writtenOn": "2022-07-12T09:46:26Z",
+      "side": 1,
+      "message": "Must be squashed with https://review.lineageos.org/c/LineageOS/android_build/+/317095 for the next bringup.",
+      "revId": "7c005f67d337f38ae5468bdcd9001d9ec246157b",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
+    }
+  ]
+}
