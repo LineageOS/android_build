@@ -16,6 +16,23 @@
       "message": "Builds and runs fine on Marlin.",
       "revId": "2ada61099134eae7e3bb5cf34882fdacd3e5868b",
       "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "09c2665a_6e3f2bf9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 2644
+      },
+      "writtenOn": "2022-07-13T23:55:49Z",
+      "side": 1,
+      "message": "Also builds and runs fine on Surnia.",
+      "revId": "2ada61099134eae7e3bb5cf34882fdacd3e5868b",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
     }
   ]
 }
