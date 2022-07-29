@@ -34,6 +34,24 @@
       "parentUuid": "8ec2a4ab_e7892018",
       "revId": "1610d9e767497798fabc273663292687b233c717",
       "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "040bd238_9a0ad3c0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 25732
+      },
+      "writtenOn": "2022-07-29T01:43:55Z",
+      "side": 1,
+      "message": "I see\n\nbtw java.mk is still broken on AOSP master (https://cs.android.com/android/platform/superproject/+/master:build/make/core/java.mk;l\u003d173), you should first send a patch to AOSP Gerrit to fix that",
+      "parentUuid": "08bcbe84_22f15436",
+      "revId": "1610d9e767497798fabc273663292687b233c717",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
     }
   ]
 }
