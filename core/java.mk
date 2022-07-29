@@ -170,7 +170,7 @@ include $(BUILD_SYSTEM)/sdk_check.mk
 # reasons anyway).
 #
 # Note that we set this only when called from package_internal.mk and not in other cases.
-ifneq (,$(called_from_package_internal)
+ifneq (,$(called_from_package_internal))
 dex_preopt_profile_src_file := $(LOCAL_BUILT_MODULE)
 endif
 
