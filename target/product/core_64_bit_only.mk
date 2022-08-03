@@ -31,3 +31,6 @@ PRODUCT_VENDOR_PROPERTIES += dalvik.vm.dex2oat64.enabled=true
 
 TARGET_SUPPORTS_32_BIT_APPS := false
 TARGET_SUPPORTS_64_BIT_APPS := true
+ifeq ($(TARGET_SUPPORTS_OMX_SERVICE),)
+$(warning TARGET_SUPPORTS_OMX_SERVICE is undefined. Please set it to true if your target uses OMX service, or false otherwise.)
+endif
