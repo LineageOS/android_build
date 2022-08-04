@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d6130d49_f8ea56f8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 30091
+      },
+      "writtenOn": "2022-08-04T13:13:06Z",
+      "side": 1,
+      "message": "Define an optional OTA server URL for custom builders",
+      "revId": "a8ed0e7ebd7e3c46ed66f9e05bb088bbd803e57a",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
+    }
+  ]
+}
