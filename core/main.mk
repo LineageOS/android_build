@@ -390,6 +390,12 @@ ifneq (,$(user_variant))
   # Disallow mock locations by default for user builds
   ADDITIONAL_SYSTEM_PROPERTIES += ro.allow.mock.location=0
 
+  # Add OTA custom server URL for user builds if specified
+  ifneq (,$(OTA_URL))
+    ADDITIONAL_SYSTEM_PROPERTIES += \
+        lineage.updater.uri="$(OTA_URL)/api/v1/{device}/{type}/{incr}"
+  endif
+
 else # !user_variant
   # Turn on checkjni for non-user builds.
   ADDITIONAL_SYSTEM_PROPERTIES += ro.kernel.android.checkjni=1
