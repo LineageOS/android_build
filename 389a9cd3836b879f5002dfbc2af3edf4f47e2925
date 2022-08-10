@@ -118,6 +118,23 @@
       "message": "All good on my flight",
       "revId": "389a9cd3836b879f5002dfbc2af3edf4f47e2925",
       "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "679aee80_76510666",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 15173
+      },
+      "writtenOn": "2022-08-10T01:10:35Z",
+      "side": 1,
+      "message": "I\u0027ll ship the series once the current flight of nightlies is complete.",
+      "revId": "389a9cd3836b879f5002dfbc2af3edf4f47e2925",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
     }
   ]
 }
