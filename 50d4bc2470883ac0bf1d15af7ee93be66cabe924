@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cf8d6800_f200261e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 25732
+      },
+      "writtenOn": "2022-09-09T01:13:32Z",
+      "side": 1,
+      "message": "We need this to ship Xiaomi SDM710 and Xiaomi SM8150",
+      "revId": "50d4bc2470883ac0bf1d15af7ee93be66cabe924",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
+    }
+  ]
+}
