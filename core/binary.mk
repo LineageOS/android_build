@@ -40,21 +40,27 @@ endif
 
 my_soong_problems :=
 
+ifeq ($(TARGET_USES_KERNEL_PLATFORM),true)
+  KERNEL_HEADER_LIBRARY := device_kernel_headers
+else
+  KERNEL_HEADER_LIBRARY := generated_kernel_headers
+endif
+
 # Automatically replace the old-style kernel header include with a dependency
-# on the generated_kernel_headers header library
+# on the $(KERNEL_HEADER_LIBRARY) header library
 ifneq (,$(findstring $(TARGET_OUT_INTERMEDIATES)/KERNEL_OBJ/usr/include,$(LOCAL_C_INCLUDES)))
   LOCAL_C_INCLUDES := $(patsubst $(TARGET_OUT_INTERMEDIATES)/KERNEL_OBJ/usr/include,,$(LOCAL_C_INCLUDES))
-  LOCAL_HEADER_LIBRARIES += generated_kernel_headers
+  LOCAL_HEADER_LIBRARIES += $(KERNEL_HEADER_LIBRARY)
 endif
 
 # Some qcom binaries use this weird -isystem include...
 ifneq (,$(findstring $(TARGET_OUT_INTERMEDIATES)/KERNEL_OBJ/usr/include,$(LOCAL_CFLAGS)))
   LOCAL_CFLAGS := $(patsubst -isystem $(TARGET_OUT_INTERMEDIATES)/KERNEL_OBJ/usr/include,,$(LOCAL_CFLAGS))
-  LOCAL_HEADER_LIBRARIES += generated_kernel_headers
+  LOCAL_HEADER_LIBRARIES += $(KERNEL_HEADER_LIBRARY)
 endif
 
 # Remove KERNEL_OBJ/usr from any LOCAL_ADDITIONAL_DEPENDENCIES, we will
-# just include generated_kernel_headers which already has the proper
+# just include $(KERNEL_HEADER_LIBRARY) which already has the proper
 # dependency
 ifneq (,$(findstring $(TARGET_OUT_INTERMEDIATES)/KERNEL_OBJ/usr,$(LOCAL_ADDITIONAL_DEPENDENCIES)))
   LOCAL_ADDITIONAL_DEPENDENCIES := $(patsubst $(TARGET_OUT_INTERMEDIATES)/KERNEL_OBJ/usr,,$(LOCAL_ADDITIONAL_DEPENDENCIES))
