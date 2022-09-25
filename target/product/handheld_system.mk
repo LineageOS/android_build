@@ -53,7 +53,6 @@ PRODUCT_PACKAGES += \
     ManagedProvisioning \
     MmsService \
     MtpService \
-    MusicFX \
     NfcNci \
     PacProcessor \
     PrintRecommendationService \
