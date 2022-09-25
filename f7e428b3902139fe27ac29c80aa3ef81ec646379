@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a8f54ef4_909e9ce8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 21651
+      },
+      "writtenOn": "2022-09-25T12:12:39Z",
+      "side": 1,
+      "message": "Move to the \"ifeq ($(LINEAGE_BUILD),)\" instead?",
+      "revId": "f7e428b3902139fe27ac29c80aa3ef81ec646379",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
+    }
+  ]
+}
