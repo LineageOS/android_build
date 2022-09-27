@@ -16,6 +16,23 @@
       "message": "Move to the \"ifeq ($(LINEAGE_BUILD),)\" instead?",
       "revId": "f7e428b3902139fe27ac29c80aa3ef81ec646379",
       "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "08b1849a_614d652d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 16185
+      },
+      "writtenOn": "2022-09-27T21:18:37Z",
+      "side": 1,
+      "message": "superseded by manifest commit",
+      "revId": "f7e428b3902139fe27ac29c80aa3ef81ec646379",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
     }
   ]
 }
