@@ -33,6 +33,23 @@
       "message": "superseded by manifest commit",
       "revId": "f7e428b3902139fe27ac29c80aa3ef81ec646379",
       "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e123fb6e_fe6bf4ec",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 13648
+      },
+      "writtenOn": "2022-09-27T21:19:49Z",
+      "side": 1,
+      "message": "https://review.lineageos.org/c/LineageOS/android/+/339845",
+      "revId": "f7e428b3902139fe27ac29c80aa3ef81ec646379",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
     }
   ]
 }
