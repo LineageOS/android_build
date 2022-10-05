@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6cd68b59_5014403b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 25925
+      },
+      "writtenOn": "2022-10-05T14:21:22Z",
+      "side": 1,
+      "message": "Merged upstream\nI\u0027m planning to use this for /vendor on exynos9820.",
+      "revId": "a87b24c9e7f3b4ad53b9821c92dee91ee76cc5b8",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
+    }
+  ]
+}
