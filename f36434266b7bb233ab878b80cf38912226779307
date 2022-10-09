@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3fc08ed9_1ebec22e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 26658
+      },
+      "writtenOn": "2022-10-09T15:56:40Z",
+      "side": 1,
+      "message": "Builds fine for potter and sargo.\nThanks a lot!",
+      "revId": "f36434266b7bb233ab878b80cf38912226779307",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
+    }
+  ]
+}
