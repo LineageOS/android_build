@@ -16,6 +16,24 @@
       "message": "Do we need an announcement before we merge this?",
       "revId": "238f949b655b495f3ef539006b037e88bb86e813",
       "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "66be97a6_59a884d3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 4550
+      },
+      "writtenOn": "2022-10-11T20:21:59Z",
+      "side": 1,
+      "message": "I don\u0027t think we do, this has been deprecated for a few versions now and build will error out if the device still uses it anyway",
+      "parentUuid": "b44e5190_f3c43eeb",
+      "revId": "238f949b655b495f3ef539006b037e88bb86e813",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
     }
   ]
 }
