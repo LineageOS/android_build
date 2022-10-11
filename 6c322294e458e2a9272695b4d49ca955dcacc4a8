@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1c9c621d_a57dfdf0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 17656
+      },
+      "writtenOn": "2022-10-11T20:04:50Z",
+      "side": 1,
+      "message": "As agreed with Nolen, added an empty commit to document, what has been implemented and what has been skipped (and why)",
+      "revId": "6c322294e458e2a9272695b4d49ca955dcacc4a8",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
+    }
+  ]
+}
