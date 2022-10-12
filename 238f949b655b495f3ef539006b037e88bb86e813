@@ -52,6 +52,23 @@
       "parentUuid": "66be97a6_59a884d3",
       "revId": "238f949b655b495f3ef539006b037e88bb86e813",
       "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "57b720ba_caf39249",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 28232
+      },
+      "writtenOn": "2022-10-12T04:00:40Z",
+      "side": 1,
+      "message": "Then we\u0027re good to go.",
+      "revId": "238f949b655b495f3ef539006b037e88bb86e813",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
     }
   ]
 }
