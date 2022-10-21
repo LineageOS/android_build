@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b241c9d9_caa93efa",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 14048
+      },
+      "writtenOn": "2022-10-21T02:30:51Z",
+      "side": 1,
+      "message": "Verified that futility-host is included in otatools for dragon",
+      "revId": "9f628e6b6c4dd7a395b71a2b653cbe2cad80e10a",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
+    }
+  ]
+}
