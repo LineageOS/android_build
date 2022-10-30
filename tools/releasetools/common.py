@@ -2379,7 +2379,7 @@ def SignFile(input_name, output_name, key, password, min_api_level=None,
 
   proc = Run(cmd, stdin=subprocess.PIPE)
   if password is not None:
-    password += "\n"
+    password += b"\n"
   stdoutdata, _ = proc.communicate(password)
   if proc.returncode != 0:
     raise ExternalError(
