@@ -2379,7 +2379,7 @@ def SignFile(input_name, output_name, key, password, min_api_level=None,
 
   proc = Run(cmd, stdin=subprocess.PIPE)
   if password is not None:
-    password += "\n"
+    password += b"\n"
   stdoutdata, _ = proc.communicate(password)
   if proc.returncode != 0:
     raise ExternalError(
@@ -2684,7 +2684,7 @@ class PasswordManager(object):
               ps = subprocess.Popen(self.secure_storage_cmd, shell=True, stdout=subprocess.PIPE)
               output = ps.communicate()[0]
               if ps.returncode == 0:
-                current[i] = output
+                current[i] = output.decode('utf-8')
             except Exception as e:
               print(e)
               pass
