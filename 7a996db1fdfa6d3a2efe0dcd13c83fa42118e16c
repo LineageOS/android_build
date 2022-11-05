@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e2a51443_d474bc0c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 16185
+      },
+      "writtenOn": "2022-11-05T20:31:17Z",
+      "side": 1,
+      "message": "No, for personal picking of course fine but we won\u0027t take this - just sign it with release-keys, it\u0027s not hard to do.",
+      "revId": "7a996db1fdfa6d3a2efe0dcd13c83fa42118e16c",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
+    }
+  ]
+}
