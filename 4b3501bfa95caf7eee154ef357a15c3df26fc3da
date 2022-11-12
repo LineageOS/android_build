@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d5643a21_102d805d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 21152
+      },
+      "writtenOn": "2022-11-12T07:59:02Z",
+      "side": 1,
+      "message": "CVE-2022-2209 does not appear to be a valid CVE number anymore",
+      "revId": "4b3501bfa95caf7eee154ef357a15c3df26fc3da",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
+    }
+  ]
+}
