@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ec720244_1f4f1040",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 30416
+      },
+      "writtenOn": "2022-11-18T06:34:34Z",
+      "side": 1,
+      "message": "Without this, when BOARD_RAMDISK_USE_LZ4 is set to true, it ends up using gzip instead of lz4",
+      "revId": "7e3992aa3da4e3556fe531d549d4628c62fdea40",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
+    }
+  ]
+}
