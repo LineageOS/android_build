@@ -16,6 +16,23 @@
       "message": "This topic (Q_asb_2022-11) builds and runs fine on Surnia.",
       "revId": "4306ceac4fa96b6744b30f3b935c41b8be9b0dcf",
       "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d418edb1_8b9a7066",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 18682
+      },
+      "writtenOn": "2022-11-18T22:00:15Z",
+      "side": 1,
+      "message": "thank you \nworks on linegeos 16.0 with microg on samsung s7 ",
+      "revId": "4306ceac4fa96b6744b30f3b935c41b8be9b0dcf",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
     }
   ]
 }
