@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a6715e6d_e264dc75",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 18682
+      },
+      "writtenOn": "2022-11-18T21:56:00Z",
+      "side": 1,
+      "message": "thank you \nworks on linegeos 16.0 with microg on samsung s7 ",
+      "revId": "79ae08630f605c04ee9b22b2a994e3a1834dba2c",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
+    }
+  ]
+}
