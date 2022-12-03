@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6a782b50_fb80de8f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 15173
+      },
+      "writtenOn": "2022-12-03T18:21:05Z",
+      "side": 1,
+      "message": "yolo, shipit. can\u0027t really break signing any worse.",
+      "revId": "3735f2578eb0790f1e1f8a14e52722ec9ef9768c",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
+    }
+  ]
+}
