@@ -592,7 +592,7 @@ def ProcessTargetFiles(input_tf_zip, output_tf_zip, misc_info,
             data,
             payload_key,
             container_key,
-            key_passwords,
+            key_passwords.get(container_key, None),
             apk_keys,
             codename_to_api_level_map,
             no_hashtree=None,  # Let apex_util determine if hash tree is needed
