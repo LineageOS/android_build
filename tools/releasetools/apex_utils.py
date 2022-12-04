@@ -208,7 +208,7 @@ class ApexApkSigner(object):
     return self.apex_path
 
 
-def SignApexPayload(avbtool, payload_file, payload_key_path, payload_key_name,
+def SignApexPayload(avbtool, payload_file, payload_key_path, payload_pw, payload_key_name,
                     algorithm, salt, hash_algorithm, no_hashtree, signing_args=None):
   """Signs a given payload_file with the payload key."""
   # Add the new footer. Old footer, if any, will be replaced by avbtool.
@@ -222,6 +222,9 @@ def SignApexPayload(avbtool, payload_file, payload_key_path, payload_key_name,
          '--hash_algorithm', hash_algorithm]
   if no_hashtree:
     cmd.append('--no_hashtree')
+  if payload_pw:
+    cmd.append('--key_password')
+    cmd.append(payload_pw)
   if signing_args:
     cmd.extend(shlex.split(signing_args))
 
@@ -234,15 +237,18 @@ def SignApexPayload(avbtool, payload_file, payload_key_path, payload_key_name,
 
   # Verify the signed payload image with specified public key.
   logger.info('Verifying %s', payload_file)
-  VerifyApexPayload(avbtool, payload_file, payload_key_path, no_hashtree)
+  VerifyApexPayload(avbtool, payload_file, payload_key_path, payload_pw, no_hashtree)
 
 
-def VerifyApexPayload(avbtool, payload_file, payload_key, no_hashtree=False):
+def VerifyApexPayload(avbtool, payload_file, payload_key, payload_pw=None, no_hashtree=False):
   """Verifies the APEX payload signature with the given key."""
   cmd = [avbtool, 'verify_image', '--image', payload_file,
          '--key', payload_key]
   if no_hashtree:
     cmd.append('--accept_zeroed_hashtree')
+  if payload_pw:
+    cmd.append('--key_password')
+    cmd.append(payload_pw)
   try:
     common.RunAndCheckOutput(cmd)
   except common.ExternalError as e:
@@ -358,10 +364,12 @@ def SignUncompressedApex(avbtool, apex_file, payload_key, container_key,
   payload_info = ParseApexPayloadInfo(avbtool, payload_file)
   if no_hashtree is None:
     no_hashtree = payload_info.get("Tree Size", 0) == 0
+  payload_pw = container_pw.get(payload_key) if container_pw else None
   SignApexPayload(
       avbtool,
       payload_file,
       payload_key,
+      payload_pw,
       payload_info['apex.key'],
       payload_info['Algorithm'],
       payload_info['Salt'],
@@ -370,7 +378,7 @@ def SignUncompressedApex(avbtool, apex_file, payload_key, container_key,
       signing_args)
 
   # 2b. Update the embedded payload public key.
-  payload_public_key = common.ExtractAvbPublicKey(avbtool, payload_key)
+  payload_public_key = common.ExtractAvbPublicKey(avbtool, payload_key, payload_pw)
   common.ZipDelete(apex_file, APEX_PAYLOAD_IMAGE)
   if APEX_PUBKEY in zip_items:
     common.ZipDelete(apex_file, APEX_PUBKEY)
