@@ -2236,6 +2236,12 @@ def GetKeyPasswords(keylist):
       no_passwords.append(k)
       continue
 
+    if k.endswith(".pem") and os.path.exists(k):
+      with open(k, "r") as f:
+        if f.read().startswith("-----BEGIN ENCRYPTED PRIVATE KEY-----"):
+          need_passwords.append(k)
+          continue
+
     p = Run(["openssl", "pkcs8", "-in", k+OPTIONS.private_key_suffix,
              "-inform", "DER", "-nocrypt"],
             stdin=devnull.fileno(),
