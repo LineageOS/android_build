@@ -2242,6 +2242,10 @@ def GetKeyPasswords(keylist):
           need_passwords.append(k)
           continue
 
+    if k == "/lineage/signing/signing-keys/com.android.adbd.pem":
+      need_passwords.append(k)
+      continue
+
     p = Run(["openssl", "pkcs8", "-in", k+OPTIONS.private_key_suffix,
              "-inform", "DER", "-nocrypt"],
             stdin=devnull.fileno(),
