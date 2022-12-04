@@ -2236,6 +2236,16 @@ def GetKeyPasswords(keylist):
       no_passwords.append(k)
       continue
 
+    if k.endswith('.pem'):
+      p = Run(["openssl", "rsa", "-in", k, "-noout", "-passin", "pass:"],
+              stdin=devnull.fileno(),
+              stdout=devnull.fileno(),
+              stderr=subprocess.PIPE)
+      _, stderr = p.communicate()
+      if stderr.strip().endswith('empty password'):
+        need_passwords.append(k)
+        continue
+
     p = Run(["openssl", "pkcs8", "-in", k+OPTIONS.private_key_suffix,
              "-inform", "DER", "-nocrypt"],
             stdin=devnull.fileno(),
