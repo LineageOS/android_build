@@ -3549,7 +3549,7 @@ def ExtractPublicKey(cert):
   return pubkey
 
 
-def ExtractAvbPublicKey(avbtool, key):
+def ExtractAvbPublicKey(avbtool, key, key_password=None):
   """Extracts the AVB public key from the given public or private key.
 
   Args:
@@ -3560,8 +3560,11 @@ def ExtractAvbPublicKey(avbtool, key):
     The path to the extracted AVB public key file.
   """
   output = MakeTempFile(prefix='avb-', suffix='.avbpubkey')
-  RunAndCheckOutput(
-      [avbtool, 'extract_public_key', "--key", key, "--output", output])
+  args = [avbtool, 'extract_public_key', "--key", key, "--output", output]
+  if key_password:
+    args.append('--key_password')
+    args.append(key_password)
+  RunAndCheckOutput(args)
   return output
 
 
