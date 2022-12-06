@@ -2910,8 +2910,6 @@ class PasswordManager(object):
             missing.append(i)
       # Are all the passwords already in the file?
       if not missing:
-        if "ANDROID_SECURE_STORAGE_CMD" in os.environ:
-          del os.environ["ANDROID_SECURE_STORAGE_CMD"]
         return current
 
       for i in missing:
