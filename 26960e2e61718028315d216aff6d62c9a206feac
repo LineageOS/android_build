@@ -16,6 +16,23 @@
       "message": "Hacky but works, feel free to improve.",
       "revId": "26960e2e61718028315d216aff6d62c9a206feac",
       "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1f6edb19_ef116151",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 2195
+      },
+      "writtenOn": "2022-12-06T11:04:55Z",
+      "side": 1,
+      "message": "Not needed if we directly support `ANDROID_SECURE_STORAGE_CMD` in avbtool.",
+      "revId": "26960e2e61718028315d216aff6d62c9a206feac",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
     }
   ]
 }
