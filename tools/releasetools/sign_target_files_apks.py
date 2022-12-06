@@ -254,6 +254,7 @@ def GetApkCerts(certmap):
     if not cert:
       cert = "PRESIGNED"
     certmap[apk] = OPTIONS.key_map.get(cert, cert)
+  certmap['SdkSandbox.apk'] = certmap['SdkSandboxClient.apk']
 
   return certmap
 
