@@ -728,4 +728,27 @@ ifneq (,$(runtime_resource_overlays_product)$(runtime_resource_overlays_vendor))
         vendor \
     )
   endif
+
+  ifdef LOCAL_ADDITIONAL_RRO_PACKAGE_NAME
+    ifdef runtime_resource_overlays_product
+      $(call append_enforce_rro_sources, \
+          $(my_register_name), \
+          true, \
+          $(LOCAL_ADDITIONAL_RRO_PACKAGE_NAME), \
+          $(enforce_rro_use_res_lib), \
+          $(runtime_resource_overlays_product), \
+          product \
+      )
+    endif
+    ifdef runtime_resource_overlays_vendor
+      $(call append_enforce_rro_sources, \
+          $(my_register_name), \
+          true, \
+          $(LOCAL_ADDITIONAL_RRO_PACKAGE_NAME), \
+          $(enforce_rro_use_res_lib), \
+          $(runtime_resource_overlays_vendor), \
+          vendor \
+      )
+    endif
+  endif
 endif
