@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3a325ec0_db98757c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 2195
+      },
+      "writtenOn": "2022-12-19T20:37:39Z",
+      "side": 1,
+      "message": "TODOs:\n\n1. Test and get it working with some Android.mk app\n2. Hook up to soong for Android.bp\n3. Potentially allow multiple values - need some foreach loops.",
+      "revId": "ada89f21ce6b4ccab02c5c7b70e2da99ad8872cb",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
+    }
+  ]
+}
