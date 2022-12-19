@@ -509,6 +509,7 @@ ADDITIONAL_PRODUCT_PROPERTIES := $(strip $(ADDITIONAL_PRODUCT_PROPERTIES))
 
 ifneq ($(PRODUCT_ENFORCE_RRO_TARGETS),)
 ENFORCE_RRO_SOURCES :=
+ADDITIONAL_RRO_SOURCES :=
 endif
 
 # Color-coded warnings including current module info
@@ -581,6 +582,7 @@ endef
 # -------------------------------------------------------------------
 ifneq ($(PRODUCT_ENFORCE_RRO_TARGETS),)
 $(call generate_all_enforce_rro_packages)
+$(call generate_all_additional_rro_packages)
 endif
 
 # -------------------------------------------------------------------

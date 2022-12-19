@@ -48,6 +48,9 @@ def get_args():
     parser.add_argument(
         '-o', '--output', required=True,
         help='Output manifest file path.')
+    parser.add_argument(
+        '--original-package', required=False,
+        help='Use original-package name.')
     return parser.parse_args()
 
 
@@ -64,6 +67,10 @@ def main(argv):
       f.close()
       dom = parseString(data)
       package_name = dom.documentElement.getAttribute('package')
+      original_package_name = dom.documentElement.getAttribute('original-package')
+
+  if args.original_package and original_package_name:
+    package_name = original_package_name
 
   with open(args.output, 'w+') as f:
     f.write(ANDROID_MANIFEST_TEMPLATE % (package_name, partition, package_name, priority))
