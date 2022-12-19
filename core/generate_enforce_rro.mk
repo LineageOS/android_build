@@ -13,8 +13,15 @@ else
 $(rro_android_manifest_file): $(enforce_rro_source_manifest_package_info)
 endif
 
+ifeq (true,$(enforce_rro_additional))
+  original_package_arg := --original-package
+else
+  original_package_arg :=
+endif
+
 $(rro_android_manifest_file): PRIVATE_PACKAGE_INFO := $(enforce_rro_source_manifest_package_info)
 $(rro_android_manifest_file): PRIVATE_USE_PACKAGE_NAME := $(use_package_name_arg)
+$(rro_android_manifest_file): PRIVATE_ORIGINAL_PACKAGE := $(original_package_arg)
 $(rro_android_manifest_file): PRIVATE_PARTITION := $(enforce_rro_partition)
 # There should be no duplicate overrides, but just in case, set the priority of
 # /product overlays to be higher than /vendor, to at least get deterministic results.
@@ -23,6 +30,7 @@ $(rro_android_manifest_file): build/make/tools/generate-enforce-rro-android-mani
 	$(hide) build/make/tools/generate-enforce-rro-android-manifest.py \
 	    --package-info $(PRIVATE_PACKAGE_INFO) \
 	    $(PRIVATE_USE_PACKAGE_NAME) \
+      $(PRIVATE_ORIGINAL_PACKAGE) \
 	    --partition $(PRIVATE_PARTITION) \
 	    --priority $(PRIVATE_PRIORITY) \
 	    -o $@
