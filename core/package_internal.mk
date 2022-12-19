@@ -96,6 +96,22 @@ ifneq (,$(override_manifest_name))
 LOCAL_MANIFEST_PACKAGE_NAME := $(override_manifest_name)
 endif
 
+# If LOCAL_MODULE matches a rule in PRODUCT_ADDITIONAL_RRO_PACKAGES,
+# generate an additional rror for it
+ifneq (,$(PRODUCT_ADDITIONAL_RRO_PACKAGES))
+additional_rro_needed := $(strip $(word 1,\
+  $(foreach rule,$(PRODUCT_ADDITIONAL_RRO_PACKAGES),\
+  $(eval _pkg_name_pat := $(call word-colon,1,$(rule)))\
+  $(eval _manifest_name_pat := $(call word-colon,2,$(rule)))\
+  $(if $(filter $(_pkg_name_pat),$(LOCAL_MODULE)),\
+    $(patsubst $(_pkg_name_pat),$(_manifest_name_pat),$(LOCAL_MODULE))\
+     )\
+   )\
+))
+endif
+
+additional_rro_needed := true
+
 include $(BUILD_SYSTEM)/force_aapt2.mk
 # validate that app contains a manifest file for aapt2
 ifeq (,$(strip $(LOCAL_MANIFEST_FILE)$(LOCAL_FULL_MANIFEST_FILE)))
@@ -727,5 +743,28 @@ ifneq (,$(runtime_resource_overlays_product)$(runtime_resource_overlays_vendor))
         $(runtime_resource_overlays_vendor), \
         vendor \
     )
+  endif
+
+  ifneq (,$(additional_rro_needed))
+    ifdef runtime_resource_overlays_product
+      $(call append_additional_rro_sources, \
+          $(my_register_name), \
+          $(enforce_rro_is_manifest_package_name), \
+          $(enforce_rro_manifest_package_info), \
+          $(enforce_rro_use_res_lib), \
+          $(runtime_resource_overlays_product), \
+          product \
+      )
+    endif
+    ifdef runtime_resource_overlays_vendor
+      $(call append_additional_rro_sources, \
+          $(my_register_name), \
+          $(enforce_rro_is_manifest_package_name), \
+          $(enforce_rro_manifest_package_info), \
+          $(enforce_rro_use_res_lib), \
+          $(runtime_resource_overlays_vendor), \
+          vendor \
+      )
+    endif
   endif
 endif
