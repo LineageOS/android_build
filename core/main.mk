@@ -581,6 +581,7 @@ endef
 # -------------------------------------------------------------------
 ifneq ($(PRODUCT_ENFORCE_RRO_TARGETS),)
 $(call generate_all_enforce_rro_packages)
+$(call generate_all_additional_rro_packages)
 endif
 
 # -------------------------------------------------------------------
