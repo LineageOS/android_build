@@ -3753,6 +3753,7 @@ $(foreach source,$(ENFORCE_RRO_SOURCES), \
   $(eval enforce_rro_use_res_lib := $(word 4,$(_o))) \
   $(eval enforce_rro_source_overlays := $(subst :, ,$(word 5,$(_o)))) \
   $(eval enforce_rro_partition := $(word 6,$(_o))) \
+  $(eval enforce_rro_additional := false) \
   $(eval include $(BUILD_SYSTEM)/generate_enforce_rro.mk) \
   $(eval ALL_MODULES.$$(enforce_rro_source_module).REQUIRED_FROM_TARGET += $$(LOCAL_PACKAGE_NAME)) \
 )
