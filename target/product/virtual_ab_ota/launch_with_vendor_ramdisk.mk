@@ -25,3 +25,5 @@ PRODUCT_PACKAGES += \
     linker.vendor_ramdisk \
     e2fsck.vendor_ramdisk \
     fsck.f2fs.vendor_ramdisk \
+    resize2fs.vendor_ramdisk \
+    tune2fs.vendor_ramdisk
