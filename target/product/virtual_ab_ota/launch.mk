@@ -18,4 +18,6 @@ PRODUCT_VIRTUAL_AB_OTA := true
 
 PRODUCT_VENDOR_PROPERTIES += ro.virtual_ab.enabled=true
 
-PRODUCT_PACKAGES += e2fsck_ramdisk
+PRODUCT_PACKAGES += \
+    e2fsck_ramdisk \
+    tune2fs_ramdisk
