@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4ee0f4f3_80a945ff",
+        "filename": "core/generate_enforce_rro.mk",
+        "patchSetId": 14
+      },
+      "lineNbr": 4,
+      "author": {
+        "id": 2195
+      },
+      "writtenOn": "2022-12-21T23:23:46Z",
+      "side": 1,
+      "message": "If we want more in addition to loops in the calls to append, this will also need to be managed.",
+      "revId": "d0e3999cabb9c9b92eb51e972a9b3683a3f3266c",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6ba7bdde_9d72aecd",
+        "filename": "core/soong_app_prebuilt.mk",
+        "patchSetId": 14
+      },
+      "lineNbr": 259,
+      "author": {
+        "id": 2195
+      },
+      "writtenOn": "2022-12-21T23:23:46Z",
+      "side": 1,
+      "message": "Need to change to `ifdef LOCAL_ADDITIONAL_RRO_PACKAGE_NAME`",
+      "revId": "d0e3999cabb9c9b92eb51e972a9b3683a3f3266c",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "faa2e2cf_5d83d38f",
+        "filename": "core/soong_app_prebuilt.mk",
+        "patchSetId": 14
+      },
+      "lineNbr": 264,
+      "author": {
+        "id": 2195
+      },
+      "writtenOn": "2022-12-21T23:23:46Z",
+      "side": 1,
+      "message": "`$(LOCAL_ADDITIONAL_RRO_PACKAGE_NAME)`",
+      "revId": "d0e3999cabb9c9b92eb51e972a9b3683a3f3266c",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9135fda3_6b2bebfe",
+        "filename": "core/soong_app_prebuilt.mk",
+        "patchSetId": 14
+      },
+      "lineNbr": 275,
+      "author": {
+        "id": 2195
+      },
+      "writtenOn": "2022-12-21T23:23:46Z",
+      "side": 1,
+      "message": "`$(LOCAL_ADDITIONAL_RRO_PACKAGE_NAME)`",
+      "revId": "d0e3999cabb9c9b92eb51e972a9b3683a3f3266c",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
+    }
+  ]
+}
