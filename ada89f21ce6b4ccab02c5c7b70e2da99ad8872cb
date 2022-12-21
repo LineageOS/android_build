@@ -16,6 +16,24 @@
       "message": "TODOs:\n\n1. Test and get it working with some Android.mk app\n2. Hook up to soong for Android.bp\n3. Potentially allow multiple values - need some foreach loops.",
       "revId": "ada89f21ce6b4ccab02c5c7b70e2da99ad8872cb",
       "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d3bc2e12_36a7c1c5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 2195
+      },
+      "writtenOn": "2022-12-21T21:00:14Z",
+      "side": 1,
+      "message": "1. Meh\n2. I give up, https://review.lineageos.org/c/LineageOS/android_vendor_lineage/+/346368 Build additional RRO package, for Aperture dev APK \n3. Could still be done to allow more than one override per app if desired, it\u0027ll just be complicated.",
+      "parentUuid": "3a325ec0_db98757c",
+      "revId": "ada89f21ce6b4ccab02c5c7b70e2da99ad8872cb",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
     }
   ]
 }
