@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8ef8009b_93428540",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 31013
+      },
+      "writtenOn": "2023-01-07T16:32:45Z",
+      "side": 1,
+      "message": "Fine on alioth.",
+      "revId": "6a82c080b42a54e7c058e079a5a7c503c8c0b3fa",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
+    }
+  ]
+}
