@@ -16,6 +16,23 @@
       "message": "(for the whole topic)",
       "revId": "07de740022dcd5acaf6c770c3bc5225ae9c34d94",
       "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "14b51003_9100cf96",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 17656
+      },
+      "writtenOn": "2023-01-08T15:02:14Z",
+      "side": 1,
+      "message": "OK for hotdog",
+      "revId": "07de740022dcd5acaf6c770c3bc5225ae9c34d94",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
     }
   ]
 }
