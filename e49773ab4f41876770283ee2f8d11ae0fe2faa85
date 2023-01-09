@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "66b188d3_7fe574ad",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 2644
+      },
+      "writtenOn": "2023-01-09T00:15:00Z",
+      "side": 1,
+      "message": "This patch set (Q_asb_2023-01) builds and works fine on Surnia.",
+      "revId": "e49773ab4f41876770283ee2f8d11ae0fe2faa85",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
+    }
+  ]
+}
