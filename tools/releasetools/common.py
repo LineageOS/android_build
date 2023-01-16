@@ -2045,7 +2045,11 @@ def UnzipToDir(filename, dirname, patterns=None):
       return
     cmd.extend(filtered)
 
-  RunAndCheckOutput(cmd)
+
+  env = os.environ.copy()
+  env['UNZIP_DISABLE_ZIPBOMB_DETECTION'] = 'TRUE'
+
+  RunAndCheckOutput(cmd, env=env)
 
 
 def UnzipTemp(filename, patterns=None):
