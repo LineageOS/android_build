@@ -6902,7 +6902,7 @@ endif
 # -----------------------------------------------------------------
 # The SDK
 
-ifneq ($(filter sdk,$(MAKECMDGOALS)),)
+ifneq ($(filter sdk sdk_addon,$(MAKECMDGOALS)),)
 
 # The SDK includes host-specific components, so it belongs under HOST_OUT.
 sdk_dir := $(HOST_OUT)/sdk/$(TARGET_PRODUCT)
