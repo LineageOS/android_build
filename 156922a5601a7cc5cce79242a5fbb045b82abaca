@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6d5ed300_473f8493",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 13559
+      },
+      "writtenOn": "2023-01-27T07:23:30Z",
+      "side": 1,
+      "message": "sdk_addon is still broken, for some reason its not installing userdata properly\n\n`cp: bad \u0027out/target/product/emulator_x86_64/data\u0027: No such file or directory`",
+      "revId": "156922a5601a7cc5cce79242a5fbb045b82abaca",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
+    }
+  ]
+}
