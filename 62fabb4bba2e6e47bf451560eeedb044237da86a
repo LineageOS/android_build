@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5c5f6184_2d04da46",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 13028
+      },
+      "writtenOn": "2023-03-11T18:15:05Z",
+      "side": 1,
+      "message": "No need to include it, we don\u0027t have translations for it, yet",
+      "revId": "62fabb4bba2e6e47bf451560eeedb044237da86a",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
+    }
+  ]
+}
