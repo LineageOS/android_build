@@ -108,4 +108,5 @@ PRODUCT_LOCALES := \
 PRODUCT_LOCALES += \
         ast_ES \
         gd_GB \
-        cy_GB
+        cy_GB \
+        fur_IT
