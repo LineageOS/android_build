@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "db3f03f1_5ca49c98",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 20587
+      },
+      "writtenOn": "2023-03-30T15:10:44Z",
+      "side": 1,
+      "message": "Successfully build bacon with all patches from this topic and booted successfully on a Sony lilac",
+      "revId": "1c07411e4f522d4490486231141df8f236c7a659",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
+    }
+  ]
+}
