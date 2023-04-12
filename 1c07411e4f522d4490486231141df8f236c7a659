@@ -16,6 +16,23 @@
       "message": "Successfully build bacon with all patches from this topic and booted successfully on a Sony lilac",
       "revId": "1c07411e4f522d4490486231141df8f236c7a659",
       "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0351d6e6_df5725b0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 23699
+      },
+      "writtenOn": "2023-04-12T07:13:35Z",
+      "side": 1,
+      "message": "Will it be in \"Merged\" status in the future?",
+      "revId": "1c07411e4f522d4490486231141df8f236c7a659",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
     }
   ]
 }
