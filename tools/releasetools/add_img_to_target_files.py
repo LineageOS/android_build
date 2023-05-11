@@ -65,6 +65,7 @@ import ota_metadata_pb2
 
 from apex_utils import GetApexInfoFromTargetFiles
 from common import AddCareMapForAbOta, ZipDelete
+from concurrent.futures import ThreadPoolExecutor
 
 if sys.hexversion < 0x02070000:
   print("Python 2.7 or newer is required.", file=sys.stderr)
@@ -924,8 +925,10 @@ def AddImagesToTargetFiles(filename):
       ("system_dlkm", has_system_dlkm, AddSystemDlkm, []),
       ("system_other", has_system_other, AddSystemOther, []),
   )
-  for call in add_partition_calls:
-    add_partition(*call)
+
+  with ThreadPoolExecutor(max_workers=len(add_partition_calls)) as executor:
+    for future in [executor.submit(add_partition, *call) for call in add_partition_calls]:
+      future.result()
 
   AddApexInfo(output_zip)
 
