@@ -191,8 +191,7 @@ def UpdateDeviceState(device_state, build_info, boot_variable_values,
       partition_fingerprints = set()
       for runtime_build_info in build_info_set:
         partition_devices.add(
-            runtime_build_info.GetPartitionBuildProp('ro.product.device',
-                                                     partition))
+            runtime_build_info.GetBuildProp('ro.product.device'))
         partition_fingerprints.add(
             runtime_build_info.GetPartitionFingerprint(partition))
 
