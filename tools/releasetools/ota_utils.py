@@ -20,6 +20,7 @@ import struct
 import zipfile
 
 import ota_metadata_pb2
+import common
 from common import (ZipDelete, ZipClose, OPTIONS, MakeTempFile,
                     ZipWriteStr, BuildInfo, LoadDictionaryFromFile,
                     SignFile, PARTITIONS_WITH_BUILD_PROP, PartitionBuildProps)
@@ -190,9 +191,13 @@ def UpdateDeviceState(device_state, build_info, boot_variable_values,
       partition_devices = set()
       partition_fingerprints = set()
       for runtime_build_info in build_info_set:
-        partition_devices.add(
-            runtime_build_info.GetPartitionBuildProp('ro.product.device',
-                                                     partition))
+        try:
+            partition_devices.add(
+                runtime_build_info.GetPartitionBuildProp('ro.product.device',
+                                                         partition))
+        except common.ExternalError:
+            partition_devices.add(
+                runtime_build_info.GetBuildProp('ro.product.device'))
         partition_fingerprints.add(
             runtime_build_info.GetPartitionFingerprint(partition))
 
