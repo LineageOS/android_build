@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "89c0d563_7562fa40",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 14048
+      },
+      "writtenOn": "2023-05-25T17:06:05Z",
+      "side": 1,
+      "message": "This is only for picking. A better solution would need found for merging, some sort of fallback instead of a blanket replacement.",
+      "revId": "99d5c6defcb552ee2c3f3aa69e230aed583ea52e",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
+    }
+  ]
+}
