@@ -94,6 +94,7 @@ $(call add_json_list, AAPTPrebuiltDPI,                   $(PRODUCT_AAPT_PREBUILT
 
 $(call add_json_str,  DefaultAppCertificate,             $(PRODUCT_DEFAULT_DEV_CERTIFICATE))
 
+$(call add_json_str,  AppsDefaultVersionCode,            $(APPS_DEFAULT_VERSION_CODE))
 $(call add_json_str,  AppsDefaultVersionName,            $(APPS_DEFAULT_VERSION_NAME))
 
 $(call add_json_list, SanitizeHost,                      $(SANITIZE_HOST))
