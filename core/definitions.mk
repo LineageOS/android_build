@@ -2297,7 +2297,7 @@ $(hide) $(AAPT2) link -o $@ \
   $(if $(filter --product,$(PRIVATE_AAPT_FLAGS)),,$(addprefix --product ,$(PRIVATE_TARGET_AAPT_CHARACTERISTICS))) \
   $(addprefix -c ,$(PRIVATE_PRODUCT_AAPT_CONFIG)) \
   $(addprefix --preferred-density ,$(PRIVATE_PRODUCT_AAPT_PREF_CONFIG)) \
-  $(if $(filter --version-code,$(PRIVATE_AAPT_FLAGS)),,--version-code $(PLATFORM_SDK_VERSION)) \
+  $(if $(filter --version-code,$(PRIVATE_AAPT_FLAGS)),,--version-code $(APPS_DEFAULT_VERSION_CODE)) \
   $(if $(filter --version-name,$(PRIVATE_AAPT_FLAGS)),,--version-name $(APPS_DEFAULT_VERSION_NAME)) \
   $(addprefix --rename-manifest-package ,$(PRIVATE_MANIFEST_PACKAGE_NAME)) \
   $(addprefix --rename-instrumentation-target-package ,$(PRIVATE_MANIFEST_INSTRUMENTATION_FOR)) \
