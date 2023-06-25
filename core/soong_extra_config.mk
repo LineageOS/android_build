@@ -55,6 +55,7 @@ $(call add_json_str, SystemServerCompilerFilter, $(PRODUCT_SYSTEM_SERVER_COMPILE
 $(call add_json_bool, Product16KDeveloperOption, $(filter true,$(PRODUCT_16K_DEVELOPER_OPTION)))
 
 $(call add_json_str, RecoveryDefaultRotation, $(TARGET_RECOVERY_DEFAULT_ROTATION))
+$(call add_json_str, RecoveryDefaultTouchRotation, $(TARGET_RECOVERY_DEFAULT_TOUCH_ROTATION))
 $(call add_json_str, RecoveryOverscanPercent, $(TARGET_RECOVERY_OVERSCAN_PERCENT))
 $(call add_json_str, RecoveryPixelFormat, $(TARGET_RECOVERY_PIXEL_FORMAT))
 
