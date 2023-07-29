@@ -36,8 +36,12 @@ PRODUCT_PACKAGES += \
 
 ifeq ($(LINEAGE_BUILD),)
 PRODUCT_PACKAGES += \
-    Camera2 \
     LatinIME
+
+ifneq ($(PRODUCT_NO_CAMERA),true)
+PRODUCT_PACKAGES += \
+    Camera2
+endif
 endif
 
 PRODUCT_PACKAGES_DEBUG += \
