@@ -24,7 +24,6 @@ $(call inherit-product, $(SRC_TARGET_DIR)/product/media_product.mk)
 PRODUCT_PACKAGES += \
     Browser2 \
     Calendar \
-    Camera2 \
     Contacts \
     DeskClock \
     Gallery2 \
@@ -34,6 +33,11 @@ PRODUCT_PACKAGES += \
     QuickSearchBox \
     SettingsIntelligence \
     frameworks-base-overlays
+
+ifneq ($(PRODUCT_NO_CAMERA),true)
+PRODUCT_PACKAGES += \
+    Camera2
+endif
 
 ifeq ($(LINEAGE_BUILD),)
 PRODUCT_PACKAGES += \
