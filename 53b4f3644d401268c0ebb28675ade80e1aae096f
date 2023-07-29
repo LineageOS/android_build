@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "be6e61c1_9885d7b0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 13648
+      },
+      "writtenOn": "2023-07-29T22:09:52Z",
+      "side": 1,
+      "message": "This change is pointless in this branch.",
+      "revId": "53b4f3644d401268c0ebb28675ade80e1aae096f",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bf097142_9a53f11c",
+        "filename": "target/product/handheld_product.mk",
+        "patchSetId": 1
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 13648
+      },
+      "writtenOn": "2023-07-29T22:09:52Z",
+      "side": 1,
+      "message": "See this.",
+      "revId": "53b4f3644d401268c0ebb28675ade80e1aae096f",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
+    }
+  ]
+}
