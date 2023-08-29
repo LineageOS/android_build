@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bab11d9d_4784d410",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 20587
+      },
+      "writtenOn": "2023-08-29T16:07:01Z",
+      "side": 1,
+      "message": "Not picked from R_asb_2023-07:\n - I77f4218599511ff4f9f3790e4942a329d5a18da4 (in android_tools_apksig): missing Github branch in LOS fork\n - Ibd3ee52c5993a541abb7b373e4052091d13e9c4f (in android_frameworks_opt_net_wifi): PSK not applicable\n - I848545f7aee202495c515f47a32871a2cb6ae707 (in android_frameworks_base): EXTRA_REMOTE_INPUT_HISTORY_ITEMS doesn\u0027t exist yet\n\nBuilds and runs fine on Sony XZ1C",
+      "revId": "70e77dd3c8f9cadf3a73bd662086bdaa3f482886",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
+    }
+  ]
+}
