@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bbd8093a_7e463ed7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 20587
+      },
+      "writtenOn": "2023-08-29T16:18:23Z",
+      "side": 1,
+      "message": "I was asked to provide my backports for July\u0026August.\n\nCurrently missing compared to R_asb_2023-08:\nId951f8710aff9f9a907f4fc56035533eb6f6b760 : Requires 17.1 branch for LineageOS/android_system_ca-certificates \n\nTested to build and run on Sony XZ1C",
+      "revId": "a0dc33782a7d062df649d6c31198533cc8b02522",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
+    }
+  ]
+}
