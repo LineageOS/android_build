@@ -16,6 +16,23 @@
       "message": "Builds and boots fine on Xiaomi SM6250",
       "revId": "88f03751cb8b57f27bd091796705dea0b57a9988",
       "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3a7c5c6e_71a3ef70",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 14010
+      },
+      "writtenOn": "2023-09-17T08:59:56Z",
+      "side": 1,
+      "message": "Ok on mata and rhode",
+      "revId": "88f03751cb8b57f27bd091796705dea0b57a9988",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
     }
   ]
 }
