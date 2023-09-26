@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e62a7ff0_6b3c3484",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 29669
+      },
+      "writtenOn": "2023-09-26T13:46:22Z",
+      "side": 1,
+      "message": "https://android.googlesource.com/platform/build/+/refs/tags/android-13.0.0_r75/core/version_defaults.mk#106",
+      "revId": "e7e855bed14b8ac25b8a443e0e81a39930236b02",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
+    }
+  ]
+}
