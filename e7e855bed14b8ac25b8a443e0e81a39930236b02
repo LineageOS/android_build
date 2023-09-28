@@ -50,6 +50,24 @@
       "message": "https://github.com/LineageOS/android_build/blob/lineage-20.0/core/version_defaults.mk#L106",
       "revId": "e7e855bed14b8ac25b8a443e0e81a39930236b02",
       "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1b2ad44c_e9a34dd8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 19282
+      },
+      "writtenOn": "2023-09-28T06:33:24Z",
+      "side": 1,
+      "message": "https://review.lineageos.org/c/LineageOS/android_build/+/366332",
+      "parentUuid": "c9fcae08_1631f646",
+      "revId": "e7e855bed14b8ac25b8a443e0e81a39930236b02",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
     }
   ]
 }
