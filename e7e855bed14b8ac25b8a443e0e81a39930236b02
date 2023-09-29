@@ -68,6 +68,23 @@
       "parentUuid": "c9fcae08_1631f646",
       "revId": "e7e855bed14b8ac25b8a443e0e81a39930236b02",
       "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3ccba3c5_69134b34",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 29669
+      },
+      "writtenOn": "2023-09-29T09:23:32Z",
+      "side": 1,
+      "message": "Its 1 September in r_75 aosp repo and not 5 September",
+      "revId": "e7e855bed14b8ac25b8a443e0e81a39930236b02",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
     }
   ]
 }
