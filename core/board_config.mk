@@ -406,6 +406,12 @@ define check_image_config
 endef
 
 ###########################################
+# Now we can substitute with the real value of TARGET_COPY_OUT_RAMDISK
+ifeq ($(BOARD_BUILD_SYSTEM_ROOT_IMAGE),true)
+TARGET_COPY_OUT_RAMDISK := $(TARGET_COPY_OUT_ROOT)
+endif
+
+###########################################
 # Configure whether we're building the system image
 BUILDING_SYSTEM_IMAGE := true
 ifeq ($(PRODUCT_BUILD_SYSTEM_IMAGE),)
@@ -554,8 +560,15 @@ endif
 
 # Are we building a debug vendor_boot image
 BUILDING_DEBUG_VENDOR_BOOT_IMAGE :=
+# Can't build vendor_boot-debug.img if BOARD_BUILD_SYSTEM_ROOT_IMAGE is true,
+# because building debug vendor_boot image requires a ramdisk.
+ifeq ($(BOARD_BUILD_SYSTEM_ROOT_IMAGE),true)
+  ifeq ($(PRODUCT_BUILD_DEBUG_VENDOR_BOOT_IMAGE),true)
+    $(warning PRODUCT_BUILD_DEBUG_VENDOR_BOOT_IMAGE is true, but so is BOARD_BUILD_SYSTEM_ROOT_IMAGE. \
+      Skip building the debug vendor_boot image.)
+  endif
 # Can't build vendor_boot-debug.img if we're not building a ramdisk.
-ifndef BUILDING_RAMDISK_IMAGE
+else ifndef BUILDING_RAMDISK_IMAGE
   ifeq ($(PRODUCT_BUILD_DEBUG_VENDOR_BOOT_IMAGE),true)
     $(warning PRODUCT_BUILD_DEBUG_VENDOR_BOOT_IMAGE is true, but we're not building a ramdisk image. \
       Skip building the debug vendor_boot image.)
@@ -592,8 +605,15 @@ endif
 
 # Are we building a debug boot image
 BUILDING_DEBUG_BOOT_IMAGE :=
+# Can't build boot-debug.img if BOARD_BUILD_SYSTEM_ROOT_IMAGE is true,
+# because building debug boot image requires a ramdisk.
+ifeq ($(BOARD_BUILD_SYSTEM_ROOT_IMAGE),true)
+  ifeq ($(PRODUCT_BUILD_DEBUG_BOOT_IMAGE),true)
+    $(warning PRODUCT_BUILD_DEBUG_BOOT_IMAGE is true, but so is BOARD_BUILD_SYSTEM_ROOT_IMAGE. \
+      Skip building the debug boot image.)
+  endif
 # Can't build boot-debug.img if we're not building a ramdisk.
-ifndef BUILDING_RAMDISK_IMAGE
+else ifndef BUILDING_RAMDISK_IMAGE
   ifeq ($(PRODUCT_BUILD_DEBUG_BOOT_IMAGE),true)
     $(warning PRODUCT_BUILD_DEBUG_BOOT_IMAGE is true, but we're not building a ramdisk image. \
       Skip building the debug boot image.)
