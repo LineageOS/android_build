@@ -140,6 +140,24 @@
       "parentUuid": "c58cb71c_ea537865",
       "revId": "883bdfdeaca1b972b95a58ec6278a3f1e5961617",
       "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "eaad1d6b_0740620e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 16023
+      },
+      "writtenOn": "2023-10-14T23:55:27Z",
+      "side": 1,
+      "message": "I solved that by setting the deflate level to 1:\nhttps://git.halogenos.org/halogenOS/android_build_make/-/commit/2493d236da9e2af469c79bd492654e731ca43f91",
+      "parentUuid": "e4251fa6_d7286257",
+      "revId": "883bdfdeaca1b972b95a58ec6278a3f1e5961617",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
     }
   ]
 }
