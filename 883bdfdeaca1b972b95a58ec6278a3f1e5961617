@@ -16,6 +16,23 @@
       "message": "what about switching to Q style SAR (mount system with first stage init) instead\n\n(I did it on my P SAR A-only/AB devices)",
       "revId": "883bdfdeaca1b972b95a58ec6278a3f1e5961617",
       "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ce6d7c0c_47732990",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 32245
+      },
+      "writtenOn": "2023-10-14T19:51:19Z",
+      "side": 1,
+      "message": "Also, have you proved that the reverts really works?",
+      "revId": "883bdfdeaca1b972b95a58ec6278a3f1e5961617",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
     }
   ]
 }
