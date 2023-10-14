@@ -105,6 +105,23 @@
       "parentUuid": "702abf88_310fc2b5",
       "revId": "883bdfdeaca1b972b95a58ec6278a3f1e5961617",
       "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c58cb71c_ea537865",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 16023
+      },
+      "writtenOn": "2023-10-14T23:15:44Z",
+      "side": 1,
+      "message": "Consider trying this in your BoardConfig first: \nTARGET_USERIMAGES_SPARSE_EXT_DISABLED :\u003d true\n\nSee https://git.halogenos.org/halogenOS/android_device_oneplus_sm8150-common/-/commit/c9c7c0038b3b356ac2aa3fe0cfe5ab7006a48cba",
+      "revId": "883bdfdeaca1b972b95a58ec6278a3f1e5961617",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
     }
   ]
 }
