@@ -51,6 +51,24 @@
       "parentUuid": "ce6d7c0c_47732990",
       "revId": "883bdfdeaca1b972b95a58ec6278a3f1e5961617",
       "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2c57453c_e623fef5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 32245
+      },
+      "writtenOn": "2023-10-14T20:45:48Z",
+      "side": 1,
+      "message": "maybe it should still boot if you remove BOARD_BUILD_SYSTEM_ROOT_IMAGE on your BoardConfig?\n\nIf really just that 3 commits is enough",
+      "parentUuid": "ae826913_ee451548",
+      "revId": "883bdfdeaca1b972b95a58ec6278a3f1e5961617",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
     }
   ]
 }
