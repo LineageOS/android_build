@@ -33,6 +33,24 @@
       "message": "Also, have you proved that the reverts really works?",
       "revId": "883bdfdeaca1b972b95a58ec6278a3f1e5961617",
       "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ae826913_ee451548",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 16878
+      },
+      "writtenOn": "2023-10-14T20:39:21Z",
+      "side": 1,
+      "message": "yes with thoose reverts my LG g8s sm8150 boots up correctly again",
+      "parentUuid": "ce6d7c0c_47732990",
+      "revId": "883bdfdeaca1b972b95a58ec6278a3f1e5961617",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
     }
   ]
 }
