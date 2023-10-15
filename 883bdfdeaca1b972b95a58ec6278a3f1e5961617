@@ -158,6 +158,24 @@
       "parentUuid": "e4251fa6_d7286257",
       "revId": "883bdfdeaca1b972b95a58ec6278a3f1e5961617",
       "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fb3058f4_f6dc7a7c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 16878
+      },
+      "writtenOn": "2023-10-15T03:14:01Z",
+      "side": 1,
+      "message": "nice thank you, now the images actually Mount again but i still need Sar first sage init always boots recovery and also if i force normal boot it teils me /system/bin/init not found",
+      "parentUuid": "eaad1d6b_0740620e",
+      "revId": "883bdfdeaca1b972b95a58ec6278a3f1e5961617",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
     }
   ]
 }
