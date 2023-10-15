@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e91d80a4_84bce921",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 20587
+      },
+      "writtenOn": "2023-10-15T18:13:29Z",
+      "side": 1,
+      "message": "This ASB-topic is currently missing the uploads to libxml2 and libwebp as the LineageOS repos are missing the respective lineage-17.1 branches",
+      "revId": "979199eda44099f0ff3d60e0cef75d7246e5a7c6",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
+    }
+  ]
+}
