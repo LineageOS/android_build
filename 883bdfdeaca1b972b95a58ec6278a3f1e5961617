@@ -193,6 +193,23 @@
       "message": "Put system-as-root related commits under a topic, `14-system-as-root`?",
       "revId": "883bdfdeaca1b972b95a58ec6278a3f1e5961617",
       "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b0c973c7_bf8061b2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 31019
+      },
+      "writtenOn": "2023-10-16T05:19:49Z",
+      "side": 1,
+      "message": "I think you can try these \n\nhttps://github.com/SuperiorOS-Devices/device_xiaomi_violet/commit/1d861bbda8626656c14931b32c856d370eb3cbad\n\nhttps://github.com/SuperiorOS-Devices/device_xiaomi_violet/commit/e04f370b47590f1960746e63407f18092ed694fd\n\nworks fine on A only SAR device",
+      "revId": "883bdfdeaca1b972b95a58ec6278a3f1e5961617",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
     }
   ]
 }
