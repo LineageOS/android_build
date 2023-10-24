@@ -281,6 +281,24 @@
       "message": "it\u0027s easy to make first stage init work, you can see what I pushed for gts4lv (A-only) and oneplus sdm845 (legacy A/B).",
       "revId": "883bdfdeaca1b972b95a58ec6278a3f1e5961617",
       "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b724f47f_fe283f97",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 16023
+      },
+      "writtenOn": "2023-10-24T21:36:15Z",
+      "side": 1,
+      "message": "I had the issue again that package target files would fill up my RAM. I found out that if userdata image size is set, it would create an userdata.img file of that size and load it into ram while packaging target files which causes the fill-up. I came up with following solution:\n\nhttps://git.halogenos.org/halogenOS/android_build_make/-/commit/3ab60356fb930dd0f52c570df8073c7e84dc53d1\nhttps://git.halogenos.org/halogenOS/android_build_make/-/commit/42f1dbcbd90e72c583d0516c22c1f2fbef97b6d3\n\nIt will tell you what to do if you\u0027re affected.",
+      "parentUuid": "fb3058f4_f6dc7a7c",
+      "revId": "883bdfdeaca1b972b95a58ec6278a3f1e5961617",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
     }
   ]
 }
