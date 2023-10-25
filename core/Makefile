@@ -1925,7 +1925,8 @@ $(if $(BOARD_$(_var)IMAGE_SQUASHFS_COMPRESSOR_OPT),$(hide) echo "$(1)_squashfs_c
 $(if $(BOARD_$(_var)IMAGE_SQUASHFS_DISABLE_4K_ALIGN),$(hide) echo "$(1)_squashfs_disable_4k_align=$(BOARD_$(_var)IMAGE_SQUASHFS_DISABLE_4K_ALIGN)" >> $(2))
 $(if $(PRODUCT_$(_var)_BASE_FS_PATH),$(hide) echo "$(1)_base_fs_file=$(PRODUCT_$(_var)_BASE_FS_PATH)" >> $(2))
 $(eval _size := $(BOARD_$(_var)IMAGE_PARTITION_SIZE))
-$(eval _reserved := $(BOARD_$(_var)IMAGE_PARTITION_RESERVED_SIZE))
+$(if $(filter true,$(AB_OTA_UPDATER)),,
+    $(eval _reserved := $(BOARD_$(_var)IMAGE_PARTITION_RESERVED_SIZE)))
 $(eval _headroom := $(PRODUCT_$(_var)_HEADROOM))
 $(if $(or $(_size), $(_reserved), $(_headroom)),,
     $(hide) echo "$(1)_disable_sparse=true" >> $(2))
