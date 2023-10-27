@@ -3395,9 +3395,14 @@ class BlockDifference(object):
     #   decompression_time: 15s  | 25s                | 25s
 
     if not self.src:
-      brotli_cmd = ['brotli', '--quality=6',
-                    '--output={}.new.dat.br'.format(self.path),
-                    '{}.new.dat'.format(self.path)]
+      if "BROTLI_COMPRESSION_LEVEL" in os.environ:
+        brotli_cmd = ['brotli', '--quality=',os.environ['BROTLI_COMPRESSION_LEVEL'],
+                      '--output={}.new.dat.br'.format(self.path),
+                      '{}.new.dat'.format(self.path)]
+      else:
+        brotli_cmd = ['brotli', '--quality=6',
+                      '--output={}.new.dat.br'.format(self.path),
+                      '{}.new.dat'.format(self.path)]
       print("Compressing {}.new.dat with brotli".format(self.partition))
       RunAndCheckOutput(brotli_cmd)
 
