@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "25f8aa8c_cb6e7ea9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 4550
+      },
+      "writtenOn": "2023-11-05T13:50:12Z",
+      "side": 1,
+      "message": "For testing upgrades from lineage-20.0 until November ASB is out.",
+      "revId": "edb4a47b864037df8b5310d097e4d6a642cafcef",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
+    }
+  ]
+}
