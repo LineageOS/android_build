@@ -35,6 +35,23 @@ endif
 
 $(call declare-0p-target,$(INSTALLED_ANDROID_INFO_TXT_TARGET))
 
+# Similarly to above, generate a file containing extra info
+# to be used only with custom releasetools
+INSTALLED_ANDROID_INFO_EXTRA_TXT_TARGET := $(PRODUCT_OUT)/android-info-extra.txt
+android_info_extra_txt := $(TARGET_ANDROID_INFO_EXTRA_FILE)
+ifndef android_info_extra_txt
+android_info_extra_txt := $(wildcard $(TARGET_DEVICE_DIR)/android-info-extra.txt)
+endif
+$(INSTALLED_ANDROID_INFO_EXTRA_TXT_TARGET): $(android_info_extra_txt)
+	$(call pretty,"Generated: ($@)")
+ifdef android_info_extra_txt
+	$(hide) grep -v '#' $< > $@
+else
+	$(hide) echo "" > $@
+endif
+
+$(call declare-0p-target,$(INSTALLED_ANDROID_INFO_EXTRA_TXT_TARGET))
+
 # Copy compatibility metadata to the device.
 
 # Device Manifest
