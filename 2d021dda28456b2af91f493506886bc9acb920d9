@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1b106f46_3be6936c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 13648
+      },
+      "writtenOn": "2023-11-14T15:50:34Z",
+      "side": 1,
+      "message": "This solves your fastboot flashall issues with version-trustzone. See my device changes.",
+      "revId": "2d021dda28456b2af91f493506886bc9acb920d9",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
+    }
+  ]
+}
