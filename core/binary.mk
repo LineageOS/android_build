@@ -64,6 +64,11 @@ endif
 ifneq (,$(findstring $(TARGET_OUT_INTERMEDIATES)/KERNEL_OBJ/usr,$(LOCAL_ADDITIONAL_DEPENDENCIES)))
   LOCAL_ADDITIONAL_DEPENDENCIES := $(patsubst $(TARGET_OUT_INTERMEDIATES)/KERNEL_OBJ/usr,,$(LOCAL_ADDITIONAL_DEPENDENCIES))
 endif
+
+# Replace device_kernel_headers with generated_kernel_headers when building inline
+ifneq (,$(findstring generated_kernel_headers,$(LOCAL_HEADER_LIBRARIES)))
+  LOCAL_HEADER_LIBRARIES := $(patsubst generated_kernel_headers,device_kernel_headers,$(LOCAL_HEADER_LIBRARIES))
+endif
 endif
 
 # The following LOCAL_ variables will be modified in this file.
