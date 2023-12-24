@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0577da65_6b0a3070",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 19252
+      },
+      "writtenOn": "2023-12-24T12:16:01Z",
+      "side": 1,
+      "message": "This is needed to fix bootloader on Z01R",
+      "revId": "c895fb5d32e0beb61cca0db9b18a7a25111c84e4",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
+    }
+  ]
+}
