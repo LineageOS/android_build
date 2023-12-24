@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e4a8b733_6470b993",
+        "filename": "CleanSpec.mk",
+        "patchSetId": 8
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 4550
+      },
+      "writtenOn": "2023-12-24T10:56:05Z",
+      "side": 1,
+      "message": "This isn\u0027t needed, since this file is introduced in this commit, it has no effect",
+      "revId": "0d6f284bbe7ac89bae987780348fec983eeca82b",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
+    }
+  ]
+}
