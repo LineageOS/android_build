@@ -291,7 +291,7 @@ endif
 ifneq ($(BOARD_KERNEL_MODULES_16K),)
 BUILT_RAMDISK_16K_TARGET := $(PRODUCT_OUT)/ramdisk_16k.img
 endif
-ifeq ($(BUILDING_VENDOR_BOOT_IMAGE),true)
+ifeq ($(BUILDING_VENDOR_RAMDISK_IMAGE),true)
 INSTALLED_VENDOR_RAMDISK_TARGET := $(PRODUCT_OUT)/vendor_ramdisk.img
 endif
 
@@ -1627,9 +1627,9 @@ endif # BOARD_PREBUILT_INIT_BOOT_IMAGE
 endif # BUILDING_INIT_BOOT_IMAGE is not true
 
 # -----------------------------------------------------------------
-# vendor boot image
+# vendor ramdisk image
 INSTALLED_FILES_OUTSIDE_IMAGES := $(filter-out $(TARGET_VENDOR_RAMDISK_OUT)/%, $(INSTALLED_FILES_OUTSIDE_IMAGES))
-ifeq ($(BUILDING_VENDOR_BOOT_IMAGE),true)
+ifeq ($(BUILDING_VENDOR_RAMDISK_IMAGE),true)
 
 INTERNAL_VENDOR_RAMDISK_FILES := $(filter $(TARGET_VENDOR_RAMDISK_OUT)/%, \
     $(ALL_DEFAULT_INSTALLED_MODULES))
@@ -1670,7 +1670,11 @@ $(INSTALLED_FILES_FILE_VENDOR_RAMDISK): $(INTERNAL_VENDOR_RAMDISK_FILES) $(FILES
 
 $(eval $(call declare-0p-target,$(INSTALLED_FILES_FILE_VENDOR_RAMDISK)))
 $(eval $(call declare-0p-target,$(INSTALLED_FILES_JSON_VENDOR_RAMDISK)))
+endif # BUILDING_VENDOR_RAMDISK_IMAGE
 
+# -----------------------------------------------------------------
+# vendor boot image
+ifeq ($(BUILDING_VENDOR_BOOT_IMAGE),true)
 ifdef BOARD_INCLUDE_DTB_IN_BOOTIMG
   ifneq ($(BUILDING_VENDOR_KERNEL_BOOT_IMAGE),true)
     # If we have vendor_kernel_boot partition, we migrate dtb image to that image
