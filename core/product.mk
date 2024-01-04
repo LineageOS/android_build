@@ -357,6 +357,7 @@ _product_single_value_vars += PRODUCT_BUILD_BOOT_IMAGE
 _product_single_value_vars += PRODUCT_BUILD_INIT_BOOT_IMAGE
 _product_single_value_vars += PRODUCT_BUILD_DEBUG_BOOT_IMAGE
 _product_single_value_vars += PRODUCT_BUILD_VENDOR_BOOT_IMAGE
+_product_single_value_vars += PRODUCT_BUILD_VENDOR_RAMDISK_IMAGE
 _product_single_value_vars += PRODUCT_BUILD_VENDOR_KERNEL_BOOT_IMAGE
 _product_single_value_vars += PRODUCT_BUILD_DEBUG_VENDOR_BOOT_IMAGE
 _product_single_value_vars += PRODUCT_BUILD_VBMETA_IMAGE
