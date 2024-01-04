@@ -16,6 +16,23 @@
       "message": "combining ramdisk images has only been tested on QEMU + GKI 6.1 + LZ4 ramdisk yet, and it works\n\nand, I haven\u0027t tested this commit yet, will do in sometime later",
       "revId": "d5c93d08fd3e6da69eede5338146b129f4849db9",
       "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d60cb4e2_f3585ca8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 32245
+      },
+      "writtenOn": "2024-01-04T20:22:39Z",
+      "side": 1,
+      "message": "TODO:\n- Extend the logic to other ramdisks (debug ones)\n- Verify that it won\u0027t break other targets",
+      "revId": "d5c93d08fd3e6da69eede5338146b129f4849db9",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
     }
   ]
 }
