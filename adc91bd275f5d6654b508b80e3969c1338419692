@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "12377122_2f2ab64e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 32245
+      },
+      "writtenOn": "2024-01-04T21:46:29Z",
+      "side": 1,
+      "message": "example usage: https://github.com/me-cafebabe-aosp-mainline/android_device_virt_common/commit/a40e4fc0da63d2ad12c7e40a475fdd926ba13315",
+      "revId": "adc91bd275f5d6654b508b80e3969c1338419692",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
+    }
+  ]
+}
