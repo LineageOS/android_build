@@ -287,6 +287,12 @@ endif
 endif
 endif
 
+# This will get referenced by ramdisk(-recovery).img target too
+ifneq ($(BOARD_KERNEL_MODULES_16K),)
+BUILT_RAMDISK_16K_TARGET := $(PRODUCT_OUT)/ramdisk_16k.img
+endif
+INSTALLED_VENDOR_RAMDISK_TARGET := $(PRODUCT_OUT)/vendor_ramdisk.img
+
 include $(BUILD_SYSTEM)/sysprop.mk
 
 # ----------------------------------------------------------------
@@ -318,6 +324,25 @@ $(INSTALLED_SDK_BUILD_PROP_TARGET): $(INSTALLED_BUILD_PROP_TARGET)
 	$(hide) mv $@.tmp $@
 
 $(call declare-0p-target,$(INSTALLED_SDK_BUILD_PROP_TARGET))
+
+
+# -----------------------------------------------------------------
+# declare ramdisk compression rules
+
+ifeq ($(BOARD_RAMDISK_USE_LZ4),true)
+# -l enables the legacy format used by the Linux kernel
+COMPRESSION_COMMAND_DEPS := $(LZ4)
+COMPRESSION_COMMAND := $(LZ4) -l -12 --favor-decSpeed
+RAMDISK_EXT := .lz4
+else ifeq ($(BOARD_RAMDISK_USE_XZ),true)
+COMPRESSION_COMMAND_DEPS := $(XZ)
+COMPRESSION_COMMAND := $(XZ) -f -c --check=crc32 --lzma2=dict=32MiB
+RAMDISK_EXT := .xz
+else
+COMPRESSION_COMMAND_DEPS := $(GZIP)
+COMPRESSION_COMMAND := $(GZIP)
+RAMDISK_EXT := .gz
+endif
 
 # -----------------------------------------------------------------
 # declare recovery ramdisk files
@@ -377,6 +402,51 @@ $(foreach vendor_ramdisk_fragment,$(INTERNAL_VENDOR_RAMDISK_FRAGMENTS), \
     $(error Must not specify --ramdisk_name for vendor ramdisk fragment: $(vendor_ramdisk_fragment))) \
   $(eval BOARD_VENDOR_RAMDISK_FRAGMENT.$(vendor_ramdisk_fragment).MKBOOTIMG_ARGS += --ramdisk_name $(vendor_ramdisk_fragment)) \
   $(eval .KATI_READONLY := BOARD_VENDOR_RAMDISK_FRAGMENT.$(vendor_ramdisk_fragment).MKBOOTIMG_ARGS) \
+)
+
+# -----------------------------------------------------------------
+# Declare vendor ramdisk fragments build rules
+
+BOARD_VENDOR_RAMDISK_FRAGMENT.16K.PREBUILT := $(BUILT_RAMDISK_16K_TARGET)
+
+# $(1): Build target name
+# $(2): Staging dir to be compressed
+# $(3): Build dependencies
+define build-vendor-ramdisk-fragment-target
+$(1): $(3) $(MKBOOTFS) | $(COMPRESSION_COMMAND_DEPS)
+	$(MKBOOTFS) -d $(TARGET_OUT) $(2) | $(COMPRESSION_COMMAND) > $$@
+endef
+
+# $(1): Ramdisk name
+define build-vendor-ramdisk-fragment
+$(strip \
+  $(eval build_target := $(call intermediates-dir-for,PACKAGING,vendor_ramdisk_fragments)/$(1).cpio$(RAMDISK_EXT)) \
+  $(eval $(call build-vendor-ramdisk-fragment-target,$(build_target),$(VENDOR_RAMDISK_FRAGMENT.$(1).STAGING_DIR),$(VENDOR_RAMDISK_FRAGMENT.$(1).FILES))) \
+  $(build_target) \
+)
+endef
+
+# $(1): Ramdisk name
+# $(2): Prebuilt file path
+define build-prebuilt-vendor-ramdisk-fragment
+$(strip \
+  $(eval build_target := $(call intermediates-dir-for,PACKAGING,prebuilt_vendor_ramdisk_fragments)/$(1)) \
+  $(eval $(call copy-one-file,$(2),$(build_target))) \
+  $(build_target) \
+)
+endef
+
+INTERNAL_VENDOR_RAMDISK_FRAGMENT_TARGETS :=
+INTERNAL_VENDOR_RAMDISK_FRAGMENT_ARGS :=
+
+$(foreach vendor_ramdisk_fragment,$(INTERNAL_VENDOR_RAMDISK_FRAGMENTS), \
+  $(eval prebuilt_vendor_ramdisk_fragment_file := $(BOARD_VENDOR_RAMDISK_FRAGMENT.$(vendor_ramdisk_fragment).PREBUILT)) \
+  $(if $(prebuilt_vendor_ramdisk_fragment_file), \
+    $(eval vendor_ramdisk_fragment_target := $(call build-prebuilt-vendor-ramdisk-fragment,$(vendor_ramdisk_fragment),$(prebuilt_vendor_ramdisk_fragment_file))) \
+    $(eval ### else ###), \
+    $(eval vendor_ramdisk_fragment_target := $(call build-vendor-ramdisk-fragment,$(vendor_ramdisk_fragment)))) \
+  $(eval INTERNAL_VENDOR_RAMDISK_FRAGMENT_TARGETS += $(vendor_ramdisk_fragment_target)) \
+  $(eval INTERNAL_VENDOR_RAMDISK_FRAGMENT_ARGS += $(BOARD_VENDOR_RAMDISK_FRAGMENT.$(vendor_ramdisk_fragment).MKBOOTIMG_ARGS) --vendor_ramdisk_fragment $(vendor_ramdisk_fragment_target)) \
 )
 
 # -----------------------------------------------------------------
@@ -1087,7 +1157,6 @@ BUILT_RAMDISK_TARGET := $(PRODUCT_OUT)/ramdisk.img
 ifneq ($(BOARD_KERNEL_MODULES_16K),)
 
 TARGET_OUT_RAMDISK_16K := $(PRODUCT_OUT)/ramdisk_16k
-BUILT_RAMDISK_16K_TARGET := $(PRODUCT_OUT)/ramdisk_16k.img
 RAMDISK_16K_STAGING_DIR := $(call intermediates-dir-for,PACKAGING,depmod_ramdisk_16k)
 
 ifneq ($(BOARD_SYSTEM_KERNEL_MODULES),)
@@ -1133,8 +1202,6 @@ $(foreach \
     ) \
   ) \
 )
-
-BOARD_VENDOR_RAMDISK_FRAGMENT.16K.PREBUILT := $(BUILT_RAMDISK_16K_TARGET)
 
 $(BUILT_RAMDISK_16K_TARGET): $(DEPMOD) $(MKBOOTFS) $(EXTRACT_KERNEL) $(COMPRESSION_COMMAND_DEPS)
 $(BUILT_RAMDISK_16K_TARGET): $(foreach file,$(BOARD_KERNEL_MODULES_16K),$(RAMDISK_16K_STAGING_DIR)/lib/modules/0.0/$(notdir $(file)))
@@ -1194,21 +1261,6 @@ boototapackage_16k: $(BUILT_BOOT_OTA_PACKAGE_16K)
 
 endif
 
-
-ifeq ($(BOARD_RAMDISK_USE_LZ4),true)
-# -l enables the legacy format used by the Linux kernel
-COMPRESSION_COMMAND_DEPS := $(LZ4)
-COMPRESSION_COMMAND := $(LZ4) -l -12 --favor-decSpeed
-RAMDISK_EXT := .lz4
-else ifeq ($(BOARD_RAMDISK_USE_XZ),true)
-COMPRESSION_COMMAND_DEPS := $(XZ)
-COMPRESSION_COMMAND := $(XZ) -f -c --check=crc32 --lzma2=dict=32MiB
-RAMDISK_EXT := .xz
-else
-COMPRESSION_COMMAND_DEPS := $(GZIP)
-COMPRESSION_COMMAND := $(GZIP)
-RAMDISK_EXT := .gz
-endif
 
 # This file contains /dev nodes description added to the generic ramdisk
 RAMDISK_NODE_LIST := $(PRODUCT_OUT)/ramdisk_node_list
@@ -1594,7 +1646,6 @@ endif
 $(INTERNAL_VENDOR_RAMDISK_TARGET): $(MKBOOTFS) $(INTERNAL_VENDOR_RAMDISK_FILES) | $(COMPRESSION_COMMAND_DEPS)
 	$(MKBOOTFS) -d $(TARGET_OUT) $(TARGET_VENDOR_RAMDISK_OUT) $(PRIVATE_ADDITIONAL_DIR) | $(COMPRESSION_COMMAND) > $@
 
-INSTALLED_VENDOR_RAMDISK_TARGET := $(PRODUCT_OUT)/vendor_ramdisk.img
 $(INSTALLED_VENDOR_RAMDISK_TARGET): $(INTERNAL_VENDOR_RAMDISK_TARGET)
 	@echo "Target vendor ramdisk: $@"
 	$(copy-file-to-target)
@@ -1643,46 +1694,6 @@ ifdef INTERNAL_BOOTCONFIG
 	 printf "%s\n" $(param) >> $@;)
   INTERNAL_VENDOR_BOOTIMAGE_ARGS += --vendor_bootconfig $(INTERNAL_VENDOR_BOOTCONFIG_TARGET)
 endif
-
-# $(1): Build target name
-# $(2): Staging dir to be compressed
-# $(3): Build dependencies
-define build-vendor-ramdisk-fragment-target
-$(1): $(3) $(MKBOOTFS) | $(COMPRESSION_COMMAND_DEPS)
-	$(MKBOOTFS) -d $(TARGET_OUT) $(2) | $(COMPRESSION_COMMAND) > $$@
-endef
-
-# $(1): Ramdisk name
-define build-vendor-ramdisk-fragment
-$(strip \
-  $(eval build_target := $(call intermediates-dir-for,PACKAGING,vendor_ramdisk_fragments)/$(1).cpio$(RAMDISK_EXT)) \
-  $(eval $(call build-vendor-ramdisk-fragment-target,$(build_target),$(VENDOR_RAMDISK_FRAGMENT.$(1).STAGING_DIR),$(VENDOR_RAMDISK_FRAGMENT.$(1).FILES))) \
-  $(build_target) \
-)
-endef
-
-# $(1): Ramdisk name
-# $(2): Prebuilt file path
-define build-prebuilt-vendor-ramdisk-fragment
-$(strip \
-  $(eval build_target := $(call intermediates-dir-for,PACKAGING,prebuilt_vendor_ramdisk_fragments)/$(1)) \
-  $(eval $(call copy-one-file,$(2),$(build_target))) \
-  $(build_target) \
-)
-endef
-
-INTERNAL_VENDOR_RAMDISK_FRAGMENT_TARGETS :=
-INTERNAL_VENDOR_RAMDISK_FRAGMENT_ARGS :=
-
-$(foreach vendor_ramdisk_fragment,$(INTERNAL_VENDOR_RAMDISK_FRAGMENTS), \
-  $(eval prebuilt_vendor_ramdisk_fragment_file := $(BOARD_VENDOR_RAMDISK_FRAGMENT.$(vendor_ramdisk_fragment).PREBUILT)) \
-  $(if $(prebuilt_vendor_ramdisk_fragment_file), \
-    $(eval vendor_ramdisk_fragment_target := $(call build-prebuilt-vendor-ramdisk-fragment,$(vendor_ramdisk_fragment),$(prebuilt_vendor_ramdisk_fragment_file))) \
-    $(eval ### else ###), \
-    $(eval vendor_ramdisk_fragment_target := $(call build-vendor-ramdisk-fragment,$(vendor_ramdisk_fragment)))) \
-  $(eval INTERNAL_VENDOR_RAMDISK_FRAGMENT_TARGETS += $(vendor_ramdisk_fragment_target)) \
-  $(eval INTERNAL_VENDOR_RAMDISK_FRAGMENT_ARGS += $(BOARD_VENDOR_RAMDISK_FRAGMENT.$(vendor_ramdisk_fragment).MKBOOTIMG_ARGS) --vendor_ramdisk_fragment $(vendor_ramdisk_fragment_target)) \
-)
 
 INSTALLED_VENDOR_BOOTIMAGE_TARGET := $(PRODUCT_OUT)/vendor_boot.img
 $(INSTALLED_VENDOR_BOOTIMAGE_TARGET): $(MKBOOTIMG) $(INTERNAL_VENDOR_RAMDISK_TARGET) $(INSTALLED_DTBIMAGE_TARGET)
