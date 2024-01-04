@@ -552,6 +552,15 @@ else ifeq ($(PRODUCT_BUILD_RAMDISK_IMAGE),false)
 endif
 .KATI_READONLY := BUILDING_RAMDISK_IMAGE
 
+# Are we building a vendor ramdisk image
+BUILDING_VENDOR_RAMDISK_IMAGE :=
+ifeq ($(BUILDING_VENDOR_BOOT_IMAGE),true)
+  BUILDING_VENDOR_RAMDISK_IMAGE := true
+else ifeq ($(PRODUCT_BUILD_VENDOR_RAMDISK_IMAGE),true)
+  BUILDING_VENDOR_RAMDISK_IMAGE := true
+endif
+.KATI_READONLY := BUILDING_VENDOR_RAMDISK_IMAGE
+
 # Are we building a debug vendor_boot image
 BUILDING_DEBUG_VENDOR_BOOT_IMAGE :=
 # Can't build vendor_boot-debug.img if we're not building a ramdisk.
@@ -1035,25 +1044,27 @@ ifndef BUILDING_RECOVERY_IMAGE
   endif
 endif
 
-ifndef BUILDING_VENDOR_BOOT_IMAGE
+ifndef BUILDING_VENDOR_RAMDISK_IMAGE
   ifeq (true,$(BOARD_MOVE_RECOVERY_RESOURCES_TO_VENDOR_BOOT))
-    $(error Should not set BOARD_MOVE_RECOVERY_RESOURCES_TO_VENDOR_BOOT if not building vendor_boot image)
+    $(error Should not set BOARD_MOVE_RECOVERY_RESOURCES_TO_VENDOR_BOOT if not building vendor_boot or vendor ramdisk image)
   endif
   ifdef BOARD_VENDOR_RAMDISK_FRAGMENTS
-    $(error Should not set BOARD_VENDOR_RAMDISK_FRAGMENTS if not building vendor_boot image)
+    $(error Should not set BOARD_VENDOR_RAMDISK_FRAGMENTS if not building vendor_boot or vendor ramdisk image)
   endif
-else # BUILDING_VENDOR_BOOT_IMAGE
-  ifneq (,$(call math_lt,$(BOARD_BOOT_HEADER_VERSION),4))
-    ifdef BOARD_VENDOR_RAMDISK_FRAGMENTS
-      $(error Should not set BOARD_VENDOR_RAMDISK_FRAGMENTS if \
-        BOARD_BOOT_HEADER_VERSION is less than 4)
-    endif
-    ifeq (true,$(BOARD_INCLUDE_RECOVERY_RAMDISK_IN_VENDOR_BOOT))
-      $(error Should not set BOARD_INCLUDE_RECOVERY_RAMDISK_IN_VENDOR_BOOT if \
-        BOARD_BOOT_HEADER_VERSION is less than 4)
-    endif
-  endif
-endif # BUILDING_VENDOR_BOOT_IMAGE
+else # BUILDING_VENDOR_RAMDISK_IMAGE
+  ifeq ($(BUILDING_VENDOR_BOOT_IMAGE),true)
+    ifneq (,$(call math_lt,$(BOARD_BOOT_HEADER_VERSION),4))
+      ifdef BOARD_VENDOR_RAMDISK_FRAGMENTS
+        $(error Should not set BOARD_VENDOR_RAMDISK_FRAGMENTS if \
+          BOARD_BOOT_HEADER_VERSION is less than 4)
+      endif
+      ifeq (true,$(BOARD_INCLUDE_RECOVERY_RAMDISK_IN_VENDOR_BOOT))
+        $(error Should not set BOARD_INCLUDE_RECOVERY_RAMDISK_IN_VENDOR_BOOT if \
+          BOARD_BOOT_HEADER_VERSION is less than 4)
+      endif
+    endif # BOARD_BOOT_HEADER_VERSION
+  endif # BUILDING_VENDOR_BOOT_IMAGE
+endif # BUILDING_VENDOR_RAMDISK_IMAGE
 
 ifneq ($(words $(BOARD_VENDOR_RAMDISK_FRAGMENTS)),$(words $(sort $(BOARD_VENDOR_RAMDISK_FRAGMENTS))))
   $(error BOARD_VENDOR_RAMDISK_FRAGMENTS has duplicate entries: $(BOARD_VENDOR_RAMDISK_FRAGMENTS))
