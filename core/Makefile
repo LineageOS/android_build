@@ -450,6 +450,23 @@ $(foreach vendor_ramdisk_fragment,$(INTERNAL_VENDOR_RAMDISK_FRAGMENTS), \
 )
 
 # -----------------------------------------------------------------
+# declare ramdisk images combination rules
+
+INTERNAL_RAMDISK_IMAGES_COMBINATION_DEPS :=
+ifeq ($(COMBINING_RAMDISK_IMAGES),true)
+  ifeq ($(BUILDING_VENDOR_RAMDISK_IMAGE),true)
+    INTERNAL_RAMDISK_IMAGES_COMBINATION_DEPS += $(INSTALLED_VENDOR_RAMDISK_TARGET) $(INTERNAL_VENDOR_RAMDISK_FRAGMENT_TARGETS)
+  endif
+endif
+
+# $1: ramdisk image target
+define combine-ramdisk-images
+$(if $(filter true,$(COMBINING_RAMDISK_IMAGES)),\
+  $(if $(filter true,$(BUILDING_VENDOR_RAMDISK_IMAGE)),\
+    cat $(INSTALLED_VENDOR_RAMDISK_TARGET) $(INTERNAL_VENDOR_RAMDISK_FRAGMENT_TARGETS) >> $(1)))
+endef
+
+# -----------------------------------------------------------------
 # kernel modules
 
 # Depmod requires a well-formed kernel version so 0.0 is used as a placeholder.
@@ -710,8 +727,8 @@ $(if $(filter top,$(1)),\
     $(call copy-many-files,$(call module-load-list-copy-paths,$(call intermediates-dir-for,PACKAGING,vendor_kernel_ramdisk_charger_module_list$(_sep)$(_kver)),$(BOARD_VENDOR_KERNEL_RAMDISK_KERNEL_MODULES$(_sep)$(_kver)),$(BOARD_VENDOR_KERNEL_RAMDISK_CHARGER_KERNEL_MODULES_LOAD$(_sep)$(_kver)),modules.load.charger,$(TARGET_VENDOR_KERNEL_RAMDISK_OUT))))
 endef
 
-ifneq ($(BUILDING_VENDOR_BOOT_IMAGE),true)
-  # If there is no vendor boot partition, store vendor ramdisk kernel modules in the
+ifneq ($(BUILDING_VENDOR_RAMDISK_IMAGE),true)
+  # If there is no vendor ramdisk, store vendor ramdisk kernel modules in the
   # boot ramdisk.
   BOARD_GENERIC_RAMDISK_KERNEL_MODULES += $(BOARD_VENDOR_RAMDISK_KERNEL_MODULES)
   BOARD_GENERIC_RAMDISK_KERNEL_MODULES_LOAD += $(BOARD_VENDOR_RAMDISK_KERNEL_MODULES_LOAD)
@@ -1268,6 +1285,7 @@ RAMDISK_NODE_LIST := $(PRODUCT_OUT)/ramdisk_node_list
 # We just build this directly to the install location.
 INSTALLED_RAMDISK_TARGET := $(BUILT_RAMDISK_TARGET)
 $(INSTALLED_RAMDISK_TARGET): PRIVATE_DIRS := debug_ramdisk dev metadata mnt proc second_stage_resources sys
+$(INSTALLED_RAMDISK_TARGET): $(INTERNAL_RAMDISK_IMAGES_COMBINATION_DEPS)
 $(INSTALLED_RAMDISK_TARGET): $(MKBOOTFS) $(RAMDISK_NODE_LIST) $(INTERNAL_RAMDISK_FILES) $(INSTALLED_FILES_FILE_RAMDISK) | $(COMPRESSION_COMMAND_DEPS)
 	$(call pretty,"Target ramdisk: $@")
 	$(hide) mkdir -p $(addprefix $(TARGET_RAMDISK_OUT)/,$(PRIVATE_DIRS))
@@ -1275,6 +1293,7 @@ ifeq (true,$(BOARD_USES_GENERIC_KERNEL_IMAGE))
 	$(hide) mkdir -p $(addprefix $(TARGET_RAMDISK_OUT)/first_stage_ramdisk/,$(PRIVATE_DIRS))
 endif
 	$(hide) $(MKBOOTFS) -n $(RAMDISK_NODE_LIST) -d $(TARGET_OUT) $(TARGET_RAMDISK_OUT) | $(COMPRESSION_COMMAND) > $@
+	$(hide) $(call combine-ramdisk-images,$@)
 
 $(call declare-1p-container,$(INSTALLED_RAMDISK_TARGET),)
 $(call declare-container-license-deps,$(INSTALLED_RAMDISK_TARGET),$(INTERNAL_RAMDISK_FILE),$(PRODUCT_OUT)/:/)
@@ -1285,6 +1304,7 @@ UNMOUNTED_NOTICE_VENDOR_DEPS += $(INSTALLED_RAMDISK_TARGET)
 ramdisk-nodeps: $(MKBOOTFS) | $(COMPRESSION_COMMAND_DEPS)
 	@echo "make $@: ignoring dependencies"
 	$(hide) $(MKBOOTFS) -d $(TARGET_OUT) $(TARGET_RAMDISK_OUT) | $(COMPRESSION_COMMAND) > $(INSTALLED_RAMDISK_TARGET)
+	$(hide) $(call combine-ramdisk-images,$(INSTALLED_RAMDISK_TARGET))
 
 endif # BUILDING_RAMDISK_IMAGE
 
@@ -2778,9 +2798,11 @@ $(recovery_uncompressed_ramdisk): $(INTERNAL_RECOVERY_RAMDISK_FILES_TIMESTAMP)
 	@echo ----- Making uncompressed recovery ramdisk ------
 	$(MKBOOTFS) -d $(TARGET_OUT) $(TARGET_RECOVERY_ROOT_OUT) > $@
 
+$(recovery_ramdisk): $(INTERNAL_RAMDISK_IMAGES_COMBINATION_DEPS)
 $(recovery_ramdisk): $(recovery_uncompressed_ramdisk) $(COMPRESSION_COMMAND_DEPS)
 	@echo ----- Making compressed recovery ramdisk ------
 	$(COMPRESSION_COMMAND) < $(recovery_uncompressed_ramdisk) > $@
+	$(hide) $(call combine-ramdisk-images,$@)
 
 # $(1): output file
 # $(2): optional kernel file
@@ -2934,12 +2956,14 @@ ifdef BUILDING_DEBUG_BOOT_IMAGE
 # and property files to allow adb root, if the device is unlocked.
 INSTALLED_DEBUG_RAMDISK_TARGET := $(PRODUCT_OUT)/ramdisk-debug.img
 
+$(INSTALLED_DEBUG_RAMDISK_TARGET): $(INTERNAL_RAMDISK_IMAGES_COMBINATION_DEPS)
 $(INSTALLED_DEBUG_RAMDISK_TARGET): $(INSTALLED_FILES_FILE_DEBUG_RAMDISK)
 $(INSTALLED_DEBUG_RAMDISK_TARGET): $(MKBOOTFS) | $(COMPRESSION_COMMAND_DEPS)
 	@echo "Target debug ramdisk: $@"
 	$(hide) rm -f $@
 	$(hide) mkdir -p $(dir $@)
 	$(MKBOOTFS) -d $(TARGET_OUT) $(INTERNAL_DEBUG_RAMDISK_SRC_DIRS) | $(COMPRESSION_COMMAND) > $@
+	$(hide) $(call combine-ramdisk-images,$@)
 
 $(call declare-1p-container,$(INSTALLED_DEBUG_RAMDISK_TARGET),)
 $(call declare-container-license-deps,$(INSTALLED_DEBUG_RAMDISK_TARGET),$(INSTALLED_RAMDISK_TARGET),$(PRODUCT_OUT)/:/)
@@ -2952,6 +2976,7 @@ ramdisk_debug-nodeps: $(MKBOOTFS) | $(COMPRESSION_COMMAND_DEPS)
 	$(hide) rm -f $(INSTALLED_DEBUG_RAMDISK_TARGET)
 	$(hide) mkdir -p $(dir $(INSTALLED_DEBUG_RAMDISK_TARGET)) $(INTERNAL_DEBUG_RAMDISK_SRC_DIRS)
 	$(MKBOOTFS) -d $(TARGET_OUT) $(INTERNAL_DEBUG_RAMDISK_SRC_DIRS) | $(COMPRESSION_COMMAND) > $(INSTALLED_DEBUG_RAMDISK_TARGET)
+	$(hide) $(call combine-ramdisk-images,$(INSTALLED_DEBUG_RAMDISK_TARGET))
 
 # -----------------------------------------------------------------
 # the boot-debug.img, which is the kernel plus ramdisk-debug.img
@@ -3154,12 +3179,14 @@ ifdef BUILDING_DEBUG_BOOT_IMAGE
 # few additional test-harness-specific properties in adb_debug.prop.
 INSTALLED_TEST_HARNESS_RAMDISK_TARGET := $(PRODUCT_OUT)/ramdisk-test-harness.img
 
+$(INSTALLED_TEST_HARNESS_RAMDISK_TARGET): $(INTERNAL_RAMDISK_IMAGES_COMBINATION_DEPS)
 $(INSTALLED_TEST_HARNESS_RAMDISK_TARGET): $(INTERNAL_TEST_HARNESS_RAMDISK_SRC_DEPS)
 $(INSTALLED_TEST_HARNESS_RAMDISK_TARGET): $(MKBOOTFS) | $(COMPRESSION_COMMAND_DEPS)
 	@echo "Target test harness ramdisk: $@"
 	$(hide) rm -f $@
 	$(hide) mkdir -p $(dir $@)
 	$(MKBOOTFS) -d $(TARGET_OUT) $(INTERNAL_TEST_HARNESS_RAMDISK_SRC_DIRS) | $(COMPRESSION_COMMAND) > $@
+	$(hide) $(call combine-ramdisk-images,$@)
 
 $(call declare-1p-container,$(INSTALLED_TEST_HARNESS_RAMDISK_TARGET),)
 $(call declare-container-license-deps,$(INSTALLED_TEST_HARNESS_RAMDISK_TARGET),$(INTERNAL_TEST_HARNESS_RAMDISK_SRC_DEPS),$(PRODUCT_OUT)/:/)
@@ -3172,6 +3199,7 @@ ramdisk_test_harness-nodeps: $(MKBOOTFS) | $(COMPRESSION_COMMAND_DEPS)
 	$(hide) rm -f $(INSTALLED_TEST_HARNESS_RAMDISK_TARGET)
 	$(hide) mkdir -p $(dir $(INSTALLED_TEST_HARNESS_RAMDISK_TARGET)) $(INTERNAL_TEST_HARNESS_RAMDISK_SRC_DIRS)
 	$(MKBOOTFS) -d $(TARGET_OUT) $(INTERNAL_TEST_HARNESS_RAMDISK_SRC_DIRS) | $(COMPRESSION_COMMAND) > $(INSTALLED_TEST_HARNESS_RAMDISK_TARGET)
+	$(hide) $(call combine-ramdisk-images,$(INSTALLED_TEST_HARNESS_RAMDISK_TARGET))
 
 # -----------------------------------------------------------------
 # the boot-test-harness.img, which is the kernel plus ramdisk-test-harness.img
