@@ -552,6 +552,15 @@ else ifeq ($(PRODUCT_BUILD_RAMDISK_IMAGE),false)
 endif
 .KATI_READONLY := BUILDING_RAMDISK_IMAGE
 
+# Are we building a vendor ramdisk image
+BUILDING_VENDOR_RAMDISK_IMAGE :=
+ifeq ($(BUILDING_VENDOR_BOOT_IMAGE),true)
+  BUILDING_VENDOR_RAMDISK_IMAGE := true
+else ifeq ($(PRODUCT_BUILD_VENDOR_RAMDISK_IMAGE),true)
+  BUILDING_VENDOR_RAMDISK_IMAGE := true
+endif
+.KATI_READONLY := BUILDING_VENDOR_RAMDISK_IMAGE
+
 # Are we building a debug vendor_boot image
 BUILDING_DEBUG_VENDOR_BOOT_IMAGE :=
 # Can't build vendor_boot-debug.img if we're not building a ramdisk.
