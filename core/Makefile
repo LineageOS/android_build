@@ -1017,6 +1017,9 @@ RAMDISK_NODE_LIST := $(PRODUCT_OUT)/ramdisk_node_list
 # We just build this directly to the install location.
 INSTALLED_RAMDISK_TARGET := $(BUILT_RAMDISK_TARGET)
 $(INSTALLED_RAMDISK_TARGET): PRIVATE_DIRS := debug_ramdisk dev metadata mnt proc second_stage_resources sys
+ifeq ($(COMBINING_RAMDISK_IMAGES),true)
+$(INSTALLED_RAMDISK_TARGET): $(INSTALLED_VENDOR_RAMDISK_TARGET) $(INTERNAL_VENDOR_RAMDISK_FRAGMENT_TARGETS)
+endif
 $(INSTALLED_RAMDISK_TARGET): $(MKBOOTFS) $(RAMDISK_NODE_LIST) $(INTERNAL_RAMDISK_FILES) $(INSTALLED_FILES_FILE_RAMDISK) | $(COMPRESSION_COMMAND_DEPS)
 	$(call pretty,"Target ramdisk: $@")
 	$(hide) mkdir -p $(addprefix $(TARGET_RAMDISK_OUT)/,$(PRIVATE_DIRS))
@@ -1024,6 +1027,9 @@ ifeq (true,$(BOARD_USES_GENERIC_KERNEL_IMAGE))
 	$(hide) mkdir -p $(addprefix $(TARGET_RAMDISK_OUT)/first_stage_ramdisk/,$(PRIVATE_DIRS))
 endif
 	$(hide) $(MKBOOTFS) -n $(RAMDISK_NODE_LIST) -d $(TARGET_OUT) $(TARGET_RAMDISK_OUT) | $(COMPRESSION_COMMAND) > $@
+ifeq ($(COMBINING_RAMDISK_IMAGES),true)
+	cat $(INSTALLED_VENDOR_RAMDISK_TARGET) $(INTERNAL_VENDOR_RAMDISK_FRAGMENT_TARGETS) >> $@
+endif
 
 $(call declare-1p-container,$(INSTALLED_RAMDISK_TARGET),)
 $(call declare-container-license-deps,$(INSTALLED_RAMDISK_TARGET),$(INTERNAL_RAMDISK_FILE),$(PRODUCT_OUT)/:/)
@@ -2534,9 +2540,15 @@ $(recovery_uncompressed_ramdisk): $(INTERNAL_RECOVERY_RAMDISK_FILES_TIMESTAMP)
 	@echo ----- Making uncompressed recovery ramdisk ------
 	$(MKBOOTFS) -d $(TARGET_OUT) $(TARGET_RECOVERY_ROOT_OUT) > $@
 
+ifeq ($(COMBINING_RAMDISK_IMAGES),true)
+$(recovery_ramdisk): $(INSTALLED_VENDOR_RAMDISK_TARGET) $(INTERNAL_VENDOR_RAMDISK_FRAGMENT_TARGETS)
+endif
 $(recovery_ramdisk): $(recovery_uncompressed_ramdisk) $(COMPRESSION_COMMAND_DEPS)
 	@echo ----- Making compressed recovery ramdisk ------
 	$(COMPRESSION_COMMAND) < $(recovery_uncompressed_ramdisk) > $@
+ifeq ($(COMBINING_RAMDISK_IMAGES),true)
+	cat $(INSTALLED_VENDOR_RAMDISK_TARGET) $(INTERNAL_VENDOR_RAMDISK_FRAGMENT_TARGETS) >> $@
+endif
 
 # $(1): output file
 # $(2): optional kernel file
