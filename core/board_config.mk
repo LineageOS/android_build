@@ -126,6 +126,9 @@ _board_strip_readonly_list += BOARD_INCLUDE_RECOVERY_RAMDISK_IN_VENDOR_BOOT
 _board_strip_readonly_list += BOARD_MOVE_GSI_AVB_KEYS_TO_VENDOR_BOOT
 _board_strip_readonly_list += BOARD_COPY_BOOT_IMAGE_TO_TARGET_FILES
 
+# Combine ramdisk images variables
+_board_strip_readonly_list += BOARD_COMBINE_RAMDISK_IMAGES
+
 # Prebuilt image variables
 _board_strip_readonly_list += BOARD_PREBUILT_INIT_BOOT_IMAGE
 
@@ -560,6 +563,28 @@ else ifeq ($(PRODUCT_BUILD_VENDOR_RAMDISK_IMAGE),true)
   BUILDING_VENDOR_RAMDISK_IMAGE := true
 endif
 .KATI_READONLY := BUILDING_VENDOR_RAMDISK_IMAGE
+
+# Are we combining ramdisk images
+COMBINING_RAMDISK_IMAGES :=
+ifeq ($(BUILDING_VENDOR_BOOT_IMAGE),true)
+  ifeq ($(BOARD_COMBINE_RAMDISK_IMAGES),true)
+    $(error Could not combine ramdisk images if BUILDING_VENDOR_BOOT_IMAGE is set to true)
+  endif
+else ifneq ($(BUILDING_VENDOR_RAMDISK_IMAGE),true)
+  ifeq ($(BOARD_COMBINE_RAMDISK_IMAGES),true)
+    $(error Could not combine ramdisk images if BUILDING_VENDOR_RAMDISK_IMAGE is not set to true)
+  endif
+else ifneq ($(BOARD_RAMDISK_USE_LZ4),true)
+# TODO: Figure out whether if other compression types would work too or not
+  ifeq ($(BOARD_COMBINE_RAMDISK_IMAGES),true)
+    $(error Could not combine ramdisk images if BOARD_RAMDISK_USE_LZ4 is not set to true)
+  endif
+else
+  ifeq ($(BOARD_COMBINE_RAMDISK_IMAGES),true)
+    COMBINING_RAMDISK_IMAGES := true
+  endif
+endif
+.KATI_READONLY := COMBINING_RAMDISK_IMAGES
 
 # Are we building a debug vendor_boot image
 BUILDING_DEBUG_VENDOR_BOOT_IMAGE :=
