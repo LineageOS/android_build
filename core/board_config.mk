@@ -126,6 +126,9 @@ _board_strip_readonly_list += BOARD_INCLUDE_RECOVERY_RAMDISK_IN_VENDOR_BOOT
 _board_strip_readonly_list += BOARD_MOVE_GSI_AVB_KEYS_TO_VENDOR_BOOT
 _board_strip_readonly_list += BOARD_COPY_BOOT_IMAGE_TO_TARGET_FILES
 
+# Combine ramdisk images variables
+_board_strip_readonly_list += BOARD_COMBINE_RAMDISK_IMAGES
+
 # Prebuilt image variables
 _board_strip_readonly_list += BOARD_PREBUILT_INIT_BOOT_IMAGE
 
@@ -557,6 +560,23 @@ else ifeq ($(PRODUCT_BUILD_VENDOR_RAMDISK_IMAGE),true)
   BUILDING_VENDOR_RAMDISK_IMAGE := true
 endif
 .KATI_READONLY := BUILDING_VENDOR_RAMDISK_IMAGE
+
+# Are we combining ramdisk images
+COMBINING_RAMDISK_IMAGES :=
+ifeq ($(BOARD_COMBINE_RAMDISK_IMAGES),true)
+  ifeq ($(BUILDING_INIT_BOOT_IMAGE),true)
+    $(error Should not combine ramdisk images if BUILDING_INIT_BOOT_IMAGE is true)
+  endif
+  ifeq ($(BUILDING_VENDOR_BOOT_IMAGE),true)
+    $(error Should not combine ramdisk images if BUILDING_VENDOR_BOOT_IMAGE is true)
+  endif
+  ifneq ($(filter true,$(BOARD_MOVE_RECOVERY_RESOURCES_TO_VENDOR_BOOT) $(BOARD_INCLUDE_RECOVERY_RAMDISK_IN_VENDOR_BOOT)),)
+    $(error Should not combine ramdisk images if BOARD_MOVE_RECOVERY_RESOURCES_TO_VENDOR_BOOT or BOARD_INCLUDE_RECOVERY_RAMDISK_IN_VENDOR_BOOT is set to true)
+  endif
+
+  COMBINING_RAMDISK_IMAGES := true
+endif
+.KATI_READONLY := COMBINING_RAMDISK_IMAGES
 
 # Are we building a debug vendor_boot image
 BUILDING_DEBUG_VENDOR_BOOT_IMAGE :=
