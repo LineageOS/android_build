@@ -200,6 +200,7 @@ endif
 endif
 
 # This will get referenced by ramdisk(-recovery).img target too
+INTERNAL_VENDOR_BOOTCONFIG_TARGET := $(PRODUCT_OUT)/vendor-bootconfig.img
 INSTALLED_VENDOR_RAMDISK_TARGET := $(PRODUCT_OUT)/vendor_ramdisk.img
 
 include $(BUILD_SYSTEM)/sysprop.mk
@@ -360,13 +361,18 @@ ifeq ($(COMBINING_RAMDISK_IMAGES),true)
   ifeq ($(BUILDING_VENDOR_RAMDISK_IMAGE),true)
     INTERNAL_RAMDISK_IMAGES_COMBINATION_DEPS += $(INSTALLED_VENDOR_RAMDISK_TARGET) $(INTERNAL_VENDOR_RAMDISK_FRAGMENT_TARGETS)
   endif
+  ifdef INTERNAL_BOOTCONFIG
+    INTERNAL_RAMDISK_IMAGES_COMBINATION_DEPS += $(INTERNAL_VENDOR_BOOTCONFIG_TARGET)
+  endif
 endif
 
 # $1: ramdisk image target
 define combine-ramdisk-images
 $(if $(filter true,$(COMBINING_RAMDISK_IMAGES)),\
   $(if $(filter true,$(BUILDING_VENDOR_RAMDISK_IMAGE)),\
-    cat $(INSTALLED_VENDOR_RAMDISK_TARGET) $(INTERNAL_VENDOR_RAMDISK_FRAGMENT_TARGETS) >> $(1)))
+    cat $(INSTALLED_VENDOR_RAMDISK_TARGET) $(INTERNAL_VENDOR_RAMDISK_FRAGMENT_TARGETS) >> $(1))
+  $(if $(INTERNAL_BOOTCONFIG),\
+    prebuilts/tools-lineage/${HOST_OS}-x86/bin/bootconfig -a $(INTERNAL_VENDOR_BOOTCONFIG_TARGET) $(1)))
 endef
 
 # -----------------------------------------------------------------
@@ -1412,6 +1418,15 @@ endif # BOARD_PREBUILT_INIT_BOOT_IMAGE
 endif # BUILDING_INIT_BOOT_IMAGE is not true
 
 # -----------------------------------------------------------------
+# vendor bootconfig image
+ifdef INTERNAL_BOOTCONFIG
+$(INTERNAL_VENDOR_BOOTCONFIG_TARGET):
+	rm -f $@
+	$(foreach param,$(INTERNAL_BOOTCONFIG), \
+	 printf "%s\n" $(param) >> $@;)
+endif
+
+# -----------------------------------------------------------------
 # vendor ramdisk image
 INSTALLED_FILES_OUTSIDE_IMAGES := $(filter-out $(TARGET_VENDOR_RAMDISK_OUT)/%, $(INSTALLED_FILES_OUTSIDE_IMAGES))
 ifeq ($(BUILDING_VENDOR_RAMDISK_IMAGE),true)
@@ -1478,11 +1493,6 @@ ifdef INTERNAL_KERNEL_CMDLINE
 endif
 
 ifdef INTERNAL_BOOTCONFIG
-  INTERNAL_VENDOR_BOOTCONFIG_TARGET := $(PRODUCT_OUT)/vendor-bootconfig.img
-  $(INTERNAL_VENDOR_BOOTCONFIG_TARGET):
-	rm -f $@
-	$(foreach param,$(INTERNAL_BOOTCONFIG), \
-	 printf "%s\n" $(param) >> $@;)
   INTERNAL_VENDOR_BOOTIMAGE_ARGS += --vendor_bootconfig $(INTERNAL_VENDOR_BOOTCONFIG_TARGET)
 endif
 
