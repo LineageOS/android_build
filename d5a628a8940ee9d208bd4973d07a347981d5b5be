@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1942b09c_38d5c8ef",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 11
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 32245
+      },
+      "writtenOn": "2024-01-06T20:18:19Z",
+      "side": 1,
+      "message": "it looks like GZIP ramdisk works too, will try XZ when I can do that",
+      "revId": "d5a628a8940ee9d208bd4973d07a347981d5b5be",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
+    }
+  ]
+}
