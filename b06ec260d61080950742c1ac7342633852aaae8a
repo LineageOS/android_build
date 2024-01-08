@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e346f5f2_811bed59",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 16914
+      },
+      "writtenOn": "2024-01-08T03:36:25Z",
+      "side": 1,
+      "message": "Builds and runs OK on pro1 and pro1x",
+      "revId": "b06ec260d61080950742c1ac7342633852aaae8a",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
+    }
+  ]
+}
