@@ -63,6 +63,24 @@
       "message": "Can\u0027t this be done in device tree?",
       "revId": "5e431eb9b5602af7196bf44ec50d91b78d7fab69",
       "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d0fa2831_43418a0e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 19252
+      },
+      "writtenOn": "2024-01-09T15:22:58Z",
+      "side": 1,
+      "message": "do you by chance have an example of how I can do so?",
+      "parentUuid": "628154fe_ec8f1388",
+      "revId": "5e431eb9b5602af7196bf44ec50d91b78d7fab69",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
     }
   ]
 }
