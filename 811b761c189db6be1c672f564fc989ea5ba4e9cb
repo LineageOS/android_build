@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f02499c5_a0d36cb2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 10
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 32245
+      },
+      "writtenOn": "2024-01-13T21:07:35Z",
+      "side": 1,
+      "message": "The whole chain has been tested on QEMU and Redmi 5 Plus (msm8953) with mainline kernel, works as intended.",
+      "revId": "811b761c189db6be1c672f564fc989ea5ba4e9cb",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
+    }
+  ]
+}
