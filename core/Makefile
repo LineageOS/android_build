@@ -953,7 +953,7 @@ COMPRESSION_COMMAND := $(LZ4) -l -12 --favor-decSpeed
 RAMDISK_EXT := .lz4
 else ifeq ($(BOARD_RAMDISK_USE_XZ),true)
 COMPRESSION_COMMAND_DEPS := $(XZ)
-COMPRESSION_COMMAND := $(XZ) -f -c --check=crc32 --lzma2=dict=32MiB
+COMPRESSION_COMMAND := $(XZ) -f -c --check=crc32 $(BOARD_RAMDISK_XZ_ARGS)
 RAMDISK_EXT := .xz
 else
 COMPRESSION_COMMAND_DEPS := $(MINIGZIP)
