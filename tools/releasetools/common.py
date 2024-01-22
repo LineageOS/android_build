@@ -1213,6 +1213,8 @@ def _FindAndLoadRecoveryFstab(info_dict, input_file, read_helper):
   # ../RAMDISK/system/etc/recovery.fstab. This function has to handle both
   # cases, since it may load the info_dict from an old build (e.g. when
   # generating incremental OTAs from that build).
+  if not isinstance(input_file, zipfile.ZipFile) and os.path.isfile(os.path.realpath(input_file)):
+    input_file = zipfile.ZipFile(input_file)
   system_root_image = info_dict.get('system_root_image') == 'true'
   if info_dict.get('no_recovery') != 'true':
     recovery_fstab_path = 'RECOVERY/RAMDISK/system/etc/recovery.fstab'
