@@ -34,6 +34,24 @@
       "parentUuid": "04bbfb5e_71928051",
       "revId": "025942734b97c2ed9ef60ca2b73b121902451b45",
       "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e789426e_e439d0b0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 13648
+      },
+      "writtenOn": "2024-01-28T11:41:53Z",
+      "side": 1,
+      "message": "Sure, the latest patchset is not similar anymore.",
+      "parentUuid": "2b6b2a91_03dc19cb",
+      "revId": "025942734b97c2ed9ef60ca2b73b121902451b45",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
     }
   ]
 }
