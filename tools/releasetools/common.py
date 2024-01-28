@@ -945,7 +945,11 @@ def LoadInfoDict(input_file, repacking=False):
     makeint(b.replace(".img", "_size"))
 
   # Load recovery fstab if applicable.
-  d["fstab"] = _FindAndLoadRecoveryFstab(d, input_file, read_helper)
+  if isinstance(input_file, str) and zipfile.is_zipfile(input_file):
+    with zipfile.ZipFile(input_file, 'r', allowZip64=True) as input_zip:
+      d["fstab"] = _FindAndLoadRecoveryFstab(d, input_zip, read_helper)
+  else:
+    d["fstab"] = _FindAndLoadRecoveryFstab(d, input_file, read_helper)
   ramdisk_format = GetRamdiskFormat(d)
 
   # Tries to load the build props for all partitions with care_map, including
