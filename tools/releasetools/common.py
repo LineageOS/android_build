@@ -1209,6 +1209,9 @@ def _FindAndLoadRecoveryFstab(info_dict, input_file, read_helper):
      info_dict.get("allow_non_ab") != "true":
     return None
 
+  if isinstance(input_file, str) and input_file.endswith('.zip'):
+    input_file = zipfile.ZipFile(input_file, 'r', allowZip64=True)
+
   # We changed recovery.fstab path in Q, from ../RAMDISK/etc/recovery.fstab to
   # ../RAMDISK/system/etc/recovery.fstab. This function has to handle both
   # cases, since it may load the info_dict from an old build (e.g. when
