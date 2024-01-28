@@ -16,6 +16,24 @@
       "message": "https://review.lineageos.org/c/LineageOS/android_build/+/380659",
       "revId": "025942734b97c2ed9ef60ca2b73b121902451b45",
       "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2b6b2a91_03dc19cb",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 10067
+      },
+      "writtenOn": "2024-01-28T11:40:05Z",
+      "side": 1,
+      "message": "eh, I figured this out myself so idk if I want to credit this guy...",
+      "parentUuid": "04bbfb5e_71928051",
+      "revId": "025942734b97c2ed9ef60ca2b73b121902451b45",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
     }
   ]
 }
