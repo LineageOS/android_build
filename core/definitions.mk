@@ -3932,6 +3932,7 @@ $(foreach source,$(ENFORCE_RRO_SOURCES), \
   $(eval enforce_rro_partition := $(word 6,$(_o))) \
   $(eval include $(BUILD_SYSTEM)/generate_enforce_rro.mk) \
   $(eval ALL_MODULES.$$(enforce_rro_source_module).REQUIRED_FROM_TARGET += $$(LOCAL_PACKAGE_NAME)) \
+  $(eval ENFORCE_RRO_PACKAGES_$$(call to-upper,$(enforce_rro_partition)) += $$(LOCAL_PACKAGE_NAME)) \
 )
 endef
 
