@@ -523,6 +523,8 @@ ADDITIONAL_PRODUCT_PROPERTIES := $(strip $(ADDITIONAL_PRODUCT_PROPERTIES))
 
 ifneq ($(PRODUCT_ENFORCE_RRO_TARGETS),)
 ENFORCE_RRO_SOURCES :=
+PRODUCT_ENFORCE_RRO_PACKAGES :=
+VENDOR_ENFORCE_RRO_PACKAGES :=
 endif
 
 # Color-coded warnings including current module info
@@ -595,6 +597,18 @@ endef
 # -------------------------------------------------------------------
 ifneq ($(PRODUCT_ENFORCE_RRO_TARGETS),)
 $(call generate_all_enforce_rro_packages)
+
+include $(CLEAR_VARS)
+LOCAL_MODULE := product_enforce_rro_packages
+LOCAL_MODULE_TAGS := optional
+LOCAL_REQUIRED_MODULES := $(PRODUCT_ENFORCE_RRO_PACKAGES)
+include $(BUILD_PHONY_PACKAGE)
+
+include $(CLEAR_VARS)
+LOCAL_MODULE := vendor_enforce_rro_packages
+LOCAL_MODULE_TAGS := optional
+LOCAL_REQUIRED_MODULES := $(VENDOR_ENFORCE_RRO_PACKAGES)
+include $(BUILD_PHONY_PACKAGE)
 endif
 
 # -------------------------------------------------------------------
