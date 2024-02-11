@@ -39,6 +39,23 @@
       "message": "Builds and runs OK on pro1 and pro1x",
       "revId": "6ead79a5194452633c867d26865e68d5b9b4689f",
       "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "525203da_460f7629",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 17656
+      },
+      "writtenOn": "2024-02-11T11:56:37Z",
+      "side": 1,
+      "message": "builds and runs fine on hotdog",
+      "revId": "6ead79a5194452633c867d26865e68d5b9b4689f",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
     }
   ]
 }
