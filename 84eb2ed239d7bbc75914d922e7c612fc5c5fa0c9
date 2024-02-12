@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9d34563a_cf38aed5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 4550
+      },
+      "writtenOn": "2024-02-12T21:46:49Z",
+      "side": 1,
+      "message": "Explain better what this does in commit message/send to AOSP?",
+      "revId": "84eb2ed239d7bbc75914d922e7c612fc5c5fa0c9",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
+    }
+  ]
+}
