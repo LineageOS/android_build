@@ -883,8 +883,7 @@ function lunch()
     fi
 
     local prebuilt_kernel=$(get_build_var TARGET_PREBUILT_KERNEL)
-    local emulator_kernel=$(get_build_var EMULATOR_KERNEL_FILE)
-    if [ -z "$prebuilt_kernel" ] || [ -z "$emulator_kernel" ]; then
+    if [ -z "$prebuilt_kernel" ]; then
       export INLINE_KERNEL_BUILDING=true
     else
       unset INLINE_KERNEL_BUILDING
