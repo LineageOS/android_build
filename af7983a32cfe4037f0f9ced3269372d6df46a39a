@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f3e2a89e_aa5f9f51",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 13648
+      },
+      "writtenOn": "2024-03-01T11:36:15Z",
+      "side": 1,
+      "message": "Can you re-upload to AOSP with the minor commit message edit?",
+      "revId": "af7983a32cfe4037f0f9ced3269372d6df46a39a",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
+    }
+  ]
+}
