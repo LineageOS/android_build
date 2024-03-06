@@ -79,9 +79,6 @@ define generate-common-build-props
     )\
     echo "ro.$(1).build.date=`$(DATE_FROM_FILE)`" >> $(2);\
     echo "ro.$(1).build.date.utc=`$(DATE_FROM_FILE) +%s`" >> $(2);\
-    # Allow optional assignments for ARC forward-declarations (b/249168657)
-    # TODO: Remove any tag-related inconsistencies once the goals from
-    # go/arc-android-sigprop-changes have been achieved.
     echo "ro.$(1).build.fingerprint?=$(BUILD_FINGERPRINT_FROM_FILE)" >> $(2);\
     echo "ro.$(1).build.id?=$(BUILD_ID)" >> $(2);\
     echo "ro.$(1).build.tags?=$(BUILD_VERSION_TAGS)" >> $(2);\
