@@ -885,11 +885,6 @@ function lunch()
     set_stuff_for_environment
     [[ -n "${ANDROID_QUIET_BUILD:-}" ]] || printconfig
 
-    if [ "${TARGET_BUILD_VARIANT}" = "userdebug" ] && [[  -z "${ANDROID_QUIET_BUILD}" ]]; then
-      echo
-      echo "Want FASTER LOCAL BUILDS? Use -eng instead of -userdebug (however for" \
-        "performance benchmarking continue to use userdebug)"
-    fi
     if [ $used_lunch_menu -eq 1 ]; then
       echo
       echo "Hint: next time you can simply run 'lunch $selection'"
