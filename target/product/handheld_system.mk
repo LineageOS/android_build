@@ -27,6 +27,7 @@ $(call inherit-product-if-exists, external/google-fonts/cutive-mono/fonts.mk)
 $(call inherit-product-if-exists, external/google-fonts/source-sans-pro/fonts.mk)
 $(call inherit-product-if-exists, external/noto-fonts/fonts.mk)
 $(call inherit-product-if-exists, external/roboto-fonts/fonts.mk)
+$(call inherit-product-if-exists, external/roboto-flex-fonts/fonts.mk)
 $(call inherit-product-if-exists, external/hyphenation-patterns/patterns.mk)
 $(call inherit-product-if-exists, frameworks/base/data/keyboards/keyboards.mk)
 $(call inherit-product-if-exists, frameworks/webview/chromium/chromium.mk)
@@ -56,7 +57,6 @@ PRODUCT_PACKAGES += \
     MmsService \
     MtpService \
     MusicFX \
-    NfcNci \
     PacProcessor \
     preinstalled-packages-platform-handheld-system.xml \
     PrintRecommendationService \
@@ -72,7 +72,9 @@ PRODUCT_PACKAGES += \
     UserDictionaryProvider \
     VpnDialogs \
     vr \
+    $(RELEASE_PACKAGE_NFC_STACK)
 
+PRODUCT_PACKAGES += $(RELEASE_PACKAGE_VIRTUAL_CAMERA)
 
 PRODUCT_SYSTEM_SERVER_APPS += \
     FusedLocation \

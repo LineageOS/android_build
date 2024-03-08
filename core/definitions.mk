@@ -48,20 +48,6 @@ ALL_COPIED_TARGETS:=
 # set of installed targets.
 ALL_DEFAULT_INSTALLED_MODULES:=
 
-# The list of tags that have been defined by
-# LOCAL_MODULE_TAGS.  Each word in this variable maps
-# to a corresponding ALL_MODULE_TAGS.<tagname> variable
-# that contains all of the INSTALLED_MODULEs with that tag.
-ALL_MODULE_TAGS:=
-
-# Similar to ALL_MODULE_TAGS, but contains the short names
-# of all targets for a particular tag.  The top-level variable
-# won't have the list of tags;  ust ALL_MODULE_TAGS to get
-# the list of all known tags.  (This means that this variable
-# will always be empty; it's just here as a placeholder for
-# its sub-variables.)
-ALL_MODULE_NAME_TAGS:=
-
 # Full path to all asm, C, C++, lex and yacc generated C files.
 # These all have an order-only dependency on the copied headers
 ALL_C_CPP_ETC_OBJECTS:=
@@ -74,9 +60,6 @@ INTERNAL_DALVIK_MODULES:=
 
 # All findbugs xml files
 ALL_FINDBUGS_FILES:=
-
-# GPL module license files
-ALL_GPL_MODULE_LICENSE_FILES:=
 
 # Packages with certificate violation
 CERTIFICATE_VIOLATION_MODULES :=
@@ -123,9 +106,6 @@ EXPORTS_LIST :=
 # All modules already converted to Soong
 SOONG_ALREADY_CONV :=
 
-# ALL_DEPS.*.ALL_DEPS keys
-ALL_DEPS.MODULES :=
-
 ###########################################################
 ## Debugging; prints a variable list to stdout
 ###########################################################
@@ -148,6 +128,10 @@ endef
 
 define true-or-empty
 $(filter true, $(1))
+endef
+
+define boolean-not
+$(if $(filter true,$(1)),,true)
 endef
 
 ###########################################################
@@ -897,7 +881,8 @@ $(call declare-container-license-metadata,$(1),SPDX-license-identifier-Apache-2.
 endef
 
 ###########################################################
-## Declare license dependencies $(2) for non-module target $(1)
+## Declare license dependencies $(2) with optional colon-separated
+## annotations for non-module target $(1)
 ###########################################################
 define declare-license-deps
 $(strip \
@@ -909,7 +894,8 @@ $(strip \
 endef
 
 ###########################################################
-## Declare license dependencies $(2) for non-module container-type target $(1)
+## Declare license dependencies $(2) with optional colon-separated
+## annotations for non-module container-type target $(1)
 ##
 ## Container-type targets are targets like .zip files that
 ## merely aggregate other files.
@@ -1292,38 +1278,6 @@ $(foreach lib,$(1),$(call intermediates-dir-for,JAVA_LIBRARIES,$(lib),,COMMON)/e
 endef
 
 ###########################################################
-## MODULE_TAG set operations
-###########################################################
-
-# Given a list of tags, return the targets that specify
-# any of those tags.
-# $(1): tag list
-define modules-for-tag-list
-$(sort $(foreach tag,$(1),$(foreach m,$(ALL_MODULE_NAME_TAGS.$(tag)),$(ALL_MODULES.$(m).INSTALLED))))
-endef
-
-# Same as modules-for-tag-list, but operates on
-# ALL_MODULE_NAME_TAGS.
-# $(1): tag list
-define module-names-for-tag-list
-$(sort $(foreach tag,$(1),$(ALL_MODULE_NAME_TAGS.$(tag))))
-endef
-
-# Given an accept and reject list, find the matching
-# set of targets.  If a target has multiple tags and
-# any of them are rejected, the target is rejected.
-# Reject overrides accept.
-# $(1): list of tags to accept
-# $(2): list of tags to reject
-#TODO(dbort): do $(if $(strip $(1)),$(1),$(ALL_MODULE_TAGS))
-#TODO(jbq): as of 20100106 nobody uses the second parameter
-define get-tagged-modules
-$(filter-out \
-  $(call modules-for-tag-list,$(2)), \
-    $(call modules-for-tag-list,$(1)))
-endef
-
-###########################################################
 ## Append a leaf to a base path.  Properly deals with
 ## base paths ending in /.
 ##
@@ -1548,10 +1502,10 @@ endef
 #
 # You must call this with $(eval).
 define define-aidl-java-rule
-define-aidl-java-rule-src := $(patsubst %.aidl,%.java,$(subst ../,dotdot/,$(addprefix $(2)/,$(1))))
-$$(define-aidl-java-rule-src) : $(call clean-path,$(LOCAL_PATH)/$(1)) $(AIDL)
+define_aidl_java_rule_src := $(patsubst %.aidl,%.java,$(subst ../,dotdot/,$(addprefix $(2)/,$(1))))
+$$(define_aidl_java_rule_src) : $(call clean-path,$(LOCAL_PATH)/$(1)) $(AIDL)
 	$$(transform-aidl-to-java)
-$(3) += $$(define-aidl-java-rule-src)
+$(3) += $$(define_aidl_java_rule_src)
 endef
 
 ## Given a .aidl file path generate the rule to compile it a .cpp file.
@@ -1561,10 +1515,10 @@ endef
 #
 # You must call this with $(eval).
 define define-aidl-cpp-rule
-define-aidl-cpp-rule-src := $(patsubst %.aidl,%$(LOCAL_CPP_EXTENSION),$(subst ../,dotdot/,$(addprefix $(2)/,$(1))))
-$$(define-aidl-cpp-rule-src) : $(call clean-path,$(LOCAL_PATH)/$(1)) $(AIDL_CPP)
+define_aidl_cpp_rule_src := $(patsubst %.aidl,%$(LOCAL_CPP_EXTENSION),$(subst ../,dotdot/,$(addprefix $(2)/,$(1))))
+$$(define_aidl_cpp_rule_src) : $(call clean-path,$(LOCAL_PATH)/$(1)) $(AIDL_CPP)
 	$$(transform-aidl-to-cpp)
-$(3) += $$(define-aidl-cpp-rule-src)
+$(3) += $$(define_aidl_cpp_rule_src)
 endef
 
 ###########################################################
@@ -1586,10 +1540,10 @@ endef
 #
 # You must call this with $(eval).
 define define-vts-cpp-rule
-define-vts-cpp-rule-src := $(patsubst %.vts,%$(LOCAL_CPP_EXTENSION),$(subst ../,dotdot/,$(addprefix $(2)/,$(1))))
-$$(define-vts-cpp-rule-src) : $(LOCAL_PATH)/$(1) $(VTSC)
+define_vts_cpp_rule_src := $(patsubst %.vts,%$(LOCAL_CPP_EXTENSION),$(subst ../,dotdot/,$(addprefix $(2)/,$(1))))
+$$(define_vts_cpp_rule_src) : $(LOCAL_PATH)/$(1) $(VTSC)
 	$$(transform-vts-to-cpp)
-$(3) += $$(define-vts-cpp-rule-src)
+$(3) += $$(define_vts_cpp_rule_src)
 endef
 
 ###########################################################
@@ -2378,6 +2332,7 @@ rm -rf $(PRIVATE_JAVA_GEN_DIR)
 mkdir -p $(PRIVATE_JAVA_GEN_DIR)
 $(call dump-words-to-file,$(PRIVATE_RES_FLAT),$(dir $@)aapt2-flat-list)
 $(call dump-words-to-file,$(PRIVATE_OVERLAY_FLAT),$(dir $@)aapt2-flat-overlay-list)
+cat $(PRIVATE_STATIC_LIBRARY_TRANSITIVE_RES_PACKAGES_LISTS) | sort -u | tr '\n' ' ' > $(dir $@)aapt2-transitive-overlay-list
 $(hide) $(AAPT2) link -o $@ \
   $(PRIVATE_AAPT_FLAGS) \
   $(if $(PRIVATE_STATIC_LIBRARY_EXTRA_PACKAGES),$$(cat $(PRIVATE_STATIC_LIBRARY_EXTRA_PACKAGES))) \
@@ -2397,6 +2352,7 @@ $(hide) $(AAPT2) link -o $@ \
   $(addprefix --rename-manifest-package ,$(PRIVATE_MANIFEST_PACKAGE_NAME)) \
   $(addprefix --rename-instrumentation-target-package ,$(PRIVATE_MANIFEST_INSTRUMENTATION_FOR)) \
   -R \@$(dir $@)aapt2-flat-overlay-list \
+  -R \@$(dir $@)aapt2-transitive-overlay-list \
   \@$(dir $@)aapt2-flat-list
 $(SOONG_ZIP) -o $(PRIVATE_SRCJAR) -C $(PRIVATE_JAVA_GEN_DIR) -D $(PRIVATE_JAVA_GEN_DIR)
 $(EXTRACT_JAR_PACKAGES) -i $(PRIVATE_SRCJAR) -o $(PRIVATE_AAPT_EXTRA_PACKAGES) --prefix '--extra-packages '
@@ -2942,7 +2898,7 @@ endef
 define compress-package
 $(hide) \
   mv $@ $@.uncompressed; \
-  $(MINIGZIP) -c $@.uncompressed > $@.compressed; \
+  $(GZIP) -9 -c $@.uncompressed > $@.compressed; \
   rm -f $@.uncompressed; \
   mv $@.compressed $@;
 endef
@@ -2950,7 +2906,7 @@ endef
 ifeq ($(HOST_OS),linux)
 # Runs appcompat and store logs in $(PRODUCT_OUT)/appcompat
 define extract-package
-$(AAPT2) dump resources $@ | awk -F ' |=' '/^Package/{print $$3}' >> $(PRODUCT_OUT)/appcompat/$(PRIVATE_MODULE).log &&
+$(AAPT2) dump resources $@ | awk -F ' |=' '/^Package/{print $$3; exit}' >> $(PRODUCT_OUT)/appcompat/$(PRIVATE_MODULE).log &&
 endef
 define appcompat-header
 $(hide) \
@@ -3202,8 +3158,9 @@ endef
 define copy-vintf-manifest-checked
 $(2): $(1) $(HOST_OUT_EXECUTABLES)/assemble_vintf
 	@echo "Copy xml: $$@"
-	$(hide) $(HOST_OUT_EXECUTABLES)/assemble_vintf -i $$< >/dev/null  # Don't print the xml file to stdout.
-	$$(copy-file-to-target)
+	$(hide) mkdir -p "$$(dir $$@)"
+	$(hide) VINTF_IGNORE_TARGET_FCM_VERSION=true\
+		$(HOST_OUT_EXECUTABLES)/assemble_vintf -i $$< -o $$@
 endef
 
 # Copies many vintf manifest files checked.
@@ -3283,14 +3240,6 @@ $(hide) rm -f $@
 $(hide) cp -p "$<" "$@"
 endef
 
-# The same as copy-file-to-target, but strip out "# comment"-style
-# comments (for config files and such).
-define copy-file-to-target-strip-comments
-@mkdir -p $(dir $@)
-$(hide) rm -f $@
-$(hide) sed -e 's/#.*$$//' -e 's/[ \t]*$$//' -e '/^$$/d' < $< > $@
-endef
-
 # The same as copy-file-to-target, but don't preserve
 # the old modification time.
 define copy-file-to-new-target
@@ -3323,12 +3272,6 @@ endef
 define transform-prebuilt-to-target
 @echo "$($(PRIVATE_PREFIX)DISPLAY) Prebuilt: $(PRIVATE_MODULE) ($@)"
 $(copy-file-to-target)
-endef
-
-# Copy a prebuilt file to a target location, stripping "# comment" comments.
-define transform-prebuilt-to-target-strip-comments
-@echo "$($(PRIVATE_PREFIX)DISPLAY) Prebuilt: $(PRIVATE_MODULE) ($@)"
-$(copy-file-to-target-strip-comments)
 endef
 
 # Copy a prebuilt file to a target location, but preserve symlinks rather than
@@ -3416,6 +3359,10 @@ endef
 # $(2): path in symbols directory
 # $(3): file type (elf or r8)
 # $(4): path in the mappings directory
+#
+# Regarding the restats at the end: I think you should only need to use KATI_RESTAT on $(2), but
+# there appears to be a bug in kati where it was not adding restat=true in the ninja file unless we
+# also added 4 to KATI_RESTAT.
 define _copy-symbols-file-with-mapping
 $(2): .KATI_IMPLICIT_OUTPUTS := $(4)
 $(2): $(SYMBOLS_MAP)
@@ -3424,16 +3371,7 @@ $(2): $(1)
 	$$(copy-file-to-target)
 	$(SYMBOLS_MAP) -$(strip $(3)) $(2) -write_if_changed $(4)
 .KATI_RESTAT: $(2)
-endef
-
-# Returns the directory to copy proguard dictionaries into
-define local-proguard-dictionary-directory
-$(call intermediates-dir-for,PACKAGING,proguard_dictionary)/out/target/common/obj/$(LOCAL_MODULE_CLASS)/$(LOCAL_MODULE)_intermediates
-endef
-
-# Returns the directory to copy proguard dictionary mappings into
-define local-proguard-dictionary-mapping-directory
-$(call intermediates-dir-for,PACKAGING,proguard_dictionary_mapping)/out/target/common/obj/$(LOCAL_MODULE_CLASS)/$(LOCAL_MODULE)_intermediates
+.KATI_RESTAT: $(4)
 endef
 
 

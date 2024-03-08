@@ -29,18 +29,20 @@ $(call add_soong_config_namespace,ANDROID)
 $(call add_soong_config_var,ANDROID,TARGET_DYNAMIC_64_32_MEDIASERVER)
 $(call add_soong_config_var,ANDROID,TARGET_DYNAMIC_64_32_DRMSERVER)
 $(call add_soong_config_var,ANDROID,TARGET_ENABLE_MEDIADRM_64)
-$(call add_soong_config_var,ANDROID,IS_TARGET_MIXED_SEPOLICY)
-ifeq ($(IS_TARGET_MIXED_SEPOLICY),true)
-$(call add_soong_config_var_value,ANDROID,MIXED_SEPOLICY_VERSION,$(BOARD_SEPOLICY_VERS))
-endif
 $(call add_soong_config_var,ANDROID,BOARD_USES_ODMIMAGE)
 $(call add_soong_config_var,ANDROID,BOARD_USES_RECOVERY_AS_BOOT)
+$(call add_soong_config_var,ANDROID,CHECK_DEV_TYPE_VIOLATIONS)
 $(call add_soong_config_var,ANDROID,PRODUCT_INSTALL_DEBUG_POLICY_TO_SYSTEM_EXT)
 
 # Default behavior for the tree wrt building modules or using prebuilts. This
 # can always be overridden by setting the environment variable
 # MODULE_BUILD_FROM_SOURCE.
-BRANCH_DEFAULT_MODULE_BUILD_FROM_SOURCE := false
+BRANCH_DEFAULT_MODULE_BUILD_FROM_SOURCE := $(RELEASE_DEFAULT_MODULE_BUILD_FROM_SOURCE)
+# TODO(b/301454934): The value from build flag is set to empty when use `False`
+# The condition below can be removed after the issue get sorted.
+ifeq (,$(BRANCH_DEFAULT_MODULE_BUILD_FROM_SOURCE))
+  BRANCH_DEFAULT_MODULE_BUILD_FROM_SOURCE := false
+endif
 
 ifneq ($(SANITIZE_TARGET)$(EMMA_INSTRUMENT_FRAMEWORK),)
   # Always use sources when building the framework with Java coverage or
@@ -114,6 +116,9 @@ else
 endif
 
 $(call soong_config_set,art_module,source_build,$(ART_MODULE_BUILD_FROM_SOURCE))
+ifdef ART_DEBUG_OPT_FLAG
+$(call soong_config_set,art_module,art_debug_opt_flag,$(ART_DEBUG_OPT_FLAG))
+endif
 
 ifdef TARGET_BOARD_AUTO
   $(call add_soong_config_var_value, ANDROID, target_board_auto, $(TARGET_BOARD_AUTO))
@@ -124,10 +129,12 @@ endif
 # default.
 INDIVIDUALLY_TOGGLEABLE_PREBUILT_MODULES := \
   btservices \
+  devicelock \
   permission \
   rkpd \
   uwb \
   wifi \
+  mediaprovider \
 
 $(foreach m, $(INDIVIDUALLY_TOGGLEABLE_PREBUILT_MODULES),\
   $(if $(call soong_config_get,$(m)_module,source_build),,\
@@ -155,13 +162,27 @@ endif
 SYSTEMUI_OPTIMIZE_JAVA ?= true
 $(call add_soong_config_var,ANDROID,SYSTEMUI_OPTIMIZE_JAVA)
 
-# Disable Compose in SystemUI by default.
-SYSTEMUI_USE_COMPOSE ?= false
+# Enable Compose in SystemUI by default.
+SYSTEMUI_USE_COMPOSE ?= true
 $(call add_soong_config_var,ANDROID,SYSTEMUI_USE_COMPOSE)
 
 ifdef PRODUCT_AVF_ENABLED
 $(call add_soong_config_var_value,ANDROID,avf_enabled,$(PRODUCT_AVF_ENABLED))
 endif
+
+ifdef PRODUCT_AVF_KERNEL_MODULES_ENABLED
+$(call add_soong_config_var_value,ANDROID,avf_kernel_modules_enabled,$(PRODUCT_AVF_KERNEL_MODULES_ENABLED))
+endif
+
+$(call add_soong_config_var_value,ANDROID,release_avf_allow_preinstalled_apps,$(RELEASE_AVF_ALLOW_PREINSTALLED_APPS))
+$(call add_soong_config_var_value,ANDROID,release_avf_enable_device_assignment,$(RELEASE_AVF_ENABLE_DEVICE_ASSIGNMENT))
+$(call add_soong_config_var_value,ANDROID,release_avf_enable_dice_changes,$(RELEASE_AVF_ENABLE_DICE_CHANGES))
+$(call add_soong_config_var_value,ANDROID,release_avf_enable_llpvm_changes,$(RELEASE_AVF_ENABLE_LLPVM_CHANGES))
+$(call add_soong_config_var_value,ANDROID,release_avf_enable_multi_tenant_microdroid_vm,$(RELEASE_AVF_ENABLE_MULTI_TENANT_MICRODROID_VM))
+$(call add_soong_config_var_value,ANDROID,release_avf_enable_remote_attestation,$(RELEASE_AVF_ENABLE_REMOTE_ATTESTATION))
+$(call add_soong_config_var_value,ANDROID,release_avf_enable_vendor_modules,$(RELEASE_AVF_ENABLE_VENDOR_MODULES))
+
+$(call add_soong_config_var_value,ANDROID,release_binder_death_recipient_weak_from_jni,$(RELEASE_BINDER_DEATH_RECIPIENT_WEAK_FROM_JNI))
 
 # Enable system_server optimizations by default unless explicitly set or if
 # there may be dependent runtime jars.
@@ -178,7 +199,13 @@ else ifneq (platform:services,$(lastword $(PRODUCT_SYSTEM_SERVER_JARS)))
 else
   SYSTEM_OPTIMIZE_JAVA ?= true
 endif
+
+ifeq (true,$(FULL_SYSTEM_OPTIMIZE_JAVA))
+  SYSTEM_OPTIMIZE_JAVA := true
+endif
+
 $(call add_soong_config_var,ANDROID,SYSTEM_OPTIMIZE_JAVA)
+$(call add_soong_config_var,ANDROID,FULL_SYSTEM_OPTIMIZE_JAVA)
 
 # Check for SupplementalApi module.
 ifeq ($(wildcard packages/modules/SupplementalApi),)

@@ -27,7 +27,8 @@ from common import (ZipDelete, DoesInputFileContain, ReadBytesFromInputFile, OPT
                     ZipWriteStr, BuildInfo, LoadDictionaryFromFile,
                     SignFile, PARTITIONS_WITH_BUILD_PROP, PartitionBuildProps,
                     GetRamdiskFormat, ParseUpdateEngineConfig)
-from payload_signer import PayloadSigner
+import payload_signer
+from payload_signer import PayloadSigner, AddSigningArgumentParse, GeneratePayloadProperties
 
 
 logger = logging.getLogger(__name__)
@@ -37,7 +38,6 @@ OPTIONS.force_non_ab = False
 OPTIONS.wipe_user_data = False
 OPTIONS.downgrade = False
 OPTIONS.key_passwords = {}
-OPTIONS.package_key = None
 OPTIONS.incremental_source = None
 OPTIONS.retrofit_dynamic_partitions = False
 OPTIONS.output_metadata_path = None
@@ -48,6 +48,7 @@ METADATA_PROTO_NAME = 'META-INF/com/android/metadata.pb'
 UNZIP_PATTERN = ['IMAGES/*', 'INSTALL/*', 'META/*', 'OTA/*',
                  'RADIO/*', '*/build.prop', '*/default.prop', '*/build.default', "*/etc/vintf/*"]
 SECURITY_PATCH_LEVEL_PROP_NAME = "ro.build.version.security_patch"
+TARGET_FILES_IMAGES_SUBDIR = ["IMAGES", "PREBUILT_IMAGES", "RADIO"]
 
 
 # Key is the compression algorithm, value is minimum API level required to
@@ -743,17 +744,25 @@ def ExtractTargetFiles(path: str):
     logger.info("target files %s is already extracted", path)
     return path
   extracted_dir = common.MakeTempDir("target_files")
+  logger.info(f"Extracting target files {path} to {extracted_dir}")
   common.UnzipToDir(path, extracted_dir, UNZIP_PATTERN + [""])
+  for subdir in TARGET_FILES_IMAGES_SUBDIR:
+    image_dir = os.path.join(extracted_dir, subdir)
+    if not os.path.exists(image_dir):
+      continue
+    for filename in os.listdir(image_dir):
+      if not filename.endswith(".img"):
+        continue
+      common.UnsparseImage(os.path.join(image_dir, filename))
+
   return extracted_dir
 
 
 def LocatePartitionPath(target_files_dir: str, partition: str, allow_empty):
-  path = os.path.join(target_files_dir, "RADIO", partition + ".img")
-  if os.path.exists(path):
-    return path
-  path = os.path.join(target_files_dir, "IMAGES", partition + ".img")
-  if os.path.exists(path):
-    return path
+  for subdir in TARGET_FILES_IMAGES_SUBDIR:
+    path = os.path.join(target_files_dir, subdir, partition + ".img")
+    if os.path.exists(path):
+      return path
   if allow_empty:
     return ""
   raise common.ExternalError(
@@ -766,9 +775,10 @@ def GetPartitionImages(target_files_dir: str, ab_partitions, allow_empty=True):
 
 
 def LocatePartitionMap(target_files_dir: str, partition: str):
-  path = os.path.join(target_files_dir, "RADIO", partition + ".map")
-  if os.path.exists(path):
-    return path
+  for subdir in TARGET_FILES_IMAGES_SUBDIR:
+    path = os.path.join(target_files_dir, subdir, partition + ".map")
+    if os.path.exists(path):
+      return path
   return ""
 
 
@@ -780,12 +790,12 @@ def GetPartitionMaps(target_files_dir: str, ab_partitions):
 class PayloadGenerator(object):
   """Manages the creation and the signing of an A/B OTA Payload."""
 
-  PAYLOAD_BIN = 'payload.bin'
-  PAYLOAD_PROPERTIES_TXT = 'payload_properties.txt'
+  PAYLOAD_BIN = payload_signer.PAYLOAD_BIN
+  PAYLOAD_PROPERTIES_TXT = payload_signer.PAYLOAD_PROPERTIES_TXT
   SECONDARY_PAYLOAD_BIN = 'secondary/payload.bin'
   SECONDARY_PAYLOAD_PROPERTIES_TXT = 'secondary/payload_properties.txt'
 
-  def __init__(self, secondary=False, wipe_user_data=False, minor_version=None, is_partial_update=False):
+  def __init__(self, secondary=False, wipe_user_data=False, minor_version=None, is_partial_update=False, spl_downgrade=False):
     """Initializes a Payload instance.
 
     Args:
@@ -797,6 +807,7 @@ class PayloadGenerator(object):
     self.wipe_user_data = wipe_user_data
     self.minor_version = minor_version
     self.is_partial_update = is_partial_update
+    self.spl_downgrade = spl_downgrade
 
   def _Run(self, cmd):  # pylint: disable=no-self-use
     # Don't pipe (buffer) the output if verbose is set. Let
@@ -824,8 +835,8 @@ class PayloadGenerator(object):
     target_dir = ExtractTargetFiles(target_file)
     cmd = ["delta_generator",
            "--out_file", payload_file]
-    with open(os.path.join(target_dir, "META", "ab_partitions.txt")) as fp:
-      ab_partitions = fp.read().strip().split("\n")
+    with open(os.path.join(target_dir, "META", "ab_partitions.txt"), "r") as fp:
+      ab_partitions = fp.read().strip().splitlines()
     cmd.extend(["--partition_names", ":".join(ab_partitions)])
     cmd.extend(
         ["--new_partitions", GetPartitionImages(target_dir, ab_partitions, False)])
@@ -852,6 +863,11 @@ class PayloadGenerator(object):
 
     if os.path.exists(dynamic_partition_info):
       cmd.extend(["--dynamic_partition_info_file", dynamic_partition_info])
+
+    apex_info = os.path.join(
+        target_dir, "META", "apex_info.pb")
+    if os.path.exists(apex_info):
+      cmd.extend(["--apex_info_file", apex_info])
 
     major_version, minor_version = ParseUpdateEngineConfig(
         os.path.join(target_dir, "META", "update_engine_config.txt"))
@@ -882,30 +898,7 @@ class PayloadGenerator(object):
     """
     assert isinstance(payload_signer, PayloadSigner)
 
-    # 1. Generate hashes of the payload and metadata files.
-    payload_sig_file = common.MakeTempFile(prefix="sig-", suffix=".bin")
-    metadata_sig_file = common.MakeTempFile(prefix="sig-", suffix=".bin")
-    cmd = ["brillo_update_payload", "hash",
-           "--unsigned_payload", self.payload_file,
-           "--signature_size", str(payload_signer.maximum_signature_size),
-           "--metadata_hash_file", metadata_sig_file,
-           "--payload_hash_file", payload_sig_file]
-    self._Run(cmd)
-
-    # 2. Sign the hashes.
-    signed_payload_sig_file = payload_signer.SignHashFile(payload_sig_file)
-    signed_metadata_sig_file = payload_signer.SignHashFile(metadata_sig_file)
-
-    # 3. Insert the signatures back into the payload file.
-    signed_payload_file = common.MakeTempFile(prefix="signed-payload-",
-                                              suffix=".bin")
-    cmd = ["brillo_update_payload", "sign",
-           "--unsigned_payload", self.payload_file,
-           "--payload", signed_payload_file,
-           "--signature_size", str(payload_signer.maximum_signature_size),
-           "--metadata_signature_file", signed_metadata_sig_file,
-           "--payload_signature_file", signed_payload_sig_file]
-    self._Run(cmd)
+    signed_payload_file = payload_signer.SignPayload(self.payload_file)
 
     self.payload_file = signed_payload_file
 
@@ -917,20 +910,17 @@ class PayloadGenerator(object):
     """
     assert self.payload_file is not None
     # 4. Dump the signed payload properties.
-    properties_file = common.MakeTempFile(prefix="payload-properties-",
-                                          suffix=".txt")
-    cmd = ["brillo_update_payload", "properties",
-           "--payload", self.payload_file,
-           "--properties_file", properties_file]
-    self._Run(cmd)
+    properties_file = GeneratePayloadProperties(self.payload_file)
 
-    if self.secondary:
-      with open(properties_file, "a") as f:
-        f.write("SWITCH_SLOT_ON_REBOOT=0\n")
 
-    if self.wipe_user_data:
-      with open(properties_file, "a") as f:
+    with open(properties_file, "a") as f:
+      if self.wipe_user_data:
         f.write("POWERWASH=1\n")
+      if self.secondary:
+        f.write("SWITCH_SLOT_ON_REBOOT=0\n")
+      if self.spl_downgrade:
+        f.write("SPL_DOWNGRADE=1\n")
+
 
     self.payload_properties = properties_file
 
@@ -1064,10 +1054,21 @@ def Fnmatch(filename, pattersn):
 
 def CopyTargetFilesDir(input_dir):
   output_dir = common.MakeTempDir("target_files")
-  shutil.copytree(os.path.join(input_dir, "IMAGES"), os.path.join(
-      output_dir, "IMAGES"), dirs_exist_ok=True)
+
+  def SymlinkIfNotSparse(src, dst):
+    if common.IsSparseImage(src):
+      return common.UnsparseImage(src, dst)
+    else:
+      return os.symlink(os.path.realpath(src), dst)
+
+  for subdir in TARGET_FILES_IMAGES_SUBDIR:
+    if not os.path.exists(os.path.join(input_dir, subdir)):
+      continue
+    shutil.copytree(os.path.join(input_dir, subdir), os.path.join(
+        output_dir, subdir), dirs_exist_ok=True, copy_function=SymlinkIfNotSparse)
   shutil.copytree(os.path.join(input_dir, "META"), os.path.join(
       output_dir, "META"), dirs_exist_ok=True)
+
   for (dirpath, _, filenames) in os.walk(input_dir):
     for filename in filenames:
       path = os.path.join(dirpath, filename)

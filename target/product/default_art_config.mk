@@ -38,16 +38,28 @@ endif
 PRODUCT_BOOT_JARS := \
     $(ART_APEX_JARS)
 
+# List of jars to be included in the ART boot image for testing.
+# DO NOT reorder this list. The order must match the one described above.
+# Note: We use the host variant of "core-icu4j" and "conscrypt" for testing.
+PRODUCT_TEST_ONLY_ART_BOOT_IMAGE_JARS := \
+    $(ART_APEX_JARS) \
+    platform:core-icu4j-host \
+    platform:conscrypt-host \
+
 # /system and /system_ext boot jars.
 PRODUCT_BOOT_JARS += \
     framework-minus-apex \
     framework-graphics \
+    framework-location \
+    framework-nfc \
     ext \
     telephony-common \
     voip-common \
     ims-common
 
 # APEX boot jars. Keep the list sorted by module names and then library names.
+# Note: If the existing apex introduces the new jar, also add it to
+# PRODUCT_APEX_BOOT_JARS_FOR_SOURCE_BUILD_ONLY below.
 # Note: core-icu4j is moved back to PRODUCT_BOOT_JARS in product_config.mk at a later stage.
 # Note: For modules available in Q, DO NOT add new entries here.
 PRODUCT_APEX_BOOT_JARS := \
@@ -63,6 +75,7 @@ PRODUCT_APEX_BOOT_JARS := \
     com.android.ipsec:android.net.ipsec.ike \
     com.android.media:updatable-media \
     com.android.mediaprovider:framework-mediaprovider \
+    com.android.mediaprovider:framework-pdf \
     com.android.ondevicepersonalization:framework-ondevicepersonalization \
     com.android.os.statsd:framework-statsd \
     com.android.permission:framework-permission \
@@ -75,6 +88,12 @@ PRODUCT_APEX_BOOT_JARS := \
     com.android.uwb:framework-uwb \
     com.android.virt:framework-virtualization \
     com.android.wifi:framework-wifi \
+
+# TODO(b/308174306): Adjust this after multiple prebuilts version is supported.
+# APEX boot jars that are not in prebuilt apexes.
+# Keep the list sorted by module names and then library names.
+PRODUCT_APEX_BOOT_JARS_FOR_SOURCE_BUILD_ONLY := \
+    com.android.mediaprovider:framework-pdf \
 
 # List of system_server classpath jars delivered via apex.
 # Keep the list sorted by module names and then library names.
@@ -113,6 +132,13 @@ PRODUCT_APEX_STANDALONE_SYSTEM_SERVER_JARS := \
     com.android.uwb:service-uwb \
     com.android.wifi:service-wifi \
 
+# Overrides the (apex, jar) pairs above when determining the on-device location. The format is:
+# <old_apex>:<old_jar>:<new_apex>:<new_jar>
+PRODUCT_CONFIGURED_JAR_LOCATION_OVERRIDES := \
+    platform:framework-minus-apex:platform:framework \
+    platform:core-icu4j-host:com.android.i18n:core-icu4j \
+    platform:conscrypt-host:com.android.conscrypt:conscrypt \
+
 # Minimal configuration for running dex2oat (default argument values).
 # PRODUCT_USES_DEFAULT_ART_CONFIG must be true to enable boot image compilation.
 PRODUCT_USES_DEFAULT_ART_CONFIG := true
@@ -122,4 +148,4 @@ PRODUCT_SYSTEM_PROPERTIES += \
     dalvik.vm.dex2oat-Xms=64m \
     dalvik.vm.dex2oat-Xmx=512m \
 
-PRODUCT_ENABLE_UFFD_GC := false  # TODO(jiakaiz): Change this to "default".
+PRODUCT_ENABLE_UFFD_GC := default
