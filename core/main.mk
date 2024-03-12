@@ -334,7 +334,7 @@ $(call generate_all_enforce_rro_packages)
 
 _modules_with_rro_suffix :=
 $(foreach m,$(PRODUCT_PACKAGES), \
-  $(eval _modules_with_rro_suffix += $$(m)__auto_generated_rro_%))
+  $(eval _modules_with_rro_suffix += $$(m)__$(PRODUCT_NAME)__auto_generated_rro_%))
 
 include $(CLEAR_VARS)
 LOCAL_MODULE := enforce_rro_packages_product
