@@ -36,7 +36,6 @@ PRODUCT_PACKAGES += \
     PhotoTable \
     preinstalled-packages-platform-aosp-product.xml \
     ThemePicker \
-    WallpaperPicker \
 
 # Telephony:
 #   Provide a APN configuration to GSI product
