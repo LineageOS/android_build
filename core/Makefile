@@ -7324,7 +7324,7 @@ ifeq (true,$(PRODUCT_BUILD_SUPER_PARTITION))
 # BOARD_SUPER_PARTITION_SIZE must be defined to build super image.
 ifneq ($(BOARD_SUPER_PARTITION_SIZE),)
 
-ifneq (true,$(PRODUCT_RETROFIT_DYNAMIC_PARTITIONS))
+ifeq ($(words $(BOARD_SUPER_PARTITION_BLOCK_DEVICES)),1)
 
 # For real devices and for dist builds, build super image from target files to an intermediate directory.
 INTERNAL_SUPERIMAGE_DIST_TARGET := $(call intermediates-dir-for,PACKAGING,super.img)/super.img
@@ -7342,7 +7342,7 @@ endif
 .PHONY: superimage_dist
 superimage_dist: $(INTERNAL_SUPERIMAGE_DIST_TARGET)
 
-endif # PRODUCT_RETROFIT_DYNAMIC_PARTITIONS != "true"
+endif # $(words $(BOARD_SUPER_PARTITION_BLOCK_DEVICES)) == 1
 endif # BOARD_SUPER_PARTITION_SIZE != ""
 endif # PRODUCT_BUILD_SUPER_PARTITION == "true"
 
@@ -7351,7 +7351,7 @@ endif # PRODUCT_BUILD_SUPER_PARTITION == "true"
 
 ifeq (true,$(PRODUCT_BUILD_SUPER_PARTITION))
 ifneq ($(BOARD_SUPER_PARTITION_SIZE),)
-ifneq (true,$(PRODUCT_RETROFIT_DYNAMIC_PARTITIONS))
+ifeq ($(words $(BOARD_SUPER_PARTITION_BLOCK_DEVICES)),1)
 
 # Build super.img by using $(INSTALLED_*IMAGE_TARGET) to $(1)
 # $(1): built image path
@@ -7406,7 +7406,7 @@ superimage-nodeps supernod: | $(INSTALLED_SUPERIMAGE_DEPENDENCIES)
 	$(call build-superimage-target,$(INSTALLED_SUPERIMAGE_TARGET),\
 	  $(call intermediates-dir-for,PACKAGING,superimage-nodeps)/misc_info.txt)
 
-endif # PRODUCT_RETROFIT_DYNAMIC_PARTITIONS != "true"
+endif # $(words $(BOARD_SUPER_PARTITION_BLOCK_DEVICES)) == 1
 endif # BOARD_SUPER_PARTITION_SIZE != ""
 endif # PRODUCT_BUILD_SUPER_PARTITION == "true"
 
