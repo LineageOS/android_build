@@ -179,11 +179,14 @@ class DynamicPartitionSizeChecker(object):
       raise RuntimeError("check_partition_sizes should only be executed on "
                          "builds with dynamic partitions enabled")
 
-    # Retrofit dynamic partitions: 1 slot per "super", 2 "super"s on the device
+    # Retrofit dynamic partitions:
+    # 1 slot per "super"
+    # 1 "super" on the device (non-A/B)
+    # 2 "super"s on the device (A/B)
     if dap == Dap.RDAP:
-      if slot != DeviceType.AB:
+      if slot != DeviceType.NONE and slot != DeviceType.AB:
         raise RuntimeError("Device with retrofit dynamic partitions must use "
-                           "regular (non-Virtual) A/B")
+                           "non-A/B or regular (non-Virtual) A/B")
       return 1
 
     # Launch DAP: 1 super on the device
