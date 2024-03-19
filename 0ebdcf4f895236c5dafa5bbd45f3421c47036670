@@ -16,6 +16,23 @@
       "message": "not tested on real device yet tho, will report when I do so",
       "revId": "0ebdcf4f895236c5dafa5bbd45f3421c47036670",
       "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "54ea310b_2866275c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 32245
+      },
+      "writtenOn": "2024-03-19T16:17:18Z",
+      "side": 1,
+      "message": "it works, flashed and device booted",
+      "revId": "0ebdcf4f895236c5dafa5bbd45f3421c47036670",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
     }
   ]
 }
