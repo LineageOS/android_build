@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "06470a8f_e36fa277",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 32245
+      },
+      "writtenOn": "2024-03-19T09:55:21Z",
+      "side": 1,
+      "message": "not tested on real device yet tho, will report when I do so",
+      "revId": "0ebdcf4f895236c5dafa5bbd45f3421c47036670",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
+    }
+  ]
+}
