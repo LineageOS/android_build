@@ -120,6 +120,12 @@ def CopyInstallTools(output_zip):
 def WriteFullOTAPackage(input_zip, output_file):
   target_info = common.BuildInfo(OPTIONS.info_dict, OPTIONS.oem_dicts)
 
+  is_building_rdap_ota_package = \
+      target_info.get('use_dynamic_partitions') == "true" \
+      and target_info.get('build_super_partition') == "true" \
+      and target_info.get('build_retrofit_dynamic_partitions_ota_package') == "true" \
+      and OPTIONS.retrofit_dynamic_partitions
+
   # We don't know what version it will be installed on top of. We expect the API
   # just won't change very often. Similarly for fstab, it might have changed in
   # the target build.
@@ -158,10 +164,11 @@ def WriteFullOTAPackage(input_zip, output_file):
   target_info.WriteDeviceAssertions(script, OPTIONS.oem_no_mount)
   device_specific.FullOTA_Assertions()
 
-  block_diff_dict = GetBlockDifferences(target_zip=input_zip, source_zip=None,
-                                        target_info=target_info,
-                                        source_info=None,
-                                        device_specific=device_specific)
+  if not is_building_rdap_ota_package:
+    block_diff_dict = GetBlockDifferences(target_zip=input_zip, source_zip=None,
+                                          target_info=target_info,
+                                          source_info=None,
+                                          device_specific=device_specific)
 
   # Two-step package strategy (in chronological order, which is *not*
   # the order in which the generated script has things):
@@ -230,13 +237,34 @@ else if get_stage("%(bcb_dev)s") == "3/3" then
 
   # All other partitions as well as the data wipe use 10% of the progress, and
   # the update of the system partition takes the remaining progress.
-  system_progress = 0.9 - (len(block_diff_dict) - 1) * 0.1
-  if OPTIONS.wipe_user_data:
-    system_progress -= 0.1
-  progress_dict = {partition: 0.1 for partition in block_diff_dict}
-  progress_dict["system"] = system_progress
+  if not is_building_rdap_ota_package:
+    system_progress = 0.9 - (len(block_diff_dict) - 1) * 0.1
+    if OPTIONS.wipe_user_data:
+      system_progress -= 0.1
+    progress_dict = {partition: 0.1 for partition in block_diff_dict}
+    progress_dict["system"] = system_progress
 
-  if target_info.get('use_dynamic_partitions') == "true":
+  if is_building_rdap_ota_package:
+    super_block_devices = target_info.get('super_block_devices', '').strip().split()
+    assert len(super_block_devices) > 0
+    for b in range(len(super_block_devices)):
+      super_image_name = "super_" + super_block_devices[b] + ".img"
+      super_image_path = os.path.join(OPTIONS.input_tmp, "OTA", super_image_name)
+      assert os.path.exists(super_image_path)
+      if common.IsSparseImage(super_image_path):
+        unsparse_super_image_name = "unsparse_" + super_image_name
+        unsparse_super_image_path = os.path.join(OPTIONS.input_tmp, "OTA", unsparse_super_image_name)
+        common.UnsparseImage(super_image_path, target_path=unsparse_super_image_path)
+      else:
+        unsparse_super_image_name = super_image_name
+        unsparse_super_image_path = super_image_path
+      super_image = common.File.FromLocalFile(unsparse_super_image_name, unsparse_super_image_path)
+      # TODO common.CheckSize(super_image.data, super_image_name, target_info)
+      common.ZipWriteStr(output_zip, super_image_name, super_image.data)
+      script.Print("Installing " + super_block_devices[b] + " block device image...")
+      script.ShowProgress(0.1, 0)
+      script.WriteRawImageToBootDevice(super_block_devices[b], super_image_name)
+  elif target_info.get('use_dynamic_partitions') == "true":
     # Use empty source_info_dict to indicate that all partitions / groups must
     # be re-added.
     dynamic_partitions_diff = common.DynamicPartitionsDifference(
