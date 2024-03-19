@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4efb32cc_f7949826",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 32245
+      },
+      "writtenOn": "2024-03-19T09:42:38Z",
+      "side": 1,
+      "message": "Inspired by https://source.android.com/docs/core/ota/dynamic_partitions/ab_legacy#update-flow-using-a-retrofit-update-package",
+      "revId": "dfcd0ddcb42eab196151470b5bf242c8475a44ec",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
+    }
+  ]
+}
