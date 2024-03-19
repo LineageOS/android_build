@@ -448,6 +448,16 @@ class EdifyGenerator(object):
         raise ValueError(
             "don't know how to write \"%s\" partitions" % p.fs_type)
 
+  def WriteRawImageToBootDevice(self, boot_device, fn):
+    """Write the given package file into the boot device."""
+
+    # TODO: Assert the boot device exists
+
+    device = "/dev/block/by-name/" + boot_device
+    args = {'device': device, 'fn': fn}
+    self.script.append(
+        'package_extract_file("%(fn)s", "%(device)s");' % args)
+
   def AppendExtra(self, extra):
     """Append text verbatim to the output script."""
     self.script.append(extra)
