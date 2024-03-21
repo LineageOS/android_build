@@ -270,6 +270,9 @@ def IsApexFile(filename):
 
 
 def IsOtaPackage(fp):
+  if not zipfile.is_zipfile(fp):
+    return False
+
   with zipfile.ZipFile(fp) as zfp:
     if not PAYLOAD_BIN in zfp.namelist():
       return False
