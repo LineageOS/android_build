@@ -946,7 +946,7 @@ def CopyInputDirectory(src, dst, filter_file):
       line = line.strip()
       if not line:
         return
-      if line != os.path.normpath(line):
+      if line != os.path.normpath(line) and line != os.path.normpath(line)+"/":
         sys.exit(f"{line}: not normalized")
       if line.startswith("../") or line.startswith('/'):
         sys.exit(f"{line}: escapes staging directory by starting with ../ or /")
