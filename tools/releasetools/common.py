@@ -3284,7 +3284,8 @@ class DynamicPartitionsDifference(object):
 
     script.Comment('Update dynamic partition metadata')
     script.AppendExtra('assert(update_dynamic_partitions('
-                       'package_extract_file("dynamic_partitions_op_list")));')
+                      'package_extract_file("dynamic_partitions_op_list"), '
+                      'package_extract_file("unsparse_super_empty.img")));')
 
     if write_verify_script:
       for p, u in self._partition_updates.items():
