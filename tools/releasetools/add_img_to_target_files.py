@@ -787,9 +787,16 @@ def AddSuperEmpty(output_zip):
   img = OutputFile(output_zip, OPTIONS.input_tmp, "IMAGES", "super_empty.img")
   if os.path.exists(img.name):
     logger.info("super_empty.img already exists; no need to rebuild...")
-    return
-  build_super_image.BuildSuperImage(OPTIONS.info_dict, img.name)
-  img.Write()
+  else:
+    build_super_image.BuildSuperImage(OPTIONS.info_dict, img.name)
+    img.Write()
+
+  unsparse_img = OutputFile(output_zip, OPTIONS.input_tmp, "IMAGES", "unsparse_super_empty.img")
+  if os.path.exists(unsparse_img.name):
+    logger.info("unsparse_super_empty.img already exists; no need to rebuild...")
+  else:
+    build_super_image.BuildSuperImage(OPTIONS.info_dict, unsparse_img.name, force_non_sparse=True)
+    unsparse_img.Write()
 
 
 def AddSuperSplit(output_zip):

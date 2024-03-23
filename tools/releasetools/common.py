@@ -3923,6 +3923,9 @@ class DynamicPartitionsDifference(object):
     if progress_dict is None:
       progress_dict = {}
 
+    self._have_super_empty = \
+      info_dict.get("build_super_empty_partition") == "true"
+
     self._build_without_vendor = build_without_vendor
     self._remove_all_before_apply = False
     if source_info_dict is None:
@@ -4020,8 +4023,13 @@ class DynamicPartitionsDifference(object):
     ZipWrite(output_zip, op_list_path, "dynamic_partitions_op_list")
 
     script.Comment('Update dynamic partition metadata')
-    script.AppendExtra('assert(update_dynamic_partitions('
-                       'package_extract_file("dynamic_partitions_op_list")));')
+    if self._have_super_empty:
+      script.AppendExtra('assert(update_dynamic_partitions('
+                        'package_extract_file("dynamic_partitions_op_list"), '
+                        'package_extract_file("unsparse_super_empty.img")));')
+    else:
+      script.AppendExtra('assert(update_dynamic_partitions('
+                        'package_extract_file("dynamic_partitions_op_list")));')
 
     if write_verify_script:
       for p, u in self._partition_updates.items():
