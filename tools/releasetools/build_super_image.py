@@ -69,7 +69,7 @@ def GetArgumentsForImage(partition, group, image=None):
   return cmd
 
 
-def BuildSuperImageFromDict(info_dict, output):
+def BuildSuperImageFromDict(info_dict, output, force_non_sparse=False):
 
   cmd = [info_dict["lpmake"],
          "--metadata-size", "65536",
@@ -133,7 +133,7 @@ def BuildSuperImageFromDict(info_dict, output):
 
       cmd += GetArgumentsForImage(partition + "_b", group + "_b", other_image)
 
-  if info_dict.get("build_non_sparse_super_partition") != "true":
+  if info_dict.get("build_non_sparse_super_partition") != "true" and not force_non_sparse:
     cmd.append("--sparse")
 
   cmd += ["--output", output]
@@ -178,11 +178,11 @@ def BuildSuperImageFromTargetFiles(inp, out):
   return BuildSuperImageFromExtractedTargetFiles(input_tmp, out)
 
 
-def BuildSuperImage(inp, out):
+def BuildSuperImage(inp, out, force_non_sparse=False):
 
   if isinstance(inp, dict):
     logger.info("Building super image from info dict...")
-    return BuildSuperImageFromDict(inp, out)
+    return BuildSuperImageFromDict(inp, out, force_non_sparse=False)
 
   if isinstance(inp, str):
     if os.path.isdir(inp):
