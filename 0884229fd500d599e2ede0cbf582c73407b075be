@@ -33,6 +33,23 @@
       "message": "Fixes signing foster",
       "revId": "0884229fd500d599e2ede0cbf582c73407b075be",
       "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5bd6f1fa_61c93871",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 18796
+      },
+      "writtenOn": "2024-03-25T05:37:28Z",
+      "side": 1,
+      "message": "Can\u0027t we fix this copying zip instead of symlink for bootanimation-dark.zip? We can avoid modifying here. Bootanimation is only 1-2mb",
+      "revId": "0884229fd500d599e2ede0cbf582c73407b075be",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
     }
   ]
 }
