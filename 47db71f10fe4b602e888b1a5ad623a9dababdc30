@@ -16,6 +16,24 @@
       "message": "don\u0027t !fixup on AOSP commits pls - also what use case does this fix?",
       "revId": "47db71f10fe4b602e888b1a5ad623a9dababdc30",
       "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6d205331_0025cee5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 31334
+      },
+      "writtenOn": "2024-03-25T16:23:06Z",
+      "side": 1,
+      "message": "Some path are written in \"foo/bar/\"(Like https://github.com/LineageOS/android_device_xiaomi_sm8250-common/blob/lineage-21/Android.mk#L34), and os.path.normpath will remove the \u0027/\u0027 from path, cause this process to exit when generating vendor.img.",
+      "parentUuid": "c9037840_26d1ada0",
+      "revId": "47db71f10fe4b602e888b1a5ad623a9dababdc30",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
     }
   ]
 }
