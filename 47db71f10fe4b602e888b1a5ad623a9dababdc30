@@ -88,6 +88,24 @@
       "parentUuid": "c93991da_b9e24cff",
       "revId": "47db71f10fe4b602e888b1a5ad623a9dababdc30",
       "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5c8a3e45_98607db6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 31334
+      },
+      "writtenOn": "2024-03-25T17:02:12Z",
+      "side": 1,
+      "message": "It\u0027s being fix by other patches now, closing this one.",
+      "parentUuid": "346a45de_9d44c50d",
+      "revId": "47db71f10fe4b602e888b1a5ad623a9dababdc30",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
     }
   ]
 }
