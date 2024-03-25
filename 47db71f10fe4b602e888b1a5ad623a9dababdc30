@@ -70,6 +70,24 @@
       "parentUuid": "85b86325_8103f88b",
       "revId": "47db71f10fe4b602e888b1a5ad623a9dababdc30",
       "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "346a45de_9d44c50d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 10067
+      },
+      "writtenOn": "2024-03-25T16:42:21Z",
+      "side": 1,
+      "message": "I build multiple qcom devices, and none of them have issues building vendor, so clearly something could be fixed.",
+      "parentUuid": "c93991da_b9e24cff",
+      "revId": "47db71f10fe4b602e888b1a5ad623a9dababdc30",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
     }
   ]
 }
