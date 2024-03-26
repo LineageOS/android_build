@@ -3887,22 +3887,8 @@ def MakeRecoveryPatch(input_dir, output_sink, recovery_img, boot_img,
     output_sink(recovery_img_path, recovery_img.data)
 
   else:
-    include_recovery_dtbo = info_dict.get("include_recovery_dtbo") == "true"
-    include_recovery_acpio = info_dict.get("include_recovery_acpio") == "true"
-    path = os.path.join(input_dir, recovery_resource_dat_path)
-    # Use bsdiff to handle mismatching entries (Bug: 72731506)
-    if include_recovery_dtbo or include_recovery_acpio:
-      diff_program = ["bsdiff"]
-      bonus_args = ""
-      assert not os.path.exists(path)
-    else:
-      diff_program = ["imgdiff"]
-      if os.path.exists(path):
-        diff_program.append("-b")
-        diff_program.append(path)
-        bonus_args = "--bonus /vendor/etc/recovery-resource.dat"
-      else:
-        bonus_args = ""
+    diff_program = ["bsdiff"]
+    bonus_args = ""
 
     d = Difference(recovery_img, boot_img, diff_program=diff_program)
     _, _, patch = d.ComputePatch()
