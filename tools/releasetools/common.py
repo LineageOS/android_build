@@ -3821,15 +3821,19 @@ def MakeRecoveryPatch(input_dir, output_sink, recovery_img, boot_img,
 
   full_recovery_image = info_dict.get("full_recovery_image") == "true"
   board_uses_vendorimage = info_dict.get("board_uses_vendorimage") == "true"
+  board_builds_vendorimage =  info_dict.get("board_builds_vendorimage") == "true"
 
-  if board_uses_vendorimage:
+  if board_builds_vendorimage:
     # In this case, the output sink is rooted at VENDOR
     recovery_img_path = "etc/recovery.img"
     recovery_resource_dat_path = "VENDOR/etc/recovery-resource.dat"
-  else:
+  elif not board_uses_vendorimage:
     # In this case the output sink is rooted at SYSTEM
     recovery_img_path = "vendor/etc/recovery.img"
     recovery_resource_dat_path = "SYSTEM/vendor/etc/recovery-resource.dat"
+  else:
+    logger.warning('Recovery patch generation is disable when prebuilt vendor image is used.')
+    return None
 
   if full_recovery_image:
     output_sink(recovery_img_path, recovery_img.data)
