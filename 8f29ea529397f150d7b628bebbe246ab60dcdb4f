@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "332b956b_d7d26620",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 29080
+      },
+      "writtenOn": "2024-03-31T18:31:20Z",
+      "side": 1,
+      "message": "iirc it breaks building on devices already targeting cortex-a76 as their 32-bit arch\nimho it should either be merged in AOSP or not merged at all",
+      "revId": "8f29ea529397f150d7b628bebbe246ab60dcdb4f",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
+    }
+  ]
+}
