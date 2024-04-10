@@ -240,7 +240,11 @@ ifndef PLATFORM_SECURITY_PATCH
     #  It must be of the form "YYYY-MM-DD" on production devices.
     #  It must match one of the Android Security Patch Level strings of the Public Security Bulletins.
     #  If there is no $PLATFORM_SECURITY_PATCH set, keep it empty.
+<<<<<<< PATCH SET (3771fd Bump Security String to 2024-04-05)
+      PLATFORM_SECURITY_PATCH := 2024-04-05
+=======
     PLATFORM_SECURITY_PATCH := 2024-03-05
+>>>>>>> BASE      (4c11b5 Bump Security String to 2024-03-05)
 endif
 .KATI_READONLY := PLATFORM_SECURITY_PATCH
 
