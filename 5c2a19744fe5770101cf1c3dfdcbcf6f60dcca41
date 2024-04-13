@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "dbc504af_c7f6225a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 10067
+      },
+      "writtenOn": "2024-04-13T13:44:08Z",
+      "side": 1,
+      "message": "bgcngm: your device is affected, make sure this *works* properly (or switch it to full recovery image)",
+      "revId": "5c2a19744fe5770101cf1c3dfdcbcf6f60dcca41",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
+    }
+  ]
+}
