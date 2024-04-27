@@ -16,6 +16,23 @@
       "message": "give a try plzz",
       "revId": "2da41b24a7e6d4822647ff96a805f02baa74a852",
       "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fee9ece8_def8a390",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 16185
+      },
+      "writtenOn": "2024-04-27T22:38:39Z",
+      "side": 1,
+      "message": "works fine on lge 8996 with and without the flag set",
+      "revId": "2da41b24a7e6d4822647ff96a805f02baa74a852",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
     }
   ]
 }
