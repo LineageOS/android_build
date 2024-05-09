@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "03cbe915_038fe0f6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 17656
+      },
+      "writtenOn": "2024-05-09T11:40:27Z",
+      "side": 1,
+      "message": "Are you going to push the remaining stuff (e.g. frameworks/base) as well ?",
+      "revId": "4888c1c610fb4c7e3e426d3475db8e854c6f4a33",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
+    }
+  ]
+}
