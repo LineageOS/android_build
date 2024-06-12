@@ -1275,10 +1275,16 @@ $(eval include device/lineage/sepolicy/common/sepolicy.mk)
 endif
 endif
 
+SOONG_VARIABLES := $(SOONG_OUT_DIR)/soong.$(TARGET_PRODUCT).variables
+SOONG_EXTRA_VARIABLES := $(SOONG_OUT_DIR)/soong.$(TARGET_PRODUCT).extra.variables
+
 ifeq ($(CALLED_FROM_SETUP),true)
 include $(BUILD_SYSTEM)/ninja_config.mk
 include $(BUILD_SYSTEM)/soong_config.mk
 endif
+
+SOONG_VARIABLES :=
+SOONG_EXTRA_VARIABLES :=
 
 -include external/ltp/android/ltp_package_list.mk
 DEFAULT_DATA_OUT_MODULES := ltp $(ltp_packages)
