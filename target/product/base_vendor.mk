@@ -17,7 +17,6 @@
 # Base modules and settings for recovery.
 PRODUCT_PACKAGES += \
     adbd.recovery \
-    android.hardware.health@2.0-impl-default.recovery \
     cgroups.recovery.json \
     charger.recovery \
     init_second_stage.recovery \
