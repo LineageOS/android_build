@@ -229,5 +229,3 @@ PRODUCT_SYSTEM_PROPERTIES += \
     dalvik.vm.image-dex2oat-Xmx=64m \
     dalvik.vm.dex2oat-Xms=64m \
     dalvik.vm.dex2oat-Xmx=512m \
-
-PRODUCT_ENABLE_UFFD_GC := default
