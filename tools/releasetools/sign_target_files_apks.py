@@ -124,14 +124,8 @@ Usage:  sign_target_files_apks [flags] input_target_files output_target_files
 
   --gki_signing_algorithm <algorithm>
   --gki_signing_key <key>
-      Use the specified algorithm (e.g. SHA256_RSA4096) and the key to generate
-      'boot signature' in a v4 boot.img. Otherwise it uses the existing values
-      in info dict.
-
   --gki_signing_extra_args <args>
-      Specify any additional args that are needed to generate 'boot signature'
-      (e.g. --prop foo:bar). The args will be appended to the existing ones
-      in info dict.
+      DEPRECATED Does nothing.
 
   --android_jar_path <path>
       Path to the android.jar to repack the apex file.
@@ -221,9 +215,6 @@ OPTIONS.tag_changes = ("-test-keys", "-dev-keys", "+release-keys")
 OPTIONS.avb_keys = {}
 OPTIONS.avb_algorithms = {}
 OPTIONS.avb_extra_args = {}
-OPTIONS.gki_signing_key = None
-OPTIONS.gki_signing_algorithm = None
-OPTIONS.gki_signing_extra_args = None
 OPTIONS.android_jar_path = None
 OPTIONS.vendor_partitions = set()
 OPTIONS.vendor_otatools = None
@@ -599,7 +590,7 @@ def ProcessTargetFiles(input_tf_zip: zipfile.ZipFile, output_tf_zip, misc_info,
         [len(os.path.basename(i.filename)) for i in input_tf_zip.infolist()
          if GetApkFileInfo(i.filename, compressed_extension, [])[0]])
   except ValueError:
-    # Sets this to zero for targets without APK files, e.g., gki_arm64.
+    # Sets this to zero for targets without APK files.
     maxsize = 0
 
   for info in input_tf_zip.infolist():
@@ -821,9 +812,6 @@ def ProcessTargetFiles(input_tf_zip: zipfile.ZipFile, output_tf_zip, misc_info,
   # Rewrite the props in AVB signing args.
   if misc_info.get('avb_enable') == 'true':
     RewriteAvbProps(misc_info)
-
-  # Replace the GKI signing key for boot.img, if any.
-  ReplaceGkiSigningKey(misc_info)
 
   # Write back misc_info with the latest values.
   ReplaceMiscInfoTxt(input_tf_zip, output_tf_zip, misc_info)
@@ -1106,27 +1094,6 @@ def RewriteAvbProps(misc_info):
       misc_info[args_key] = result
 
 
-def ReplaceGkiSigningKey(misc_info):
-  """Replaces the GKI signing key."""
-
-  key = OPTIONS.gki_signing_key
-  if not key:
-    return
-
-  algorithm = OPTIONS.gki_signing_algorithm
-  if not algorithm:
-    raise ValueError("Missing --gki_signing_algorithm")
-
-  print('Replacing GKI signing key with "%s" (%s)' % (key, algorithm))
-  misc_info["gki_signing_algorithm"] = algorithm
-  misc_info["gki_signing_key_path"] = key
-
-  extra_args = OPTIONS.gki_signing_extra_args
-  if extra_args:
-    print('Setting GKI signing args: "%s"' % (extra_args))
-    misc_info["gki_signing_signature_args"] = extra_args
-
-
 def BuildKeyMap(misc_info, key_mapping_options):
   for s, d in key_mapping_options:
     if s is None:   # -d option
@@ -1141,7 +1108,7 @@ def BuildKeyMap(misc_info, key_mapping_options):
           devkeydir + "/shared":   d + "/shared",
           devkeydir + "/platform": d + "/platform",
           devkeydir + "/networkstack": d + "/networkstack",
-          devkeydir + "/sdk_sandbox" : d + "/sdk_sandbox",
+          devkeydir + "/sdk_sandbox": d + "/sdk_sandbox",
           devkeydir + "/bluetooth"   : d + "/bluetooth",
       })
     else:
@@ -1482,12 +1449,6 @@ def main(argv):
       # 'oem=--signing_helper_with_files=/tmp/avbsigner.sh'.
       partition, extra_args = a.split("=", 1)
       OPTIONS.avb_extra_args[partition] = extra_args
-    elif o == "--gki_signing_key":
-      OPTIONS.gki_signing_key = a
-    elif o == "--gki_signing_algorithm":
-      OPTIONS.gki_signing_algorithm = a
-    elif o == "--gki_signing_extra_args":
-      OPTIONS.gki_signing_extra_args = a
     elif o == "--vendor_otatools":
       OPTIONS.vendor_otatools = a
     elif o == "--vendor_partitions":
@@ -1498,6 +1459,8 @@ def main(argv):
       OPTIONS.override_apk_keys = a
     elif o == "--override_apex_keys":
       OPTIONS.override_apex_keys = a
+    elif o in ("--gki_signing_key",  "--gki_signing_algorithm",  "--gki_signing_extra_args"):
+      print(f"{o} is deprecated and does nothing")
     else:
       return False
     return True

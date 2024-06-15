@@ -110,6 +110,7 @@ $(KATI_obsolete_var BUILD_BROKEN_DUP_COPY_HEADERS)
 $(KATI_obsolete_var BUILD_BROKEN_ENG_DEBUG_TAGS)
 $(KATI_obsolete_export It is a global setting. See $(CHANGES_URL)#export_keyword)
 $(KATI_obsolete_var BUILD_BROKEN_ANDROIDMK_EXPORTS)
+$(KATI_obsolete_var PRODUCT_NOTICE_SPLIT_OVERRIDE,Stop using this, keep calm, and carry on.)
 $(KATI_obsolete_var PRODUCT_STATIC_BOOT_CONTROL_HAL,Use shared library module instead. See $(CHANGES_URL)#PRODUCT_STATIC_BOOT_CONTROL_HAL)
 $(KATI_obsolete_var \
   ARCH_ARM_HAVE_ARMV7A \
@@ -372,16 +373,6 @@ ifndef ANDROID_BUILDSPEC
 ANDROID_BUILDSPEC := $(TOPDIR)buildspec.mk
 endif
 -include $(ANDROID_BUILDSPEC)
-
-# Starting in Android U, non-VNDK devices not supported
-# WARNING: DO NOT CHANGE: if you are downstream of AOSP, and you change this, without
-# letting upstream know it's important to you, we may do cleanup which breaks this
-# significantly. Please let us know if you are changing this.
-ifndef BOARD_VNDK_VERSION
-# READ WARNING - DO NOT CHANGE
-BOARD_VNDK_VERSION := current
-# READ WARNING - DO NOT CHANGE
-endif
 
 # ---------------------------------------------------------------
 # Define most of the global variables.  These are the ones that
@@ -782,16 +773,9 @@ else ifneq ($(call math_gt_or_eq,$(PRODUCT_SHIPPING_API_LEVEL),26),)
   PRODUCT_FULL_TREBLE := true
 endif
 
-# TODO(b/69865032): Make PRODUCT_NOTICE_SPLIT the default behavior and remove
-#    references to it here and below.
-ifdef PRODUCT_NOTICE_SPLIT_OVERRIDE
-   $(error PRODUCT_NOTICE_SPLIT_OVERRIDE cannot be set.)
-endif
-
 requirements := \
     PRODUCT_TREBLE_LINKER_NAMESPACES \
-    PRODUCT_ENFORCE_VINTF_MANIFEST \
-    PRODUCT_NOTICE_SPLIT
+    PRODUCT_ENFORCE_VINTF_MANIFEST
 
 # If it is overriden, then the requirement override is taken, otherwise it's
 # PRODUCT_FULL_TREBLE
@@ -804,24 +788,25 @@ $(foreach req,$(requirements),$(eval \
 PRODUCT_FULL_TREBLE_OVERRIDE ?=
 $(foreach req,$(requirements),$(eval $(req)_OVERRIDE ?=))
 
+# used to be a part of PRODUCT_FULL_TREBLE, but now always set it
+PRODUCT_NOTICE_SPLIT := true
+
 # TODO(b/114488870): disallow PRODUCT_FULL_TREBLE_OVERRIDE from being used.
 .KATI_READONLY := \
     PRODUCT_FULL_TREBLE_OVERRIDE \
     $(foreach req,$(requirements),$(req)_OVERRIDE) \
     $(requirements) \
     PRODUCT_FULL_TREBLE \
+    PRODUCT_NOTICE_SPLIT \
+
+ifneq ($(PRODUCT_FULL_TREBLE),true)
+    $(warning This device does not have Treble enabled. This is unsafe.)
+endif
 
 $(KATI_obsolete_var $(foreach req,$(requirements),$(req)_OVERRIDE) \
     ,This should be referenced without the _OVERRIDE suffix.)
 
 requirements :=
-
-# Set default value of KEEP_VNDK.
-ifeq ($(RELEASE_DEPRECATE_VNDK),true)
-  KEEP_VNDK ?= false
-else
-  KEEP_VNDK ?= true
-endif
 
 # BOARD_PROPERTY_OVERRIDES_SPLIT_ENABLED can be true only if early-mount of
 # partitions is supported. But the early-mount must be supported for full
@@ -834,14 +819,10 @@ endif
 # Set BOARD_SYSTEMSDK_VERSIONS to the latest SystemSDK version starting from P-launching
 # devices if unset.
 ifndef BOARD_SYSTEMSDK_VERSIONS
-  ifdef PRODUCT_SHIPPING_API_LEVEL
-  ifneq ($(call math_gt_or_eq,$(PRODUCT_SHIPPING_API_LEVEL),28),)
-    ifeq (REL,$(PLATFORM_VERSION_CODENAME))
-      BOARD_SYSTEMSDK_VERSIONS := $(PLATFORM_SDK_VERSION)
-    else
-      BOARD_SYSTEMSDK_VERSIONS := $(PLATFORM_VERSION_CODENAME)
-    endif
-  endif
+  ifeq (REL,$(PLATFORM_VERSION_CODENAME))
+    BOARD_SYSTEMSDK_VERSIONS := $(PLATFORM_SDK_VERSION)
+  else
+    BOARD_SYSTEMSDK_VERSIONS := $(PLATFORM_VERSION_CODENAME)
   endif
 endif
 
@@ -895,40 +876,11 @@ BUILD_DATETIME_FROM_FILE := $$(cat $(BUILD_DATETIME_FILE))
 
 # SEPolicy versions
 
-# PLATFORM_SEPOLICY_VERSION is a number of the form "NN.m" with "NN" mapping to
-# PLATFORM_SDK_VERSION and "m" as a minor number which allows for SELinux
-# changes independent of PLATFORM_SDK_VERSION.  This value will be set to
-# 10000.0 to represent tip-of-tree development that is inherently unstable and
-# thus designed not to work with any shipping vendor policy.  This is similar in
-# spirit to how DEFAULT_APP_TARGET_SDK is set.
-# The minor version ('m' component) must be updated every time a platform release
-# is made which breaks compatibility with the previous platform sepolicy version,
-# not just on every increase in PLATFORM_SDK_VERSION.  The minor version should
-# be reset to 0 on every bump of the PLATFORM_SDK_VERSION.
-sepolicy_major_vers := 34
-sepolicy_minor_vers := 0
-
-ifneq ($(sepolicy_major_vers), $(PLATFORM_SDK_VERSION))
-$(error sepolicy_major_version does not match PLATFORM_SDK_VERSION, please update.)
-endif
-
-TOT_SEPOLICY_VERSION := 10000.0
-ifneq (REL,$(PLATFORM_VERSION_CODENAME))
-    PLATFORM_SEPOLICY_VERSION := $(TOT_SEPOLICY_VERSION)
-else
-    PLATFORM_SEPOLICY_VERSION := $(join $(addsuffix .,$(sepolicy_major_vers)), $(sepolicy_minor_vers))
-endif
-sepolicy_major_vers :=
-sepolicy_minor_vers :=
-
-# BOARD_SEPOLICY_VERS must take the format "NN.m" and contain the sepolicy
-# version identifier corresponding to the sepolicy on which the non-platform
-# policy is to be based. If unspecified, this will build against the current
-# public platform policy in tree
-ifndef BOARD_SEPOLICY_VERS
-# The default platform policy version.
+# PLATFORM_SEPOLICY_VERSION is a number of the form "YYYYMM" with "YYYYMM"
+# mapping to vFRC version.
+PLATFORM_SEPOLICY_VERSION := $(BOARD_API_LEVEL)
 BOARD_SEPOLICY_VERS := $(PLATFORM_SEPOLICY_VERSION)
-endif
+.KATI_READONLY := PLATFORM_SEPOLICY_VERSION BOARD_SEPOLICY_VERS
 
 # A list of SEPolicy versions, besides PLATFORM_SEPOLICY_VERSION, that the framework supports.
 PLATFORM_SEPOLICY_COMPAT_VERSIONS := $(filter-out $(PLATFORM_SEPOLICY_VERSION), \
@@ -943,7 +895,6 @@ PLATFORM_SEPOLICY_COMPAT_VERSIONS := $(filter-out $(PLATFORM_SEPOLICY_VERSION), 
 .KATI_READONLY := \
     PLATFORM_SEPOLICY_COMPAT_VERSIONS \
     PLATFORM_SEPOLICY_VERSION \
-    TOT_SEPOLICY_VERSION \
 
 ifeq ($(PRODUCT_RETROFIT_DYNAMIC_PARTITIONS),true)
   ifneq ($(PRODUCT_USE_DYNAMIC_PARTITIONS),true)
@@ -1233,7 +1184,6 @@ TARGET_AVAILABLE_SDK_VERSIONS := $(patsubst %/test,test_%,$(TARGET_AVAILABLE_SDK
 TARGET_AVAILABLE_SDK_VERSIONS := $(filter-out %/module-lib %/system-server,$(TARGET_AVAILABLE_SDK_VERSIONS))
 TARGET_AVAIALBLE_SDK_VERSIONS := $(call numerically_sort,$(TARGET_AVAILABLE_SDK_VERSIONS))
 
-TARGET_SDK_VERSIONS_WITHOUT_JAVA_1_8_SUPPORT := $(call numbers_less_than,24,$(TARGET_AVAILABLE_SDK_VERSIONS))
 TARGET_SDK_VERSIONS_WITHOUT_JAVA_1_9_SUPPORT := $(call numbers_less_than,30,$(TARGET_AVAILABLE_SDK_VERSIONS))
 TARGET_SDK_VERSIONS_WITHOUT_JAVA_11_SUPPORT := $(call numbers_less_than,32,$(TARGET_AVAILABLE_SDK_VERSIONS))
 TARGET_SDK_VERSIONS_WITHOUT_JAVA_17_SUPPORT := $(call numbers_less_than,34,$(TARGET_AVAILABLE_SDK_VERSIONS))
@@ -1328,6 +1278,15 @@ DEFAULT_DATA_OUT_MODULES := ltp $(ltp_packages)
 -include vendor/*/build/core/config.mk
 
 include $(BUILD_SYSTEM)/dumpvar.mk
+
+ifneq ($(KEEP_VNDK),true)
+ifdef BOARD_VNDK_VERSION
+BOARD_VNDK_VERSION=
+endif
+ifdef PLATFORM_VNDK_VERSION
+PLATFORM_VNDK_VERSION=
+endif
+endif
 
 ifeq (true,$(FULL_SYSTEM_OPTIMIZE_JAVA))
 ifeq (false,$(SYSTEM_OPTIMIZE_JAVA))

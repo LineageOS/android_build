@@ -128,10 +128,24 @@ endif
 # are controlled by the MODULE_BUILD_FROM_SOURCE environment variable by
 # default.
 INDIVIDUALLY_TOGGLEABLE_PREBUILT_MODULES := \
+  adservices \
+  appsearch \
   btservices \
+  configinfrastructure \
+  conscrypt \
   devicelock \
+  healthfitness \
+  ipsec \
+  media \
+  mediaprovider \
+  mediaprovider \
+  ondevicepersonalization \
   permission \
   rkpd \
+  scheduling \
+  sdkext \
+  statsd \
+  tethering \
   uwb \
   wifi \
   mediaprovider \
@@ -153,25 +167,12 @@ ifeq (true,$(MODULE_BUILD_FROM_SOURCE))
 $(call add_soong_config_var_value,ANDROID,module_build_from_source,true)
 endif
 
-# Messaging app vars
-ifeq (eng,$(TARGET_BUILD_VARIANT))
-$(call soong_config_set,messaging,build_variant_eng,true)
-endif
-
 # Enable SystemUI optimizations by default unless explicitly set.
 SYSTEMUI_OPTIMIZE_JAVA ?= true
 $(call add_soong_config_var,ANDROID,SYSTEMUI_OPTIMIZE_JAVA)
 
-# Enable Compose in SystemUI by default.
-SYSTEMUI_USE_COMPOSE ?= true
-$(call add_soong_config_var,ANDROID,SYSTEMUI_USE_COMPOSE)
-
 ifdef PRODUCT_AVF_ENABLED
 $(call add_soong_config_var_value,ANDROID,avf_enabled,$(PRODUCT_AVF_ENABLED))
-endif
-
-ifdef PRODUCT_AVF_KERNEL_MODULES_ENABLED
-$(call add_soong_config_var_value,ANDROID,avf_kernel_modules_enabled,$(PRODUCT_AVF_KERNEL_MODULES_ENABLED))
 endif
 
 $(call add_soong_config_var_value,ANDROID,release_avf_allow_preinstalled_apps,$(RELEASE_AVF_ALLOW_PREINSTALLED_APPS))
@@ -181,6 +182,8 @@ $(call add_soong_config_var_value,ANDROID,release_avf_enable_llpvm_changes,$(REL
 $(call add_soong_config_var_value,ANDROID,release_avf_enable_multi_tenant_microdroid_vm,$(RELEASE_AVF_ENABLE_MULTI_TENANT_MICRODROID_VM))
 $(call add_soong_config_var_value,ANDROID,release_avf_enable_remote_attestation,$(RELEASE_AVF_ENABLE_REMOTE_ATTESTATION))
 $(call add_soong_config_var_value,ANDROID,release_avf_enable_vendor_modules,$(RELEASE_AVF_ENABLE_VENDOR_MODULES))
+$(call add_soong_config_var_value,ANDROID,release_avf_enable_virt_cpufreq,$(RELEASE_AVF_ENABLE_VIRT_CPUFREQ))
+$(call add_soong_config_var_value,ANDROID,release_avf_microdroid_kernel_version,$(RELEASE_AVF_MICRODROID_KERNEL_VERSION))
 
 $(call add_soong_config_var_value,ANDROID,release_binder_death_recipient_weak_from_jni,$(RELEASE_BINDER_DEATH_RECIPIENT_WEAK_FROM_JNI))
 
@@ -207,6 +210,9 @@ endif
 $(call add_soong_config_var,ANDROID,SYSTEM_OPTIMIZE_JAVA)
 $(call add_soong_config_var,ANDROID,FULL_SYSTEM_OPTIMIZE_JAVA)
 
+# TODO(b/319697968): Remove this build flag support when metalava fully supports flagged api
+$(call soong_config_set,ANDROID,release_hidden_api_exportable_stubs,$(RELEASE_HIDDEN_API_EXPORTABLE_STUBS))
+
 # Check for SupplementalApi module.
 ifeq ($(wildcard packages/modules/SupplementalApi),)
 $(call add_soong_config_var_value,ANDROID,include_nonpublic_framework_api,false)
@@ -214,3 +220,19 @@ else
 $(call add_soong_config_var_value,ANDROID,include_nonpublic_framework_api,true)
 endif
 
+# Add crashrecovery build flag to soong
+$(call soong_config_set,ANDROID,release_crashrecovery_module,$(RELEASE_CRASHRECOVERY_MODULE))
+# Add crashrecovery file move flags to soong, for both platform and module
+ifeq (true,$(RELEASE_CRASHRECOVERY_FILE_MOVE))
+  $(call soong_config_set,ANDROID,crashrecovery_files_in_module,true)
+  $(call soong_config_set,ANDROID,crashrecovery_files_in_platform,false)
+else
+  $(call soong_config_set,ANDROID,crashrecovery_files_in_module,false)
+  $(call soong_config_set,ANDROID,crashrecovery_files_in_platform,true)
+endif
+# Required as platform_bootclasspath is using this namespace
+$(call soong_config_set,bootclasspath,release_crashrecovery_module,$(RELEASE_CRASHRECOVERY_MODULE))
+
+# Enable Profiling module. Also used by platform_bootclasspath.
+$(call soong_config_set,ANDROID,release_package_profiling_module,$(RELEASE_PACKAGE_PROFILING_MODULE))
+$(call soong_config_set,bootclasspath,release_package_profiling_module,$(RELEASE_PACKAGE_PROFILING_MODULE))

@@ -37,6 +37,8 @@ ALL_DOCS:=
 # sub-variables.
 ALL_MODULES:=
 
+ALL_MAKE_MODULE_INFO_JSON_MODULES:=
+
 # The relative paths of the non-module targets in the system.
 ALL_NON_MODULES:=
 NON_MODULES_WITHOUT_LICENSE_METADATA:=
@@ -2772,6 +2774,10 @@ define module-min-sdk-version
 $(if $(LOCAL_MIN_SDK_VERSION),$(LOCAL_MIN_SDK_VERSION),$(call module-target-sdk-version))
 endef
 
+# Checks if module is in vendor or product
+define module-in-vendor-or-product
+$(if $(filter true,$(LOCAL_IN_VENDOR) $(LOCAL_IN_PRODUCT)),true)
+endef
 
 define transform-classes.jar-to-dex
 @echo "target Dex: $(PRIVATE_MODULE)"
@@ -3120,14 +3126,12 @@ endef
 
 # Copies many init script files and check they are well-formed.
 # $(1): The init script files to copy.  Each entry is a ':' separated src:dst pair.
-# Evaluates to the list of the dst files. (ie suitable for a dependency list.)
 define copy-many-init-script-files-checked
 $(foreach f, $(1), $(strip \
     $(eval _cmf_tuple := $(subst :, ,$(f))) \
     $(eval _cmf_src := $(word 1,$(_cmf_tuple))) \
     $(eval _cmf_dest := $(word 2,$(_cmf_tuple))) \
-    $(eval $(call copy-init-script-file-checked,$(_cmf_src),$(_cmf_dest))) \
-    $(_cmf_dest)))
+    $(eval $(call copy-init-script-file-checked,$(_cmf_src),$(_cmf_dest)))))
 endef
 
 # Copy the file only if it's a well-formed xml file. For use via $(eval).
@@ -3165,14 +3169,12 @@ endef
 
 # Copies many vintf manifest files checked.
 # $(1): The files to copy.  Each entry is a ':' separated src:dst pair
-# Evaluates to the list of the dst files (ie suitable for a dependency list)
 define copy-many-vintf-manifest-files-checked
 $(foreach f, $(1), $(strip \
     $(eval _cmf_tuple := $(subst :, ,$(f))) \
     $(eval _cmf_src := $(word 1,$(_cmf_tuple))) \
     $(eval _cmf_dest := $(word 2,$(_cmf_tuple))) \
-    $(eval $(call copy-vintf-manifest-checked,$(_cmf_src),$(_cmf_dest))) \
-    $(_cmf_dest)))
+    $(eval $(call copy-vintf-manifest-checked,$(_cmf_src),$(_cmf_dest)))))
 endef
 
 # Copy the file only if it's not an ELF file. For use via $(eval).
@@ -3308,7 +3310,6 @@ $(3): $(1)
 	@mkdir -p $$(dir $$@)
 	@rm -rf $$@
 	$(hide) ln -sf $(2) $$@
-$(3): .KATI_SYMLINK_OUTPUTS := $(3)
 endef
 
 # Copy an apk to a target location while removing classes*.dex

@@ -17,7 +17,9 @@
 # Base modules and settings for the system partition.
 PRODUCT_PACKAGES += \
     abx \
+    aconfigd \
     adbd_system_api \
+    aflags \
     am \
     android.hidl.base-V1.0-java \
     android.hidl.manager-V1.0-java \
@@ -70,7 +72,7 @@ PRODUCT_PACKAGES += \
     com.android.scheduling \
     com.android.sdkext \
     com.android.tethering \
-    com.android.tzdata \
+    $(RELEASE_PACKAGE_TZDATA_MODULE) \
     com.android.uwb \
     com.android.virt \
     com.android.wifi \
@@ -80,6 +82,7 @@ PRODUCT_PACKAGES += \
     CtsShimPrivPrebuilt \
     debuggerd\
     device_config \
+    DeviceDiagnostics \
     dmctl \
     dnsmasq \
     dmesgd \
@@ -88,14 +91,15 @@ PRODUCT_PACKAGES += \
     dump.erofs \
     dumpstate \
     dumpsys \
+    E2eeContactKeysProvider \
     e2fsck \
+    enhanced-confirmation.xml \
     ExtShared \
     flags_health_check \
     framework-graphics \
     framework-location \
     framework-minus-apex \
     framework-minus-apex-install-dependencies \
-    framework-nfc \
     framework-sysconfig.xml \
     fsck.erofs \
     fsck_msdos \
@@ -128,6 +132,7 @@ PRODUCT_PACKAGES += \
     ip \
     iptables \
     javax.obex \
+    kcmdlinectrl \
     keystore2 \
     credstore \
     ld.mc \
@@ -202,6 +207,7 @@ PRODUCT_PACKAGES += \
     libui \
     libusbhost \
     libutils \
+    libvintf_jni \
     libvulkan \
     libwilhelm \
     linker \
@@ -223,6 +229,7 @@ PRODUCT_PACKAGES += \
     mke2fs \
     mkfs.erofs \
     monkey \
+    misctrl \
     mtectrl \
     ndc \
     netd \
@@ -231,6 +238,7 @@ PRODUCT_PACKAGES += \
     org.apache.http.legacy \
     otacerts \
     PackageInstaller \
+    package-shareduid-allowlist.xml \
     passwd_system \
     perfetto \
     ping \
@@ -282,6 +290,7 @@ PRODUCT_PACKAGES += \
     uiautomator \
     uinput \
     uncrypt \
+    uprobestats \
     usbd \
     vdc \
     voip-common \
@@ -290,6 +299,13 @@ PRODUCT_PACKAGES += \
     wificond \
     wifi.rc \
     wm \
+
+# When we release crashrecovery module
+ifeq ($(RELEASE_CRASHRECOVERY_MODULE),true)
+  PRODUCT_PACKAGES += \
+        com.android.crashrecovery \
+
+endif
 
 # These packages are not used on Android TV
 ifneq ($(PRODUCT_IS_ATV),true)
@@ -303,6 +319,27 @@ ifneq ($(PRODUCT_NO_DYNAMIC_SYSTEM_UPDATE),true)
     PRODUCT_PACKAGES += \
         DynamicSystemInstallationService \
 
+endif
+
+# Check if the build supports NFC apex or not
+ifeq ($(RELEASE_PACKAGE_NFC_STACK),NfcNci)
+    PRODUCT_PACKAGES += \
+        framework-nfc \
+        NfcNci
+else
+    PRODUCT_PACKAGES += \
+        com.android.nfcservices
+endif
+
+# Check if the build supports Profiling module
+ifeq ($(RELEASE_PACKAGE_PROFILING_MODULE),true)
+    PRODUCT_PACKAGES += \
+       com.android.profiling
+endif
+
+ifeq ($(RELEASE_USE_WEBVIEW_BOOTSTRAP_MODULE),true)
+    PRODUCT_PACKAGES += \
+        com.android.webview.bootstrap
 endif
 
 # VINTF data for system image
@@ -427,6 +464,7 @@ PRODUCT_PACKAGES_DEBUG := \
     logpersist.start \
     logtagd.rc \
     ot-cli-ftd \
+    ot-ctl \
     procrank \
     profcollectd \
     profcollectctl \
@@ -474,3 +512,5 @@ $(call inherit-product, $(SRC_TARGET_DIR)/product/runtime_libart.mk)
 
 # Use "image" APEXes always.
 $(call inherit-product,$(SRC_TARGET_DIR)/product/updatable_apex.mk)
+
+$(call soong_config_set, bionic, large_system_property_node, $(RELEASE_LARGE_SYSTEM_PROPERTY_NODE))

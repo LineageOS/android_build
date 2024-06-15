@@ -47,7 +47,6 @@ $(call add_json_str,  Platform_version_last_stable,      $(PLATFORM_VERSION_LAST
 $(call add_json_str,  Platform_version_known_codenames,  $(PLATFORM_VERSION_KNOWN_CODENAMES))
 
 $(call add_json_bool, Release_aidl_use_unfrozen,         $(RELEASE_AIDL_USE_UNFROZEN))
-$(call add_json_bool, Release_expose_flagged_api,        $(RELEASE_EXPOSE_FLAGGED_API))
 
 $(call add_json_str,  Platform_min_supported_target_sdk_version, $(PLATFORM_MIN_SUPPORTED_TARGET_SDK_VERSION))
 
@@ -149,8 +148,10 @@ $(call add_json_str,  BtConfigIncludeDir,                $(BOARD_BLUETOOTH_BDROI
 $(call add_json_list, DeviceKernelHeaders,               $(TARGET_DEVICE_KERNEL_HEADERS) $(TARGET_BOARD_KERNEL_HEADERS) $(TARGET_PRODUCT_KERNEL_HEADERS))
 $(call add_json_str,  TargetSpecificHeaderPath,          $(TARGET_SPECIFIC_HEADER_PATH))
 $(call add_json_str,  VendorApiLevel,                    $(BOARD_API_LEVEL))
+ifeq ($(KEEP_VNDK),true)
 $(call add_json_str,  DeviceVndkVersion,                 $(BOARD_VNDK_VERSION))
 $(call add_json_str,  Platform_vndk_version,             $(PLATFORM_VNDK_VERSION))
+endif
 $(call add_json_list, ExtraVndkVersions,                 $(PRODUCT_EXTRA_VNDK_VERSIONS))
 $(call add_json_list, DeviceSystemSdkVersions,           $(BOARD_SYSTEMSDK_VERSIONS))
 $(call add_json_str,  RecoverySnapshotVersion,           $(RECOVERY_SNAPSHOT_VERSION))
@@ -233,7 +234,6 @@ $(call add_json_str,  SystemExtSepolicyPrebuiltApiDir,   $(BOARD_SYSTEM_EXT_PREB
 $(call add_json_str,  ProductSepolicyPrebuiltApiDir,     $(BOARD_PRODUCT_PREBUILT_DIR))
 
 $(call add_json_str,  PlatformSepolicyVersion,           $(PLATFORM_SEPOLICY_VERSION))
-$(call add_json_str,  TotSepolicyVersion,                $(TOT_SEPOLICY_VERSION))
 $(call add_json_list, PlatformSepolicyCompatVersions,    $(PLATFORM_SEPOLICY_COMPAT_VERSIONS))
 
 $(call add_json_bool, ForceApexSymlinkOptimization,      $(filter true,$(TARGET_FORCE_APEX_SYMLINK_OPTIMIZATION)))
@@ -303,6 +303,7 @@ $(call add_json_bool, BuildBrokenUsesSoongPython2Modules,  $(filter true,$(BUILD
 $(call add_json_bool, BuildBrokenVendorPropertyNamespace,  $(filter true,$(BUILD_BROKEN_VENDOR_PROPERTY_NAMESPACE)))
 $(call add_json_bool, BuildBrokenIncorrectPartitionImages, $(filter true,$(BUILD_BROKEN_INCORRECT_PARTITION_IMAGES)))
 $(call add_json_list, BuildBrokenInputDirModules,          $(BUILD_BROKEN_INPUT_DIR_MODULES))
+$(call add_json_bool, BuildBrokenDontCheckSystemSdk,       $(filter true,$(BUILD_BROKEN_DONT_CHECK_SYSTEMSDK)))
 
 $(call add_json_list, BuildWarningBadOptionalUsesLibsAllowlist,    $(BUILD_WARNING_BAD_OPTIONAL_USES_LIBS_ALLOWLIST))
 
@@ -337,6 +338,8 @@ $(call add_json_bool, ReleaseDefaultModuleBuildFromSource,   $(RELEASE_DEFAULT_M
 $(call add_json_bool, KeepVndk, $(filter true,$(KEEP_VNDK)))
 
 $(call add_json_bool, CheckVendorSeappViolations, $(filter true,$(CHECK_VENDOR_SEAPP_VIOLATIONS)))
+
+$(call add_json_list, BuildIgnoreApexContributionContents, $(sort $(PRODUCT_BUILD_IGNORE_APEX_CONTRIBUTION_CONTENTS)))
 
 $(call add_json_map, PartitionVarsForBazelMigrationOnlyDoNotUse)
   $(call add_json_str,  ProductDirectory,    $(dir $(INTERNAL_PRODUCT)))
@@ -399,9 +402,11 @@ $(call add_json_map, PartitionVarsForBazelMigrationOnlyDoNotUse)
   $(call add_json_list, ProductPackages, $(sort $(PRODUCT_PACKAGES)))
 $(call end_json_map)
 
-$(call add_json_bool, NextReleaseHideFlaggedApi, $(filter true,$(PRODUCT_NEXT_RELEASE_HIDE_FLAGGED_API)))
-
 $(call add_json_bool, BuildFromSourceStub, $(findstring true,$(PRODUCT_BUILD_FROM_SOURCE_STUB) $(BUILD_FROM_SOURCE_STUB)))
+
+$(call add_json_bool, HiddenapiExportableStubs, $(filter true,$(PRODUCT_HIDDEN_API_EXPORTABLE_STUBS)))
+
+$(call add_json_bool, ExportRuntimeApis, $(filter true,$(PRODUCT_EXPORT_RUNTIME_APIS)))
 
 $(call json_end)
 

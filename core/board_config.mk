@@ -186,6 +186,7 @@ _build_broken_var_list := \
   BUILD_BROKEN_VINTF_PRODUCT_COPY_FILES \
   BUILD_BROKEN_INCORRECT_PARTITION_IMAGES \
   BUILD_BROKEN_GENRULE_SANDBOXING \
+  BUILD_BROKEN_DONT_CHECK_SYSTEMSDK \
 
 _build_broken_var_list += \
   $(foreach m,$(AVAILABLE_BUILD_MODULE_TYPES) \
@@ -969,12 +970,15 @@ define check_vndk_version
   $(if $(wildcard $(vndk_path)/*/Android.bp),,$(error VNDK version $(1) not found))
 endef
 
+ifeq ($(KEEP_VNDK),true)
 ifeq ($(BOARD_VNDK_VERSION),$(PLATFORM_VNDK_VERSION))
   $(error BOARD_VNDK_VERSION is equal to PLATFORM_VNDK_VERSION; use BOARD_VNDK_VERSION := current)
 endif
 ifneq ($(BOARD_VNDK_VERSION),current)
   $(call check_vndk_version,$(BOARD_VNDK_VERSION))
 endif
+endif
+
 TARGET_VENDOR_TEST_SUFFIX := /vendor
 
 ifeq (,$(TARGET_BUILD_UNBUNDLED))
@@ -998,11 +1002,6 @@ ifdef RELEASE_BOARD_API_LEVEL
   endif
   BOARD_API_LEVEL := $(RELEASE_BOARD_API_LEVEL)
   .KATI_READONLY := BOARD_API_LEVEL
-
-  ifdef RELEASE_BOARD_API_LEVEL_FROZEN
-    BOARD_API_LEVEL_FROZEN := true
-    .KATI_READONLY := BOARD_API_LEVEL_FROZEN
-  endif
 endif
 
 ###########################################

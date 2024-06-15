@@ -287,6 +287,11 @@ endif
 endif
 endif
 
+# Do this early because sysprop.mk depends on BUILT_KERNEL_VERSION_FILE_FOR_UFFD_GC.
+ifeq (default,$(ENABLE_UFFD_GC))
+BUILT_KERNEL_VERSION_FILE_FOR_UFFD_GC := $(OUT_DIR)/soong/dexpreopt/kernel_version_for_uffd_gc.txt
+endif # ENABLE_UFFD_GC
+
 include $(BUILD_SYSTEM)/sysprop.mk
 
 # ----------------------------------------------------------------
@@ -460,9 +465,7 @@ $(3)/$(DEPMOD_STAGING_SUBDIR)/modules.dep: $(1) $(6)
 	)
 	$(if $(1),\
 	  cp $$(PRIVATE_MODULES) $$(PRIVATE_MODULE_DIR)/; \
-	  for MODULE in $$(PRIVATE_LOAD_MODULES); do \
-	    basename $$$$MODULE >> $$(PRIVATE_LOAD_FILE); \
-	  done; \
+	  if [ -n "$$(PRIVATE_LOAD_MODULES)" ]; then basename -a $$(PRIVATE_LOAD_MODULES); fi > $$(PRIVATE_LOAD_FILE); \
 	)
 	# The ln -sf + find -delete sequence is to remove any modules in
 	# PRIVATE_EXTRA_MODULES which have same basename as MODULES in PRIVATE_MODULES
@@ -2118,11 +2121,6 @@ endif
 # Get a colon-separated list of search paths.
 INTERNAL_USERIMAGES_BINARY_PATHS := $(subst $(space),:,$(sort $(dir $(INTERNAL_USERIMAGES_DEPS))))
 
-# Collects file_contexts files from modules to be installed
-$(call merge-fc-files, \
-  $(sort $(foreach m,$(product_MODULES),$(ALL_MODULES.$(m).FILE_CONTEXTS))),\
-  $(call intermediates-dir-for,ETC,file_contexts.bin)/file_contexts.modules.tmp)
-
 SELINUX_FC := $(call intermediates-dir-for,ETC,file_contexts.bin)/file_contexts.bin
 
 INTERNAL_USERIMAGES_DEPS += $(SELINUX_FC)
@@ -2756,6 +2754,8 @@ $(INTERNAL_RECOVERY_RAMDISK_FILES_TIMESTAMP): $(MKBOOTFS) \
 	$(if $(strip $(recovery_wipe)), \
 	  cp -f $(recovery_wipe) $(TARGET_RECOVERY_ROOT_OUT)/system/etc/recovery.wipe)
 	ln -sf prop.default $(TARGET_RECOVERY_ROOT_OUT)/default.prop
+	# Silence warnings in first_stage_console.
+	touch $(TARGET_RECOVERY_ROOT_OUT)/linkerconfig/ld.config.txt
 	$(BOARD_RECOVERY_IMAGE_PREPARE)
 	$(hide) touch $@
 
@@ -3278,7 +3278,6 @@ $1:
 	  exit 1; \
 	fi
 	ln -sfn $2 $1
-$1: .KATI_SYMLINK_OUTPUTS := $1
 )
 $(eval PARTITION_COMPAT_SYMLINKS += $1)
 $1
@@ -3437,6 +3436,14 @@ endif
 
 FULL_SYSTEMIMAGE_DEPS += $(INTERNAL_ROOT_FILES) $(INSTALLED_FILES_FILE_ROOT)
 
+define write-file-lines
+$(1):
+	@echo Writing $$@
+	rm -f $$@
+	echo -n > $$@
+	$$(foreach f,$(2),echo "$$(f)" >> $$@$$(newline))
+endef
+
 # -----------------------------------------------------------------
 ifdef BUILDING_SYSTEM_IMAGE
 
@@ -3489,14 +3496,6 @@ BUILT_SYSTEMIMAGE :=$= $(systemimage_intermediates)/system.img
 # Used by the bazel sandwich to request the staging dir be built
 $(systemimage_intermediates)/staging_dir.stamp: $(FULL_SYSTEMIMAGE_DEPS)
 	touch $@
-
-define write-file-lines
-$(1):
-	@echo Writing $$@
-	rm -f $$@
-	echo -n > $$@
-	$$(foreach f,$(2),echo "$$(f)" >> $$@$$(newline))
-endef
 
 # $(1): output file
 define build-systemimage-target
@@ -4642,10 +4641,18 @@ BOARD_AVB_PVMFW_ADD_HASH_FOOTER_ARGS += \
     --prop com.android.build.pvmfw.security_patch:$(PVMFW_SECURITY_PATCH)
 endif
 
-# Append avbpubkey of microdroid-vendor partition into vendor_boot partition.
-ifdef MICRODROID_VENDOR_AVBKEY
-BOARD_AVB_VENDOR_BOOT_ADD_HASH_FOOTER_ARGS += \
-    --prop_from_file com.android.build.microdroid-vendor.avbpubkey:$(MICRODROID_VENDOR_AVBKEY)
+# Append root digest of microdroid-vendor partition's hashtree descriptor into vendor partition.
+ifdef MICRODROID_VENDOR_IMAGE_MODULE
+MICRODROID_VENDOR_IMAGE := \
+    $(call intermediates-dir-for,ETC,$(MICRODROID_VENDOR_IMAGE_MODULE))/$(MICRODROID_VENDOR_IMAGE_MODULE)
+MICRODROID_VENDOR_ROOT_DIGEST := $(PRODUCT_OUT)/microdroid_vendor_root_digest
+BOARD_AVB_VENDOR_ADD_HASHTREE_FOOTER_ARGS += \
+    --prop_from_file com.android.build.microdroid-vendor.root_digest:$(MICRODROID_VENDOR_ROOT_DIGEST)
+$(MICRODROID_VENDOR_ROOT_DIGEST): $(AVBTOOL) $(MICRODROID_VENDOR_IMAGE)
+	$(AVBTOOL) print_partition_digests \
+      --image $(MICRODROID_VENDOR_IMAGE) \
+      | tr -d '\n' | sed -E 's/.*: //g' > $@
+$(INSTALLED_VENDORIMAGE_TARGET): $(MICRODROID_VENDOR_ROOT_DIGEST)
 endif
 
 BOOT_FOOTER_ARGS := BOARD_AVB_BOOT_ADD_HASH_FOOTER_ARGS
@@ -5144,8 +5151,11 @@ ifneq (,$(filter EMPTY_VENDOR_SKU_PLACEHOLDER,$(DEVICE_MANIFEST_SKUS)))
 $(error EMPTY_VENDOR_SKU_PLACEHOLDER is an internal variable and cannot be used for DEIVCE_MANIFEST_SKUS)
 endif
 
-# -- Check system manifest / matrix including fragments (excluding other framework manifests / matrices, e.g. product);
-check_vintf_system_deps := $(filter $(TARGET_OUT)/etc/vintf/%, $(check_vintf_common_srcs))
+# -- Check system and system_ext manifests / matrices including fragments (excluding other framework manifests / matrices, e.g. product);
+ifdef BUILDING_SYSTEM_IMAGE
+check_vintf_system_deps := $(filter $(TARGET_OUT)/etc/vintf/% \
+                                    $(TARGET_OUT_SYSTEM_EXT)/etc/vintf/%, \
+                                    $(check_vintf_common_srcs))
 ifneq ($(check_vintf_system_deps),)
 check_vintf_has_system := true
 
@@ -5172,9 +5182,12 @@ $(call declare-1p-target,$(vintffm_log))
 endif # check_vintf_system_deps
 check_vintf_system_deps :=
 
+endif # BUILDING_SYSTEM_IMAGE
+
 # -- Check vendor manifest / matrix including fragments (excluding other device manifests / matrices)
-check_vintf_vendor_deps := $(filter $(TARGET_OUT_VENDOR)/etc/vintf/%, $(check_vintf_common_srcs))
-check_vintf_vendor_deps += $(filter $(TARGET_OUT_VENDOR)/apex/%, $(check_vintf_common_srcs))
+check_vintf_vendor_deps := $(filter $(TARGET_OUT_VENDOR)/etc/vintf/% \
+                                    $(TARGET_OUT_VENDOR)/apex/%, \
+                                    $(check_vintf_common_srcs))
 ifneq ($(strip $(check_vintf_vendor_deps)),)
 check_vintf_has_vendor := true
 check_vintf_vendor_log := $(intermediates)/check_vintf_vendor.log
@@ -5295,6 +5308,34 @@ my_decompress_tools :=
 my_board_extracted_kernel :=
 
 endif # PRODUCT_OTA_ENFORCE_VINTF_KERNEL_REQUIREMENTS
+
+ifeq (default,$(ENABLE_UFFD_GC))
+
+ifneq (,$(BUILT_KERNEL_VERSION_FILE))
+$(BUILT_KERNEL_VERSION_FILE_FOR_UFFD_GC): $(BUILT_KERNEL_VERSION_FILE)
+$(BUILT_KERNEL_VERSION_FILE_FOR_UFFD_GC):
+	cp $(BUILT_KERNEL_VERSION_FILE) $(BUILT_KERNEL_VERSION_FILE_FOR_UFFD_GC)
+else
+# We make this a warning rather than an error to avoid breaking too many builds. When it happens,
+# we use a placeholder as the kernel version, which is consumed by uffd_gc_utils.py.
+$(BUILT_KERNEL_VERSION_FILE_FOR_UFFD_GC):
+	echo $$'\
+Unable to determine UFFD GC flag because the kernel version is not available and\n\
+PRODUCT_ENABLE_UFFD_GC is "default".\n\
+You can fix this by:\n\
+  1. [Recommended] Making the kernel version available.\n\
+    (1). Set PRODUCT_OTA_ENFORCE_VINTF_KERNEL_REQUIREMENTS to "true".\n\
+    (2). If you are still getting this message after doing so, see the warning about\n\
+         PRODUCT_OTA_ENFORCE_VINTF_KERNEL_REQUIREMENTS in the build logs.\n\
+  or\n\
+  2. Explicitly setting PRODUCT_ENABLE_UFFD_GC to "true" or "false" based on the kernel version.\n\
+    (1). Set PRODUCT_ENABLE_UFFD_GC to "true" if the kernel is a GKI kernel and is android12-5.4\n\
+         or above, or a non-GKI kernel that supports userfaultfd(2) and MREMAP_DONTUNMAP.\n\
+    (2). Set PRODUCT_ENABLE_UFFD_GC to "false" otherwise.'\
+	  && echo '<unknown-kernel>' > $@
+endif # BUILT_KERNEL_VERSION_FILE
+
+endif # ENABLE_UFFD_GC == "default"
 
 # -- Check VINTF compatibility of build.
 # Skip partial builds; only check full builds. Only check if:
@@ -5718,6 +5759,10 @@ ifneq (,$(strip $(BOARD_AVB_VBMETA_CUSTOM_PARTITIONS)))
 	  echo "flash vbmeta_$(partition)" >> $@;)
 endif
 endif # BOARD_AVB_ENABLE
+ifneq (,$(strip $(BOARD_CUSTOMIMAGES_PARTITION_LIST)))
+	$(hide) $(foreach partition,$(BOARD_CUSTOMIMAGES_PARTITION_LIST), \
+	  echo "flash $(partition)" >> $@;)
+endif
 	$(hide) echo "reboot fastboot" >> $@
 	$(hide) echo "update-super" >> $@
 	$(hide) $(foreach partition,$(BOARD_SUPER_PARTITION_PARTITION_LIST), \
@@ -6823,7 +6868,7 @@ endif
 
 $(BUILT_TARGET_FILES_PACKAGE): $(BUILT_TARGET_FILES_DIR)
 	@echo "Packaging target files: $@"
-	$(hide) $(SOONG_ZIP) -d -o $@ -C $(zip_root) -r $@.list
+	$(hide) $(SOONG_ZIP) -d -o $@ -C $(zip_root) -r $@.list -sha256
 
 .PHONY: target-files-package
 target-files-package: $(BUILT_TARGET_FILES_PACKAGE)

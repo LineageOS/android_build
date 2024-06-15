@@ -225,20 +225,14 @@ ADDITIONAL_SYSTEM_PROPERTIES += ro.postinstall.fstab.prefix=/system
 # ADDITIONAL_VENDOR_PROPERTIES will be installed in vendor/build.prop if
 # property_overrides_split_enabled is true. Otherwise it will be installed in
 # /system/build.prop
+ifeq ($(KEEP_VNDK),true)
 ifdef BOARD_VNDK_VERSION
-  ifeq ($(KEEP_VNDK),true)
   ifeq ($(BOARD_VNDK_VERSION),current)
     ADDITIONAL_VENDOR_PROPERTIES := ro.vndk.version=$(PLATFORM_VNDK_VERSION)
   else
     ADDITIONAL_VENDOR_PROPERTIES := ro.vndk.version=$(BOARD_VNDK_VERSION)
   endif
-  endif
-
-  # TODO(b/290159430): ro.vndk.deprecate is a temporal variable for deprecating VNDK.
-  # This variable will be removed once ro.vndk.version can be removed.
-  ifneq ($(KEEP_VNDK),true)
-    ADDITIONAL_SYSTEM_PROPERTIES += ro.vndk.deprecate=true
-  endif
+endif
 endif
 
 # Add cpu properties for bionic and ART.
@@ -294,6 +288,11 @@ ADDITIONAL_VENDOR_PROPERTIES += \
     ro.product.first_api_level=$(PRODUCT_SHIPPING_API_LEVEL)
 endif
 
+ifdef PRODUCT_SHIPPING_VENDOR_API_LEVEL
+ADDITIONAL_VENDOR_PROPERTIES += \
+    ro.vendor.api_level=$(PRODUCT_SHIPPING_VENDOR_API_LEVEL)
+endif
+
 ifneq ($(TARGET_BUILD_VARIANT),user)
   ifdef PRODUCT_SET_DEBUGFS_RESTRICTIONS
     ADDITIONAL_VENDOR_PROPERTIES += \
@@ -315,10 +314,10 @@ ifdef BOARD_API_LEVEL
 ADDITIONAL_VENDOR_PROPERTIES += \
     ro.board.api_level=$(BOARD_API_LEVEL)
 endif
-# BOARD_API_LEVEL_FROZEN is true when the vendor API surface is frozen.
-ifdef BOARD_API_LEVEL_FROZEN
+# RELEASE_BOARD_API_LEVEL_FROZEN is true when the vendor API surface is frozen.
+ifdef RELEASE_BOARD_API_LEVEL_FROZEN
 ADDITIONAL_VENDOR_PROPERTIES += \
-    ro.board.api_frozen=$(BOARD_API_LEVEL_FROZEN)
+    ro.board.api_frozen=$(RELEASE_BOARD_API_LEVEL_FROZEN)
 endif
 
 # Set build prop. This prop is read by ota_from_target_files when generating OTA,
@@ -444,6 +443,8 @@ ifndef is_sdk_build
   # To speedup startup of non-preopted builds, don't verify or compile the boot image.
   ADDITIONAL_SYSTEM_PROPERTIES += dalvik.vm.image-dex2oat-filter=extract
 endif
+# b/323566535
+ADDITIONAL_SYSTEM_PROPERTIES += init.svc_debug.no_fatal.zygote=true
 endif
 
 ## asan ##
@@ -1702,6 +1703,7 @@ droidcore-unbundled: $(filter $(HOST_OUT_ROOT)/%,$(modules_to_install)) \
     $(INSTALLED_SYSTEM_DLKMIMAGE_TARGET) \
     $(INSTALLED_SUPERIMAGE_EMPTY_TARGET) \
     $(INSTALLED_PRODUCTIMAGE_TARGET) \
+    $(INSTALLED_SYSTEM_EXTIMAGE_TARGET) \
     $(INSTALLED_SYSTEMOTHERIMAGE_TARGET) \
     $(INSTALLED_TEST_HARNESS_RAMDISK_TARGET) \
     $(INSTALLED_TEST_HARNESS_BOOTIMAGE_TARGET) \
@@ -1747,10 +1749,8 @@ droidcore: droidcore-unbundled
 # dist_files only for putting your library into the dist directory with a full build.
 .PHONY: dist_files
 
-ifeq ($(SOONG_COLLECT_JAVA_DEPS), true)
-  $(call dist-for-goals, dist_files, $(SOONG_OUT_DIR)/module_bp_java_deps.json)
-  $(call dist-for-goals, dist_files, $(PRODUCT_OUT)/module-info.json)
-endif
+$(call dist-for-goals, dist_files, $(SOONG_OUT_DIR)/module_bp_java_deps.json)
+$(call dist-for-goals, dist_files, $(PRODUCT_OUT)/module-info.json)
 
 .PHONY: apps_only
 ifeq ($(HOST_OS),darwin)
@@ -2027,17 +2027,6 @@ tests : host-tests target-tests
 
 .PHONY: findbugs
 findbugs: $(INTERNAL_FINDBUGS_HTML_TARGET) $(INTERNAL_FINDBUGS_XML_TARGET)
-
-LSDUMP_PATHS_FILE := $(PRODUCT_OUT)/lsdump_paths.txt
-
-.PHONY: findlsdumps
-# LSDUMP_PATHS is a list of tag:path.
-findlsdumps: $(LSDUMP_PATHS_FILE) $(foreach p,$(LSDUMP_PATHS),$(call word-colon,2,$(p)))
-
-$(LSDUMP_PATHS_FILE): PRIVATE_LSDUMP_PATHS := $(LSDUMP_PATHS)
-$(LSDUMP_PATHS_FILE):
-	@echo "Generate $@"
-	@rm -rf $@ && echo -e "$(subst :,:$(space),$(subst $(space),\n,$(PRIVATE_LSDUMP_PATHS)))" > $@
 
 .PHONY: check-elf-files
 check-elf-files:

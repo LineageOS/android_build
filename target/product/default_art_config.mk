@@ -51,7 +51,6 @@ PRODUCT_BOOT_JARS += \
     framework-minus-apex \
     framework-graphics \
     framework-location \
-    framework-nfc \
     ext \
     telephony-common \
     voip-common \
@@ -76,6 +75,7 @@ PRODUCT_APEX_BOOT_JARS := \
     com.android.media:updatable-media \
     com.android.mediaprovider:framework-mediaprovider \
     com.android.mediaprovider:framework-pdf \
+    com.android.mediaprovider:framework-pdf-v \
     com.android.ondevicepersonalization:framework-ondevicepersonalization \
     com.android.os.statsd:framework-statsd \
     com.android.permission:framework-permission \
@@ -89,11 +89,29 @@ PRODUCT_APEX_BOOT_JARS := \
     com.android.virt:framework-virtualization \
     com.android.wifi:framework-wifi \
 
-# TODO(b/308174306): Adjust this after multiple prebuilts version is supported.
-# APEX boot jars that are not in prebuilt apexes.
-# Keep the list sorted by module names and then library names.
-PRODUCT_APEX_BOOT_JARS_FOR_SOURCE_BUILD_ONLY := \
-    com.android.mediaprovider:framework-pdf \
+# When we release crashrecovery module
+ifeq ($(RELEASE_CRASHRECOVERY_MODULE),true)
+  PRODUCT_APEX_BOOT_JARS += \
+        com.android.crashrecovery:framework-crashrecovery \
+
+endif
+
+# Check if the build supports NFC apex or not
+ifeq ($(RELEASE_PACKAGE_NFC_STACK),NfcNci)
+    PRODUCT_BOOT_JARS += \
+        framework-nfc
+else
+    PRODUCT_APEX_BOOT_JARS += \
+        com.android.nfcservices:framework-nfc
+    $(call soong_config_set,bootclasspath,nfc_apex_bootclasspath_fragment,true)
+endif
+
+# Check if build supports Profiling module.
+ifeq ($(RELEASE_PACKAGE_PROFILING_MODULE),true)
+    PRODUCT_APEX_BOOT_JARS += \
+        com.android.profiling:framework-profiling \
+
+endif
 
 # List of system_server classpath jars delivered via apex.
 # Keep the list sorted by module names and then library names.
@@ -109,6 +127,17 @@ PRODUCT_APEX_SYSTEM_SERVER_JARS := \
     com.android.ondevicepersonalization:service-ondevicepersonalization \
     com.android.permission:service-permission \
     com.android.rkpd:service-rkp \
+
+# When we release crashrecovery module
+ifeq ($(RELEASE_CRASHRECOVERY_MODULE),true)
+  PRODUCT_APEX_SYSTEM_SERVER_JARS += \
+        com.android.crashrecovery:service-crashrecovery \
+
+endif
+
+ifeq ($(RELEASE_AVF_ENABLE_LLPVM_CHANGES),true)
+  PRODUCT_APEX_SYSTEM_SERVER_JARS += com.android.virt:service-virtualization
+endif
 
 # Use $(wildcard) to avoid referencing the profile in thin manifests that don't have the
 # art project.
@@ -131,6 +160,13 @@ PRODUCT_APEX_STANDALONE_SYSTEM_SERVER_JARS := \
     com.android.tethering:service-connectivity \
     com.android.uwb:service-uwb \
     com.android.wifi:service-wifi \
+
+# Check if build supports Profiling module.
+ifeq ($(RELEASE_PACKAGE_PROFILING_MODULE),true)
+    PRODUCT_APEX_STANDALONE_SYSTEM_SERVER_JARS += \
+        com.android.profiling:service-profiling \
+
+endif
 
 # Overrides the (apex, jar) pairs above when determining the on-device location. The format is:
 # <old_apex>:<old_jar>:<new_apex>:<new_jar>

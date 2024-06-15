@@ -260,6 +260,9 @@ A/B OTA specific options
   --vabc_cow_version
       Specify the VABC cow version to be used
 
+  --compression_factor
+      Specify the maximum block size to be compressed at once during OTA. supported options: 4k, 8k, 16k, 32k, 64k, 128k, 256k
+
   --backup <boolean>
       Enable or disable the execution of backuptool.sh.
       Disabled by default.
@@ -335,6 +338,7 @@ OPTIONS.vabc_compression_param = None
 OPTIONS.security_patch_level = None
 OPTIONS.max_threads = None
 OPTIONS.vabc_cow_version = None
+OPTIONS.compression_factor = None
 OPTIONS.backuptool = False
 
 
@@ -397,17 +401,6 @@ def ModifyVABCCompressionParam(content, algo):
     Updated content of dynamic_partitions_info.txt , with custom compression algo
   """
   return ModifyKeyvalueList(content, "virtual_ab_compression_method", algo)
-
-def SetVABCCowVersion(content, cow_version):
-  """ Update virtual_ab_cow_version in dynamic_partitions_info.txt
-  Args:
-    content: The string content of dynamic_partitions_info.txt
-    algo: The cow version be used for VABC. See
-          https://cs.android.com/android/platform/superproject/main/+/main:system/core/fs_mgr/libsnapshot/include/libsnapshot/cow_format.h;l=36
-  Returns:
-    Updated content of dynamic_partitions_info.txt , updated cow version
-  """
-  return ModifyKeyvalueList(content, "virtual_ab_cow_version", cow_version)
 
 
 def UpdatesInfoForSpecialUpdates(content, partitions_filter,
@@ -615,7 +608,7 @@ def GetTargetFilesZipForPartialUpdates(input_file, ab_partitions):
 
   This function modifies ab_partitions list with the desired partitions before
   calling the brillo_update_payload script. It also cleans up the reference to
-  the excluded partitions in the info file, e.g misc_info.txt.
+  the excluded partitions in the info file, e.g. misc_info.txt.
 
   Args:
     input_file: The input target-files.zip filename.
@@ -868,10 +861,10 @@ def ExtractOrCopyTargetFiles(target_file):
     return ExtractTargetFiles(target_file)
 
 
-def ValidateCompressinParam(target_info):
+def ValidateCompressionParam(target_info):
   vabc_compression_param = OPTIONS.vabc_compression_param
   if vabc_compression_param:
-    minimum_api_level_required = VABC_COMPRESSION_PARAM_SUPPORT[vabc_compression_param]
+    minimum_api_level_required = VABC_COMPRESSION_PARAM_SUPPORT[vabc_compression_param.split(",")[0]]
     if target_info.vendor_api_level < minimum_api_level_required:
       raise ValueError("Specified VABC compression param {} is only supported for API level >= {}, device is on API level {}".format(
           vabc_compression_param, minimum_api_level_required, target_info.vendor_api_level))
@@ -884,7 +877,7 @@ def GenerateAbOtaPackage(target_file, output_file, source_file=None):
   target_info = common.BuildInfo(OPTIONS.info_dict, OPTIONS.oem_dicts)
   if OPTIONS.disable_vabc and target_info.is_release_key:
     raise ValueError("Disabling VABC on release-key builds is not supported.")
-  ValidateCompressinParam(target_info)
+  ValidateCompressionParam(target_info)
   vabc_compression_param = target_info.vabc_compression_param
 
   target_file = ExtractOrCopyTargetFiles(target_file)
@@ -920,6 +913,16 @@ def GenerateAbOtaPackage(target_file, output_file, source_file=None):
           source_info.vabc_compression_param, target_info.vabc_compression_param, source_info.vabc_compression_param))
       vabc_compression_param = source_info.vabc_compression_param
 
+    # Virtual AB Cow version 3 is introduced in Android U with improved memory
+    # and install time performance. All OTA's with
+    # both the source build and target build with VIRTUAL_AB_COW_VERSION = 3
+    # can support the new format. Otherwise, fallback on older versions
+    if not source_info.vabc_cow_version or not target_info.vabc_cow_version:
+      logger.info("Source or Target doesn't have VABC_COW_VERSION specified, default to version 2")
+      OPTIONS.vabc_cow_version = 2
+    elif source_info.vabc_cow_version != target_info.vabc_cow_version:
+      logger.info("Source and Target have different cow VABC_COW_VERSION specified, default to minimum version")
+      OPTIONS.vabc_cow_version = min(source_info.vabc_cow_version, target_info.vabc_cow_version)
     # Virtual AB Compression was introduced in Androd S.
     # Later, we backported VABC to Android R. But verity support was not
     # backported, so if VABC is used and we are on Android R, disable
@@ -1025,6 +1028,8 @@ def GenerateAbOtaPackage(target_file, output_file, source_file=None):
         target_file, vabc_compression_param)
   if OPTIONS.vabc_cow_version:
     target_file = ModifyTargetFilesDynamicPartitionInfo(target_file, "virtual_ab_cow_version", OPTIONS.vabc_cow_version)
+  if OPTIONS.compression_factor:
+    target_file = ModifyTargetFilesDynamicPartitionInfo(target_file, "virtual_ab_compression_factor", OPTIONS.compression_factor)
   if OPTIONS.skip_postinstall:
     target_file = GetTargetFilesZipWithoutPostinstallConfig(target_file)
   # Target_file may have been modified, reparse ab_partitions
@@ -1043,7 +1048,11 @@ def GenerateAbOtaPackage(target_file, output_file, source_file=None):
   partition_timestamps_flags = []
   # Enforce a max timestamp this payload can be applied on top of.
   if OPTIONS.downgrade:
-    max_timestamp = source_info.GetBuildProp("ro.build.date.utc")
+    # When generating ota between merged target-files, partition build date can
+    # decrease in target, at the same time as ro.build.date.utc increases,
+    # so always pick largest value.
+    max_timestamp = max(source_info.GetBuildProp("ro.build.date.utc"),
+        str(metadata.postcondition.timestamp))
     partition_timestamps_flags = GeneratePartitionTimestampFlagsDowngrade(
         metadata.precondition.partition_state,
         metadata.postcondition.partition_state
@@ -1281,6 +1290,13 @@ def main(argv):
       else:
         raise ValueError("Cannot parse value %r for option %r - only "
                          "integers are allowed." % (a, o))
+    elif o in ("--compression_factor"):
+        values = ["4k", "8k", "16k", "32k", "64k", "128k", "256k"]
+        if a[:-1].isdigit() and a in values and a.endswith("k"):
+            OPTIONS.compression_factor = str(int(a[:-1]) * 1024)
+        else:
+            raise ValueError("Please specify value from following options: 4k, 8k, 16k, 32k, 64k, 128k", "256k")
+
     elif o == "--vabc_cow_version":
       if a.isdigit():
         OPTIONS.vabc_cow_version = a
@@ -1338,6 +1354,7 @@ def main(argv):
                                  "security_patch_level=",
                                  "max_threads=",
                                  "vabc_cow_version=",
+                                 "compression_factor=",
                                  "backup=",
                              ], extra_option_handler=[option_handler, payload_signer.signer_options])
   common.InitLogging()
