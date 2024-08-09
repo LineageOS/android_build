@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7b9ce49e_8b0423bf",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 16914
+      },
+      "writtenOn": "2024-08-09T18:26:40Z",
+      "side": 1,
+      "message": "Entire topic verified against the August ASB and android-security-13.0.0_r19..android-security-13.0.0_r20 tag diff, builds and runs fine on pro1, pro1x, and crosshatch",
+      "revId": "a5c8915ab48dc2734442c426e935004099f046e0",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
+    }
+  ]
+}
