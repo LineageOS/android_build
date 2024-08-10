@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b7415784_f7b0632f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 24334
+      },
+      "writtenOn": "2024-08-10T08:40:38Z",
+      "side": 1,
+      "message": "I m still getting offending entries build error. I don\u0027t see any new changes related this in latest tags in system/core",
+      "revId": "12a64c2575e65ab6d8cbbef4a3a8aacb95f8a4a1",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
+    }
+  ]
+}
