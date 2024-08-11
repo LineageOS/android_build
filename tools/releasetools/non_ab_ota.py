@@ -605,7 +605,7 @@ def GenerateNonAbOtaPackage(target_file, output_file, source_file=None):
       tmpfile = common.MakeTempFile(suffix=".zip")
       os.unlink(tmpfile)
       common.RunAndCheckOutput(
-          ["zip", tmpfile, "-r", ".", "-0"], cwd=target_file)
+          ["zip", tmpfile, "-y", "-r", ".", "-0"], cwd=target_file)
       assert zipfile.is_zipfile(tmpfile)
       target_file = tmpfile
 
