@@ -44,6 +44,8 @@ $(call add_json_list, PRODUCT_PRODUCT_PROPERTIES,        $(call collapse-prop-pa
 $(call add_json_list, PRODUCT_ODM_PROPERTIES,            $(call collapse-prop-pairs,PRODUCT_ODM_PROPERTIES))
 $(call add_json_list, PRODUCT_PROPERTY_OVERRIDES,        $(call collapse-prop-pairs,PRODUCT_PROPERTY_OVERRIDES))
 
+$(call add_json_list, PRODUCT_BUILD_PROP_OVERRIDES,      $(call collapse-prop-pairs,PRODUCT_BUILD_PROP_OVERRIDES))
+
 $(call add_json_str, BootloaderBoardName, $(TARGET_BOOTLOADER_BOARD_NAME))
 
 $(call add_json_bool, SdkBuild, $(filter sdk sdk_addon,$(MAKECMDGOALS)))
