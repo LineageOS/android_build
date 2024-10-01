@@ -162,3 +162,28 @@ $(call soong_config_set,bootclasspath,release_crashrecovery_module,$(RELEASE_CRA
 # Enable Profiling module. Also used by platform_bootclasspath.
 $(call soong_config_set,ANDROID,release_package_profiling_module,$(RELEASE_PACKAGE_PROFILING_MODULE))
 $(call soong_config_set,bootclasspath,release_package_profiling_module,$(RELEASE_PACKAGE_PROFILING_MODULE))
+
+# Export related variables to soong for hardware/google/graphics/common/libacryl:libacryl
+ifdef BOARD_LIBACRYL_DEFAULT_COMPOSITOR
+  $(call soong_config_set,acryl,libacryl_default_compositor,$(BOARD_LIBACRYL_DEFAULT_COMPOSITOR))
+else
+  $(call soong_config_set,acryl,libacryl_default_compositor,no_default_compositor)
+endif
+ifdef BOARD_LIBACRYL_DEFAULT_SCALER
+  $(call soong_config_set,acryl,libacryl_default_scaler,$(BOARD_LIBACRYL_DEFAULT_SCALER))
+else
+  $(call soong_config_set,acryl,libacryl_default_scaler,no_default_scaler)
+endif
+ifdef BOARD_LIBACRYL_DEFAULT_BLTER
+  $(call soong_config_set,acryl,libacryl_default_blter,$(BOARD_LIBACRYL_DEFAULT_BLTER))
+else
+  $(call soong_config_set,acryl,libacryl_default_blter,no_default_blter)
+endif
+ifdef BOARD_LIBACRYL_G2D_HDR_PLUGIN
+  #BOARD_LIBACRYL_G2D_HDR_PLUGIN is set in each board config
+  $(call soong_config_set_bool,acryl,libacryl_use_g2d_hdr_plugin,true)
+endif
+# Export path as a variable for libacryl if path exists, not all $(TARGET_BOARD_PLATFORM) has existed include folder.
+ifneq ($(wildcard hardware/google/graphics/$(TARGET_BOARD_PLATFORM)/libcap),)
+  $(call soong_config_set,acryl,libacryl_c_include,hardware/google/graphics/$(TARGET_BOARD_PLATFORM)/libcap)
+endif
