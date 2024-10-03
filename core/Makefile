@@ -3468,7 +3468,7 @@ $(1): $$(HOST_OUT_EXECUTABLES)/extra_install_zips_file_list $(foreach p,$(call r
 	@echo Writing $$@
 	rm -f $$@
 	echo -n > $$@
-	$$(foreach f,$(subst $(2)/,,$(filter $(2)/%,$(3))),echo "$$(f)" >> $$@$$(newline))
+	$$(foreach f,($(subst $(2)/,,$(filter $(2)/%,$(3)))),echo "$$(f)" | sed 's/\(^(\|)$$$$\)//g' >> $$@$$(newline))
 	$$(HOST_OUT_EXECUTABLES)/extra_install_zips_file_list $(2) $(call relevant-extra-install-zips,$(filter $(2)/%,$(3))) >> $$@
 endef
 
