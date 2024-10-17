@@ -16,6 +16,23 @@
       "message": "Entire topic verified against the October ASB and android-security-13.0.0_r21..android-security-13.0.0_r22 tag diff",
       "revId": "171c37a6b454de91adfe66c8e0e1734e17362a2c",
       "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "785bdf18_5dc13b70",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 18796
+      },
+      "writtenOn": "2024-10-17T10:02:08Z",
+      "side": 1,
+      "message": "fine here",
+      "revId": "171c37a6b454de91adfe66c8e0e1734e17362a2c",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
     }
   ]
 }
