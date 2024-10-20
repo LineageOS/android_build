@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5b1e0794_1a75d237",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 4550
+      },
+      "writtenOn": "2024-10-20T15:24:58Z",
+      "side": 1,
+      "message": "Differs from AOSP. Verify, update and merge when AOSP change is done.",
+      "revId": "41a810f294e34f9501206bb06126fdbecc6dab28",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
+    }
+  ]
+}
