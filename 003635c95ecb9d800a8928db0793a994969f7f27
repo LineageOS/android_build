@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5940b490_55ca0513",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 14048
+      },
+      "writtenOn": "2024-10-21T02:20:29Z",
+      "side": 1,
+      "message": "Verified building foster vendorimage with brcmfmac4354-sdio.nvidia,p2371-2180.txt and BCM4354.nvidia,p2371-2180.hcd in the image. Will replicate v+ to aosp.",
+      "revId": "003635c95ecb9d800a8928db0793a994969f7f27",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
+    }
+  ]
+}
