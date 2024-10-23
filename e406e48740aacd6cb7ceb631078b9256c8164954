@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "885040e0_0e991f13",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 29415
+      },
+      "writtenOn": "2024-10-23T11:41:22Z",
+      "side": 1,
+      "message": "Notably fixes build time on Ubuntu 24.10.",
+      "revId": "e406e48740aacd6cb7ceb631078b9256c8164954",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
+    }
+  ]
+}
