@@ -74,7 +74,11 @@ define generate-common-build-props
     echo "ro.$(1).build.id?=$(BUILD_ID)" >> $(2);\
     echo "ro.$(1).build.tags?=$(BUILD_VERSION_TAGS)" >> $(2);\
     echo "ro.$(1).build.type=$(TARGET_BUILD_VARIANT)" >> $(2);\
-    echo "ro.$(1).build.version.incremental=$(BUILD_NUMBER_FROM_FILE)" >> $(2);\
+    if [[ $(BUILD_NUMBER_FROM_FILE) =~ ^eng\. ]]; then \
+        echo "ro.$(1).build.version.incremental=`$(DATE_FROM_FILE) +%s`" >> $(2);\
+    else \
+        echo "ro.$(1).build.version.incremental=$(BUILD_NUMBER_FROM_FILE)" >> $(2);\
+    fi; \
     echo "ro.$(1).build.version.release=$(PLATFORM_VERSION_LAST_STABLE)" >> $(2);\
     echo "ro.$(1).build.version.release_or_codename=$(PLATFORM_VERSION)" >> $(2);\
     echo "ro.$(1).build.version.sdk=$(PLATFORM_SDK_VERSION)" >> $(2);\
