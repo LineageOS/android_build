@@ -242,6 +242,7 @@ endif
 $(call dump-phase-start,BOARD,,,, build/make/core/board_config.mk)
 ifndef RBC_PRODUCT_CONFIG
 include $(board_config_mk)
+-include vendor/extra/BoardConfigExtra.mk
 else
   $(shell mkdir -p $(OUT_DIR)/rbc)
   $(call dump-variables-rbc, $(OUT_DIR)/rbc/make_vars_pre_board_config.mk)
