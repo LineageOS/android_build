@@ -62,7 +62,7 @@ def GetArgumentsForImage(partition, group, image=None):
   image_size = sparse_img.GetImagePartitionSize(image) if image else 0
 
   cmd = ["--partition",
-         "{}:none:{}:{}".format(partition, image_size, group)]
+         "{}:readonly:{}:{}".format(partition, image_size, group)]
   if image:
     cmd += ["--image", "{}={}".format(partition, image)]
 
