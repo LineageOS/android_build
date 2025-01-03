@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "671b3bc6_d3fdaeac",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 11883
+      },
+      "writtenOn": "2025-01-03T12:01:32Z",
+      "side": 1,
+      "message": "I\u0027m not entirely sure why the value was changed originally, but readonly partitions should work just fine?",
+      "revId": "1a645c5b94bce910221296f0963e9590c017fef1",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
+    }
+  ]
+}
