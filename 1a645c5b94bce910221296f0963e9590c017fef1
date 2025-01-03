@@ -16,6 +16,24 @@
       "message": "I\u0027m not entirely sure why the value was changed originally, but readonly partitions should work just fine?",
       "revId": "1a645c5b94bce910221296f0963e9590c017fef1",
       "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "47fc2a47_703b483f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 16185
+      },
+      "writtenOn": "2025-01-03T16:55:43Z",
+      "side": 1,
+      "message": "if I recall correctly it was changed so that we can flash Google apps?",
+      "parentUuid": "671b3bc6_d3fdaeac",
+      "revId": "1a645c5b94bce910221296f0963e9590c017fef1",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
     }
   ]
 }
