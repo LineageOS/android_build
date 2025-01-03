@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cc57626d_7b99e4bf",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 14048
+      },
+      "writtenOn": "2025-01-03T08:54:49Z",
+      "side": 1,
+      "message": "Yes, I plan to send this to aosp. Also yes, I expect this to break virtually all non-tegra targets. Due to prebuilt interfaces.",
+      "revId": "e70a35bceb70a2316827d14c19e5a7d1d40c0cfe",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
+    }
+  ]
+}
