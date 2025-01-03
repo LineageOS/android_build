@@ -34,6 +34,24 @@
       "parentUuid": "671b3bc6_d3fdaeac",
       "revId": "1a645c5b94bce910221296f0963e9590c017fef1",
       "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fff05379_53d6a322",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 32245
+      },
+      "writtenOn": "2025-01-03T17:23:51Z",
+      "side": 1,
+      "message": "that\u0027s a better workaround for it, it seems\n\n(Look into Bruno\u0027s comment)\n\nhttps://review.lineageos.org/c/LineageOS/android_bootable_recovery/+/399004/comments/67b2c04e_3a441a91",
+      "parentUuid": "47fc2a47_703b483f",
+      "revId": "1a645c5b94bce910221296f0963e9590c017fef1",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
     }
   ]
 }
