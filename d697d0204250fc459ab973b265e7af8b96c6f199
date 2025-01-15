@@ -16,6 +16,24 @@
       "message": "Is this not enough?\n\nbuild/make/core/config.mk\n456:-include vendor/extra/BoardConfigExtra.mk",
       "revId": "d697d0204250fc459ab973b265e7af8b96c6f199",
       "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "db3e7ebd_a83cbb27",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 32245
+      },
+      "writtenOn": "2025-01-15T09:39:23Z",
+      "side": 1,
+      "message": "Nope.\n\nFor native bridge, it\u0027s processed by board_config.mk, while processing board_config.mk the vendor/extra/BoardConfigExtra.mk isn\u0027t included yet. \n\nAnother example:\n```\nBUILD_BROKEN_PLUGIN_VALIDATION :\u003d \\\n    soong-llvm12 \\\n    soong-llvm17 \\\n    soong-llvm18 \\\n    soong-llvm19\n```\nI need this because I have such a repo that affects all the targets\nThis gets processed on config.mk line 371, which is earlier than line 456",
+      "parentUuid": "73fa05c1_1b46e432",
+      "revId": "d697d0204250fc459ab973b265e7af8b96c6f199",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
     }
   ]
 }
