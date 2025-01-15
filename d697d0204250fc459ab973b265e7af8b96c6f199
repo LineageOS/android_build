@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "73fa05c1_1b46e432",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 4550
+      },
+      "writtenOn": "2025-01-15T09:28:32Z",
+      "side": 1,
+      "message": "Is this not enough?\n\nbuild/make/core/config.mk\n456:-include vendor/extra/BoardConfigExtra.mk",
+      "revId": "d697d0204250fc459ab973b265e7af8b96c6f199",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
+    }
+  ]
+}
