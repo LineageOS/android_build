@@ -48,3 +48,8 @@ adb_keys {
     name: "adb_keys",
     product_specific: true,
 }
+
+adb_keys {
+    name: "adb_keys.recovery",
+    recovery: true,
+}
