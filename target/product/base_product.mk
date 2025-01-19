@@ -30,3 +30,4 @@ PRODUCT_PACKAGES += \
 # Packages included only for eng or userdebug builds, previously debug tagged
 PRODUCT_PACKAGES_DEBUG += \
     adb_keys \
+    adb_keys.recovery
