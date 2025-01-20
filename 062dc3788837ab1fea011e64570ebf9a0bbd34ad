@@ -16,6 +16,24 @@
       "message": "This causes a build error on gts4lvwifi, troika and marlin but not on bluejay.\nFAILED: out/target/product/troika/obj/PACKAGING/recovery_intermediates/ramdisk_files-timestamp\ncould not make way for new symlink: root/product\ncannot delete non-empty directory: root/product\nrsync error: some files/attrs were not transferred (see previous errors) (code 23) at main.c(1338) [sender\u003d3.2.7]\nReverting fixes the build.",
       "revId": "062dc3788837ab1fea011e64570ebf9a0bbd34ad",
       "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cc84df0c_1efd2009",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 10067
+      },
+      "writtenOn": "2025-01-20T21:37:20Z",
+      "side": 1,
+      "message": "try `product` -\u003e `$(TARGET_COPY_OUT_PRODUCT)` and upload a change with that.",
+      "parentUuid": "5ba1059a_b8162e6b",
+      "revId": "062dc3788837ab1fea011e64570ebf9a0bbd34ad",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
     }
   ],
   "submitRequirementResults": []
