@@ -52,6 +52,23 @@
       "parentUuid": "cc84df0c_1efd2009",
       "revId": "062dc3788837ab1fea011e64570ebf9a0bbd34ad",
       "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7d665438_a05560c5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 2644
+      },
+      "writtenOn": "2025-01-21T02:17:08Z",
+      "side": 1,
+      "message": "That worked, thanks. https://review.lineageos.org/c/LineageOS/android_build/+/416268",
+      "revId": "062dc3788837ab1fea011e64570ebf9a0bbd34ad",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
     }
   ],
   "submitRequirementResults": []
