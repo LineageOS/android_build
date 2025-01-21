@@ -16,6 +16,24 @@
       "message": "You could amend the commit and add Łukasz Patron as the commit author to keep the commit clean. \nJust a suggestion",
       "revId": "117158821cef216f9200d879e2f3105979c65066",
       "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a5293604_c3ca2fb1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 2644
+      },
+      "writtenOn": "2025-01-21T03:16:47Z",
+      "side": 1,
+      "message": "I wii just make it a fixup with luk as the author.",
+      "parentUuid": "ce9fd4bd_0752570a",
+      "revId": "117158821cef216f9200d879e2f3105979c65066",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
     }
   ]
 }
