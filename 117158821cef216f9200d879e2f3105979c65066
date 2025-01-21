@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ce9fd4bd_0752570a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 34519
+      },
+      "writtenOn": "2025-01-21T02:43:26Z",
+      "side": 1,
+      "message": "You could amend the commit and add Łukasz Patron as the commit author to keep the commit clean. \nJust a suggestion",
+      "revId": "117158821cef216f9200d879e2f3105979c65066",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
+    }
+  ]
+}
