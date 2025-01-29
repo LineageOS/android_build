@@ -800,6 +800,22 @@ def AddSuperEmpty(output_zip):
     unsparse_img.Write()
 
 
+# lpmake assumes that the built image is not split when there is only one partition in
+# super_block_devices.
+# However, build system will try to make it split anyway, when retrofit is enabled.
+# Unforunately on A/B devices this flag must be enabled to properly perform A/B OTAs.
+#
+# This function therefore builds the single image depending on the contents of super_block_devices.
+def AddSuperImageSingleAB(output_zip, device_name: str):
+  """Create single super_<device>.img on retrofit A/B devices and store it in output_zip."""
+
+  img = OutputFile(output_zip, OPTIONS.input_tmp, "OTA", f"super_{device_name}.img")
+  built = build_super_image.BuildSuperImage(OPTIONS.input_tmp, img.name)
+
+  if built:
+    img.Write()
+
+
 def AddSuperSplit(output_zip):
   """Create split super_*.img and store it in output_zip."""
 
@@ -1157,7 +1173,14 @@ def AddImagesToTargetFiles(filename):
     if OPTIONS.info_dict.get(
             "build_retrofit_dynamic_partitions_ota_package") == "true":
       banner("super split images")
-      AddSuperSplit(output_zip)
+
+      # If the type of info_dict['super_block_devices'] is str, then there is only one item.
+      # This is needed to retrofit devices with only one partition to utilize.
+      # An example of this is Nokia 8 (NB1), which is A/B but only has system partition.
+      if isinstance(OPTIONS.info_dict['super_block_devices'], str):
+        AddSuperImageSingleAB(output_zip, OPTIONS.info_dict['super_block_devices'])
+      else:
+        AddSuperSplit(output_zip)
 
   banner("radio")
   ab_partitions_txt = os.path.join(OPTIONS.input_tmp, "META",
