@@ -16,6 +16,23 @@
       "message": "This is an RFC; would like some input.",
       "revId": "bcfdb6256d6b98f6d41ea030a21b37f83bab4188",
       "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fcfc6b0d_10c83442",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 32674
+      },
+      "writtenOn": "2025-01-31T03:12:34Z",
+      "side": 1,
+      "message": "Works on NB1 but causing problem on other devices that uses A/B RDP.",
+      "revId": "bcfdb6256d6b98f6d41ea030a21b37f83bab4188",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
     }
   ]
 }
