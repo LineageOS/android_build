@@ -16,6 +16,23 @@
       "message": "appears to work on nx\ntest: added bs to init file, updated, bs gone and initfile replaced\nbefore the initfile was not getting replaced and the bs would stay",
       "revId": "f772c6d4525b39a31820594b0546eff3b16f76b1",
       "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f5920a2c_3ba97b2f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 13648
+      },
+      "writtenOn": "2025-02-08T20:01:40Z",
+      "side": 1,
+      "message": "If we do this, then you can delete the updater warning.",
+      "revId": "f772c6d4525b39a31820594b0546eff3b16f76b1",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
     }
   ]
 }
