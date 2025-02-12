@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "121fb2d6_01a59a9f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 28223
+      },
+      "writtenOn": "2025-02-12T21:59:13Z",
+      "side": 1,
+      "message": "it includes everything I have on BoardConfigExtra.mk just fine",
+      "revId": "da4eba1643c235814654255f9d87f04b08769d7f",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
+    }
+  ]
+}
