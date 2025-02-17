@@ -104,6 +104,24 @@
       "parentUuid": "70f6c553_30cca544",
       "revId": "f772c6d4525b39a31820594b0546eff3b16f76b1",
       "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "16720c20_2cfe50ba",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 16185
+      },
+      "writtenOn": "2025-02-17T06:49:48Z",
+      "side": 1,
+      "message": "this won\u0027t work on A/B, payload.bin formatting and brillo_update and all - there\u0027s no *.list files that would cover this in an A/B package. So sadly yeah, we have to leave the Updater warning at least.\n\n@priv.luk@gmail.com what are your thoughts on merging this for non-A/B at least? Less users that need to manually intervene at least...",
+      "parentUuid": "d9c7f63d_bd662e86",
+      "revId": "f772c6d4525b39a31820594b0546eff3b16f76b1",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
     }
   ]
 }
