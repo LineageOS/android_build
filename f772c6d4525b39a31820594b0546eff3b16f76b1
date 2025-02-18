@@ -122,6 +122,24 @@
       "parentUuid": "d9c7f63d_bd662e86",
       "revId": "f772c6d4525b39a31820594b0546eff3b16f76b1",
       "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4cd7c909_59fee9f9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 16185
+      },
+      "writtenOn": "2025-02-18T01:09:16Z",
+      "side": 1,
+      "message": "won\u0027t work on A/B, so I did this - https://review.lineageos.org/c/LineageOS/android_packages_apps_Updater/+/419346 - should only show the message if update is A/B",
+      "parentUuid": "16720c20_2cfe50ba",
+      "revId": "f772c6d4525b39a31820594b0546eff3b16f76b1",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
     }
   ]
 }
