@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "796752cc_3c4d96b2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 26658
+      },
+      "writtenOn": "2025-02-22T10:56:12Z",
+      "side": 1,
+      "message": "Build fails due to\n```\n[ 99% 100766/101596] Target Java: out/target/common/obj/APPS/Settings_intermediates/classes-full-debug.jar\nFAILED: out/target/common/obj/APPS/Settings_intermediates/classes-full-debug.jar\n\n...\n\npackages/apps/Settings/src/com/android/settings/accounts/AccountTypePreferenceLoader.java:47: error: a type with the same simple name\n is already defined by the single-type-import of VisibleForTesting\nimport com.android.internal.annotations.VisibleForTesting;\n^\npackages/apps/Settings/src/com/android/settings/search/SearchFeatureProviderImpl.java:29: error: cannot find symbol\nimport com.android.settingslib.search.SearchIndexableResourcesMobile;\n                                     ^\n  symbol:   class SearchIndexableResourcesMobile\n  location: package com.android.settingslib.search\npackages/apps/Settings/src/com/android/settings/accounts/AccountTypePreferenceLoader.java:205: error: reference to VisibleForTesting \nis ambiguous\n    @VisibleForTesting\n     ^\n  both class androidx.annotation.VisibleForTesting in androidx.annotation and class com.android.internal.annotations.VisibleForTestin\ng in com.android.internal.annotations match\npackages/apps/Settings/src/com/android/settings/accounts/AccountTypePreferenceLoader.java:227: error: reference to VisibleForTesting \nis ambiguous\n    @VisibleForTesting\n     ^\n  both class androidx.annotation.VisibleForTesting in androidx.annotation and class com.android.internal.annotations.VisibleForTestin\ng in com.android.internal.annotations match\npackages/apps/Settings/src/com/android/settings/accounts/AccountTypePreferenceLoader.java:251: error: reference to VisibleForTesting \nis ambiguous\n    @VisibleForTesting\n     ^\n  both class androidx.annotation.VisibleForTesting in androidx.annotation and class com.android.internal.annotations.VisibleForTestin\ng in com.android.internal.annotations match\npackages/apps/Settings/src/com/android/settings/search/SearchFeatureProviderImpl.java:58: error: cannot find symbol\n            mSearchIndexableResources \u003d new SearchIndexableResourcesMobile();\n                                            ^\n  symbol:   class SearchIndexableResourcesMobile\n  location: class SearchFeatureProviderImpl\n6 errors\n11:51:23 ninja failed with: exit status 1\n\n#### failed to build some targets (01:04:22 (hh:mm:ss)) ####\n```",
+      "revId": "86ccdf5f615b5c16eaa76b20b4e4f87917985f88",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
+    }
+  ]
+}
