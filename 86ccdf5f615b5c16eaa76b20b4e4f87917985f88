@@ -34,6 +34,24 @@
       "parentUuid": "796752cc_3c4d96b2",
       "revId": "86ccdf5f615b5c16eaa76b20b4e4f87917985f88",
       "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "263a9e32_7e256de7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 26658
+      },
+      "writtenOn": "2025-02-23T12:10:26Z",
+      "side": 1,
+      "message": "No experience in Java debugging - how to best go for that?\nIt did work with last month\u0027s patches though. Also a clean build doesn\u0027t solve it.\nThe issues exist for potter and sargo.",
+      "parentUuid": "3af68b47_e890b895",
+      "revId": "86ccdf5f615b5c16eaa76b20b4e4f87917985f88",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
     }
   ]
 }
