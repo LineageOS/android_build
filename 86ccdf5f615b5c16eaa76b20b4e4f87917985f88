@@ -52,6 +52,24 @@
       "parentUuid": "3af68b47_e890b895",
       "revId": "86ccdf5f615b5c16eaa76b20b4e4f87917985f88",
       "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "050fa6a8_efbb1cfd",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 26658
+      },
+      "writtenOn": "2025-03-09T08:13:34Z",
+      "side": 1,
+      "message": "@flamefire89@gmail.com I\u0027ve looked into it and wrote it up in r/LineageOS (). If you\u0027re not on reddit here\u0027s what I found:\n0. I\u0027m only pulling in the topics from March 2023 until now in order - so no custom patches I\u0027m aware of.\n1. the class `VisibleForTesting` exists in both `androidx.annotation.VisibleForTesting` and `com.android.internal.annotations.VisibleForTesting` and thus should be removed, e.g., by changing `import com.android.internal.annotations.VisibleForTesting;` to `import androidx.annotation.VisibleForTesting;` in `packages/apps/Settings/src/com/android/settings/accounts/AccountTypePreferenceLoader.java`. Does that even make sense? I haven\u0027t tried because I know the language so little and can not estimate any side effects.\n\n2. `find packages/apps/Settings -name \"SearchIndexableResourcesMobile.java\"` does not return anything so the class does not seem to exist. I have no idea how to continue here. Any input would be great!",
+      "parentUuid": "263a9e32_7e256de7",
+      "revId": "86ccdf5f615b5c16eaa76b20b4e4f87917985f88",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
     }
   ]
 }
