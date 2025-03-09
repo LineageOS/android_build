@@ -70,6 +70,24 @@
       "parentUuid": "263a9e32_7e256de7",
       "revId": "86ccdf5f615b5c16eaa76b20b4e4f87917985f88",
       "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6fa6593d_1b30fd04",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 26658
+      },
+      "writtenOn": "2025-03-09T08:14:44Z",
+      "side": 1,
+      "message": "Sorry, forgot the link to reddit: https://www.reddit.com/r/LineageOS/comments/1j732c1/build_issues_for_linageos_171/",
+      "parentUuid": "050fa6a8_efbb1cfd",
+      "revId": "86ccdf5f615b5c16eaa76b20b4e4f87917985f88",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
     }
   ]
 }
