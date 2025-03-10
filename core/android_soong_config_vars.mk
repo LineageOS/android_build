@@ -97,6 +97,7 @@ $(call soong_config_set_bool,art_module,art_build_host, \
   $(if $(filter-out false_marker,$(ART_BUILD_HOST_NDEBUG)_marker $(ART_BUILD_HOST_DEBUG)_marker),true,false))
 
 # For chre
+$(call soong_config_set_bool,chre,chre_daemon_load_into_sensorspd,$(if $(filter true,$(CHRE_DAEMON_LOAD_INTO_SENSORSPD)),true,false))
 $(call soong_config_set_bool,chre,chre_daemon_lpma_enabled,$(if $(filter true,$(CHRE_DAEMON_LPMA_ENABLED)),true,false))
 $(call soong_config_set_bool,chre,chre_dedicated_transport_channel_enabled,$(if $(filter true,$(CHRE_DEDICATED_TRANSPORT_CHANNEL_ENABLED)),true,false))
 $(call soong_config_set_bool,chre,chre_log_atom_extension_enabled,$(if $(filter true,$(CHRE_LOG_ATOM_EXTENSION_ENABLED)),true,false))
