@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "496ec5e6_46d1ac5a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 14048
+      },
+      "writtenOn": "2025-03-14T20:54:03Z",
+      "side": 1,
+      "message": "Verified building and flashing quill, a legacy a/b target that has a recovery partition. The resulting ota flashed correctly in recovery and applied properly via the updater app. Needs verified on an a/b target with dynamic partitions.",
+      "revId": "008ed588707f277e0e63f0b70d5fd6b598220e51",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
+    }
+  ]
+}
