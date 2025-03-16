@@ -240,9 +240,6 @@ fn set_flag(qualified_name: &str, value: &str) -> Result<()> {
         anyhow!("no aconfig flag '{qualified_name}'. Does the flag have an .aconfig definition?"),
     )?;
 
-    ensure!(flag.permission == FlagPermission::ReadWrite,
-            format!("could not write flag '{qualified_name}', it is read-only for the current release configuration."));
-
     DeviceConfigSource::override_flag(&flag.namespace, qualified_name, value)?;
 
     Ok(())
