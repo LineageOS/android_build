@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c512d405_775c9d27",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 14048
+      },
+      "writtenOn": "2025-03-19T21:28:35Z",
+      "side": 1,
+      "message": "Verified on quill, a legacy a/b device with a recovery partition.",
+      "revId": "bc95152efc6a43f3b103b1848c946e9bf8d4e493",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
+    }
+  ]
+}
