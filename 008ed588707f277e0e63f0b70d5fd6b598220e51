@@ -67,6 +67,24 @@
       "message": "22.1 only?",
       "revId": "008ed588707f277e0e63f0b70d5fd6b598220e51",
       "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "796dee12_7da2adc1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 14048
+      },
+      "writtenOn": "2025-03-28T14:30:09Z",
+      "side": 1,
+      "message": "Picked to 22.2. That and 21.0 need merged as well.",
+      "parentUuid": "26bd8185_1f757855",
+      "revId": "008ed588707f277e0e63f0b70d5fd6b598220e51",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
     }
   ],
   "submitRequirementResults": []
