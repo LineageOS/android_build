@@ -92,7 +92,6 @@ android_system_image {
         ///////////////////////////////////////////
 
         // handheld packages
-        "Launcher3QuickStep",
         "Provision",
         "Settings",
         "StorageManager",
@@ -157,7 +156,6 @@ android_system_image {
         // gsi_product
         ///////////////////////////////////////////
         "Browser2",
-        "Camera2",
         "Dialer",
         "LatinIME",
         "apns-full-conf.xml",
