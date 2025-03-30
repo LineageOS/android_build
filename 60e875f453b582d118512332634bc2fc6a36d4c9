@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f5958ac5_89a82e5b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 20162
+      },
+      "writtenOn": "2025-03-30T05:23:58Z",
+      "side": 1,
+      "message": "When building a GSI target, the L3QS entry causes the following error:\n\n```\nerror: build/make/target/product/gsi/Android.bp:84:1: \"android_gsi\" depends on undefined module \"Launcher3QuickStep\".\nOr did you mean [\"Launcher3QuickStepLib\"]?\n```\n\nTrebuchetQuickStep should\u0027ve overridden L3QS, but for some reason isn\u0027t picked up.\n\nLikewise, Aperture should\u0027ve overridden Camera2. Having Camera2 doesn\u0027t cause a build-time error, but the resulting build contains Camera2, when it should contain Aperture instead.\n\nThis crudely fixes both.",
+      "revId": "60e875f453b582d118512332634bc2fc6a36d4c9",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
+    }
+  ]
+}
