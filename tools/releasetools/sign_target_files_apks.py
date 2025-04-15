@@ -1186,8 +1186,10 @@ def RewriteProps(data):
         value = "/".join(pieces)
       elif key == "ro.build.description":
         pieces = value.split()
-        assert pieces[-1].endswith("-keys")
-        pieces[-1] = EditTags(pieces[-1])
+        for i in range(len(pieces) - 1, -1, -1):
+            if pieces[i].endswith("-keys"):
+                pieces[i] = EditTags(pieces[i])
+                break
         value = " ".join(pieces)
       elif key.startswith("ro.") and key.endswith(".build.tags"):
         value = EditTags(value)
