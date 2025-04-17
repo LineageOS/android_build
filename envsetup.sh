@@ -470,7 +470,8 @@ function _lunch_meat()
     export TARGET_BUILD_TYPE=release
 
     local no_kernel=$(_get_build_var_cached TARGET_NO_KERNEL)
-    if [[ "$no_kernel" == "true" ]]; then
+    local prebuilt_kernel=$(_get_build_var_cached TARGET_PREBUILT_KERNEL)
+    if [[ "$no_kernel" == "true" ]] || [ -n "$prebuilt_kernel" ]; then
         unset INLINE_KERNEL_BUILDING
     else
         export INLINE_KERNEL_BUILDING=true
