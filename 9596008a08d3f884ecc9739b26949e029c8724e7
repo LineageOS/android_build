@@ -20,6 +20,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "d01debbb_bdf42ca9",
+        "filename": "tools/releasetools/sign_target_files_apks.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 1145,
+      "author": {
+        "id": 11883
+      },
+      "writtenOn": "2025-04-25T07:55:31Z",
+      "side": 1,
+      "message": "```suggestion\n        for i in range(len(pieces) - 1, -1, -1):\n```\n\nLet\u0027s start from the back?",
+      "range": {
+        "startLine": 1145,
+        "startChar": 0,
+        "endLine": 1145,
+        "endChar": 36
+      },
+      "revId": "9596008a08d3f884ecc9739b26949e029c8724e7",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "f01402a8_ec45584c",
         "filename": "tools/releasetools/sign_target_files_apks.py",
         "patchSetId": 1
