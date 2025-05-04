@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2d17e6bc_ce90ad34",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 20587
+      },
+      "writtenOn": "2025-05-04T10:52:18Z",
+      "side": 1,
+      "message": "Technically \"CVE-2025-22437  A-317203980\" (Backport...) is the prior change fd796b797ed and \"CVE-2024-49728  A-296915500\" (Reapply...) does not apply as the commit was never added or reverted.",
+      "revId": "d3b851e0498542e21d6182f413a25e4f5354c567",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
+    }
+  ]
+}
