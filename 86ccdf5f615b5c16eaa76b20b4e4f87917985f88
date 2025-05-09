@@ -88,6 +88,24 @@
       "parentUuid": "050fa6a8_efbb1cfd",
       "revId": "86ccdf5f615b5c16eaa76b20b4e4f87917985f88",
       "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b4cb7ee3_dc5fbaf8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 31841
+      },
+      "writtenOn": "2025-05-09T20:02:56Z",
+      "side": 1,
+      "message": "https://review.lineageos.org/c/LineageOS/android/+/421992\n\nYou dont seem to have this change. Rebase your manifest and resync with --no-manifest-update and then repopick all asb topics again.",
+      "parentUuid": "6fa6593d_1b30fd04",
+      "revId": "86ccdf5f615b5c16eaa76b20b4e4f87917985f88",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
     }
   ]
 }
