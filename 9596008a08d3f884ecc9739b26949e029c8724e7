@@ -41,6 +41,30 @@
       "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "eee2817a_64f725ab",
+        "filename": "tools/releasetools/sign_target_files_apks.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 1145,
+      "author": {
+        "id": 4550
+      },
+      "writtenOn": "2025-05-13T07:53:20Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d01debbb_bdf42ca9",
+      "range": {
+        "startLine": 1145,
+        "startChar": 0,
+        "endLine": 1145,
+        "endChar": 36
+      },
+      "revId": "9596008a08d3f884ecc9739b26949e029c8724e7",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f01402a8_ec45584c",
@@ -54,6 +78,24 @@
       "writtenOn": "2025-04-24T17:56:01Z",
       "side": 1,
       "message": "no break?",
+      "revId": "9596008a08d3f884ecc9739b26949e029c8724e7",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d9ca01ca_12371cd5",
+        "filename": "tools/releasetools/sign_target_files_apks.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 1147,
+      "author": {
+        "id": 4550
+      },
+      "writtenOn": "2025-05-13T07:53:20Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f01402a8_ec45584c",
       "revId": "9596008a08d3f884ecc9739b26949e029c8724e7",
       "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
     }
