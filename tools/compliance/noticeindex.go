@@ -232,7 +232,7 @@ func (ni *NoticeIndex) Hashes() chan hash {
 // InputFiles returns the complete list of files read during indexing.
 func (ni *NoticeIndex) InputFiles() []string {
 	projectMeta := ni.pmix.AllMetadataFiles()
-	files := make([]string, 0, len(ni.files) + len(ni.lg.targets) + len(projectMeta))
+	files := make([]string, 0, len(ni.files)+len(ni.lg.targets)+len(projectMeta))
 	files = append(files, ni.files...)
 	for f := range ni.lg.targets {
 		files = append(files, f)
@@ -322,6 +322,11 @@ func (ni *NoticeIndex) Libraries() chan string {
 
 // HashText returns the file content of the license text hashed as `h`.
 func (ni *NoticeIndex) HashText(h hash) []byte {
+	return ni.text[h]
+}
+
+func (ni *NoticeIndex) HashTextOfMd5(s string) []byte {
+	h := hash{key: s}
 	return ni.text[h]
 }
 

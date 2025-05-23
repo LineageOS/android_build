@@ -241,6 +241,10 @@ func htmlNotice(ctx *context, files ...string) error {
 		fmt.Fprintf(ctx.stdout, "  <h1>%s</h1>\n", html.EscapeString(ctx.product))
 	}
 	ids := make(map[string]string)
+
+	// MD5 hash of File build/soong/licenses/opensourcerequest
+	opensourcerequestHash := "67459f64e6325b6ffaa3e53946688e6f"
+	opensourcerequestNotice := false
 	if ctx.includeTOC {
 		fmt.Fprintln(ctx.stdout, "  <ul class=\"toc\">")
 		i := 0
@@ -250,14 +254,33 @@ func htmlNotice(ctx *context, files ...string) error {
 			ids[installPath] = id
 			fmt.Fprintf(ctx.stdout, "    <li id=\"%s\"><strong>%s</strong>\n      <ul>\n", id, html.EscapeString(ctx.strip(installPath)))
 			for _, h := range ni.InstallHashes(installPath) {
+				if h.String() == opensourcerequestHash {
+					opensourcerequestNotice = true
+					continue
+				}
 				libs := ni.InstallHashLibs(installPath, h)
 				fmt.Fprintf(ctx.stdout, "        <li><a href=\"#%s\">%s</a>\n", h.String(), html.EscapeString(strings.Join(libs, ", ")))
 			}
 			fmt.Fprintln(ctx.stdout, "      </ul>")
 		}
 		fmt.Fprintln(ctx.stdout, "  </ul><!-- toc -->")
+	} else {
+		for h := range ni.Hashes() {
+			if h.String() == opensourcerequestHash {
+				opensourcerequestNotice = true
+				break
+			}
+		}
+	}
+
+	if opensourcerequestNotice {
+		fmt.Fprintln(ctx.stdout, "  <hr>")
+		fmt.Fprintln(ctx.stdout, "  <strong>", html.EscapeString(string(ni.HashTextOfMd5(opensourcerequestHash))), "</strong>")
 	}
 	for h := range ni.Hashes() {
+		if h.String() == opensourcerequestHash {
+			continue
+		}
 		fmt.Fprintln(ctx.stdout, "  <hr>")
 		for _, libName := range ni.HashLibs(h) {
 			fmt.Fprintf(ctx.stdout, "  <strong>%s</strong> used by:\n    <ul class=\"file-list\">\n", html.EscapeString(libName))
