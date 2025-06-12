@@ -378,6 +378,37 @@ def GetApexKeys(keys_info, key_map):
   return keys_info
 
 
+def GetMicrodroidVbmetaKey(virt_apex_path, avbtool_path):
+  """Extracts the AVB public key from microdroid_vbmeta.img within a virt apex.
+
+  Args:
+    virt_apex_path: The path to the com.android.virt.apex file.
+    avbtool_path: The path to the avbtool executable.
+
+  Returns:
+    The AVB public key (bytes).
+  """
+  # Creates an ApexApkSigner to extract microdroid_vbmeta.img.
+  # No need to set key_passwords/codename_to_api_level_map since
+  # we won't do signing here.
+  apex_signer = apex_utils.ApexApkSigner(
+      virt_apex_path,
+      None,  # key_passwords
+      None)  # codename_to_api_level_map
+  payload_dir = apex_signer.ExtractApexPayload(virt_apex_path)
+  microdroid_vbmeta_image = os.path.join(
+      payload_dir, 'etc', 'fs', 'microdroid_vbmeta.img')
+
+  # Extracts the avb public key from microdroid_vbmeta.img.
+  with tempfile.NamedTemporaryFile() as microdroid_pubkey:
+    common.RunAndCheckOutput([
+        avbtool_path, 'info_image',
+        '--image', microdroid_vbmeta_image,
+        '--output_pubkey', microdroid_pubkey.name])
+    with open(microdroid_pubkey.name, 'rb') as f:
+      return f.read()
+
+
 def GetApkFileInfo(filename, compressed_extension, skipped_prefixes):
   """Returns the APK info based on the given filename.
 
@@ -862,21 +893,34 @@ def ProcessTargetFiles(input_tf_zip: zipfile.ZipFile, output_tf_zip: zipfile.Zip
 
     # Updates pvmfw embedded public key with the virt APEX payload key.
     elif filename == "PREBUILT_IMAGES/pvmfw.img":
-      # Find the name of the virt APEX in the target files.
+      # Find the path of the virt APEX in the target files.
       namelist = input_tf_zip.namelist()
-      apex_gen = (GetApexFilename(f) for f in namelist if IsApexFile(f))
-      virt_apex_re = re.compile("^com\.([^\.]+\.)?android\.virt\.apex$")
-      virt_apex = next((a for a in apex_gen if virt_apex_re.match(a)), None)
-      if not virt_apex:
+      apex_gen = (f for f in namelist if IsApexFile(f))
+      virt_apex_re = re.compile("^.*com\.([^\.]+\.)?android\.virt\.apex$")
+      virt_apex_path = next(
+        (a for a in apex_gen if virt_apex_re.match(a)), None)
+      if not virt_apex_path:
         print("Removing %s from ramdisk: virt APEX not found" % filename)
       else:
-        print("Replacing %s embedded key with %s key" % (filename, virt_apex))
+        print("Replacing %s embedded key with %s key" % (filename,
+                                                         virt_apex_path))
         # Get the current and new embedded keys.
+        virt_apex = GetApexFilename(virt_apex_path)
         payload_key, container_key, sign_tool = apex_keys[virt_apex]
-        new_pubkey_path = common.ExtractAvbPublicKey(
-            misc_info['avb_avbtool'], payload_key)
-        with open(new_pubkey_path, 'rb') as f:
-          new_pubkey = f.read()
+
+        # b/384813199: handles the pre-signed com.android.virt.apex in GSI.
+        if payload_key == 'PRESIGNED':
+          with tempfile.NamedTemporaryFile() as virt_apex_temp_file:
+            virt_apex_temp_file.write(input_tf_zip.read(virt_apex_path))
+            virt_apex_temp_file.flush()
+            new_pubkey = GetMicrodroidVbmetaKey(virt_apex_temp_file.name,
+                                                misc_info['avb_avbtool'])
+        else:
+          new_pubkey_path = common.ExtractAvbPublicKey(
+              misc_info['avb_avbtool'], payload_key)
+          with open(new_pubkey_path, 'rb') as f:
+            new_pubkey = f.read()
+
         pubkey_info = copy.copy(
             input_tf_zip.getinfo("PREBUILT_IMAGES/pvmfw_embedded.avbpubkey"))
         old_pubkey = input_tf_zip.read(pubkey_info.filename)

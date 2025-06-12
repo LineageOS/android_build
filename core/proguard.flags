@@ -1,14 +1,3 @@
-# We have moved -dontobfuscate and -dontoptimize to the makefiles.
-# dex does not like code run through proguard optimize and preverify steps.
-# -dontoptimize
--dontpreverify
-
-# Don't obfuscate. We only need dead code striping.
-# -dontobfuscate
-
-# Add this flag in your package's own configuration if it's needed.
-#-flattenpackagehierarchy
-
 # Keep classes and members with the platform-defined @VisibleForTesting annotation.
 -keep @com.android.internal.annotations.VisibleForTesting class *
 -keepclassmembers class * {
@@ -41,12 +30,12 @@
 # Needed to ensure callback field references are kept in their respective
 # owning classes when the downstream callback registrars only store weak refs.
 -if @com.android.internal.annotations.WeaklyReferencedCallback class *
--keepclassmembers,allowaccessmodification class * {
-  <1> *;
+-keepclassmembers,allowaccessmodification,allowobfuscation,allowshrinking class * {
+  !synthetic <1> *;
 }
 -if class * extends @com.android.internal.annotations.WeaklyReferencedCallback **
--keepclassmembers,allowaccessmodification class * {
-  <1> *;
+-keepclassmembers,allowaccessmodification,allowobfuscation,allowshrinking class * {
+  !synthetic <1> *;
 }
 
 # Understand the common @Keep annotation from various Android packages:

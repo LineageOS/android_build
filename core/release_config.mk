@@ -146,6 +146,9 @@ ifneq (,$(_use_protobuf))
         # This will also set ALL_RELEASE_CONFIGS_FOR_PRODUCT and _used_files for us.
         $(eval include $(_flags_file))
         $(KATI_extra_file_deps $(OUT_DIR)/release-config $(protobuf_map_files) $(_flags_file))
+        ifneq (,$(_disallow_lunch_use))
+            $(error Release config ${TARGET_RELEASE} is disallowed for build.  Please use one of: $(ALL_RELEASE_CONFIGS_FOR_PRODUCT))
+        endif
     else
         # This is the first pass of product config.
         $(eval include $(_flags_varmk))
@@ -153,20 +156,6 @@ ifneq (,$(_use_protobuf))
     _used_files :=
     ifeq (,$(_must_protobuf)$(RELEASE_BUILD_FLAGS_IN_PROTOBUF))
         _use_protobuf :=
-    else
-        _base_all_release := all_release_configs-$(TARGET_PRODUCT)
-        $(call dist-for-goals,droid,\
-            $(_flags_dir)/$(_base_all_release).pb:build_flags/all_release_configs.pb \
-            $(_flags_dir)/$(_base_all_release).textproto:build_flags/all_release_configs.textproto \
-            $(_flags_dir)/$(_base_all_release).json:build_flags/all_release_configs.json \
-            $(_flags_dir)/inheritance_graph-$(TARGET_PRODUCT).dot:build_flags/inheritance_graph-$(TARGET_PRODUCT).dot \
-        )
-# These are always created, add an empty rule for them to keep ninja happy.
-$(_flags_dir)/inheritance_graph-$(TARGET_PRODUCT).dot:
-	: created by $(OUT_DIR)/release-config
-$(_flags_dir)/$(_base_all_release).pb $(_flags_dir)/$(_base_all_release).textproto $(_flags_dir)/$(_base_all_release).json:
-	: created by $(OUT_DIR)/release-config
-        _base_all_release :=
     endif
     _flags_dir:=
     _flags_file:=

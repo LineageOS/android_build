@@ -7,7 +7,10 @@ rust_defaults {
     edition: "2021",
     clippy_lints: "android",
     lints: "android",
-    srcs: ["src/main.rs"],
+    srcs: [
+        "src/main.rs",
+        ":finalized_flags_record.json",
+    ],
     rustlibs: [
         "libaconfig_protos",
         "libaconfig_storage_file",
@@ -18,6 +21,7 @@ rust_defaults {
         "libserde",
         "libserde_json",
         "libtinytemplate",
+        "libconvert_finalized_flags",
     ],
 }
 
@@ -243,6 +247,11 @@ rust_aconfig_library {
     crate_name: "aconfig_test_rust_library",
     aconfig_declarations: "aconfig.test.flags",
     host_supported: true,
+    apex_available: [
+        "//apex_available:platform",
+        "com.android.configinfrastructure",
+    ],
+    min_sdk_version: "34",
 }
 
 rust_test {

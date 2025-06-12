@@ -23,7 +23,9 @@ import pathlib
 import subprocess
 
 from build_context import BuildContext
+import metrics_agent
 import test_mapping_module_retriever
+import test_discovery_agent
 
 
 class OptimizedBuildTarget(ABC):
@@ -42,10 +44,12 @@ class OptimizedBuildTarget(ABC):
       target: str,
       build_context: BuildContext,
       args: argparse.Namespace,
+      test_infos,
   ):
     self.target = target
     self.build_context = build_context
     self.args = args
+    self.test_infos = test_infos
 
   def get_build_targets(self) -> set[str]:
     features = self.build_context.enabled_build_features
@@ -53,6 +57,8 @@ class OptimizedBuildTarget(ABC):
       self.modules_to_build = self.get_build_targets_impl()
       return self.modules_to_build
 
+    if self.target == 'general-tests':
+      self._report_info_metrics_silently('general-tests.zip')
     self.modules_to_build = {self.target}
     return {self.target}
 
@@ -161,6 +167,16 @@ class OptimizedBuildTarget(ABC):
         f'{dist_dir / name}',
     ]
 
+  def _report_info_metrics_silently(self, artifact_name):
+    try:
+      metrics_agent_instance = metrics_agent.MetricsAgent.instance()
+      targets = self.get_build_targets_impl()
+      metrics_agent_instance.report_optimized_target(self.target)
+      metrics_agent_instance.add_target_artifact(self.target, artifact_name, 0, targets)
+    except Exception as e:
+      logging.error(f'error while silently reporting metrics: {e}')
+
+
 
 class NullOptimizer(OptimizedBuildTarget):
   """No-op target optimizer.
@@ -191,6 +207,19 @@ class ChangeInfo:
 
     self._change_info_contents = change_info_contents
 
+  def get_changed_paths(self) -> set[str]:
+    changed_paths = set()
+    for change in self._change_info_contents['changes']:
+      project_path = change.get('projectPath') + '/'
+
+      for revision in change.get('revisions'):
+        for file_info in revision.get('fileInfos'):
+          file_path = file_info.get('path')
+          dir_path = os.path.dirname(file_path)
+          changed_paths.add(project_path + dir_path)
+
+    return changed_paths
+
   def find_changed_files(self) -> set[str]:
     changed_files = set()
 
@@ -207,11 +236,7 @@ class ChangeInfo:
 class GeneralTestsOptimizer(OptimizedBuildTarget):
   """general-tests optimizer
 
-  This optimizer reads in the list of changed files from the file located in
-  env[CHANGE_INFO] and uses this list alongside the normal TEST MAPPING logic to
-  determine what test mapping modules will run for the given changes. It then
-  builds those modules and packages them in the same way general-tests.zip is
-  normally built.
+  This optimizer uses test discovery to build a list of modules that are needed by all tests configured for the build. These modules are then build and packaged by the optimizer in the same way as they are in a normal build.
   """
 
   # List of modules that are built alongside general-tests as dependencies.
@@ -219,93 +244,105 @@ class GeneralTestsOptimizer(OptimizedBuildTarget):
       'cts-tradefed',
       'vts-tradefed',
       'compatibility-host-util',
-      'general-tests-shared-libs',
   ])
 
   def get_build_targets_impl(self) -> set[str]:
-    change_info_file_path = os.environ.get('CHANGE_INFO')
-    if not change_info_file_path:
-      logging.info(
-          'No CHANGE_INFO env var found, general-tests optimization disabled.'
-      )
-      return {'general-tests'}
-
-    test_infos = self.build_context.test_infos
-    test_mapping_test_groups = set()
-    for test_info in test_infos:
-      is_test_mapping = test_info.is_test_mapping
-      current_test_mapping_test_groups = test_info.test_mapping_test_groups
-      uses_general_tests = test_info.build_target_used('general-tests')
-
-      if uses_general_tests and not is_test_mapping:
-        logging.info(
-            'Test uses general-tests.zip but is not test-mapping, general-tests'
-            ' optimization disabled.'
-        )
-        return {'general-tests'}
-
-      if is_test_mapping:
-        test_mapping_test_groups.update(current_test_mapping_test_groups)
-
-    change_info = ChangeInfo(change_info_file_path)
-    changed_files = change_info.find_changed_files()
-
-    test_mappings = test_mapping_module_retriever.GetTestMappings(
-        changed_files, set()
-    )
+    self._general_tests_outputs = self._get_general_tests_outputs()
+    test_modules = self._get_test_discovery_modules()
 
     modules_to_build = set(self._REQUIRED_MODULES)
-
-    modules_to_build.update(
-        test_mapping_module_retriever.FindAffectedModules(
-            test_mappings, changed_files, test_mapping_test_groups
-        )
-    )
+    self._build_outputs = []
+    for module in test_modules:
+      module_outputs = [output for output in self._general_tests_outputs if module in output]
+      if module_outputs:
+        modules_to_build.add(module)
+        self._build_outputs.extend(module_outputs)
 
     return modules_to_build
+
+  def _get_general_tests_outputs(self) -> list[str]:
+    src_top = pathlib.Path(os.environ.get('TOP', os.getcwd()))
+    soong_vars = self._query_soong_vars(
+        src_top,
+        [
+            'PRODUCT_OUT',
+        ],
+    )
+    product_out = pathlib.Path(soong_vars.get('PRODUCT_OUT'))
+    with open(f'{product_out / "general-tests_files"}') as general_tests_list_file:
+      general_tests_list = general_tests_list_file.readlines()
+    with open(f'{product_out / "general-tests_host_files"}') as general_tests_list_file:
+      self._general_tests_host_outputs = general_tests_list_file.readlines()
+    with open(f'{product_out / "general-tests_target_files"}') as general_tests_list_file:
+      self._general_tests_target_outputs = general_tests_list_file.readlines()
+    return general_tests_list
+
+
+  def _get_test_discovery_modules(self) -> set[str]:
+    change_info = ChangeInfo(os.environ.get('CHANGE_INFO'))
+    change_paths = change_info.get_changed_paths()
+    test_modules = set()
+    for test_info in self.test_infos:
+      tf_command = self._build_tf_command(test_info, change_paths)
+      discovery_agent = test_discovery_agent.TestDiscoveryAgent(tradefed_args=tf_command, test_mapping_zip_path=os.environ.get('DIST_DIR')+'/test_mappings.zip')
+      modules, dependencies = discovery_agent.discover_test_mapping_test_modules()
+      for regex in modules:
+        test_modules.add(regex)
+    return test_modules
+
+
+  def _build_tf_command(self, test_info, change_paths) -> list[str]:
+    command = [test_info.command]
+    for extra_option in test_info.extra_options:
+      if not extra_option.get('key'):
+        continue
+      arg_key = '--' + extra_option.get('key')
+      if arg_key == '--build-id':
+        command.append(arg_key)
+        command.append(os.environ.get('BUILD_NUMBER'))
+        continue
+      if extra_option.get('values'):
+        for value in extra_option.get('values'):
+          command.append(arg_key)
+          command.append(value)
+      else:
+        command.append(arg_key)
+    if test_info.is_test_mapping:
+      for change_path in change_paths:
+        command.append('--test-mapping-path')
+        command.append(change_path)
+
+    return command
 
   def get_package_outputs_commands_impl(self):
     src_top = pathlib.Path(os.environ.get('TOP', os.getcwd()))
     dist_dir = pathlib.Path(os.environ.get('DIST_DIR'))
+    tmp_dir = pathlib.Path(os.environ.get('TMPDIR'))
+    print(f'modules: {self.modules_to_build}')
 
+    host_outputs = [str(src_top) + '/' + file for file in self._general_tests_host_outputs if any('/'+module+'/' in file for module in self.modules_to_build)]
+    target_outputs = [str(src_top) + '/' + file for file in self._general_tests_target_outputs if any('/'+module+'/' in file for module in self.modules_to_build)]
+    host_config_files = [file for file in host_outputs if file.endswith('.config\n')]
+    target_config_files = [file for file in target_outputs if file.endswith('.config\n')]
+    logging.info(host_outputs)
+    logging.info(target_outputs)
+    with open(f"{tmp_dir / 'host.list'}", 'w') as host_list_file:
+      for output in host_outputs:
+        host_list_file.write(output)
+    with open(f"{tmp_dir / 'target.list'}", 'w') as target_list_file:
+      for output in target_outputs:
+        target_list_file.write(output)
     soong_vars = self._query_soong_vars(
         src_top,
         [
-            'HOST_OUT_TESTCASES',
-            'TARGET_OUT_TESTCASES',
             'PRODUCT_OUT',
             'SOONG_HOST_OUT',
             'HOST_OUT',
         ],
     )
-    host_out_testcases = pathlib.Path(soong_vars.get('HOST_OUT_TESTCASES'))
-    target_out_testcases = pathlib.Path(soong_vars.get('TARGET_OUT_TESTCASES'))
     product_out = pathlib.Path(soong_vars.get('PRODUCT_OUT'))
     soong_host_out = pathlib.Path(soong_vars.get('SOONG_HOST_OUT'))
     host_out = pathlib.Path(soong_vars.get('HOST_OUT'))
-
-    host_paths = []
-    target_paths = []
-    host_config_files = []
-    target_config_files = []
-    for module in self.modules_to_build:
-      # The required modules are handled separately, no need to package.
-      if module in self._REQUIRED_MODULES:
-        continue
-
-      host_path = host_out_testcases / module
-      if os.path.exists(host_path):
-        host_paths.append(host_path)
-        self._collect_config_files(src_top, host_path, host_config_files)
-
-      target_path = target_out_testcases / module
-      if os.path.exists(target_path):
-        target_paths.append(target_path)
-        self._collect_config_files(src_top, target_path, target_config_files)
-
-      if not os.path.exists(host_path) and not os.path.exists(target_path):
-        logging.info(f'No host or target build outputs found for {module}.')
-
     zip_commands = []
 
     zip_commands.extend(
@@ -320,24 +357,23 @@ class GeneralTestsOptimizer(OptimizedBuildTarget):
     )
 
     zip_command = self._base_zip_command(src_top, dist_dir, 'general-tests.zip')
-
     # Add host testcases.
-    if host_paths:
+    if host_outputs:
       zip_command.extend(
           self._generate_zip_options_for_items(
               prefix='host',
-              relative_root=f'{src_top / soong_host_out}',
-              directories=host_paths,
+              relative_root=str(host_out),
+              list_files=[f"{tmp_dir / 'host.list'}"],
           )
       )
 
     # Add target testcases.
-    if target_paths:
+    if target_outputs:
       zip_command.extend(
           self._generate_zip_options_for_items(
               prefix='target',
-              relative_root=f'{src_top / product_out}',
-              directories=target_paths,
+              relative_root=str(product_out),
+              list_files=[f"{tmp_dir / 'target.list'}"],
           )
       )
 
@@ -357,19 +393,10 @@ class GeneralTestsOptimizer(OptimizedBuildTarget):
         )
     )
 
+    zip_command.append('-sha256')
+
     zip_commands.append(zip_command)
     return zip_commands
-
-  def _collect_config_files(
-      self,
-      src_top: pathlib.Path,
-      root_dir: pathlib.Path,
-      config_files: list[str],
-  ):
-    for root, dirs, files in os.walk(src_top / root_dir):
-      for file in files:
-        if file.endswith('.config'):
-          config_files.append(root_dir / file)
 
   def _get_zip_test_configs_zips_commands(
       self,

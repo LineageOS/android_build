@@ -330,6 +330,19 @@ $(eval SOONG_CONFIG_$(strip $1)_$(strip $2):=$(filter true,$3))
 $(eval SOONG_CONFIG_TYPE_$(strip $1)_$(strip $2):=bool)
 endef
 
+# soong_config_set_int is the same as soong_config_set, but it will
+# also type the variable as an integer, so that when using select() expressions
+# in blueprint files they can use integer values instead of strings.
+# It will error out if a non-integer is supplied
+# $1 is the namespace. $2 is the variable name. $3 is the variable value.
+# Ex: $(call soong_config_set_bool,acme,COOL_FEATURE,34)
+define soong_config_set_int
+$(call soong_config_define_internal,$1,$2) \
+$(if $(call math_is_int,$3),,$(error soong_config_set_int called with non-integer value $(3)))
+$(eval SOONG_CONFIG_$(strip $1)_$(strip $2):=$(strip $3))
+$(eval SOONG_CONFIG_TYPE_$(strip $1)_$(strip $2):=int)
+endef
+
 # soong_config_set_string_list is the same as soong_config_set, but it will
 # also type the variable as a list of strings, so that when using select() expressions
 # in blueprint files they can use list values instead of strings.
@@ -602,10 +615,7 @@ DISABLE_PREOPT :=
 DISABLE_PREOPT_BOOT_IMAGES :=
 ifneq (,$(TARGET_BUILD_APPS)$(TARGET_BUILD_UNBUNDLED_IMAGE))
   DISABLE_PREOPT := true
-  # VSDK builds perform dexpreopt during merge_target_files build step.
-  ifneq (true,$(BUILDING_WITH_VSDK))
-    DISABLE_PREOPT_BOOT_IMAGES := true
-  endif
+  DISABLE_PREOPT_BOOT_IMAGES := true
 endif
 ifeq (true,$(TARGET_BUILD_UNBUNDLED))
   ifneq (true,$(UNBUNDLED_BUILD_SDKS_FROM_SOURCE))
@@ -734,8 +744,8 @@ SYMBOLS_MAP := $(HOST_OUT_EXECUTABLES)/symbols_map
 PROGUARD_HOME := external/proguard
 PROGUARD := $(PROGUARD_HOME)/bin/proguard.sh
 PROGUARD_DEPS := $(PROGUARD) $(PROGUARD_HOME)/lib/proguard.jar
-JAVATAGS := build/make/tools/java-event-log-tags.py
-MERGETAGS := build/make/tools/merge-event-log-tags.py
+JAVATAGS := $(HOST_OUT_EXECUTABLES)/java-event-log-tags
+MERGETAGS := $(HOST_OUT_EXECUTABLES)/merge-event-log-tags
 APPEND2SIMG := $(HOST_OUT_EXECUTABLES)/append2simg
 VERITY_SIGNER := $(HOST_OUT_EXECUTABLES)/verity_signer
 BUILD_VERITY_METADATA := $(HOST_OUT_EXECUTABLES)/build_verity_metadata
@@ -769,50 +779,21 @@ endif
 .KATI_READONLY := \
     PRODUCT_COMPATIBLE_PROPERTY
 
-# Boolean variable determining if Treble is fully enabled
-PRODUCT_FULL_TREBLE := false
-ifneq ($(PRODUCT_FULL_TREBLE_OVERRIDE),)
-  PRODUCT_FULL_TREBLE := $(PRODUCT_FULL_TREBLE_OVERRIDE)
-else ifeq ($(PRODUCT_SHIPPING_API_LEVEL),)
-  #$(warning no product shipping level defined)
-else ifneq ($(call math_gt_or_eq,$(PRODUCT_SHIPPING_API_LEVEL),26),)
-  PRODUCT_FULL_TREBLE := true
-endif
-
-requirements := \
-    PRODUCT_TREBLE_LINKER_NAMESPACES \
-    PRODUCT_ENFORCE_VINTF_MANIFEST
-
-# If it is overriden, then the requirement override is taken, otherwise it's
-# PRODUCT_FULL_TREBLE
-$(foreach req,$(requirements),$(eval \
-    $(req) := $(if $($(req)_OVERRIDE),$($(req)_OVERRIDE),$(PRODUCT_FULL_TREBLE))))
-# If the requirement is false for any reason, then it's not PRODUCT_FULL_TREBLE
-$(foreach req,$(requirements),$(eval \
-    PRODUCT_FULL_TREBLE := $(if $(filter false,$($(req))),false,$(PRODUCT_FULL_TREBLE))))
-
-PRODUCT_FULL_TREBLE_OVERRIDE ?=
-$(foreach req,$(requirements),$(eval $(req)_OVERRIDE ?=))
-
-# used to be a part of PRODUCT_FULL_TREBLE, but now always set it
-PRODUCT_NOTICE_SPLIT := true
+# TODO: remove all code referencing these, and remove override variables
+PRODUCT_FULL_TREBLE := true
+PRODUCT_TREBLE_LINKER_NAMESPACES := true
+PRODUCT_ENFORCE_VINTF_MANIFEST := true
 
 # TODO(b/114488870): disallow PRODUCT_FULL_TREBLE_OVERRIDE from being used.
 .KATI_READONLY := \
-    PRODUCT_FULL_TREBLE_OVERRIDE \
-    $(foreach req,$(requirements),$(req)_OVERRIDE) \
-    $(requirements) \
     PRODUCT_FULL_TREBLE \
-    PRODUCT_NOTICE_SPLIT \
+    PRODUCT_TREBLE_LINKER_NAMESPACES \
+    PRODUCT_ENFORCE_VINTF_MANIFEST \
 
-ifneq ($(PRODUCT_FULL_TREBLE),true)
-    $(warning This device does not have Treble enabled. This is unsafe.)
-endif
-
-$(KATI_obsolete_var $(foreach req,$(requirements),$(req)_OVERRIDE) \
-    ,This should be referenced without the _OVERRIDE suffix.)
-
-requirements :=
+# TODO(b/114488870): remove all sets of these everwhere, and disallow them to be used
+$(KATI_obsolete_var PRODUCT_TREBLE_LINKER_NAMESPACES_OVERRIDE,Deprecated.)
+$(KATI_obsolete_var PRODUCT_ENFORCE_VINTF_MANIFEST_OVERRIDE,Deprecated.)
+$(KATI_obsolete_var PRODUCT_FULL_TREBLE_OVERRIDE,Deprecated.)
 
 # BOARD_PROPERTY_OVERRIDES_SPLIT_ENABLED can be true only if early-mount of
 # partitions is supported. But the early-mount must be supported for full
@@ -898,15 +879,18 @@ BOARD_SEPOLICY_VERS := $(PLATFORM_SEPOLICY_VERSION)
 .KATI_READONLY := PLATFORM_SEPOLICY_VERSION BOARD_SEPOLICY_VERS
 
 # A list of SEPolicy versions, besides PLATFORM_SEPOLICY_VERSION, that the framework supports.
-PLATFORM_SEPOLICY_COMPAT_VERSIONS := $(filter-out $(PLATFORM_SEPOLICY_VERSION), \
+PLATFORM_SEPOLICY_COMPAT_VERSIONS := \
     29.0 \
     30.0 \
     31.0 \
     32.0 \
     33.0 \
     34.0 \
+
+PLATFORM_SEPOLICY_COMPAT_VERSIONS += $(foreach ver,\
     202404 \
-    )
+    202504 \
+    ,$(if $(filter true,$(call math_gt,$(PLATFORM_SEPOLICY_VERSION),$(ver))),$(ver)))
 
 .KATI_READONLY := \
     PLATFORM_SEPOLICY_COMPAT_VERSIONS \
@@ -1350,3 +1334,58 @@ ifeq (false,$(SYSTEM_OPTIMIZE_JAVA))
 $(error SYSTEM_OPTIMIZE_JAVA must be enabled when FULL_SYSTEM_OPTIMIZE_JAVA is enabled)
 endif
 endif
+
+# -----------------------------------------------------------------
+# Define fingerprint, thumbprint, and version tags for the current build
+#
+# BUILD_VERSION_TAGS is a comma-separated list of tags chosen by the device
+# implementer that further distinguishes the build. It's basically defined
+# by the device implementer. Here, we are adding a mandatory tag that
+# identifies the signing config of the build.
+BUILD_VERSION_TAGS := $(BUILD_VERSION_TAGS)
+ifeq ($(TARGET_BUILD_TYPE),debug)
+  BUILD_VERSION_TAGS += debug
+endif
+# The "test-keys" tag marks builds signed with the old test keys,
+# which are available in the SDK.  "dev-keys" marks builds signed with
+# non-default dev keys (usually private keys from a vendor directory).
+# Both of these tags will be removed and replaced with "release-keys"
+# when the target-files is signed in a post-build step.
+ifeq ($(DEFAULT_SYSTEM_DEV_CERTIFICATE),build/make/target/product/security/testkey)
+BUILD_KEYS := test-keys
+else
+BUILD_KEYS := dev-keys
+endif
+BUILD_VERSION_TAGS += $(BUILD_KEYS)
+BUILD_VERSION_TAGS := $(subst $(space),$(comma),$(sort $(BUILD_VERSION_TAGS)))
+
+# BUILD_FINGERPRINT is used used to uniquely identify the combined build and
+# product; used by the OTA server.
+ifeq (,$(strip $(BUILD_FINGERPRINT)))
+  BUILD_FINGERPRINT := $(PRODUCT_BRAND)/$(TARGET_PRODUCT)/$(TARGET_DEVICE):$(PLATFORM_VERSION)/$(BUILD_ID)/$(BUILD_NUMBER_FROM_FILE):$(TARGET_BUILD_VARIANT)/$(BUILD_VERSION_TAGS)
+endif
+
+BUILD_FINGERPRINT_FILE := $(PRODUCT_OUT)/build_fingerprint.txt
+ifneq (,$(shell mkdir -p $(PRODUCT_OUT) && echo $(BUILD_FINGERPRINT) >$(BUILD_FINGERPRINT_FILE).tmp && (if ! cmp -s $(BUILD_FINGERPRINT_FILE).tmp $(BUILD_FINGERPRINT_FILE); then mv $(BUILD_FINGERPRINT_FILE).tmp $(BUILD_FINGERPRINT_FILE); else rm $(BUILD_FINGERPRINT_FILE).tmp; fi) && grep " " $(BUILD_FINGERPRINT_FILE)))
+  $(error BUILD_FINGERPRINT cannot contain spaces: "$(file <$(BUILD_FINGERPRINT_FILE))")
+endif
+BUILD_FINGERPRINT_FROM_FILE := $$(cat $(BUILD_FINGERPRINT_FILE))
+# unset it for safety.
+BUILD_FINGERPRINT :=
+
+# BUILD_THUMBPRINT is used to uniquely identify the system build; used by the
+# OTA server. This purposefully excludes any product-specific variables.
+ifeq (,$(strip $(BUILD_THUMBPRINT)))
+  BUILD_THUMBPRINT := $(PLATFORM_VERSION)/$(BUILD_ID)/$(BUILD_NUMBER_FROM_FILE):$(TARGET_BUILD_VARIANT)/$(BUILD_VERSION_TAGS)
+endif
+
+BUILD_THUMBPRINT_FILE := $(PRODUCT_OUT)/build_thumbprint.txt
+ifeq ($(strip $(HAS_BUILD_NUMBER)),true)
+$(BUILD_THUMBPRINT_FILE): $(BUILD_NUMBER_FILE)
+endif
+ifneq (,$(shell mkdir -p $(PRODUCT_OUT) && echo $(BUILD_THUMBPRINT) >$(BUILD_THUMBPRINT_FILE) && grep " " $(BUILD_THUMBPRINT_FILE)))
+  $(error BUILD_THUMBPRINT cannot contain spaces: "$(file <$(BUILD_THUMBPRINT_FILE))")
+endif
+# unset it for safety.
+BUILD_THUMBPRINT_FILE :=
+BUILD_THUMBPRINT :=

@@ -22,32 +22,45 @@ use tinytemplate::TinyTemplate;
 
 use crate::codegen;
 use crate::codegen::CodegenMode;
-use crate::commands::OutputFile;
+use crate::commands::{should_include_flag, OutputFile};
 use aconfig_protos::{ProtoFlagPermission, ProtoFlagState, ProtoParsedFlag};
+use convert_finalized_flags::{FinalizedFlag, FinalizedFlagMap};
 use std::collections::HashMap;
+
+// Arguments to configure codegen for generate_java_code.
+pub struct JavaCodegenConfig {
+    pub codegen_mode: CodegenMode,
+    pub flag_ids: HashMap<String, u16>,
+    pub allow_instrumentation: bool,
+    pub package_fingerprint: u64,
+    pub new_exported: bool,
+    pub single_exported_file: bool,
+    pub finalized_flags: FinalizedFlagMap,
+}
 
 pub fn generate_java_code<I>(
     package: &str,
     parsed_flags_iter: I,
-    codegen_mode: CodegenMode,
-    flag_ids: HashMap<String, u16>,
-    allow_instrumentation: bool,
-    package_fingerprint: u64,
+    config: JavaCodegenConfig,
 ) -> Result<Vec<OutputFile>>
 where
     I: Iterator<Item = ProtoParsedFlag>,
 {
-    let flag_elements: Vec<FlagElement> =
-        parsed_flags_iter.map(|pf| create_flag_element(package, &pf, flag_ids.clone())).collect();
+    let flag_elements: Vec<FlagElement> = parsed_flags_iter
+        .map(|pf| {
+            create_flag_element(package, &pf, config.flag_ids.clone(), &config.finalized_flags)
+        })
+        .collect();
     let namespace_flags = gen_flags_by_namespace(&flag_elements);
     let properties_set: BTreeSet<String> =
         flag_elements.iter().map(|fe| format_property_name(&fe.device_config_namespace)).collect();
-    let is_test_mode = codegen_mode == CodegenMode::Test;
-    let library_exported = codegen_mode == CodegenMode::Exported;
+    let is_test_mode = config.codegen_mode == CodegenMode::Test;
+    let library_exported = config.codegen_mode == CodegenMode::Exported;
     let runtime_lookup_required =
         flag_elements.iter().any(|elem| elem.is_read_write) || library_exported;
     let container = (flag_elements.first().expect("zero template flags").container).to_string();
-    let is_platform_container = matches!(container.as_str(), "system" | "product" | "vendor");
+    let is_platform_container =
+        matches!(container.as_str(), "system" | "system_ext" | "product" | "vendor");
     let context = Context {
         flag_elements,
         namespace_flags,
@@ -56,17 +69,22 @@ where
         properties_set,
         package_name: package.to_string(),
         library_exported,
-        allow_instrumentation,
+        allow_instrumentation: config.allow_instrumentation,
         container,
         is_platform_container,
-        package_fingerprint: format!("0x{:X}L", package_fingerprint),
+        package_fingerprint: format!("0x{:X}L", config.package_fingerprint),
+        new_exported: config.new_exported,
+        single_exported_file: config.single_exported_file,
     };
     let mut template = TinyTemplate::new();
+    if library_exported && config.single_exported_file {
+        template.add_template(
+            "ExportedFlags.java",
+            include_str!("../../templates/ExportedFlags.java.template"),
+        )?;
+    }
     template.add_template("Flags.java", include_str!("../../templates/Flags.java.template"))?;
-    template.add_template(
-        "FeatureFlagsImpl.java",
-        include_str!("../../templates/FeatureFlagsImpl.java.template"),
-    )?;
+    add_feature_flags_impl_template(&context, &mut template)?;
     template.add_template(
         "FeatureFlags.java",
         include_str!("../../templates/FeatureFlags.java.template"),
@@ -81,18 +99,25 @@ where
     )?;
 
     let path: PathBuf = package.split('.').collect();
-    [
+    let mut files = vec![
         "Flags.java",
         "FeatureFlags.java",
         "FeatureFlagsImpl.java",
         "CustomFeatureFlags.java",
         "FakeFeatureFlagsImpl.java",
-    ]
-    .iter()
-    .map(|file| {
-        Ok(OutputFile { contents: template.render(file, &context)?.into(), path: path.join(file) })
-    })
-    .collect::<Result<Vec<OutputFile>>>()
+    ];
+    if library_exported && config.single_exported_file {
+        files.push("ExportedFlags.java");
+    }
+    files
+        .iter()
+        .map(|file| {
+            Ok(OutputFile {
+                contents: template.render(file, &context)?.into(),
+                path: path.join(file),
+            })
+        })
+        .collect::<Result<Vec<OutputFile>>>()
 }
 
 fn gen_flags_by_namespace(flags: &[FlagElement]) -> Vec<NamespaceFlags> {
@@ -129,6 +154,8 @@ struct Context {
     pub container: String,
     pub is_platform_container: bool,
     pub package_fingerprint: String,
+    pub new_exported: bool,
+    pub single_exported_file: bool,
 }
 
 #[derive(Serialize, Debug)]
@@ -149,20 +176,20 @@ struct FlagElement {
     pub is_read_write: bool,
     pub method_name: String,
     pub properties: String,
+    pub finalized_sdk_present: bool,
+    pub finalized_sdk_value: i32,
 }
 
 fn create_flag_element(
     package: &str,
     pf: &ProtoParsedFlag,
     flag_offsets: HashMap<String, u16>,
+    finalized_flags: &FinalizedFlagMap,
 ) -> FlagElement {
     let device_config_flag = codegen::create_device_config_ident(package, pf.name())
         .expect("values checked at flag parse time");
 
-    let no_assigned_offset =
-        (pf.container() == "system" || pf.container() == "vendor" || pf.container() == "product")
-            && pf.permission() == ProtoFlagPermission::READ_ONLY
-            && pf.state() == ProtoFlagState::DISABLED;
+    let no_assigned_offset = !should_include_flag(pf);
 
     let flag_offset = match flag_offsets.get(pf.name()) {
         Some(offset) => offset,
@@ -179,6 +206,18 @@ fn create_flag_element(
         }
     };
 
+    // An empty map is provided if check_api_level is disabled.
+    let mut finalized_sdk_present: bool = false;
+    let mut finalized_sdk_value: i32 = 0;
+    if !finalized_flags.is_empty() {
+        let finalized_sdk = finalized_flags.get_finalized_level(&FinalizedFlag {
+            flag_name: pf.name().to_string(),
+            package_name: package.to_string(),
+        });
+        finalized_sdk_present = finalized_sdk.is_some();
+        finalized_sdk_value = finalized_sdk.map(|f| f.0).unwrap_or_default();
+    }
+
     FlagElement {
         container: pf.container().to_string(),
         default_value: pf.state() == ProtoFlagState::ENABLED,
@@ -190,6 +229,8 @@ fn create_flag_element(
         is_read_write: pf.permission() == ProtoFlagPermission::READ_WRITE,
         method_name: format_java_method_name(pf.name()),
         properties: format_property_name(pf.namespace()),
+        finalized_sdk_present,
+        finalized_sdk_value,
     }
 }
 
@@ -219,8 +260,62 @@ fn format_property_name(property_name: &str) -> String {
     format!("mProperties{}{}", &name[0..1].to_ascii_uppercase(), &name[1..])
 }
 
+fn add_feature_flags_impl_template(
+    context: &Context,
+    template: &mut TinyTemplate,
+) -> Result<(), tinytemplate::error::Error> {
+    if context.is_test_mode {
+        // Test mode has its own template, so use regardless of any other settings.
+        template.add_template(
+            "FeatureFlagsImpl.java",
+            include_str!("../../templates/FeatureFlagsImpl.test_mode.java.template"),
+        )?;
+        return Ok(());
+    }
+
+    match (context.library_exported, context.new_exported, context.allow_instrumentation) {
+        // Exported library with new_exported enabled, use new storage exported template.
+        (true, true, _) => {
+            template.add_template(
+                "FeatureFlagsImpl.java",
+                include_str!("../../templates/FeatureFlagsImpl.exported.java.template"),
+            )?;
+        }
+
+        // Exported library with new_exported NOT enabled, use legacy (device
+        // config) template, because regardless of allow_instrumentation, we use
+        // device config for exported libs if new_exported isn't enabled.
+        // Remove once new_exported is fully rolled out.
+        (true, false, _) => {
+            template.add_template(
+                "FeatureFlagsImpl.java",
+                include_str!("../../templates/FeatureFlagsImpl.deviceConfig.java.template"),
+            )?;
+        }
+
+        // New storage internal mode.
+        (false, _, true) => {
+            template.add_template(
+                "FeatureFlagsImpl.java",
+                include_str!("../../templates/FeatureFlagsImpl.new_storage.java.template"),
+            )?;
+        }
+
+        // Device config internal mode. Use legacy (device config) template.
+        (false, _, false) => {
+            template.add_template(
+                "FeatureFlagsImpl.java",
+                include_str!("../../templates/FeatureFlagsImpl.deviceConfig.java.template"),
+            )?;
+        }
+    };
+    Ok(())
+}
+
 #[cfg(test)]
 mod tests {
+    use convert_finalized_flags::ApiLevel;
+
     use super::*;
     use crate::commands::assign_flag_ids;
     use std::collections::HashMap;
@@ -523,13 +618,19 @@ mod tests {
             crate::commands::modify_parsed_flags_based_on_mode(parsed_flags, mode).unwrap();
         let flag_ids =
             assign_flag_ids(crate::test::TEST_PACKAGE, modified_parsed_flags.iter()).unwrap();
+        let config = JavaCodegenConfig {
+            codegen_mode: mode,
+            flag_ids,
+            allow_instrumentation: true,
+            package_fingerprint: 5801144784618221668,
+            new_exported: false,
+            single_exported_file: false,
+            finalized_flags: FinalizedFlagMap::new(),
+        };
         let generated_files = generate_java_code(
             crate::test::TEST_PACKAGE,
             modified_parsed_flags.into_iter(),
-            mode,
-            flag_ids,
-            true,
-            5801144784618221668,
+            config,
         )
         .unwrap();
         let expect_flags_content = EXPECTED_FLAG_COMMON_CONTENT.to_string()
@@ -541,12 +642,11 @@ mod tests {
         package com.android.aconfig.test;
         // TODO(b/303773055): Remove the annotation after access issue is resolved.
         import android.compat.annotation.UnsupportedAppUsage;
-        import android.os.Build;
         import android.os.flagging.PlatformAconfigPackageInternal;
         import android.util.Log;
         /** @hide */
         public final class FeatureFlagsImpl implements FeatureFlags {
-            private static final String TAG = "com.android.aconfig.test.FeatureFlagsImpl";
+            private static final String TAG = "FeatureFlagsImpl";
             private static volatile boolean isCached = false;
             private static boolean disabledRw = false;
             private static boolean disabledRwExported = false;
@@ -554,14 +654,14 @@ mod tests {
             private static boolean enabledRw = true;
             private void init() {
                 try {
-                    PlatformAconfigPackageInternal reader = PlatformAconfigPackageInternal.load("system", "com.android.aconfig.test", 0x5081CE7221C77064L);
+                    PlatformAconfigPackageInternal reader = PlatformAconfigPackageInternal.load("com.android.aconfig.test", 0x5081CE7221C77064L);
                     disabledRw = reader.getBooleanFlagValue(0);
                     disabledRwExported = reader.getBooleanFlagValue(1);
                     enabledRw = reader.getBooleanFlagValue(7);
                     disabledRwInOtherNamespace = reader.getBooleanFlagValue(2);
                 } catch (Exception e) {
                     Log.e(TAG, e.toString());
-                } catch (NoClassDefFoundError e) {
+                } catch (LinkageError e) {
                     // for mainline module running on older devices.
                     // This should be replaces to version check, after the version bump.
                     Log.e(TAG, e.toString());
@@ -678,18 +778,25 @@ mod tests {
             crate::commands::modify_parsed_flags_based_on_mode(parsed_flags, mode).unwrap();
         let flag_ids =
             assign_flag_ids(crate::test::TEST_PACKAGE, modified_parsed_flags.iter()).unwrap();
+        let config = JavaCodegenConfig {
+            codegen_mode: mode,
+            flag_ids,
+            allow_instrumentation: true,
+            package_fingerprint: 5801144784618221668,
+            new_exported: false,
+            single_exported_file: false,
+            finalized_flags: FinalizedFlagMap::new(),
+        };
         let generated_files = generate_java_code(
             crate::test::TEST_PACKAGE,
             modified_parsed_flags.into_iter(),
-            mode,
-            flag_ids,
-            true,
-            5801144784618221668,
+            config,
         )
         .unwrap();
 
         let expect_flags_content = r#"
         package com.android.aconfig.test;
+        import android.os.Build;
         /** @hide */
         public final class Flags {
             /** @hide */
@@ -786,11 +893,15 @@ mod tests {
         package com.android.aconfig.test;
 
         import java.util.Arrays;
+        import java.util.HashMap;
+        import java.util.Map;
         import java.util.HashSet;
         import java.util.List;
         import java.util.Set;
         import java.util.function.BiPredicate;
         import java.util.function.Predicate;
+
+        import android.os.Build;
 
         /** @hide */
         public class CustomFeatureFlags implements FeatureFlags {
@@ -834,6 +945,19 @@ mod tests {
                     ""
                 )
             );
+
+            private Map<String, Integer> mFinalizedFlags = new HashMap<>(
+                Map.ofEntries(
+                    Map.entry("", Integer.MAX_VALUE)
+                )
+            );
+
+            public boolean isFlagFinalized(String flagName) {
+                if (!mFinalizedFlags.containsKey(flagName)) {
+                    return false;
+                }
+                return Build.VERSION.SDK_INT >= mFinalizedFlags.get(flagName);
+            }
         }
     "#;
 
@@ -870,6 +994,492 @@ mod tests {
     }
 
     #[test]
+    fn test_generate_java_code_new_exported() {
+        let parsed_flags = crate::test::parse_test_flags();
+        let mode = CodegenMode::Exported;
+        let modified_parsed_flags =
+            crate::commands::modify_parsed_flags_based_on_mode(parsed_flags, mode).unwrap();
+        let flag_ids =
+            assign_flag_ids(crate::test::TEST_PACKAGE, modified_parsed_flags.iter()).unwrap();
+        let config = JavaCodegenConfig {
+            codegen_mode: mode,
+            flag_ids,
+            allow_instrumentation: true,
+            package_fingerprint: 5801144784618221668,
+            new_exported: true,
+            single_exported_file: false,
+            finalized_flags: FinalizedFlagMap::new(),
+        };
+        let generated_files = generate_java_code(
+            crate::test::TEST_PACKAGE,
+            modified_parsed_flags.into_iter(),
+            config,
+        )
+        .unwrap();
+
+        let expect_flags_content = r#"
+        package com.android.aconfig.test;
+        import android.os.Build;
+        /** @hide */
+        public final class Flags {
+            /** @hide */
+            public static final String FLAG_DISABLED_RW_EXPORTED = "com.android.aconfig.test.disabled_rw_exported";
+            /** @hide */
+            public static final String FLAG_ENABLED_FIXED_RO_EXPORTED = "com.android.aconfig.test.enabled_fixed_ro_exported";
+            /** @hide */
+            public static final String FLAG_ENABLED_RO_EXPORTED = "com.android.aconfig.test.enabled_ro_exported";
+            public static boolean disabledRwExported() {
+                return FEATURE_FLAGS.disabledRwExported();
+            }
+            public static boolean enabledFixedRoExported() {
+                return FEATURE_FLAGS.enabledFixedRoExported();
+            }
+            public static boolean enabledRoExported() {
+                return FEATURE_FLAGS.enabledRoExported();
+            }
+            private static FeatureFlags FEATURE_FLAGS = new FeatureFlagsImpl();
+        }
+        "#;
+
+        let expect_feature_flags_content = r#"
+        package com.android.aconfig.test;
+        /** @hide */
+        public interface FeatureFlags {
+            boolean disabledRwExported();
+            boolean enabledFixedRoExported();
+            boolean enabledRoExported();
+        }
+        "#;
+
+        let expect_feature_flags_impl_content = r#"
+        package com.android.aconfig.test;
+        import android.os.Build;
+        import android.os.flagging.AconfigPackage;
+        import android.util.Log;
+        /** @hide */
+        public final class FeatureFlagsImpl implements FeatureFlags {
+            private static final String TAG = "FeatureFlagsImplExport";
+            private static volatile boolean isCached = false;
+            private static boolean disabledRwExported = false;
+            private static boolean enabledFixedRoExported = false;
+            private static boolean enabledRoExported = false;
+            private void init() {
+                try {
+                    AconfigPackage reader = AconfigPackage.load("com.android.aconfig.test");
+                    disabledRwExported = reader.getBooleanFlagValue("disabled_rw_exported", false);
+                    enabledFixedRoExported = reader.getBooleanFlagValue("enabled_fixed_ro_exported", false);
+                    enabledRoExported = reader.getBooleanFlagValue("enabled_ro_exported", false);
+                } catch (Exception e) {
+                    // pass
+                    Log.e(TAG, e.toString());
+                } catch (LinkageError e) {
+                    // for mainline module running on older devices.
+                    // This should be replaces to version check, after the version bump.
+                    Log.w(TAG, e.toString());
+                }
+                isCached = true;
+            }
+            @Override
+            public boolean disabledRwExported() {
+                if (!isCached) {
+                    init();
+                }
+                return disabledRwExported;
+            }
+            @Override
+            public boolean enabledFixedRoExported() {
+                if (!isCached) {
+                    init();
+                }
+                return enabledFixedRoExported;
+            }
+            @Override
+            public boolean enabledRoExported() {
+                if (!isCached) {
+                    init();
+                }
+                return enabledRoExported;
+            }
+        }"#;
+
+        let expect_custom_feature_flags_content = r#"
+        package com.android.aconfig.test;
+
+        import java.util.Arrays;
+        import java.util.HashMap;
+        import java.util.Map;
+        import java.util.HashSet;
+        import java.util.List;
+        import java.util.Set;
+        import java.util.function.BiPredicate;
+        import java.util.function.Predicate;
+        import android.os.Build;
+
+        /** @hide */
+        public class CustomFeatureFlags implements FeatureFlags {
+
+            private BiPredicate<String, Predicate<FeatureFlags>> mGetValueImpl;
+
+            public CustomFeatureFlags(BiPredicate<String, Predicate<FeatureFlags>> getValueImpl) {
+                mGetValueImpl = getValueImpl;
+            }
+
+            @Override
+            public boolean disabledRwExported() {
+                return getValue(Flags.FLAG_DISABLED_RW_EXPORTED,
+                    FeatureFlags::disabledRwExported);
+            }
+            @Override
+            public boolean enabledFixedRoExported() {
+                return getValue(Flags.FLAG_ENABLED_FIXED_RO_EXPORTED,
+                    FeatureFlags::enabledFixedRoExported);
+            }
+            @Override
+            public boolean enabledRoExported() {
+                return getValue(Flags.FLAG_ENABLED_RO_EXPORTED,
+                    FeatureFlags::enabledRoExported);
+            }
+
+            protected boolean getValue(String flagName, Predicate<FeatureFlags> getter) {
+                return mGetValueImpl.test(flagName, getter);
+            }
+
+            public List<String> getFlagNames() {
+                return Arrays.asList(
+                    Flags.FLAG_DISABLED_RW_EXPORTED,
+                    Flags.FLAG_ENABLED_FIXED_RO_EXPORTED,
+                    Flags.FLAG_ENABLED_RO_EXPORTED
+                );
+            }
+
+            private Set<String> mReadOnlyFlagsSet = new HashSet<>(
+                Arrays.asList(
+                    ""
+                )
+            );
+
+            private Map<String, Integer> mFinalizedFlags = new HashMap<>(
+                Map.ofEntries(
+                    Map.entry("", Integer.MAX_VALUE)
+                )
+            );
+
+            public boolean isFlagFinalized(String flagName) {
+                if (!mFinalizedFlags.containsKey(flagName)) {
+                    return false;
+                }
+                return Build.VERSION.SDK_INT >= mFinalizedFlags.get(flagName);
+            }
+        }
+    "#;
+
+        let mut file_set = HashMap::from([
+            ("com/android/aconfig/test/Flags.java", expect_flags_content),
+            ("com/android/aconfig/test/FeatureFlags.java", expect_feature_flags_content),
+            ("com/android/aconfig/test/FeatureFlagsImpl.java", expect_feature_flags_impl_content),
+            (
+                "com/android/aconfig/test/CustomFeatureFlags.java",
+                expect_custom_feature_flags_content,
+            ),
+            (
+                "com/android/aconfig/test/FakeFeatureFlagsImpl.java",
+                EXPECTED_FAKEFEATUREFLAGSIMPL_CONTENT,
+            ),
+        ]);
+
+        for file in generated_files {
+            let file_path = file.path.to_str().unwrap();
+            assert!(file_set.contains_key(file_path), "Cannot find {}", file_path);
+            assert_eq!(
+                None,
+                crate::test::first_significant_code_diff(
+                    file_set.get(file_path).unwrap(),
+                    &String::from_utf8(file.contents).unwrap()
+                ),
+                "File {} content is not correct",
+                file_path
+            );
+            file_set.remove(file_path);
+        }
+
+        assert!(file_set.is_empty());
+    }
+
+    #[test]
+    fn test_generate_java_code_new_exported_with_sdk_check() {
+        let parsed_flags = crate::test::parse_test_flags();
+        let mode = CodegenMode::Exported;
+        let modified_parsed_flags =
+            crate::commands::modify_parsed_flags_based_on_mode(parsed_flags, mode).unwrap();
+        let flag_ids =
+            assign_flag_ids(crate::test::TEST_PACKAGE, modified_parsed_flags.iter()).unwrap();
+        let mut finalized_flags = FinalizedFlagMap::new();
+        finalized_flags.insert_if_new(
+            ApiLevel(36),
+            FinalizedFlag {
+                flag_name: "disabled_rw_exported".to_string(),
+                package_name: "com.android.aconfig.test".to_string(),
+            },
+        );
+        let config = JavaCodegenConfig {
+            codegen_mode: mode,
+            flag_ids,
+            allow_instrumentation: true,
+            package_fingerprint: 5801144784618221668,
+            new_exported: true,
+            single_exported_file: false,
+            finalized_flags,
+        };
+        let generated_files = generate_java_code(
+            crate::test::TEST_PACKAGE,
+            modified_parsed_flags.into_iter(),
+            config,
+        )
+        .unwrap();
+
+        let expect_flags_content = r#"
+        package com.android.aconfig.test;
+        import android.os.Build;
+        /** @hide */
+        public final class Flags {
+            /** @hide */
+            public static final String FLAG_DISABLED_RW_EXPORTED = "com.android.aconfig.test.disabled_rw_exported";
+            /** @hide */
+            public static final String FLAG_ENABLED_FIXED_RO_EXPORTED = "com.android.aconfig.test.enabled_fixed_ro_exported";
+            /** @hide */
+            public static final String FLAG_ENABLED_RO_EXPORTED = "com.android.aconfig.test.enabled_ro_exported";
+            public static boolean disabledRwExported() {
+                if (Build.VERSION.SDK_INT >= 36) {
+                  return true;
+                }
+                return FEATURE_FLAGS.disabledRwExported();
+            }
+            public static boolean enabledFixedRoExported() {
+                return FEATURE_FLAGS.enabledFixedRoExported();
+            }
+            public static boolean enabledRoExported() {
+                return FEATURE_FLAGS.enabledRoExported();
+            }
+            private static FeatureFlags FEATURE_FLAGS = new FeatureFlagsImpl();
+        }
+        "#;
+
+        let expect_feature_flags_content = r#"
+        package com.android.aconfig.test;
+        /** @hide */
+        public interface FeatureFlags {
+            boolean disabledRwExported();
+            boolean enabledFixedRoExported();
+            boolean enabledRoExported();
+        }
+        "#;
+
+        let expect_feature_flags_impl_content = r#"
+        package com.android.aconfig.test;
+        import android.os.Build;
+        import android.os.flagging.AconfigPackage;
+        import android.util.Log;
+        /** @hide */
+        public final class FeatureFlagsImpl implements FeatureFlags {
+            private static final String TAG = "FeatureFlagsImplExport";
+            private static volatile boolean isCached = false;
+            private static boolean disabledRwExported = false;
+            private static boolean enabledFixedRoExported = false;
+            private static boolean enabledRoExported = false;
+            private void init() {
+                try {
+                    AconfigPackage reader = AconfigPackage.load("com.android.aconfig.test");
+                    disabledRwExported = Build.VERSION.SDK_INT >= 36 ? true : reader.getBooleanFlagValue("disabled_rw_exported", false);
+                    enabledFixedRoExported = reader.getBooleanFlagValue("enabled_fixed_ro_exported", false);
+                    enabledRoExported = reader.getBooleanFlagValue("enabled_ro_exported", false);
+                } catch (Exception e) {
+                    // pass
+                    Log.e(TAG, e.toString());
+                } catch (LinkageError e) {
+                    // for mainline module running on older devices.
+                    // This should be replaces to version check, after the version bump.
+                    Log.w(TAG, e.toString());
+                }
+                isCached = true;
+            }
+            @Override
+            public boolean disabledRwExported() {
+                if (!isCached) {
+                    init();
+                }
+                return disabledRwExported;
+            }
+            @Override
+            public boolean enabledFixedRoExported() {
+                if (!isCached) {
+                    init();
+                }
+                return enabledFixedRoExported;
+            }
+            @Override
+            public boolean enabledRoExported() {
+                if (!isCached) {
+                    init();
+                }
+                return enabledRoExported;
+            }
+        }"#;
+
+        let expect_custom_feature_flags_content = r#"
+        package com.android.aconfig.test;
+
+        import java.util.Arrays;
+        import java.util.HashMap;
+        import java.util.Map;
+        import java.util.HashSet;
+        import java.util.List;
+        import java.util.Set;
+        import java.util.function.BiPredicate;
+        import java.util.function.Predicate;
+        import android.os.Build;
+
+        /** @hide */
+        public class CustomFeatureFlags implements FeatureFlags {
+
+            private BiPredicate<String, Predicate<FeatureFlags>> mGetValueImpl;
+
+            public CustomFeatureFlags(BiPredicate<String, Predicate<FeatureFlags>> getValueImpl) {
+                mGetValueImpl = getValueImpl;
+            }
+
+            @Override
+            public boolean disabledRwExported() {
+                return getValue(Flags.FLAG_DISABLED_RW_EXPORTED,
+                    FeatureFlags::disabledRwExported);
+            }
+            @Override
+            public boolean enabledFixedRoExported() {
+                return getValue(Flags.FLAG_ENABLED_FIXED_RO_EXPORTED,
+                    FeatureFlags::enabledFixedRoExported);
+            }
+            @Override
+            public boolean enabledRoExported() {
+                return getValue(Flags.FLAG_ENABLED_RO_EXPORTED,
+                    FeatureFlags::enabledRoExported);
+            }
+
+            protected boolean getValue(String flagName, Predicate<FeatureFlags> getter) {
+                return mGetValueImpl.test(flagName, getter);
+            }
+
+            public List<String> getFlagNames() {
+                return Arrays.asList(
+                    Flags.FLAG_DISABLED_RW_EXPORTED,
+                    Flags.FLAG_ENABLED_FIXED_RO_EXPORTED,
+                    Flags.FLAG_ENABLED_RO_EXPORTED
+                );
+            }
+
+            private Set<String> mReadOnlyFlagsSet = new HashSet<>(
+                Arrays.asList(
+                    ""
+                )
+            );
+
+            private Map<String, Integer> mFinalizedFlags = new HashMap<>(
+                Map.ofEntries(
+                    Map.entry(Flags.FLAG_DISABLED_RW_EXPORTED, 36),
+                    Map.entry("", Integer.MAX_VALUE)
+                )
+            );
+
+            public boolean isFlagFinalized(String flagName) {
+                if (!mFinalizedFlags.containsKey(flagName)) {
+                    return false;
+                }
+                return Build.VERSION.SDK_INT >= mFinalizedFlags.get(flagName);
+            }
+        }
+    "#;
+
+        let mut file_set = HashMap::from([
+            ("com/android/aconfig/test/Flags.java", expect_flags_content),
+            ("com/android/aconfig/test/FeatureFlags.java", expect_feature_flags_content),
+            ("com/android/aconfig/test/FeatureFlagsImpl.java", expect_feature_flags_impl_content),
+            (
+                "com/android/aconfig/test/CustomFeatureFlags.java",
+                expect_custom_feature_flags_content,
+            ),
+            (
+                "com/android/aconfig/test/FakeFeatureFlagsImpl.java",
+                EXPECTED_FAKEFEATUREFLAGSIMPL_CONTENT,
+            ),
+        ]);
+
+        for file in generated_files {
+            let file_path = file.path.to_str().unwrap();
+            assert!(file_set.contains_key(file_path), "Cannot find {}", file_path);
+            assert_eq!(
+                None,
+                crate::test::first_significant_code_diff(
+                    file_set.get(file_path).unwrap(),
+                    &String::from_utf8(file.contents).unwrap()
+                ),
+                "File {} content is not correct",
+                file_path
+            );
+            file_set.remove(file_path);
+        }
+
+        assert!(file_set.is_empty());
+    }
+
+    // Test that the SDK check isn't added unless the library is exported (even
+    // if the flag is present in finalized_flags).
+    #[test]
+    fn test_generate_java_code_flags_with_sdk_check() {
+        let parsed_flags = crate::test::parse_test_flags();
+        let mode = CodegenMode::Production;
+        let modified_parsed_flags =
+            crate::commands::modify_parsed_flags_based_on_mode(parsed_flags, mode).unwrap();
+        let flag_ids =
+            assign_flag_ids(crate::test::TEST_PACKAGE, modified_parsed_flags.iter()).unwrap();
+        let mut finalized_flags = FinalizedFlagMap::new();
+        finalized_flags.insert_if_new(
+            ApiLevel(36),
+            FinalizedFlag {
+                flag_name: "disabled_rw".to_string(),
+                package_name: "com.android.aconfig.test".to_string(),
+            },
+        );
+        let config = JavaCodegenConfig {
+            codegen_mode: mode,
+            flag_ids,
+            allow_instrumentation: true,
+            package_fingerprint: 5801144784618221668,
+            new_exported: true,
+            single_exported_file: false,
+            finalized_flags,
+        };
+        let generated_files = generate_java_code(
+            crate::test::TEST_PACKAGE,
+            modified_parsed_flags.into_iter(),
+            config,
+        )
+        .unwrap();
+
+        let expect_flags_content = EXPECTED_FLAG_COMMON_CONTENT.to_string()
+            + r#"
+        private static FeatureFlags FEATURE_FLAGS = new FeatureFlagsImpl();
+        }"#;
+
+        let file = generated_files.iter().find(|f| f.path.ends_with("Flags.java")).unwrap();
+        assert_eq!(
+            None,
+            crate::test::first_significant_code_diff(
+                &expect_flags_content,
+                &String::from_utf8(file.contents.clone()).unwrap()
+            ),
+            "Flags content is not correct"
+        );
+    }
+
+    #[test]
     fn test_generate_java_code_test() {
         let parsed_flags = crate::test::parse_test_flags();
         let mode = CodegenMode::Test;
@@ -877,13 +1487,19 @@ mod tests {
             crate::commands::modify_parsed_flags_based_on_mode(parsed_flags, mode).unwrap();
         let flag_ids =
             assign_flag_ids(crate::test::TEST_PACKAGE, modified_parsed_flags.iter()).unwrap();
+        let config = JavaCodegenConfig {
+            codegen_mode: mode,
+            flag_ids,
+            allow_instrumentation: true,
+            package_fingerprint: 5801144784618221668,
+            new_exported: false,
+            single_exported_file: false,
+            finalized_flags: FinalizedFlagMap::new(),
+        };
         let generated_files = generate_java_code(
             crate::test::TEST_PACKAGE,
             modified_parsed_flags.into_iter(),
-            mode,
-            flag_ids,
-            true,
-            5801144784618221668,
+            config,
         )
         .unwrap();
 
@@ -999,13 +1615,19 @@ mod tests {
             crate::commands::modify_parsed_flags_based_on_mode(parsed_flags, mode).unwrap();
         let flag_ids =
             assign_flag_ids(crate::test::TEST_PACKAGE, modified_parsed_flags.iter()).unwrap();
+        let config = JavaCodegenConfig {
+            codegen_mode: mode,
+            flag_ids,
+            allow_instrumentation: true,
+            package_fingerprint: 5801144784618221668,
+            new_exported: false,
+            single_exported_file: false,
+            finalized_flags: FinalizedFlagMap::new(),
+        };
         let generated_files = generate_java_code(
             crate::test::TEST_PACKAGE,
             modified_parsed_flags.into_iter(),
-            mode,
-            flag_ids,
-            true,
-            5801144784618221668,
+            config,
         )
         .unwrap();
         let expect_featureflags_content = r#"
@@ -1269,6 +1891,109 @@ mod tests {
         }
 
         assert!(file_set.is_empty());
+    }
+
+    #[test]
+    fn test_generate_java_code_exported_flags() {
+        let parsed_flags = crate::test::parse_test_flags();
+        let mode = CodegenMode::Exported;
+        let modified_parsed_flags =
+            crate::commands::modify_parsed_flags_based_on_mode(parsed_flags, mode).unwrap();
+        let flag_ids =
+            assign_flag_ids(crate::test::TEST_PACKAGE, modified_parsed_flags.iter()).unwrap();
+        let mut finalized_flags = FinalizedFlagMap::new();
+        finalized_flags.insert_if_new(
+            ApiLevel(36),
+            FinalizedFlag {
+                flag_name: "disabled_rw_exported".to_string(),
+                package_name: "com.android.aconfig.test".to_string(),
+            },
+        );
+        let config = JavaCodegenConfig {
+            codegen_mode: mode,
+            flag_ids,
+            allow_instrumentation: true,
+            package_fingerprint: 5801144784618221668,
+            new_exported: true,
+            single_exported_file: true,
+            finalized_flags,
+        };
+        let generated_files = generate_java_code(
+            crate::test::TEST_PACKAGE,
+            modified_parsed_flags.into_iter(),
+            config,
+        )
+        .unwrap();
+
+        let expect_exported_flags_content = r#"
+        package com.android.aconfig.test;
+
+        import android.os.Build;
+        import android.os.flagging.AconfigPackage;
+        import android.util.Log;
+        public final class ExportedFlags {
+
+            public static final String FLAG_DISABLED_RW_EXPORTED = "com.android.aconfig.test.disabled_rw_exported";
+            public static final String FLAG_ENABLED_FIXED_RO_EXPORTED = "com.android.aconfig.test.enabled_fixed_ro_exported";
+            public static final String FLAG_ENABLED_RO_EXPORTED = "com.android.aconfig.test.enabled_ro_exported";
+            private static final String TAG = "ExportedFlags";
+            private static volatile boolean isCached = false;
+
+            private static boolean disabledRwExported = false;
+            private static boolean enabledFixedRoExported = false;
+            private static boolean enabledRoExported = false;
+            private ExportedFlags() {}
+
+            private void init() {
+                try {
+                    AconfigPackage reader = AconfigPackage.load("com.android.aconfig.test");
+                    disabledRwExported = reader.getBooleanFlagValue("disabled_rw_exported", false);
+                    enabledFixedRoExported = reader.getBooleanFlagValue("enabled_fixed_ro_exported", false);
+                    enabledRoExported = reader.getBooleanFlagValue("enabled_ro_exported", false);
+                } catch (Exception e) {
+                    // pass
+                    Log.e(TAG, e.toString());
+                } catch (LinkageError e) {
+                    // for mainline module running on older devices.
+                    // This should be replaces to version check, after the version bump.
+                    Log.w(TAG, e.toString());
+                }
+                isCached = true;
+            }
+            public static boolean disabledRwExported() {
+                if (Build.VERSION.SDK_INT >= 36) {
+                  return true;
+                }
+
+                if (!featureFlags.isCached) {
+                    featureFlags.init();
+                }
+                return featureFlags.disabledRwExported;
+            }
+            public static boolean enabledFixedRoExported() {
+                if (!featureFlags.isCached) {
+                    featureFlags.init();
+                }
+                return featureFlags.enabledFixedRoExported;
+            }
+            public static boolean enabledRoExported() {
+                if (!featureFlags.isCached) {
+                    featureFlags.init();
+                }
+                return featureFlags.enabledRoExported;
+            }
+            private static ExportedFlags featureFlags = new ExportedFlags();
+        }"#;
+
+        let file = generated_files.iter().find(|f| f.path.ends_with("ExportedFlags.java")).unwrap();
+        assert_eq!(
+            None,
+            crate::test::first_significant_code_diff(
+                expect_exported_flags_content,
+                &String::from_utf8(file.contents.clone()).unwrap()
+            ),
+            "ExportedFlags content is not correct"
+        );
     }
 
     #[test]

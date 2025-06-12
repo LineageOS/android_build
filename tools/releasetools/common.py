@@ -23,7 +23,7 @@ import fnmatch
 import getopt
 import getpass
 import gzip
-import imp
+import importlib.util
 import json
 import logging
 import logging.config
@@ -1418,7 +1418,22 @@ def SharedUidPartitionViolations(uid_dict, partition_groups):
   return errors
 
 
-def RunHostInitVerifier(product_out, partition_map):
+def RunVendoredHostInitVerifier(product_out, partition_map):
+  """Runs vendor host_init_verifier on the init rc files within selected partitions.
+
+  host_init_verifier searches the etc/init path within each selected partition.
+
+  Args:
+    product_out: PRODUCT_OUT directory, containing partition directories.
+    partition_map: A map of partition name -> relative path within product_out.
+  """
+  return RunHostInitVerifier(
+      product_out,
+      partition_map,
+      tool=os.path.join(OPTIONS.vendor_otatools, 'bin', 'host_init_verifier'))
+
+
+def RunHostInitVerifier(product_out, partition_map, tool="host_init_verifier"):
   """Runs host_init_verifier on the init rc files within partitions.
 
   host_init_verifier searches the etc/init path within each partition.
@@ -1426,9 +1441,10 @@ def RunHostInitVerifier(product_out, partition_map):
   Args:
     product_out: PRODUCT_OUT directory, containing partition directories.
     partition_map: A map of partition name -> relative path within product_out.
+    tool: Full path to host_init_verifier or binary name
   """
   allowed_partitions = ("system", "system_ext", "product", "vendor", "odm")
-  cmd = ["host_init_verifier"]
+  cmd = [tool]
   for partition, path in partition_map.items():
     if partition not in allowed_partitions:
       raise ExternalError("Unable to call host_init_verifier for partition %s" %
@@ -3051,7 +3067,7 @@ def ZipWrite(zip_file, filename, arcname=None, perms=0o644,
     os.chmod(filename, perms)
 
     # Use a fixed timestamp so the output is repeatable.
-    # Note: Use of fromtimestamp rather than utcfromtimestamp here is
+    # Note: Use of fromtimestamp without specifying a timezone here is
     # intentional. zip stores datetimes in local time without a time zone
     # attached, so we need "epoch" but in the local time zone to get 2009/01/01
     # in the zip archive.
@@ -3190,16 +3206,19 @@ class DeviceSpecificParams(object):
         return
       try:
         if os.path.isdir(path):
-          info = imp.find_module("releasetools", [path])
-        else:
-          d, f = os.path.split(path)
-          b, x = os.path.splitext(f)
-          if x == ".py":
-            f = b
-          info = imp.find_module(f, [d])
+          path = os.path.join(path, "releasetools")
+          if os.path.isdir(path):
+            path = os.path.join(path, "__init__.py")
+        if not os.path.exists(path) and os.path.exists(path + ".py"):
+          path = path + ".py"
+        spec = importlib.util.spec_from_file_location("device_specific", path)
+        if not spec:
+          raise FileNotFoundError(path)
         logger.info("loaded device-specific extensions from %s", path)
-        self.module = imp.load_module("device_specific", *info)
-      except ImportError:
+        module = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(module)
+        self.module = module
+      except (ImportError, FileNotFoundError):
         logger.info("unable to load device-specific module; assuming none")
 
   def _DoCall(self, function_name, *args, **kwargs):

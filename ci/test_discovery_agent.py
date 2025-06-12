@@ -30,6 +30,10 @@ class TestDiscoveryAgent:
 
   _TRADEFED_TEST_ZIP_REGEXES_LIST_KEY = "TestZipRegexes"
 
+  _TRADEFED_TEST_MODULES_LIST_KEY = "TestModules"
+
+  _TRADEFED_TEST_DEPENDENCIES_LIST_KEY = "TestDependencies"
+
   _TRADEFED_DISCOVERY_OUTPUT_FILE_NAME = "test_discovery_agent.txt"
 
   def __init__(
@@ -49,7 +53,7 @@ class TestDiscoveryAgent:
       A list of test zip regexes that TF is going to try to pull files from.
     """
     test_discovery_output_file_name = os.path.join(
-        os.environ.get('TOP'), 'out', self._TRADEFED_DISCOVERY_OUTPUT_FILE_NAME
+        os.environ.get("TOP"), "out", self._TRADEFED_DISCOVERY_OUTPUT_FILE_NAME
     )
     with open(
         test_discovery_output_file_name, mode="w+t"
@@ -89,14 +93,61 @@ class TestDiscoveryAgent:
         raise TestDiscoveryError("No test zip regexes returned")
       return data[self._TRADEFED_TEST_ZIP_REGEXES_LIST_KEY]
 
-  def discover_test_modules(self) -> list[str]:
-    """Discover test modules from TradeFed.
+  def discover_test_mapping_test_modules(self) -> (list[str], list[str]):
+    """Discover test mapping test modules and dependencies from TradeFed.
 
     Returns:
-      A list of test modules that TradeFed is going to execute based on the
+      A tuple that contains a list of test modules and a list of test
+      dependencies that TradeFed is going to execute based on the
       TradeFed test args.
     """
-    return []
+    test_discovery_output_file_name = os.path.join(
+        os.environ.get("TOP"), "out", self._TRADEFED_DISCOVERY_OUTPUT_FILE_NAME
+    )
+    with open(
+        test_discovery_output_file_name, mode="w+t"
+    ) as test_discovery_output_file:
+      java_args = []
+      java_args.append("prebuilts/jdk/jdk21/linux-x86/bin/java")
+      java_args.append("-cp")
+      java_args.append(
+          self.create_classpath(self.tradefed_jar_relevant_files_path)
+      )
+      java_args.append(
+          "com.android.tradefed.observatory.TestMappingDiscoveryAgent"
+      )
+      java_args.extend(self.tradefed_args)
+      env = os.environ.copy()
+      env.update({"SKIP_JAVA_QUERY": "1"})
+      env.update({"ALLOW_EMPTY_TEST_MAPPING": "1"})
+      env.update({"TF_TEST_MAPPING_ZIP_FILE": self.test_mapping_zip_path})
+      env.update({"DISCOVERY_OUTPUT_FILE": test_discovery_output_file.name})
+      logging.info(f"Calling test discovery with args: {java_args}")
+      try:
+        result = subprocess.run(args=java_args, env=env, text=True, check=True, stdout = subprocess.PIPE,
+    stderr = subprocess.PIPE)
+        logging.info(f"Test discovery agent output: {result.stdout}")
+      except subprocess.CalledProcessError as e:
+        raise TestDiscoveryError(
+            f"Failed to run test discovery, stdout: {e.stdout}, stderr:"
+            f" {e.stderr}, returncode: {e.returncode}"
+        )
+      data = json.loads(test_discovery_output_file.read())
+      logging.info(f"Test discovery result file content: {data}")
+      if (
+          self._TRADEFED_NO_POSSIBLE_TEST_DISCOVERY_KEY in data
+          and data[self._TRADEFED_NO_POSSIBLE_TEST_DISCOVERY_KEY]
+      ):
+        raise TestDiscoveryError("No possible test discovery")
+      if (
+          data[self._TRADEFED_TEST_MODULES_LIST_KEY] is None
+          or data[self._TRADEFED_TEST_MODULES_LIST_KEY] is []
+      ):
+        raise TestDiscoveryError("No test modules returned")
+      return (
+          data[self._TRADEFED_TEST_MODULES_LIST_KEY],
+          data[self._TRADEFED_TEST_DEPENDENCIES_LIST_KEY],
+      )
 
   def create_classpath(self, directory):
     """Creates a classpath string from all .jar files in the given directory.

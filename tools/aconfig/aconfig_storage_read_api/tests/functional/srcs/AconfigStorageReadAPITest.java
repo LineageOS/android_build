@@ -19,14 +19,13 @@ package android.aconfig.storage.test;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
-import android.aconfig.DeviceProtos;
+import android.aconfig.DeviceProtosTestUtil;
 import android.aconfig.nano.Aconfig.parsed_flag;
 import android.aconfig.storage.AconfigStorageReadAPI;
 import android.aconfig.storage.FlagReadContext;
 import android.aconfig.storage.FlagReadContext.StoredFlagType;
 import android.aconfig.storage.PackageReadContext;
 import android.aconfig.storage.SipHasher13;
-import android.aconfig.storage.StorageInternalReader;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -211,7 +210,7 @@ public class AconfigStorageReadAPITest {
 
     @Test
     public void testRustJavaEqualHash() throws IOException {
-        List<parsed_flag> flags = DeviceProtos.loadAndParseFlagProtos();
+        List<parsed_flag> flags = DeviceProtosTestUtil.loadAndParseFlagProtos();
         for (parsed_flag flag : flags) {
             String packageName = flag.package_;
             String flagName = flag.name;
@@ -223,48 +222,6 @@ public class AconfigStorageReadAPITest {
             rHash = AconfigStorageReadAPI.hash(fullFlagName);
             jHash = SipHasher13.hash(fullFlagName.getBytes());
             assertEquals(rHash, jHash);
-        }
-    }
-
-    @Test
-    public void testRustJavaEqualFlag() throws IOException {
-        List<parsed_flag> flags = DeviceProtos.loadAndParseFlagProtos();
-
-        String mapPath = "/metadata/aconfig/maps/";
-        String flagsPath = "/metadata/aconfig/boot/";
-
-        for (parsed_flag flag : flags) {
-
-            String container = flag.container;
-            String packageName = flag.package_;
-            String flagName = flag.name;
-            String fullFlagName = packageName + "/" + flagName;
-
-            MappedByteBuffer packageMap =
-                    AconfigStorageReadAPI.mapStorageFile(mapPath + container + ".package.map");
-            MappedByteBuffer flagMap =
-                    AconfigStorageReadAPI.mapStorageFile(mapPath + container + ".flag.map");
-            MappedByteBuffer flagValList =
-                    AconfigStorageReadAPI.mapStorageFile(flagsPath + container + ".val");
-
-            PackageReadContext packageContext =
-                    AconfigStorageReadAPI.getPackageReadContext(packageMap, packageName);
-
-            FlagReadContext flagContext =
-                    AconfigStorageReadAPI.getFlagReadContext(
-                            flagMap, packageContext.mPackageId, flagName);
-
-            boolean rVal =
-                    AconfigStorageReadAPI.getBooleanFlagValue(
-                            flagValList,
-                            packageContext.mBooleanStartIndex + flagContext.mFlagIndex);
-
-            StorageInternalReader reader = new StorageInternalReader(container, packageName);
-            boolean jVal = reader.getBooleanFlagValue(flagContext.mFlagIndex);
-
-            long rHash = AconfigStorageReadAPI.hash(packageName);
-            long jHash = SipHasher13.hash(packageName.getBytes());
-            assertEquals(rVal, jVal);
         }
     }
 }

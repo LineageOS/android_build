@@ -43,10 +43,6 @@
       "name": "aflags.test"
     },
     {
-      // printflags unit tests
-      "name": "printflags.test"
-    },
-    {
       // aconfig_protos unit tests
       "name": "aconfig_protos.test"
     },
@@ -106,10 +102,6 @@
     {
       // aconfig_storage read functional test
       "name": "aconfig_storage_read_functional"
-    },
-    {
-      // aconfig_storage read unit test
-      "name": "aconfig_storage_read_unit"
     }
   ]
 }

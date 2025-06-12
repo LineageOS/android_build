@@ -92,6 +92,7 @@ THIRD_PARTY_IDENTIFIER_TYPES = [
     'SVN',
     'Hg',
     'Darcs',
+    'Piper',
     'VCS',
     'Archive',
     'PrebuiltByAlphabet',
@@ -414,11 +415,13 @@ def save_report(report_file_path, report):
 def installed_file_has_metadata(installed_file_metadata, report):
   installed_file = installed_file_metadata['installed_file']
   module_path = installed_file_metadata['module_path']
+  is_soong_module = installed_file_metadata['is_soong_module']
   product_copy_files = installed_file_metadata['product_copy_files']
   kernel_module_copy_files = installed_file_metadata['kernel_module_copy_files']
   is_platform_generated = installed_file_metadata['is_platform_generated']
 
   if (not module_path and
+      not is_soong_module and
       not product_copy_files and
       not kernel_module_copy_files and
       not is_platform_generated and
@@ -708,8 +711,17 @@ def main():
         'installed_file': dep_file,
         'is_prebuilt_make_module': False
     }
-    file_metadata.update(db.get_soong_module_of_built_file(dep_file))
-    add_package_of_file(file_id, file_metadata, doc, report)
+    soong_module = db.get_soong_module_of_built_file(dep_file)
+    if not soong_module:
+      continue
+    file_metadata.update(soong_module)
+    if is_source_package(file_metadata) or is_prebuilt_package(file_metadata):
+      add_package_of_file(file_id, file_metadata, doc, report)
+    else:
+      # Other static lib files are generated from the platform
+      doc.add_relationship(sbom_data.Relationship(id1=file_id,
+                                                  relationship=sbom_data.RelationshipType.GENERATED_FROM,
+                                                  id2=sbom_data.SPDXID_PLATFORM))
 
     # Add relationships for static deps of static libraries
     add_static_deps_of_file(file_id, file_metadata, doc)

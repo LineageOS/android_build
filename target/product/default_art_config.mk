@@ -51,7 +51,6 @@ PRODUCT_BOOT_JARS += \
     framework-minus-apex \
     framework-graphics \
     framework-location \
-    framework-connectivity-b \
     ext \
     telephony-common \
     voip-common \
@@ -66,7 +65,7 @@ PRODUCT_APEX_BOOT_JARS := \
     com.android.adservices:framework-adservices \
     com.android.adservices:framework-sdksandbox \
     com.android.appsearch:framework-appsearch \
-    com.android.btservices:framework-bluetooth \
+    com.android.bt:framework-bluetooth \
     com.android.configinfrastructure:framework-configinfrastructure \
     com.android.conscrypt:conscrypt \
     com.android.devicelock:framework-devicelock \
@@ -137,6 +136,17 @@ ifneq (,$(RELEASE_RANGING_STACK))
     $(call soong_config_set,bootclasspath,release_ranging_stack,true)
 endif
 
+# Check if VCN should be built into the tethering module or not
+ifeq ($(RELEASE_MOVE_VCN_TO_MAINLINE),true)
+    PRODUCT_APEX_BOOT_JARS += \
+        com.android.tethering:framework-connectivity-b \
+
+else
+    PRODUCT_BOOT_JARS += \
+        framework-connectivity-b \
+
+endif
+
 # List of system_server classpath jars delivered via apex.
 # Keep the list sorted by module names and then library names.
 # Note: For modules available in Q, DO NOT add new entries here.
@@ -184,7 +194,7 @@ PRODUCT_STANDALONE_SYSTEM_SERVER_JARS := \
 # Keep the list sorted by module names and then library names.
 # Note: For modules available in Q, DO NOT add new entries here.
 PRODUCT_APEX_STANDALONE_SYSTEM_SERVER_JARS := \
-    com.android.btservices:service-bluetooth \
+    com.android.bt:service-bluetooth \
     com.android.devicelock:service-devicelock \
     com.android.os.statsd:service-statsd \
     com.android.scheduling:service-scheduling \

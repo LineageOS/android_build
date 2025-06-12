@@ -132,6 +132,7 @@ android_filesystem_defaults {
         "Dialer",
         "LatinIME",
         "apns-full-conf.xml",
+        "frameworks-base-overlays",
     ],
     multilib: {
         lib64: {
@@ -208,4 +209,14 @@ android_system_image {
         true: true,
         default: false,
     }),
+    multilib: {
+        common: {
+            deps: select(release_flag("RELEASE_AVATAR_PICKER_APP"), {
+                true: [
+                    "AvatarPicker", // handheld_system_ext (RELEASE_AVATAR_PICKER_APP)
+                ],
+                default: [],
+            }),
+        },
+    },
 }

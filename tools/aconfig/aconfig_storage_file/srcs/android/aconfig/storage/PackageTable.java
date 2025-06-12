@@ -19,17 +19,23 @@ package android.aconfig.storage;
 import static java.nio.charset.StandardCharsets.UTF_8;
 
 import java.nio.ByteBuffer;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 public class PackageTable {
 
+    private static final int FINGERPRINT_BYTES = 8;
+    // int: mPackageId + int: mBooleanStartIndex + int: mNextOffset
+    private static final int NODE_SKIP_BYTES = 12;
+
     private Header mHeader;
-    private ByteBufferReader mReader;
+    private ByteBuffer mBuffer;
 
     public static PackageTable fromBytes(ByteBuffer bytes) {
         PackageTable packageTable = new PackageTable();
-        packageTable.mReader = new ByteBufferReader(bytes);
-        packageTable.mHeader = Header.fromBytes(packageTable.mReader);
+        packageTable.mBuffer = bytes;
+        packageTable.mHeader = Header.fromBytes(new ByteBufferReader(bytes));
 
         return packageTable;
     }
@@ -41,16 +47,17 @@ public class PackageTable {
         if (newPosition >= mHeader.mNodeOffset) {
             return null;
         }
-        mReader.position(newPosition);
-        int nodeIndex = mReader.readInt();
+        ByteBufferReader reader = new ByteBufferReader(mBuffer);
+        reader.position(newPosition);
+        int nodeIndex = reader.readInt();
 
         if (nodeIndex < mHeader.mNodeOffset || nodeIndex >= mHeader.mFileSize) {
             return null;
         }
 
         while (nodeIndex != -1) {
-            mReader.position(nodeIndex);
-            Node node = Node.fromBytes(mReader, mHeader.mVersion);
+            reader.position(nodeIndex);
+            Node node = Node.fromBytes(reader, mHeader.mVersion);
             if (Objects.equals(packageName, node.mPackageName)) {
                 return node;
             }
@@ -58,6 +65,19 @@ public class PackageTable {
         }
 
         return null;
+    }
+
+    public List<String> getPackageList() {
+        List<String> list = new ArrayList<>(mHeader.mNumPackages);
+        ByteBufferReader reader = new ByteBufferReader(mBuffer);
+        reader.position(mHeader.mNodeOffset);
+        int fingerprintBytes = mHeader.mVersion == 1 ? 0 : FINGERPRINT_BYTES;
+        int skipBytes = fingerprintBytes + NODE_SKIP_BYTES;
+        for (int i = 0; i < mHeader.mNumPackages; i++) {
+            list.add(reader.readString());
+            reader.position(reader.position() + skipBytes);
+        }
+        return list;
     }
 
     public Header getHeader() {

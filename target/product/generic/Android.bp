@@ -1,5 +1,4 @@
 generic_rootdirs = [
-    "acct",
     "apex",
     "bootstrap-apex",
     "config",
@@ -124,6 +123,31 @@ android_symlinks = [
     {
         target: "/data/cache",
         name: "cache",
+    },
+    {
+        target: "/odm/odm_dlkm/etc",
+        name: "odm_dlkm/etc",
+    },
+    {
+        target: "/vendor/vendor_dlkm/etc",
+        name: "vendor_dlkm/etc",
+    },
+]
+
+extra_vendor_symlinks = [
+    // Some vendors still haven't cleaned up all device specific directories under root!
+    // TODO(b/111434759, b/111287060) SoC specific hacks
+    {
+        target: "/vendor/lib/dsp",
+        name: "dsp",
+    },
+    {
+        target: "/mnt/vendor/persist",
+        name: "persist",
+    },
+    {
+        target: "/vendor/firmware_mnt",
+        name: "firmware",
     },
 ]
 
@@ -383,6 +407,11 @@ android_filesystem_defaults {
         "android.hidl.allocator@1.0-service",
 
         ///////////////////////////////////////////
+        // media_system_ext
+        ///////////////////////////////////////////
+        "StatementService",
+
+        ///////////////////////////////////////////
         // window_extensions_base
         ///////////////////////////////////////////
         "androidx.window.extensions",
@@ -469,6 +498,8 @@ system_image_defaults {
     name: "system_image_defaults",
     partition_name: "system",
     base_dir: "system",
+    stem: "system.img",
+    no_full_install: true,
     dirs: generic_rootdirs,
     soong_config_variables: {
         TARGET_ADD_ROOT_EXTRA_VENDOR_SYMLINKS: {
@@ -510,6 +541,7 @@ system_image_defaults {
     avb_private_key: ":generic_system_sign_key",
     avb_algorithm: "SHA256_RSA4096",
     avb_hash_algorithm: "sha256",
+    rollback_index_location: 1,
 
     deps: [
         "abx",
@@ -603,7 +635,6 @@ system_image_defaults {
         "locksettings", // base_system
         "logcat", // base_system
         "logd", // base_system
-        "logpersist.start",
         "lpdump", // base_system
         "lshal", // base_system
         "make_f2fs", // media_system
@@ -625,6 +656,7 @@ system_image_defaults {
         "otapreopt_script", // generic_system
         "package-shareduid-allowlist.xml", // base_system
         "passwd_system", // base_system
+        "pbtombstone", // base_system
         "perfetto", // base_system
         "ping", // base_system
         "ping6", // base_system
@@ -638,7 +670,6 @@ system_image_defaults {
         "preinstalled-packages-platform.xml", // base_system
         "preinstalled-packages-strict-signature.xml", // base_system
         "preloaded-classes", // ok
-        "printflags", // base_system
         "privapp-permissions-platform.xml", // base_system
         "prng_seeder", // base_system
         "public.libraries.android.txt",
@@ -660,7 +691,6 @@ system_image_defaults {
         "sfdo", // base_system
         "sgdisk", // base_system
         "sm", // base_system
-        "snapshotctl", // base_system
         "snapuserd", // base_system
         "storaged", // base_system
         "surfaceflinger", // base_system
@@ -698,9 +728,12 @@ system_image_defaults {
         true: [
             "mm_daemon", // base_system (RELEASE_MEMORY_MANAGEMENT_DAEMON)
         ],
-        default: [],
+        default: [
+            "init-mmd-prop.rc", // base_system
+        ],
     }) + select(product_variable("debuggable"), {
         true: [
+            "alloctop",
             "adevice_fingerprint",
             "arping",
             "avbctl",
@@ -713,9 +746,11 @@ system_image_defaults {
             "iperf3",
             "iw",
             "layertracegenerator",
+            "logpersist.start",
             "logtagd.rc",
             "ot-cli-ftd",
             "ot-ctl",
+            "overlay_remounter",
             "procrank",
             "profcollectctl",
             "profcollectd",
@@ -723,6 +758,7 @@ system_image_defaults {
             "sanitizer-status",
             "servicedispatcher",
             "showmap",
+            "snapshotctl",
             "sqlite3",
             "ss",
             "start_with_lockagent",
@@ -803,7 +839,6 @@ system_image_defaults {
                 "Shell", // base_system
                 "SimAppDialog", // handheld_system
                 "SoundPicker", // not installed by anyone
-                "StatementService", // media_system
                 "Stk", // generic_system
                 "Tag", // generic_system
                 "TeleService", // handheld_system
@@ -837,7 +872,6 @@ system_image_defaults {
                 "framework-graphics", // base_system
                 "framework-location", // base_system
                 "framework-minus-apex-install-dependencies", // base_system
-                "framework-connectivity-b", // base_system
                 "framework_compatibility_matrix.device.xml",
                 "generic_system_fonts", // ok
                 "hwservicemanager_compat_symlink_module", // base_system
@@ -875,11 +909,11 @@ system_image_defaults {
                     "com.android.profiling", // base_system (RELEASE_PACKAGE_PROFILING_MODULE)
                 ],
                 default: [],
-            }) + select(release_flag("RELEASE_AVATAR_PICKER_APP"), {
-                true: [
-                    "AvatarPicker", // generic_system (RELEASE_AVATAR_PICKER_APP)
+            }) + select(release_flag("RELEASE_MOVE_VCN_TO_MAINLINE"), {
+                true: [],
+                default: [
+                    "framework-connectivity-b", // base_system
                 ],
-                default: [],
             }) + select(release_flag("RELEASE_UPROBESTATS_MODULE"), {
                 true: [
                     "com.android.uprobestats", // base_system (RELEASE_UPROBESTATS_MODULE)
@@ -1044,4 +1078,9 @@ android_system_image {
         compressor: "lz4hc,9",
         compress_hints: "erofs_compress_hints.txt",
     },
+    deps: [
+        // DO NOT update this list. Instead, update the system_image_defaults to
+        // sync with the base_system.mk
+        "logpersist.start", // cf only
+    ],
 }

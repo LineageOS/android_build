@@ -16,6 +16,7 @@
 
 import argparse
 from dataclasses import dataclass
+from collections import defaultdict
 import json
 import logging
 import os
@@ -33,7 +34,9 @@ import test_discovery_agent
 REQUIRED_ENV_VARS = frozenset(['TARGET_PRODUCT', 'TARGET_RELEASE', 'TOP', 'DIST_DIR'])
 SOONG_UI_EXE_REL_PATH = 'build/soong/soong_ui.bash'
 LOG_PATH = 'logs/build_test_suites.log'
-REQUIRED_BUILD_TARGETS = frozenset(['dist'])
+# Currently, this prevents the removal of those tags when they exist. In the future we likely
+# want the script to supply 'dist directly
+REQUIRED_BUILD_TARGETS = frozenset(['dist', 'droid', 'checkbuild'])
 
 
 class Error(Exception):
@@ -66,52 +69,33 @@ class BuildPlanner:
     self.build_context = build_context
     self.args = args
     self.target_optimizations = target_optimizations
+    self.target_to_test_infos = defaultdict(list)
 
   def create_build_plan(self):
 
     if 'optimized_build' not in self.build_context.enabled_build_features:
       return BuildPlan(set(self.args.extra_targets), set())
 
+    if not self.build_context.test_infos:
+      logging.warning('Build context has no test infos, skipping optimizations.')
+      for target in self.args.extra_targets:
+        get_metrics_agent().report_unoptimized_target(target, 'BUILD_CONTEXT has no test infos.')
+      return BuildPlan(set(self.args.extra_targets), set())
+
     build_targets = set()
     packaging_commands_getters = []
     # In order to roll optimizations out differently between test suites and
     # device builds, we have separate flags.
-    if (
-        'test_suites_zip_test_discovery'
+    enable_discovery = (('test_suites_zip_test_discovery'
         in self.build_context.enabled_build_features
         and not self.args.device_build
     ) or (
         'device_zip_test_discovery'
         in self.build_context.enabled_build_features
         and self.args.device_build
-    ):
-      preliminary_build_targets = self._collect_preliminary_build_targets()
-    else:
-      preliminary_build_targets = self._legacy_collect_preliminary_build_targets()
-
-      # Keep reporting metrics when test discovery is disabled.
-      # To be removed once test discovery is fully rolled out.
-      optimization_rationale = ''
-      test_discovery_zip_regexes = set()
-      try:
-        test_discovery_zip_regexes = self._get_test_discovery_zip_regexes()
-        logging.info(f'Discovered test discovery regexes: {test_discovery_zip_regexes}')
-      except test_discovery_agent.TestDiscoveryError as e:
-        optimization_rationale = e.message
-        logging.warning(f'Unable to perform test discovery: {optimization_rationale}')
-
-      for target in self.args.extra_targets:
-        if optimization_rationale:
-          get_metrics_agent().report_unoptimized_target(target, optimization_rationale)
-          continue
-        try:
-          regex = r'\b(%s.*)\b' % re.escape(target)
-          if any(re.search(regex, opt) for opt in test_discovery_zip_regexes):
-            get_metrics_agent().report_unoptimized_target(target, 'Test artifact used.')
-            continue
-          get_metrics_agent().report_optimized_target(target)
-        except Exception as e:
-          logging.error(f'unable to parse test discovery output: {repr(e)}')
+    )) and not self.args.test_discovery_info_mode
+    logging.info(f'Discovery mode is enabled= {enable_discovery}')
+    preliminary_build_targets = self._collect_preliminary_build_targets(enable_discovery)
 
     for target in preliminary_build_targets:
       target_optimizer_getter = self.target_optimizations.get(target, None)
@@ -120,7 +104,7 @@ class BuildPlanner:
         continue
 
       target_optimizer = target_optimizer_getter(
-          target, self.build_context, self.args
+          target, self.build_context, self.args, self.target_to_test_infos[target]
       )
       build_targets.update(target_optimizer.get_build_targets())
       packaging_commands_getters.append(
@@ -129,7 +113,7 @@ class BuildPlanner:
 
     return BuildPlan(build_targets, packaging_commands_getters)
 
-  def _collect_preliminary_build_targets(self):
+  def _collect_preliminary_build_targets(self, enable_discovery: bool):
     build_targets = set()
     try:
       test_discovery_zip_regexes = self._get_test_discovery_zip_regexes()
@@ -145,6 +129,11 @@ class BuildPlanner:
     for target in self.args.extra_targets:
       if target in REQUIRED_BUILD_TARGETS:
         build_targets.add(target)
+        get_metrics_agent().report_unoptimized_target(target, 'Required build target.')
+        continue
+      # If nothing is discovered without error, that means nothing is needed.
+      if not test_discovery_zip_regexes:
+        get_metrics_agent().report_optimized_target(target)
         continue
 
       regex = r'\b(%s.*)\b' % re.escape(target)
@@ -153,13 +142,18 @@ class BuildPlanner:
           if re.search(regex, opt):
             get_metrics_agent().report_unoptimized_target(target, 'Test artifact used.')
             build_targets.add(target)
-            continue
+            # proceed to next target evaluation
+            break
           get_metrics_agent().report_optimized_target(target)
         except Exception as e:
           # In case of exception report as unoptimized
           build_targets.add(target)
           get_metrics_agent().report_unoptimized_target(target, f'Error in parsing test discovery output for {target}: {repr(e)}')
           logging.error(f'unable to parse test discovery output: {repr(e)}')
+          break
+    # If discovery is not enabled, return the original list
+    if not enable_discovery:
+      return self._legacy_collect_preliminary_build_targets()
 
     return build_targets
 
@@ -186,6 +180,10 @@ class BuildPlanner:
       tf_command = self._build_tf_command(test_info)
       discovery_agent = test_discovery_agent.TestDiscoveryAgent(tradefed_args=tf_command)
       for regex in discovery_agent.discover_test_zip_regexes():
+        for target in self.args.extra_targets:
+          target_regex = r'\b(%s.*)\b' % re.escape(target)
+          if re.search(target_regex, regex):
+            self.target_to_test_infos[target].append(test_info)
         build_target_regexes.add(regex)
     return build_target_regexes
 
@@ -260,6 +258,11 @@ def parse_args(argv: list[str]) -> argparse.Namespace:
       action='store_true',
       help='Flag to indicate running a device build.',
   )
+  argparser.add_argument(
+      '--test_discovery_info_mode',
+      action='store_true',
+      help='Flag to enable running test discovery in info only mode.',
+  )
 
   return argparser.parse_args(argv)
 
@@ -301,7 +304,7 @@ def execute_build_plan(build_plan: BuildPlan):
   build_command.append(get_top().joinpath(SOONG_UI_EXE_REL_PATH))
   build_command.append('--make-mode')
   build_command.extend(build_plan.build_targets)
-
+  logging.info(f'Running build command: {build_command}')
   try:
     run_command(build_command)
   except subprocess.CalledProcessError as e:

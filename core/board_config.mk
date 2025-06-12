@@ -291,9 +291,10 @@ $(foreach var,$(_board_true_false_vars), \
     $(error Valid values of $(var) are "true", "false", and "". Not "$($(var))")))
 
 include $(BUILD_SYSTEM)/board_config_wifi.mk
-include $(BUILD_SYSTEM)/board_config_wpa_supplicant.mk
+-include external/wpa_supplicant_8/board_config_wpa_supplicant.mk
 
 # Set up soong config for "soong_config_value_variable".
+-include hardware/interfaces/configstore/1.1/default/surfaceflinger.mk
 -include vendor/google/build/soong/soong_config_namespace/camera.mk
 
 # Default *_CPU_VARIANT_RUNTIME to CPU_VARIANT if unspecified.

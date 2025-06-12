@@ -58,6 +58,9 @@ class Expression(object):
                   *format_args)
     else:
       msg = "{} is greater than {}:\n{} == {} > {} == {}".format(*format_args)
+      if "SOONG_RUSTC_INCREMENTAL" in os.environ:
+        msg = ("If setting \"SOONG_RUSTC_INCREMENTAL\" try building without it. "
+               + msg)
       if level == logging.ERROR:
         raise RuntimeError(msg)
       else:

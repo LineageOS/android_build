@@ -26,6 +26,7 @@ from unittest import mock
 from build_context import BuildContext
 import optimized_targets
 from pyfakefs import fake_filesystem_unittest
+import test_discovery_agent
 
 
 class GeneralTestsOptimizerTest(fake_filesystem_unittest.TestCase):
@@ -38,14 +39,12 @@ class GeneralTestsOptimizerTest(fake_filesystem_unittest.TestCase):
     self.mock_os_environ = os_environ_patcher.start()
 
     self._setup_working_build_env()
-    self._write_change_info_file()
     test_mapping_dir = pathlib.Path('/project/path/file/path')
     test_mapping_dir.mkdir(parents=True)
-    self._write_test_mapping_file()
 
   def _setup_working_build_env(self):
-    self.change_info_file = pathlib.Path('/tmp/change_info')
     self._write_soong_ui_file()
+    self._write_change_info_file()
     self._host_out_testcases = pathlib.Path('/tmp/top/host_out_testcases')
     self._host_out_testcases.mkdir(parents=True)
     self._target_out_testcases = pathlib.Path('/tmp/top/target_out_testcases')
@@ -56,15 +55,54 @@ class GeneralTestsOptimizerTest(fake_filesystem_unittest.TestCase):
     self._soong_host_out.mkdir(parents=True)
     self._host_out = pathlib.Path('/tmp/top/host_out')
     self._host_out.mkdir(parents=True)
+    self._write_general_tests_files_outputs()
 
     self._dist_dir = pathlib.Path('/tmp/top/out/dist')
     self._dist_dir.mkdir(parents=True)
 
     self.mock_os_environ.update({
-        'CHANGE_INFO': str(self.change_info_file),
         'TOP': '/tmp/top',
         'DIST_DIR': '/tmp/top/out/dist',
+        'TMPDIR': '/tmp/',
+        'CHANGE_INFO': '/tmp/top/change_info'
     })
+
+  def _write_change_info_file(self):
+    change_info_path = pathlib.Path('/tmp/top/')
+    with open(os.path.join(change_info_path, 'change_info'), 'w') as f:
+      f.write("""
+    {
+      "changes": [
+        {
+          "projectPath": "build/ci",
+          "revisions": [
+            {
+              "revisionNumber": 1,
+              "fileInfos": [
+                {
+                  "path": "src/main/java/com/example/MyClass.java",
+                  "action": "MODIFIED"
+                },
+                {
+                  "path": "src/test/java/com/example/MyClassTest.java",
+                  "action": "ADDED"
+                }
+              ]
+            },
+            {
+              "revisionNumber": 2,
+              "fileInfos": [
+                {
+                  "path": "src/main/java/com/example/AnotherClass.java",
+                  "action": "MODIFIED"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+    """)
 
   def _write_soong_ui_file(self):
     soong_path = pathlib.Path('/tmp/top/build/soong')
@@ -72,127 +110,92 @@ class GeneralTestsOptimizerTest(fake_filesystem_unittest.TestCase):
     with open(os.path.join(soong_path, 'soong_ui.bash'), 'w') as f:
       f.write("""
               #/bin/bash
-              echo HOST_OUT_TESTCASES='/tmp/top/host_out_testcases'
-              echo TARGET_OUT_TESTCASES='/tmp/top/target_out_testcases'
               echo PRODUCT_OUT='/tmp/top/product_out'
               echo SOONG_HOST_OUT='/tmp/top/soong_host_out'
               echo HOST_OUT='/tmp/top/host_out'
               """)
     os.chmod(os.path.join(soong_path, 'soong_ui.bash'), 0o666)
 
-  def _write_change_info_file(self):
-    change_info_contents = {
-        'changes': [{
-            'projectPath': '/project/path',
-            'revisions': [{
-                'fileInfos': [{
-                    'path': 'file/path/file_name',
-                }],
-            }],
-        }]
-    }
+  def _write_general_tests_files_outputs(self):
+    with open(os.path.join(self._product_out, 'general-tests_files'), 'w') as f:
+      f.write("""
+              path/to/module_1/general-tests-host-file
+              path/to/module_1/general-tests-host-file.config
+              path/to/module_1/general-tests-target-file
+              path/to/module_1/general-tests-target-file.config
+              path/to/module_2/general-tests-host-file
+              path/to/module_2/general-tests-host-file.config
+              path/to/module_2/general-tests-target-file
+              path/to/module_2/general-tests-target-file.config
+              path/to/module_1/general-tests-host-file
+              path/to/module_1/general-tests-host-file.config
+              path/to/module_1/general-tests-target-file
+              path/to/module_1/general-tests-target-file.config
+              """)
+    with open(os.path.join(self._product_out, 'general-tests_host_files'), 'w') as f:
+      f.write("""
+              path/to/module_1/general-tests-host-file
+              path/to/module_1/general-tests-host-file.config
+              path/to/module_2/general-tests-host-file
+              path/to/module_2/general-tests-host-file.config
+              path/to/module_1/general-tests-host-file
+              path/to/module_1/general-tests-host-file.config
+              """)
+    with open(os.path.join(self._product_out, 'general-tests_target_files'), 'w') as f:
+      f.write("""
+              path/to/module_1/general-tests-target-file
+              path/to/module_1/general-tests-target-file.config
+              path/to/module_2/general-tests-target-file
+              path/to/module_2/general-tests-target-file.config
+              path/to/module_1/general-tests-target-file
+              path/to/module_1/general-tests-target-file.config
+              """)
 
-    with open(self.change_info_file, 'w') as f:
-      json.dump(change_info_contents, f)
-
-  def _write_test_mapping_file(self):
-    test_mapping_contents = {
-        'test-mapping-group': [
-            {
-                'name': 'test_mapping_module',
-            },
-        ],
-    }
-
-    with open('/project/path/file/path/TEST_MAPPING', 'w') as f:
-      json.dump(test_mapping_contents, f)
-
-  def test_general_tests_optimized(self):
-    optimizer = self._create_general_tests_optimizer()
-
-    build_targets = optimizer.get_build_targets()
-
-    expected_build_targets = set(
-        optimized_targets.GeneralTestsOptimizer._REQUIRED_MODULES
-    )
-    expected_build_targets.add('test_mapping_module')
-
-    self.assertSetEqual(build_targets, expected_build_targets)
-
-  def test_no_change_info_no_optimization(self):
-    del os.environ['CHANGE_INFO']
-
-    optimizer = self._create_general_tests_optimizer()
-
-    build_targets = optimizer.get_build_targets()
-
-    self.assertSetEqual(build_targets, {'general-tests'})
-
-  def test_mapping_groups_unused_module_not_built(self):
-    test_context = self._create_test_context()
-    test_context['testInfos'][0]['extraOptions'] = [
-        {
-            'key': 'additional-files-filter',
-            'values': ['general-tests.zip'],
-        },
-        {
-            'key': 'test-mapping-test-group',
-            'values': ['unused-test-mapping-group'],
-        },
-    ]
-    optimizer = self._create_general_tests_optimizer(
-        build_context=self._create_build_context(test_context=test_context)
-    )
-
-    build_targets = optimizer.get_build_targets()
-
-    expected_build_targets = set(
-        optimized_targets.GeneralTestsOptimizer._REQUIRED_MODULES
-    )
-    self.assertSetEqual(build_targets, expected_build_targets)
-
-  def test_general_tests_used_by_non_test_mapping_test_no_optimization(self):
-    test_context = self._create_test_context()
-    test_context['testInfos'][0]['extraOptions'] = [{
-        'key': 'additional-files-filter',
-        'values': ['general-tests.zip'],
-    }]
-    optimizer = self._create_general_tests_optimizer(
-        build_context=self._create_build_context(test_context=test_context)
-    )
-
-    build_targets = optimizer.get_build_targets()
-
-    self.assertSetEqual(build_targets, {'general-tests'})
-
-  def test_malformed_change_info_raises(self):
-    with open(self.change_info_file, 'w') as f:
-      f.write('not change info')
-
-    optimizer = self._create_general_tests_optimizer()
-
-    with self.assertRaises(json.decoder.JSONDecodeError):
-      build_targets = optimizer.get_build_targets()
-
-  def test_malformed_test_mapping_raises(self):
-    with open('/project/path/file/path/TEST_MAPPING', 'w') as f:
-      f.write('not test mapping')
-
-    optimizer = self._create_general_tests_optimizer()
-
-    with self.assertRaises(json.decoder.JSONDecodeError):
-      build_targets = optimizer.get_build_targets()
 
   @mock.patch('subprocess.run')
-  def test_packaging_outputs_success(self, subprocess_run):
+  @mock.patch.object(test_discovery_agent.TestDiscoveryAgent, 'discover_test_mapping_test_modules')
+  def test_general_tests_optimized(self, discover_modules, subprocess_run):
     subprocess_run.return_value = self._get_soong_vars_output()
+    discover_modules.return_value = (['module_1'], ['dependency_1'])
+
+    optimizer = self._create_general_tests_optimizer()
+
+    build_targets = optimizer.get_build_targets()
+
+    expected_build_targets = set(
+        optimized_targets.GeneralTestsOptimizer._REQUIRED_MODULES
+    )
+    expected_build_targets.add('module_1')
+
+    self.assertSetEqual(build_targets, expected_build_targets)
+
+  @mock.patch('subprocess.run')
+  @mock.patch.object(test_discovery_agent.TestDiscoveryAgent, 'discover_test_mapping_test_modules')
+  def test_module_unused_module_not_built(self, discover_modules, subprocess_run):
+    subprocess_run.return_value = self._get_soong_vars_output()
+    discover_modules.return_value = (['no_module'], ['dependency_1'])
+
+    optimizer = self._create_general_tests_optimizer()
+
+    build_targets = optimizer.get_build_targets()
+
+    expected_build_targets = set(
+        optimized_targets.GeneralTestsOptimizer._REQUIRED_MODULES
+    )
+    self.assertSetEqual(build_targets, expected_build_targets)
+
+  @mock.patch('subprocess.run')
+  @mock.patch.object(test_discovery_agent.TestDiscoveryAgent, 'discover_test_mapping_test_modules')
+  def test_packaging_outputs_success(self, discover_modules, subprocess_run):
+    subprocess_run.return_value = self._get_soong_vars_output()
+    discover_modules.return_value = (['module_1'], ['dependency_1'])
     optimizer = self._create_general_tests_optimizer()
     self._set_up_build_outputs(['test_mapping_module'])
 
     targets = optimizer.get_build_targets()
     package_commands = optimizer.get_package_outputs_commands()
 
-    self._verify_soong_zip_commands(package_commands, ['test_mapping_module'])
+    self._verify_soong_zip_commands(package_commands, ['module_1'])
 
   @mock.patch('subprocess.run')
   def test_get_soong_dumpvars_fails_raises(self, subprocess_run):
@@ -200,10 +203,8 @@ class GeneralTestsOptimizerTest(fake_filesystem_unittest.TestCase):
     optimizer = self._create_general_tests_optimizer()
     self._set_up_build_outputs(['test_mapping_module'])
 
-    targets = optimizer.get_build_targets()
-
     with self.assertRaisesRegex(RuntimeError, 'Soong dumpvars failed!'):
-      package_commands = optimizer.get_package_outputs_commands()
+      targets = optimizer.get_build_targets()
 
   @mock.patch('subprocess.run')
   def test_get_soong_dumpvars_bad_output_raises(self, subprocess_run):
@@ -213,18 +214,16 @@ class GeneralTestsOptimizerTest(fake_filesystem_unittest.TestCase):
     optimizer = self._create_general_tests_optimizer()
     self._set_up_build_outputs(['test_mapping_module'])
 
-    targets = optimizer.get_build_targets()
-
     with self.assertRaisesRegex(
         RuntimeError, 'Error parsing soong dumpvars output'
     ):
-      package_commands = optimizer.get_package_outputs_commands()
+      targets = optimizer.get_build_targets()
 
   def _create_general_tests_optimizer(self, build_context: BuildContext = None):
     if not build_context:
       build_context = self._create_build_context()
     return optimized_targets.GeneralTestsOptimizer(
-        'general-tests', build_context, None
+        'general-tests', build_context, None, build_context.test_infos
     )
 
   def _create_build_context(
@@ -274,11 +273,10 @@ class GeneralTestsOptimizerTest(fake_filesystem_unittest.TestCase):
     return_value = subprocess.CompletedProcess(args=[], returncode=return_code)
     if not stdout:
       stdout = textwrap.dedent(f"""\
-                               HOST_OUT_TESTCASES='{self._host_out_testcases}'
-                               TARGET_OUT_TESTCASES='{self._target_out_testcases}'
                                PRODUCT_OUT='{self._product_out}'
                                SOONG_HOST_OUT='{self._soong_host_out}'
-                               HOST_OUT='{self._host_out}'""")
+                               HOST_OUT='{self._host_out}'
+                               """)
 
     return_value.stdout = stdout
     return return_value

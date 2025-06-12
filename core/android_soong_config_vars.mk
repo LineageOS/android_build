@@ -39,11 +39,16 @@ $(call soong_config_set_bool,ANDROID,RELEASE_BOARD_API_LEVEL_FROZEN,$(RELEASE_BO
 $(call add_soong_config_var,ANDROID,TARGET_DYNAMIC_64_32_DRMSERVER)
 $(call add_soong_config_var,ANDROID,TARGET_ENABLE_MEDIADRM_64)
 $(call add_soong_config_var,ANDROID,TARGET_DYNAMIC_64_32_MEDIASERVER)
+$(call soong_config_set_bool,ANDROID,TARGET_SUPPORTS_32_BIT_APPS,$(if $(filter true,$(TARGET_SUPPORTS_32_BIT_APPS)),true,false))
+$(call soong_config_set_bool,ANDROID,TARGET_SUPPORTS_64_BIT_APPS,$(if $(filter true,$(TARGET_SUPPORTS_64_BIT_APPS)),true,false))
 $(call add_soong_config_var,ANDROID,BOARD_GENFS_LABELS_VERSION)
 $(call soong_config_set_bool,ANDROID,PRODUCT_FSVERITY_GENERATE_METADATA,$(if $(filter true,$(PRODUCT_FSVERITY_GENERATE_METADATA)),true,false))
 
 $(call add_soong_config_var,ANDROID,ADDITIONAL_M4DEFS,$(if $(BOARD_SEPOLICY_M4DEFS),$(addprefix -D,$(BOARD_SEPOLICY_M4DEFS))))
 $(call add_soong_config_var,ANDROID,TARGET_ADD_ROOT_EXTRA_VENDOR_SYMLINKS)
+
+# For BUILDING_GSI
+$(call soong_config_set_bool,gsi,building_gsi,$(if $(filter true,$(BUILDING_GSI)),true,false))
 
 # For bootable/recovery
 RECOVERY_API_VERSION := 3
@@ -84,6 +89,8 @@ $(call soong_config_set_bool,chre,chre_daemon_load_into_sensorspd,$(if $(filter 
 $(call soong_config_set_bool,chre,chre_daemon_lpma_enabled,$(if $(filter true,$(CHRE_DAEMON_LPMA_ENABLED)),true,false))
 $(call soong_config_set_bool,chre,chre_dedicated_transport_channel_enabled,$(if $(filter true,$(CHRE_DEDICATED_TRANSPORT_CHANNEL_ENABLED)),true,false))
 $(call soong_config_set_bool,chre,chre_log_atom_extension_enabled,$(if $(filter true,$(CHRE_LOG_ATOM_EXTENSION_ENABLED)),true,false))
+$(call soong_config_set_bool,chre,building_vendor_image,$(if $(filter true,$(BUILDING_VENDOR_IMAGE)),true,false))
+$(call soong_config_set_bool,chre,chre_usf_daemon_enabled,$(if $(filter true,$(CHRE_USF_DAEMON_ENABLED)),true,false))
 
 ifdef TARGET_BOARD_AUTO
   $(call add_soong_config_var_value, ANDROID, target_board_auto, $(TARGET_BOARD_AUTO))
@@ -126,12 +133,10 @@ ifdef TARGET_BOOTS_16K
 $(call soong_config_set_bool,ANDROID,target_boots_16k,$(filter true,$(TARGET_BOOTS_16K)))
 endif
 
-ifdef PRODUCT_MEMCG_V2_FORCE_ENABLED
-$(call add_soong_config_var_value,ANDROID,memcg_v2_force_enabled,$(PRODUCT_MEMCG_V2_FORCE_ENABLED))
-endif
-
 ifdef PRODUCT_CGROUP_V2_SYS_APP_ISOLATION_ENABLED
 $(call add_soong_config_var_value,ANDROID,cgroup_v2_sys_app_isolation,$(PRODUCT_CGROUP_V2_SYS_APP_ISOLATION_ENABLED))
+else
+$(call add_soong_config_var_value,ANDROID,cgroup_v2_sys_app_isolation,true)
 endif
 
 $(call add_soong_config_var_value,ANDROID,release_avf_allow_preinstalled_apps,$(RELEASE_AVF_ALLOW_PREINSTALLED_APPS))
@@ -153,8 +158,6 @@ $(call add_soong_config_var_value,ANDROID,release_binder_death_recipient_weak_fr
 
 $(call add_soong_config_var_value,ANDROID,release_libpower_no_lock_binder_txn,$(RELEASE_LIBPOWER_NO_LOCK_BINDER_TXN))
 
-$(call add_soong_config_var_value,ANDROID,release_package_libandroid_runtime_punch_holes,$(RELEASE_PACKAGE_LIBANDROID_RUNTIME_PUNCH_HOLES))
-
 $(call add_soong_config_var_value,ANDROID,release_selinux_data_data_ignore,$(RELEASE_SELINUX_DATA_DATA_IGNORE))
 ifneq (,$(filter eng userdebug,$(TARGET_BUILD_VARIANT)))
     # write appcompat system properties on userdebug and eng builds
@@ -172,6 +175,7 @@ ifeq (true,$(PRODUCT_BROKEN_SUBOPTIMAL_ORDER_OF_SYSTEM_SERVER_JARS))
 else ifneq (platform:services,$(lastword $(PRODUCT_SYSTEM_SERVER_JARS)))
   # If services is not the final jar in the dependency ordering, don't assume
   # it can be safely optimized in isolation, as there may be dependent jars.
+  # TODO(b/212737576): Remove this exception after integrating use of `$(system_server_trace_refs)`.
   SYSTEM_OPTIMIZE_JAVA ?= false
 else
   SYSTEM_OPTIMIZE_JAVA ?= true
@@ -184,6 +188,20 @@ endif
 $(call add_soong_config_var,ANDROID,SYSTEM_OPTIMIZE_JAVA)
 $(call add_soong_config_var,ANDROID,FULL_SYSTEM_OPTIMIZE_JAVA)
 
+ifeq (true, $(SYSTEM_OPTIMIZE_JAVA))
+  # Create a list of (non-prefixed) system server jars that follow `services` in
+  # the classpath. This can be used when optimizing `services` to trace any
+  # downstream references that need keeping.
+  # Example: "foo:service1 platform:services bar:services2" -> "services2"
+  system_server_jars_dependent_on_services := $(shell \
+      echo "$(PRODUCT_SYSTEM_SERVER_JARS)" | \
+      awk '{found=0; for(i=1;i<=NF;i++){if($$i=="platform:services"){found=1; continue} if(found){split($$i,a,":"); print a[2]}}}' | \
+      xargs)
+  ifneq ($(strip $(system_server_jars_dependent_on_services)),)
+    $(call soong_config_set_string_list,ANDROID,system_server_trace_refs,$(system_server_jars_dependent_on_services))
+  endif
+endif
+
 # TODO(b/319697968): Remove this build flag support when metalava fully supports flagged api
 $(call soong_config_set,ANDROID,release_hidden_api_exportable_stubs,$(RELEASE_HIDDEN_API_EXPORTABLE_STUBS))
 
@@ -193,6 +211,14 @@ $(call add_soong_config_var_value,ANDROID,include_nonpublic_framework_api,false)
 else
 $(call add_soong_config_var_value,ANDROID,include_nonpublic_framework_api,true)
 endif
+
+# Add nfc build flag to soong
+ifneq ($(RELEASE_PACKAGE_NFC_STACK),NfcNci)
+  $(call soong_config_set,bootclasspath,nfc_apex_bootclasspath_fragment,true)
+endif
+
+# Add uwb build flag to soong
+$(call soong_config_set,bootclasspath,release_ranging_stack,$(RELEASE_RANGING_STACK))
 
 # Add crashrecovery build flag to soong
 $(call soong_config_set,ANDROID,release_crashrecovery_module,$(RELEASE_CRASHRECOVERY_MODULE))
@@ -234,6 +260,9 @@ endif
 # Enable Profiling module. Also used by platform_bootclasspath.
 $(call soong_config_set,ANDROID,release_package_profiling_module,$(RELEASE_PACKAGE_PROFILING_MODULE))
 $(call soong_config_set,bootclasspath,release_package_profiling_module,$(RELEASE_PACKAGE_PROFILING_MODULE))
+
+# Move VCN from platform to the Tethering module; used by both platform and module
+$(call soong_config_set,ANDROID,is_vcn_in_mainline,$(RELEASE_MOVE_VCN_TO_MAINLINE))
 
 # Add perf-setup build flag to soong
 # Note: BOARD_PERFSETUP_SCRIPT location must be under platform_testing/scripts/perf-setup/.
@@ -305,3 +334,46 @@ $(call soong_config_set_bool,fs_config,system_dlkm,$(if $(BOARD_USES_SYSTEM_DLKM
 $(call soong_config_set_bool,telephony,sec_cp_secure_boot,$(if $(filter true,$(SEC_CP_SECURE_BOOT)),true,false))
 $(call soong_config_set_bool,telephony,cbd_protocol_sit,$(if $(filter true,$(CBD_PROTOCOL_SIT)),true,false))
 $(call soong_config_set_bool,telephony,use_radioexternal_hal_aidl,$(if $(filter true,$(USE_RADIOEXTERNAL_HAL_AIDL)),true,false))
+
+# Variables for hwcomposer.$(TARGET_BOARD_PLATFORM)
+$(call soong_config_set_bool,google_graphics,board_uses_hwc_services,$(if $(filter true,$(BOARD_USES_HWC_SERVICES)),true,false))
+
+# Variables for controlling android.hardware.composer.hwc3-service.pixel
+$(call soong_config_set,google_graphics,board_hwc_version,$(BOARD_HWC_VERSION))
+
+# Flag ExcludeExtractApk is to support "extract_apk" property for the following conditions.
+ifneq ($(WITH_DEXPREOPT),true)
+  $(call soong_config_set_bool,PrebuiltGmsCore,ExcludeExtractApk,true)
+endif
+ifeq ($(DONT_DEXPREOPT_PREBUILTS),true)
+  $(call soong_config_set_bool,PrebuiltGmsCore,ExcludeExtractApk,true)
+endif
+ifeq ($(WITH_DEXPREOPT_BOOT_IMG_AND_SYSTEM_SERVER_ONLY),true)
+  $(call soong_config_set_bool,PrebuiltGmsCore,ExcludeExtractApk,true)
+endif
+
+# Variables for extra branches
+# TODO(b/383238397): Use bootstrap_go_package to enable extra flags.
+-include vendor/google/build/extra_soong_config_vars.mk
+
+# Variable for CI test packages
+ifneq ($(filter arm x86 true,$(TARGET_ARCH) $(TARGET_2ND_ARCH) $(TARGET_ENABLE_MEDIADRM_64)),)
+  $(call soong_config_set_bool,ci_tests,uses_widevine_tests, true)
+endif
+
+# Flags used in GTVS prebuilt apps
+$(call soong_config_set_bool,GTVS,GTVS_COMPRESSED_PREBUILTS,$(if $(findstring $(GTVS_COMPRESSED_PREBUILTS),true yes),true,false))
+$(call soong_config_set_bool,GTVS,GTVS_GMSCORE_BETA,$(if $(findstring $(GTVS_GMSCORE_BETA),true yes),true,false))
+$(call soong_config_set_bool,GTVS,GTVS_SETUPWRAITH_BETA,$(if $(findstring $(GTVS_SETUPWRAITH_BETA),true yes),true,false))
+$(call soong_config_set_bool,GTVS,PRODUCT_USE_PREBUILT_GTVS,$(if $(findstring $(PRODUCT_USE_PREBUILT_GTVS),true yes),true,false))
+
+# Flags used in GTVS_GTV prebuilt apps
+$(call soong_config_set_bool,GTVS_GTV,PRODUCT_USE_PREBUILT_GTVS_GTV,$(if $(findstring $(PRODUCT_USE_PREBUILT_GTVS_GTV),true yes),true,false))
+
+# Check modules to be built in "otatools-package".
+ifneq ($(wildcard vendor/google/tools/build_mixed_kernels_ramdisk),)
+  $(call soong_config_set_bool,otatools,use_build_mixed_kernels_ramdisk,true)
+endif
+ifneq ($(wildcard bootable/deprecated-ota/applypatch),)
+  $(call soong_config_set_bool,otatools,use_bootable_deprecated_ota_applypatch,true)
+endif

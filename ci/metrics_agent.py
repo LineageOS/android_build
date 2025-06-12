@@ -92,15 +92,15 @@ class MetricsAgent:
       size: int,
       included_modules: set[str],
   ):
-    target_result = self.target_results.get(target_name)
+    target_result = self._target_results.get(target_name)
     artifact = (
         metrics_pb2.OptimizedBuildMetrics.TargetOptimizationResult.OutputArtifact()
     )
     artifact.name = artifact_name
     artifact.size = size
     for module in included_modules:
-      artifact.included_modules.add(module)
-    target_result.output_artifacts.add(artifact)
+      artifact.included_modules.append(module)
+    target_result.output_artifact.append(artifact)
 
   def end_reporting(self):
     for target_result in self._target_results.values():

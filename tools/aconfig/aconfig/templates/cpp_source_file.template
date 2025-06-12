@@ -1,6 +1,5 @@
 #include "{header}.h"
 
-{{ if allow_instrumentation }}
 {{ if readwrite- }}
 #include <unistd.h>
 #include "aconfig_storage/aconfig_storage_read_api.hpp"
@@ -8,11 +7,7 @@
 #define LOG_TAG "aconfig_cpp_codegen"
 #define ALOGE(...) __android_log_print(ANDROID_LOG_ERROR, LOG_TAG, __VA_ARGS__)
 {{ -endif }}
-{{ endif }}
 
-{{ if readwrite- }}
-#include <server_configurable_flags/get_flags.h>
-{{ endif }}
 {{ if is_test_mode }}
 #include <unordered_map>
 #include <string>
@@ -29,32 +24,103 @@ namespace {cpp_namespace} \{
     private:
         std::unordered_map<std::string, bool> overrides_;
 
+    {{ if readwrite- }}
+        uint32_t boolean_start_index_;
+
+        std::unique_ptr<aconfig_storage::MappedStorageFile> flag_value_file_;
+
+        bool package_exists_in_storage_;
+    {{ -endif }}
+
     public:
+    {{ if readwrite- }}
+        flag_provider()
+            : overrides_()
+            , boolean_start_index_()
+            , flag_value_file_(nullptr)
+            , package_exists_in_storage_(true) \{
+
+            auto package_map_file = aconfig_storage::get_mapped_file(
+                 "{container}",
+                 aconfig_storage::StorageFileType::package_map);
+
+            if (!package_map_file.ok()) \{
+                ALOGE("error: failed to get package map file: %s", package_map_file.error().c_str());
+                package_exists_in_storage_ = false;
+                return;
+            }
+
+            auto context = aconfig_storage::get_package_read_context(
+                **package_map_file, "{package}");
+
+            if (!context.ok()) \{
+                ALOGE("error: failed to get package read context: %s", context.error().c_str());
+                package_exists_in_storage_ = false;
+                return;
+            }
+
+            if (!(context->package_exists)) \{
+                package_exists_in_storage_ = false;
+                return;
+            }
+
+            // cache package boolean flag start index
+            boolean_start_index_ = context->boolean_start_index;
+
+            // unmap package map file and free memory
+            delete *package_map_file;
+
+            auto flag_value_file = aconfig_storage::get_mapped_file(
+                "{container}",
+                aconfig_storage::StorageFileType::flag_val);
+            if (!flag_value_file.ok()) \{
+                ALOGE("error: failed to get flag value file: %s", flag_value_file.error().c_str());
+                package_exists_in_storage_ = false;
+                return;
+            }
+
+            // cache flag value file
+            flag_value_file_ = std::unique_ptr<aconfig_storage::MappedStorageFile>(
+                *flag_value_file);
+
+        }
+    {{ -else }}
         flag_provider()
             : overrides_()
         \{}
+    {{ -endif }}
 
-{{ for item in class_elements }}
+    {{ for item in class_elements }}
         virtual bool {item.flag_name}() override \{
             auto it = overrides_.find("{item.flag_name}");
-              if (it != overrides_.end()) \{
-                  return it->second;
+            if (it != overrides_.end()) \{
+                return it->second;
             } else \{
-              {{ if item.readwrite- }}
-              return server_configurable_flags::GetServerConfigurableFlag(
-                  "aconfig_flags.{item.device_config_namespace}",
-                  "{item.device_config_flag}",
-                  "{item.default_value}") == "true";
-              {{ -else }}
-                  return {item.default_value};
-              {{ -endif }}
+                {{ if item.readwrite- }}
+                if (!package_exists_in_storage_) \{
+                    return {item.default_value};
+                }
+
+                auto value = aconfig_storage::get_boolean_flag_value(
+                    *flag_value_file_,
+                    boolean_start_index_ + {item.flag_offset});
+
+                if (!value.ok()) \{
+                    ALOGE("error: failed to read flag value: %s", value.error().c_str());
+                    return {item.default_value};
+                } else \{
+                    return *value;
+                }
+                {{ -else }}
+                return {item.default_value};
+                {{ -endif }}
             }
         }
 
         virtual void {item.flag_name}(bool val) override \{
             overrides_["{item.flag_name}"] = val;
         }
-{{ endfor }}
+    {{ endfor }}
 
         virtual void reset_flags() override \{
             overrides_.clear();
@@ -66,15 +132,10 @@ namespace {cpp_namespace} \{
     class flag_provider : public flag_provider_interface \{
     public:
 
-        {{ if allow_instrumentation- }}
         {{ if readwrite- }}
         flag_provider()
-            {{ if readwrite- }}
             : cache_({readwrite_count}, -1)
             , boolean_start_index_()
-            {{ -else- }}
-            : boolean_start_index_()
-            {{ -endif }}
             , flag_value_file_(nullptr)
             , package_exists_in_storage_(true) \{
 
@@ -121,13 +182,11 @@ namespace {cpp_namespace} \{
 
         }
         {{ -endif }}
-        {{ -endif }}
 
         {{ -for item in class_elements }}
         virtual bool {item.flag_name}() override \{
             {{ -if item.readwrite }}
             if (cache_[{item.readwrite_idx}] == -1) \{
-            {{ if allow_instrumentation- }}
                 if (!package_exists_in_storage_) \{
                     return {item.default_value};
                 }
@@ -138,15 +197,10 @@ namespace {cpp_namespace} \{
 
                 if (!value.ok()) \{
                     ALOGE("error: failed to read flag value: %s", value.error().c_str());
+                    return {item.default_value};
                 }
 
                 cache_[{item.readwrite_idx}] = *value;
-            {{ -else- }}
-                cache_[{item.readwrite_idx}] = server_configurable_flags::GetServerConfigurableFlag(
-                    "aconfig_flags.{item.device_config_namespace}",
-                    "{item.device_config_flag}",
-                    "{item.default_value}") == "true";
-            {{ -endif }}
             }
             return cache_[{item.readwrite_idx}];
             {{ -else }}
@@ -162,13 +216,12 @@ namespace {cpp_namespace} \{
     {{ if readwrite- }}
     private:
         std::vector<int8_t> cache_ = std::vector<int8_t>({readwrite_count}, -1);
-    {{ if allow_instrumentation- }}
+
         uint32_t boolean_start_index_;
 
         std::unique_ptr<aconfig_storage::MappedStorageFile> flag_value_file_;
 
         bool package_exists_in_storage_;
-    {{ -endif }}
     {{ -endif }}
 
     };

@@ -85,11 +85,6 @@ python_binary_host {
     srcs: [
         "list_files.py",
     ],
-    version: {
-        py3: {
-            embedded_launcher: true,
-        },
-    },
 }
 
 python_test_host {
@@ -109,11 +104,6 @@ python_test_host {
 python_binary_host {
     name: "characteristics_rro_generator",
     srcs: ["characteristics_rro_generator.py"],
-    version: {
-        py3: {
-            embedded_launcher: true,
-        },
-    },
 }
 
 python_binary_host {
@@ -121,5 +111,13 @@ python_binary_host {
     srcs: [
         "event_log_tags.py",
         "merge-event-log-tags.py",
+    ],
+}
+
+python_binary_host {
+    name: "java-event-log-tags",
+    srcs: [
+        "event_log_tags.py",
+        "java-event-log-tags.py",
     ],
 }
