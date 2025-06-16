@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f24fd1a0_abc440d8",
+        "filename": "target/product/security/Android.bp",
+        "patchSetId": 1
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 31655
+      },
+      "writtenOn": "2025-06-16T16:34:41Z",
+      "side": 1,
+      "message": "build/make/target/product/security/Android.bp:50:23: unrecognized property \"recovery_available\"",
+      "revId": "e10bad585149d4b725fa2138f683fe96277c508b",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
+    }
+  ]
+}
