@@ -16,6 +16,24 @@
       "message": "build/make/target/product/security/Android.bp:50:23: unrecognized property \"recovery_available\"",
       "revId": "e10bad585149d4b725fa2138f683fe96277c508b",
       "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "313daecd_c5bd2a2e",
+        "filename": "target/product/security/Android.bp",
+        "patchSetId": 1
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 34512
+      },
+      "writtenOn": "2025-06-18T11:10:22Z",
+      "side": 1,
+      "message": "the recovery_available property needs to be explicitly defined here first\n\nhttps://github.com/LineageOS/android_build_soong/blob/lineage-22.2/etc/adb_keys.go",
+      "parentUuid": "f24fd1a0_abc440d8",
+      "revId": "e10bad585149d4b725fa2138f683fe96277c508b",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
     }
   ]
 }
