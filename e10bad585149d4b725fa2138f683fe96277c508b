@@ -34,6 +34,24 @@
       "parentUuid": "f24fd1a0_abc440d8",
       "revId": "e10bad585149d4b725fa2138f683fe96277c508b",
       "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "eb900a58_4262961f",
+        "filename": "target/product/security/Android.bp",
+        "patchSetId": 1
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 34512
+      },
+      "writtenOn": "2025-06-21T10:01:06Z",
+      "side": 1,
+      "message": "https://review.lineageos.org/c/LineageOS/android_build_soong/+/434117",
+      "parentUuid": "313daecd_c5bd2a2e",
+      "revId": "e10bad585149d4b725fa2138f683fe96277c508b",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
     }
   ]
 }
