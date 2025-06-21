@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6d04a96c_3c425be2",
+        "filename": "target/product/security/Android.bp",
+        "patchSetId": 3
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 11883
+      },
+      "writtenOn": "2025-06-21T16:17:04Z",
+      "side": 1,
+      "message": "Leave this alone\n\nCreate name: adb_keys_recovery with recovery: true (not recovery available!)",
+      "revId": "c21389acd12fb77dca0ccff68c73527627f47c1c",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
+    }
+  ]
+}
