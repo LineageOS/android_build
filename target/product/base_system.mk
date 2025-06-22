@@ -412,11 +412,6 @@ else
         mediametrics
 endif
 
-ifneq (,$(RELEASE_RANGING_STACK))
-    PRODUCT_PACKAGES += \
-        com.android.ranging
-endif
-
 ifeq ($(RELEASE_PROCESS_MEMORY_GUARDIAN_DAEMON),true)
   PRODUCT_PACKAGES += \
         pmg_daemon
