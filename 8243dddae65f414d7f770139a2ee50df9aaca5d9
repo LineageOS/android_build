@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9a4e8dce_a4cf168c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 31655
+      },
+      "writtenOn": "2025-06-22T14:45:13Z",
+      "side": 1,
+      "message": "error: build/make/target/product/security/Android.bp:52:1: module \"adb_keys.recovery\" variant \"android_arm64_armv8-a_cortex-a73\": adb_keys module type must set product_specific to true",
+      "revId": "8243dddae65f414d7f770139a2ee50df9aaca5d9",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
+    }
+  ]
+}
