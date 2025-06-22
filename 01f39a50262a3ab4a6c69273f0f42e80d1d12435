@@ -16,6 +16,24 @@
       "message": "hopefully you verified that it actually installs adb keys into recovery",
       "revId": "01f39a50262a3ab4a6c69273f0f42e80d1d12435",
       "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c0862062_9371e46d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 34512
+      },
+      "writtenOn": "2025-06-22T15:44:43Z",
+      "side": 1,
+      "message": "maybe, maybe not, ¯\\_(ツ)_/¯.",
+      "parentUuid": "62db34ea_101559ca",
+      "revId": "01f39a50262a3ab4a6c69273f0f42e80d1d12435",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
     }
   ]
 }
