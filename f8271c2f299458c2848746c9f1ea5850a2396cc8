@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "be60c47e_8b450043",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 32245
+      },
+      "writtenOn": "2025-06-26T17:49:52Z",
+      "side": 1,
+      "message": "not working since 22.2, probably because of handled by soong now",
+      "revId": "f8271c2f299458c2848746c9f1ea5850a2396cc8",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
+    }
+  ]
+}
