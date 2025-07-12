@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "27febbea_9ed4b06f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 16185
+      },
+      "writtenOn": "2025-07-12T01:34:09Z",
+      "side": 1,
+      "message": "kills the spam about pixel overlays missing on build start.",
+      "revId": "13504bd15ceedaea7d989fdce2f1931793d0f2a7",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
+    }
+  ]
+}
