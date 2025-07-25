@@ -553,6 +553,11 @@ function _lunch_meat()
     else
         export INLINE_KERNEL_BUILDING=true
     fi
+    local prebuilt_headers=$(_get_build_var_cached TARGET_PREBUILT_KERNEL_HEADERS)
+    local platform_target=$(_get_build_var_cached TARGET_KERNEL_PLATFORM_TARGET)
+    if [ -n "$prebuilt_headers" ] || [ -n "$platform_target" ]; then
+        export HAS_PREBUILT_KERNEL_HEADERS=true
+    fi
 
     [[ -n "${ANDROID_QUIET_BUILD:-}" ]] || echo
 
