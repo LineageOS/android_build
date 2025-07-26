@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2f0cc62d_ee2927fe",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 13648
+      },
+      "writtenOn": "2025-07-26T14:23:56Z",
+      "side": 1,
+      "message": "This still comes handy for stuff like this: https://review.lineageos.org/c/LineageOS/android_device_oneplus_salami/+/441061",
+      "revId": "6d27abb478810a22a5a0c304a1bbf03455ef89e3",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
+    }
+  ]
+}
