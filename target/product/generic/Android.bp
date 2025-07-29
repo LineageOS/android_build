@@ -536,6 +536,7 @@ system_image_defaults {
         "android.software.window_magnification.prebuilt.xml", // handheld_system
         "android.system.suspend-service",
         "apexd",
+        "apexd.mainline_patch_level_2",
         "appops",
         "approved-ogki-builds.xml", // base_system
         "appwidget",
