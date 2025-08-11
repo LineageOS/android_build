@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b55c91f5_bcbd07b2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 16185
+      },
+      "writtenOn": "2025-08-11T02:37:14Z",
+      "side": 1,
+      "message": "still valid, Tegra 5.10 lives at least, w/ 4.9 booting.",
+      "revId": "d27fe35537000b9b18e9d91cc7e821f02a9c302f",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
+    }
+  ]
+}
