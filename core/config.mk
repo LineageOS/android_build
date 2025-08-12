@@ -218,6 +218,8 @@ BUILD_COMBOS :=$= $(BUILD_SYSTEM)/combo
 
 CLEAR_VARS :=$= $(BUILD_SYSTEM)/clear_vars.mk
 
+DUMP_ANDROIDMK :=$= $(BUILD_SYSTEM)/dump_androidmk.mk
+
 BUILD_HOST_STATIC_LIBRARY :=$= $(BUILD_SYSTEM)/host_static_library.mk
 BUILD_HOST_SHARED_LIBRARY :=$= $(BUILD_SYSTEM)/host_shared_library.mk
 BUILD_STATIC_LIBRARY :=$= $(BUILD_SYSTEM)/static_library.mk

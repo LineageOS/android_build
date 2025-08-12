@@ -3645,6 +3645,7 @@ $(strip $(if $(LOCAL_RECORDED_MODULE_TYPE),,
   $(if $(filter-out $(SOONG_ANDROID_MK),$(LOCAL_MODULE_MAKEFILE)),
     $(if $(filter $(1),$(STATS.MODULE_TYPE)),
       $(eval LOCAL_RECORDED_MODULE_TYPE := true)
+      $(eval LOCAL_RECORDED_MODULE_TYPE_IS := $(1))
         $(eval STATS.MODULE_TYPE.$(1) += 1),
       $(error Invalid module type: $(1))))))
 endef
