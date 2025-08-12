@@ -304,7 +304,15 @@ subdir_makefiles += $(SOONG_OUT_DIR)/late-$(TARGET_PRODUCT)$(COVERAGE_SUFFIX).mk
 subdir_makefiles_total := $(words int $(subdir_makefiles) post finish)
 .KATI_READONLY := subdir_makefiles_total
 
+ALL_DUMP_ANDROIDMK_LOCAL_PATH :=
+
 $(foreach mk,$(subdir_makefiles),$(info [$(call inc_and_print,subdir_makefiles_inc)/$(subdir_makefiles_total)] including $(mk) ...)$(eval include $(mk)))
+
+.PHONY: convert-to-androidbp
+convert-to-androidbp: $(HOST_OUT_EXECUTABLES)/androidmk
+	$(foreach lp,$(ALL_DUMP_ANDROIDMK_LOCAL_PATH),\
+		echo Convert Android.mk to Android.bp in $(lp) &&\
+		$(HOST_OUT_EXECUTABLES)/androidmk $(lp)/Android_mk_dump > $(lp)/Android_bp &&) true
 
 # Build bootloader.img/radio.img, and unpack the partitions.
 -include vendor/google_devices/$(TARGET_SOC)/prebuilts/misc_bins/update_bootloader_radio_image.mk
