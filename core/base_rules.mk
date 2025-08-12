@@ -14,6 +14,10 @@
 # limitations under the License.
 #
 
+ifeq ($(LOCAL_CONVERT_TO_ANDROIDBP),true)
+include $(DUMP_ANDROIDMK)
+endif
+
 # Catch users that directly include base_rules.mk
 $(call record-module-type,base_rules)
 
