@@ -224,6 +224,7 @@ LOCAL_PROTO_JAVA_OUTPUT_PARAMS:=
 LOCAL_PROVIDES_USES_LIBRARY:=
 LOCAL_R8_FLAG_FILES:=
 LOCAL_RECORDED_MODULE_TYPE:=
+LOCAL_RECORDED_MODULE_TYPE_IS:=
 LOCAL_RENDERSCRIPT_CC:=
 LOCAL_RENDERSCRIPT_COMPATIBILITY:=
 LOCAL_RENDERSCRIPT_FLAGS:=
@@ -487,6 +488,8 @@ full_android_manifest :=
 non_system_module :=
 
 module_license_metadata :=
+
+LOCAL_DUMP_ANDROIDMK_FINISHED :=
 
 # Trim MAKEFILE_LIST so that $(call my-dir) doesn't need to
 # iterate over thousands of entries every time.

@@ -7,6 +7,11 @@
 ###########################################################
 $(call record-module-type,PREBUILT)
 
+# Include $(DUMP_ANDROIDMK) early to avoid LOCAL_SRC_FILES getting cleared
+ifeq ($(LOCAL_CONVERT_TO_ANDROIDBP),true)
+include $(DUMP_ANDROIDMK)
+endif
+
 ifdef LOCAL_IS_HOST_MODULE
   my_prefix := HOST_
   LOCAL_HOST_PREFIX :=
