@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2cae204d_daf2ba05",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 35792
+      },
+      "writtenOn": "2025-08-19T07:32:24Z",
+      "side": 1,
+      "message": "System update",
+      "revId": "2a777ecff6e7e5daefac8c1ecb27cca5e27b1b67",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
+    }
+  ]
+}
