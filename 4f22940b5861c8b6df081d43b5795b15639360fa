@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7c716145_48a52a2f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 4550
+      },
+      "writtenOn": "2025-08-21T15:19:30Z",
+      "side": 1,
+      "message": "For documentation purposes, pick https://review.lineageos.org/c/LineageOS/android_build_release/+/437275 before this change",
+      "revId": "4f22940b5861c8b6df081d43b5795b15639360fa",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
+    }
+  ]
+}
