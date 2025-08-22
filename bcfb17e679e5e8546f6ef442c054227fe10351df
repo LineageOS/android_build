@@ -16,6 +16,24 @@
       "message": "Is this needed since it defined in both cases of the if/else block above?",
       "revId": "bcfb17e679e5e8546f6ef442c054227fe10351df",
       "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9a8903ad_849448b3",
+        "filename": "envsetup.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 604,
+      "author": {
+        "id": 16185
+      },
+      "writtenOn": "2025-08-22T00:36:01Z",
+      "side": 1,
+      "message": "yes, try yourself, breakfast will fail to run this if you\u0027re in a subdirectory.",
+      "parentUuid": "416da4ab_c9e31b18",
+      "revId": "bcfb17e679e5e8546f6ef442c054227fe10351df",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
     }
   ]
 }
