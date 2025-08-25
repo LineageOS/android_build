@@ -3580,6 +3580,7 @@ endef
 
 $(eval $(call write-partition-file-list,$(systemimage_intermediates)/file_list.txt,$(TARGET_OUT),$(FULL_SYSTEMIMAGE_DEPS)))
 
+ifeq ($(USE_SOONG_DEFINED_SYSTEM_IMAGE),true)
 ifneq ($(PRODUCT_SOONG_DEFINED_SYSTEM_IMAGE),)
 file_list_diff := $(HOST_OUT_EXECUTABLES)/file_list_diff$(HOST_EXECUTABLE_SUFFIX)
 system_file_diff_timestamp := $(systemimage_intermediates)/file_diff.timestamp
@@ -3605,6 +3606,7 @@ $(system_file_diff_timestamp): \
 	touch $@
 
 $(BUILT_SYSTEMIMAGE): $(system_file_diff_timestamp)
+endif
 endif
 
 # Used by soong sandwich to request the staging dir be built
