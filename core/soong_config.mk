@@ -253,7 +253,9 @@ $(call add_json_list, TargetFSConfigGen,                 $(TARGET_FS_CONFIG_GEN)
 # PRODUCT_SOONG_DEFINED_SYSTEM_IMAGE, PRODUCT_SOONG_DEFINED_SYSTEM_IMAGE is still used to compare
 # installed files between make and soong, regardless of the USE_SOONG_DEFINED_SYSTEM_IMAGE setting.
 $(call add_json_bool, UseSoongSystemImage,               $(filter true,$(USE_SOONG_DEFINED_SYSTEM_IMAGE)))
+ifeq ($(USE_SOONG_DEFINED_SYSTEM_IMAGE),true)
 $(call add_json_str,  ProductSoongDefinedSystemImage,    $(PRODUCT_SOONG_DEFINED_SYSTEM_IMAGE))
+endif
 
 $(call add_json_bool, UseSoongNoticeXML, $(filter true,$(PRODUCT_USE_SOONG_NOTICE_XML)))
 
