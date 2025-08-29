@@ -33,6 +33,24 @@
       "message": "Where\u0027s the counterpart of this change?",
       "revId": "ab3d17c30908e5d17370907c8c00e24ff8f288f6",
       "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6ba81acf_e4e9b59d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 16185
+      },
+      "writtenOn": "2025-08-29T17:59:35Z",
+      "side": 1,
+      "message": "It\u0027s in Android.mk, and tbh we don\u0027t need the static target.\n\n\n```\ncc_binary {\n    name: \"resize2fs\",\n    host_supported: true,\n    recovery_available: true,\n    vendor_ramdisk_available: true,\n    defaults: [\"resize2fs-defaults\"],\n```\n\nexisting e2fsprogs Android.bp\n\nWe can and plan to just use that. it\u0027s even recovery_available.",
+      "parentUuid": "8c2392cf_f5900d57",
+      "revId": "ab3d17c30908e5d17370907c8c00e24ff8f288f6",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
     }
   ],
   "submitRequirementResults": []
