@@ -22,6 +22,30 @@
       },
       "revId": "d2a5ab6da21807edabe9b9baa7872583e74aa3c0",
       "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b92cf394_c5abcba5",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 18796
+      },
+      "writtenOn": "2025-08-30T17:57:37Z",
+      "side": 1,
+      "message": "I used it from AOSP. https://android.googlesource.com/platform/frameworks/base/+/1bf1349b6db",
+      "parentUuid": "e9dc8e93_4a3662f5",
+      "range": {
+        "startLine": 18,
+        "startChar": 73,
+        "endLine": 18,
+        "endChar": 84
+      },
+      "revId": "d2a5ab6da21807edabe9b9baa7872583e74aa3c0",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
     }
   ],
   "submitRequirementResults": []
