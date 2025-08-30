@@ -46,6 +46,30 @@
       },
       "revId": "d2a5ab6da21807edabe9b9baa7872583e74aa3c0",
       "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b59318cf_04678189",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 15173
+      },
+      "writtenOn": "2025-08-30T18:51:45Z",
+      "side": 1,
+      "message": "Yes, but that ref isn\u0027t in the history of this branch. Prior change means \"prior change here\"",
+      "parentUuid": "b92cf394_c5abcba5",
+      "range": {
+        "startLine": 18,
+        "startChar": 73,
+        "endLine": 18,
+        "endChar": 84
+      },
+      "revId": "d2a5ab6da21807edabe9b9baa7872583e74aa3c0",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
     }
   ],
   "submitRequirementResults": []
