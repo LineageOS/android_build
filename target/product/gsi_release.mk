@@ -76,7 +76,7 @@ PRODUCT_PACKAGES += \
 ifneq ($(PRODUCT_IS_AUTOMOTIVE),true)
     PRODUCT_PACKAGES += \
         gsi_overlay_framework \
-        gsi_overlay_systemui \
+        gsi_overlay_systemui
     PRODUCT_COPY_FILES += \
         device/generic/common/overlays/overlay-config.xml:$(TARGET_COPY_OUT_SYSTEM_EXT)/overlay/config/config.xml
 endif
