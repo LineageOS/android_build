@@ -205,9 +205,11 @@ android_system_image {
         true: ["frameworks-base-overlays-debug"],
         default: [],
     }),
-    enabled: select(soong_config_variable("gsi", "building_gsi"), {
-        true: true,
-        default: false,
+    enabled: select((soong_config_variable("gsi", "building_gsi"),
+                     soong_config_variable("gsi", "building_lineage_gsi")), {
+        (true, true): false,
+        (true, default): true,
+        (default, default): false,
     }),
     multilib: {
         common: {
