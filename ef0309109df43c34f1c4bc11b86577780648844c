@@ -16,6 +16,23 @@
       "message": "I\u0027m pretty sure we can drop this, I havent seen a device that builds dt.img since msm8916/msm8939",
       "revId": "ef0309109df43c34f1c4bc11b86577780648844c",
       "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e13a24d0_9181315e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 16878
+      },
+      "writtenOn": "2025-09-30T23:47:13Z",
+      "side": 1,
+      "message": "This can be also recreated using a local mkbootimg.mk and a local mkbootimg.py.\n\nI just got my LG G4 to boot Los23 with those changes again without picking this commit",
+      "revId": "ef0309109df43c34f1c4bc11b86577780648844c",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
     }
   ],
   "submitRequirementResults": []
