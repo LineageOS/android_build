@@ -34,6 +34,24 @@
       "parentUuid": "6003bbf7_00884aa1",
       "revId": "4a204bd77dc27305dd2e9d679d79df2e3dc3db62",
       "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "345771c2_23ffb5e1",
+        "filename": "core/version_util.mk",
+        "patchSetId": 1
+      },
+      "lineNbr": 205,
+      "author": {
+        "id": 29415
+      },
+      "writtenOn": "2025-10-15T12:45:12Z",
+      "side": 1,
+      "message": "Seems to be broken with uutils.\n\nnexus@prism:~/lineage-23.0/build/make$ date -u -d \u00272025-10-01\u0027 +%s\n1759291200\nnexus@prism:~/lineage-23.0/build/make$ date -d \u00272025-10-01\u0027 +%s\n1759291200\nnexus@prism:~/lineage-23.0/build/make$ TZ\u003dUTC date -d \u00272025-10-01\u0027 +%s\n1759276800",
+      "parentUuid": "a155135c_526d2e9e",
+      "revId": "4a204bd77dc27305dd2e9d679d79df2e3dc3db62",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
     }
   ]
 }
