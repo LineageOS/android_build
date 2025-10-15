@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6003bbf7_00884aa1",
+        "filename": "core/version_util.mk",
+        "patchSetId": 1
+      },
+      "lineNbr": 205,
+      "author": {
+        "id": 10067
+      },
+      "writtenOn": "2025-10-15T11:50:37Z",
+      "side": 1,
+      "message": "`date -ud`?",
+      "revId": "4a204bd77dc27305dd2e9d679d79df2e3dc3db62",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
+    }
+  ]
+}
