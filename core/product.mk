@@ -309,6 +309,12 @@ _product_list_vars += PRODUCT_ARTIFACT_PATH_REQUIREMENT_ALLOWED_LIST
 # installed on /system directory by default.
 _product_list_vars += PRODUCT_FORCE_PRODUCT_MODULES_TO_SYSTEM_PARTITION
 
+# When this is true, dynamic partitions is retrofitted on a device that has
+# already been launched without dynamic partitions. Otherwise, the device
+# is launched with dynamic partitions.
+# This flag implies PRODUCT_USE_DYNAMIC_PARTITIONS.
+_product_single_value_vars += PRODUCT_RETROFIT_DYNAMIC_PARTITIONS
+
 # List of directories that will be used to gate blueprint modules from the build graph
 _product_list_vars += PRODUCT_SOURCE_ROOT_DIRS
 
