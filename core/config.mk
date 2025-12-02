@@ -935,6 +935,19 @@ ifeq ($(call math_gt,$(BOARD_API_LEVEL),$(BOARD_GENFS_LABELS_VERSION)),true)
   $(error BOARD_GENFS_LABELS_VERSION ($(BOARD_GENFS_LABELS_VERSION)) must be greater than or equal to BOARD_API_LEVEL ($(BOARD_API_LEVEL)))
 endif
 
+ifeq ($(PRODUCT_RETROFIT_DYNAMIC_PARTITIONS),true)
+  ifneq ($(PRODUCT_USE_DYNAMIC_PARTITIONS),true)
+    $(error PRODUCT_USE_DYNAMIC_PARTITIONS must be true when PRODUCT_RETROFIT_DYNAMIC_PARTITIONS \
+        is set)
+  endif
+  ifdef PRODUCT_SHIPPING_API_LEVEL
+    ifeq (true,$(call math_gt_or_eq,$(PRODUCT_SHIPPING_API_LEVEL),29))
+      $(error Devices with shipping API level $(PRODUCT_SHIPPING_API_LEVEL) must not set \
+          PRODUCT_RETROFIT_DYNAMIC_PARTITIONS)
+    endif
+  endif
+endif
+
 ifeq ($(PRODUCT_USE_DYNAMIC_PARTITIONS),true)
     ifneq ($(PRODUCT_USE_DYNAMIC_PARTITION_SIZE),true)
         $(error PRODUCT_USE_DYNAMIC_PARTITION_SIZE must be true for devices with dynamic partitions)
@@ -1036,6 +1049,41 @@ BOARD_SUPER_PARTITION_PARTITION_LIST := \
 .KATI_READONLY := BOARD_SUPER_PARTITION_PARTITION_LIST
 
 ifneq ($(BOARD_SUPER_PARTITION_SIZE),)
+ifeq ($(PRODUCT_RETROFIT_DYNAMIC_PARTITIONS),true)
+
+# The metadata device must be specified manually for retrofitting.
+ifeq ($(BOARD_SUPER_PARTITION_METADATA_DEVICE),)
+$(error Must specify BOARD_SUPER_PARTITION_METADATA_DEVICE if PRODUCT_RETROFIT_DYNAMIC_PARTITIONS=true.)
+endif
+
+# The super partition block device list must be specified manually for retrofitting.
+ifeq ($(BOARD_SUPER_PARTITION_BLOCK_DEVICES),)
+$(error Must specify BOARD_SUPER_PARTITION_BLOCK_DEVICES if PRODUCT_RETROFIT_DYNAMIC_PARTITIONS=true.)
+endif
+
+# The metadata device must be included in the super partition block device list.
+ifeq (,$(filter $(BOARD_SUPER_PARTITION_METADATA_DEVICE),$(BOARD_SUPER_PARTITION_BLOCK_DEVICES)))
+$(error BOARD_SUPER_PARTITION_METADATA_DEVICE is not listed in BOARD_SUPER_PARTITION_BLOCK_DEVICES.)
+endif
+
+# The metadata device must be supplied to init via the kernel command-line.
+INTERNAL_KERNEL_CMDLINE += androidboot.super_partition=$(BOARD_SUPER_PARTITION_METADATA_DEVICE)
+
+BOARD_BUILD_RETROFIT_DYNAMIC_PARTITIONS_OTA_PACKAGE := true
+
+# If "vendor" is listed as one of the dynamic partitions but without its image available (e.g. an
+# AOSP target built without vendor image), don't build the retrofit full OTA package. Because we
+# won't be able to build meaningful super_* images for retrofitting purpose.
+ifneq (,$(filter vendor,$(BOARD_SUPER_PARTITION_PARTITION_LIST)))
+ifndef BUILDING_VENDOR_IMAGE
+ifndef BOARD_PREBUILT_VENDORIMAGE
+BOARD_BUILD_RETROFIT_DYNAMIC_PARTITIONS_OTA_PACKAGE :=
+endif # BOARD_PREBUILT_VENDORIMAGE
+endif # BUILDING_VENDOR_IMAGE
+endif # BOARD_SUPER_PARTITION_PARTITION_LIST
+
+else # PRODUCT_RETROFIT_DYNAMIC_PARTITIONS
+
 # For normal devices, we populate BOARD_SUPER_PARTITION_BLOCK_DEVICES so the
 # build can handle both cases consistently.
 ifeq ($(BOARD_SUPER_PARTITION_METADATA_DEVICE),)
@@ -1055,12 +1103,16 @@ endif
 ifneq ($(BOARD_SUPER_PARTITION_METADATA_DEVICE),super)
 INTERNAL_KERNEL_CMDLINE += androidboot.super_partition=$(BOARD_SUPER_PARTITION_METADATA_DEVICE)
 endif
+BOARD_BUILD_RETROFIT_DYNAMIC_PARTITIONS_OTA_PACKAGE :=
 
+endif # PRODUCT_RETROFIT_DYNAMIC_PARTITIONS
 endif # BOARD_SUPER_PARTITION_SIZE
 BOARD_SUPER_PARTITION_BLOCK_DEVICES ?=
 .KATI_READONLY := BOARD_SUPER_PARTITION_BLOCK_DEVICES
 BOARD_SUPER_PARTITION_METADATA_DEVICE ?=
 .KATI_READONLY := BOARD_SUPER_PARTITION_METADATA_DEVICE
+BOARD_BUILD_RETROFIT_DYNAMIC_PARTITIONS_OTA_PACKAGE ?=
+.KATI_READONLY := BOARD_BUILD_RETROFIT_DYNAMIC_PARTITIONS_OTA_PACKAGE
 
 $(foreach device,$(call to-upper,$(BOARD_SUPER_PARTITION_BLOCK_DEVICES)), \
     $(eval BOARD_SUPER_PARTITION_$(device)_DEVICE_SIZE := $(strip $(BOARD_SUPER_PARTITION_$(device)_DEVICE_SIZE))) \
