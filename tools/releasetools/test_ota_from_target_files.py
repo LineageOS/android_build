@@ -184,6 +184,7 @@ class OtaFromTargetFilesTest(test_utils.ReleaseToolsTestCase):
     # Reset the global options as in ota_from_target_files.py.
     common.OPTIONS.incremental_source = None
     common.OPTIONS.downgrade = False
+    common.OPTIONS.retrofit_dynamic_partitions = False
     common.OPTIONS.timestamp = False
     common.OPTIONS.wipe_user_data = False
     common.OPTIONS.no_signing = False
@@ -338,6 +339,24 @@ class OtaFromTargetFilesTest(test_utils.ReleaseToolsTestCase):
     self.assertEqual('com.android.apex.1', info_list[0].package_name)
     self.assertEqual(1000, info_list[0].version)
     self.assertEqual(1000, info_list[0].source_version)
+
+  def test_GetPackageMetadata_retrofitDynamicPartitions(self):
+    target_info = common.BuildInfo(self.TEST_TARGET_INFO_DICT, None)
+    common.OPTIONS.retrofit_dynamic_partitions = True
+    metadata = self.GetLegacyOtaMetadata(target_info)
+    self.assertDictEqual(
+        {
+            'ota-retrofit-dynamic-partitions': 'yes',
+            'ota-type': 'BLOCK',
+            'ota-required-cache': '0',
+            'post-build': 'build-fingerprint-target',
+            'post-build-incremental': 'build-version-incremental-target',
+            'post-sdk-level': '27',
+            'post-security-patch-level': '2017-12-01',
+            'post-timestamp': '1500000000',
+            'pre-device': 'product-device',
+        },
+        metadata)
 
   @staticmethod
   def _test_GetPackageMetadata_swapBuildTimestamps(target_info, source_info):
@@ -1646,6 +1665,9 @@ class RuntimeFingerprintTest(test_utils.ReleaseToolsTestCase):
                      metadata_dict.get('ota-wipe') == 'yes')
     self.assertEqual(metadata_proto.required_cache,
                      int(metadata_dict.get('ota-required-cache', 0)))
+    self.assertEqual(metadata_proto.retrofit_dynamic_partitions,
+                     metadata_dict.get(
+                         'ota-retrofit-dynamic-partitions') == 'yes')
 
   def test_GetPackageMetadata_incremental_package(self):
     vendor_build_prop = copy.deepcopy(self.VENDOR_BUILD_PROP)
