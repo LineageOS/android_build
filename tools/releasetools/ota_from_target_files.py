@@ -64,6 +64,13 @@ Common options that apply to both of non-A/B and A/B OTAs
       Generate an OTA package that will wipe the user data partition when
       installed.
 
+  --retrofit_dynamic_partitions
+      Generates an OTA package that updates a device to support dynamic
+      partitions (default False). This flag is implied when generating
+      an incremental OTA where the base build does not support dynamic
+      partitions but the target build does. For A/B, when this flag is set,
+      --skip_postinstall is implied.
+
   --skip_compatibility_check
       Skip checking compatibility of the input target files package.
 
@@ -349,6 +356,7 @@ AB_PARTITIONS = 'META/ab_partitions.txt'
 TARGET_DIFFING_UNZIP_PATTERN = ['BOOT', 'RECOVERY', 'SYSTEM/*', 'VENDOR/*',
                                 'PRODUCT/*', 'SYSTEM_EXT/*', 'ODM/*',
                                 'VENDOR_DLKM/*', 'ODM_DLKM/*', 'SYSTEM_DLKM/*']
+RETROFIT_DAP_UNZIP_PATTERN = ['OTA/super_*.img', AB_PARTITIONS]
 
 # Images to be excluded from secondary payload. We essentially only keep
 # 'system_other' and bootloader partitions.
@@ -688,6 +696,77 @@ def GetTargetFilesZipForPartialUpdates(input_file, ab_partitions):
   return input_file
 
 
+def GetTargetFilesZipForRetrofitDynamicPartitions(input_file,
+                                                  super_block_devices,
+                                                  dynamic_partition_list):
+  """Returns a target-files.zip for retrofitting dynamic partitions.
+
+  This allows brillo_update_payload to generate an OTA based on the exact
+  bits on the block devices. Postinstall is disabled.
+
+  Args:
+    input_file: The input target-files.zip filename.
+    super_block_devices: The list of super block devices
+    dynamic_partition_list: The list of dynamic partitions
+
+  Returns:
+    The filename of target-files.zip with *.img replaced with super_*.img for
+    each block device in super_block_devices.
+  """
+  assert super_block_devices, "No super_block_devices are specified."
+
+  replace = {'OTA/super_{}.img'.format(dev): 'IMAGES/{}.img'.format(dev)
+             for dev in super_block_devices}
+
+  # Remove partitions from META/ab_partitions.txt that is in
+  # dynamic_partition_list but not in super_block_devices so that
+  # brillo_update_payload won't generate update for those logical partitions.
+  ab_partitions_lines = common.ReadFromInputFile(
+      input_file, AB_PARTITIONS).split("\n")
+  ab_partitions = [line.strip() for line in ab_partitions_lines]
+  # Assert that all super_block_devices are in ab_partitions
+  super_device_not_updated = [partition for partition in super_block_devices
+                              if partition not in ab_partitions]
+  assert not super_device_not_updated, \
+      "{} is in super_block_devices but not in {}".format(
+          super_device_not_updated, AB_PARTITIONS)
+  # ab_partitions -= (dynamic_partition_list - super_block_devices)
+  to_delete = [AB_PARTITIONS]
+
+  # Always skip postinstall for a retrofit update.
+  to_delete += [POSTINSTALL_CONFIG]
+
+  # Delete dynamic_partitions_info.txt so that brillo_update_payload thinks this
+  # is a regular update on devices without dynamic partitions support.
+  to_delete += [DYNAMIC_PARTITION_INFO]
+
+  # Remove the existing partition images as well as the map files.
+  to_delete += list(replace.values())
+  to_delete += ['IMAGES/{}.map'.format(dev) for dev in super_block_devices]
+  for item in to_delete:
+    os.unlink(os.path.join(input_file, item))
+
+  # Write super_{foo}.img as {foo}.img.
+  for src, dst in replace.items():
+    assert DoesInputFileContain(input_file, src), \
+        'Missing {} in {}; {} cannot be written'.format(src, input_file, dst)
+    source_path = os.path.join(input_file, *src.split("/"))
+    target_path = os.path.join(input_file, *dst.split("/"))
+    os.rename(source_path, target_path)
+
+  # Write new ab_partitions.txt file
+  new_ab_partitions = os.path.join(input_file, AB_PARTITIONS)
+  with open(new_ab_partitions, 'w') as f:
+    for partition in ab_partitions:
+      if (partition in dynamic_partition_list and
+              partition not in super_block_devices):
+        logger.info("Dropping %s from ab_partitions.txt", partition)
+        continue
+      f.write(partition + "\n")
+
+  return input_file
+
+
 def GetTargetFilesZipForCustomImagesUpdates(input_file, custom_images: dict):
   """Returns a target-files.zip for custom partitions update.
 
@@ -930,7 +1009,11 @@ def GenerateAbOtaPackage(target_file, output_file, source_file=None):
     target_file = GetTargetFilesZipForCustomImagesUpdates(
         target_file, OPTIONS.custom_images)
 
-  if OPTIONS.partial:
+  if OPTIONS.retrofit_dynamic_partitions:
+    target_file = GetTargetFilesZipForRetrofitDynamicPartitions(
+        target_file, target_info.get("super_block_devices").strip().split(),
+        target_info.get("dynamic_partition_list").strip().split())
+  elif OPTIONS.partial:
     target_file = GetTargetFilesZipForPartialUpdates(target_file,
                                                      OPTIONS.partial)
   if vabc_compression_param != target_info.vabc_compression_param:
@@ -1147,7 +1230,7 @@ def main(argv):
     elif o == "--skip_postinstall":
       OPTIONS.skip_postinstall = True
     elif o == "--retrofit_dynamic_partitions":
-      raise ValueError("Retrofit dynamic partitions is no longer supported")
+      OPTIONS.retrofit_dynamic_partitions = True
     elif o == "--skip_compatibility_check":
       OPTIONS.skip_compatibility_check = True
     elif o == "--output_metadata_path":
@@ -1256,6 +1339,7 @@ def main(argv):
                                  "log_diff=",
                                  "extracted_input_target_files=",
                                  "skip_postinstall",
+                                 "retrofit_dynamic_partitions",
                                  "skip_compatibility_check",
                                  "output_metadata_path=",
                                  "disable_fec_computation",
@@ -1312,7 +1396,7 @@ def main(argv):
   if OPTIONS.incremental_source is None and OPTIONS.downgrade:
     raise ValueError("Cannot generate downgradable full OTAs")
 
-  # TODO(xunchang) for partial updates, maybe we should rebuild the
+  # TODO(xunchang) for retrofit and partial updates, maybe we should rebuild the
   # target-file and reload the info_dict. So the info will be consistent with
   # the modified target-file.
 
@@ -1342,12 +1426,22 @@ def main(argv):
   # Load OEM dicts if provided.
   OPTIONS.oem_dicts = _LoadOemDicts(OPTIONS.oem_source)
 
+  # Assume retrofitting dynamic partitions when base build does not set
+  # use_dynamic_partitions but target build does.
   if (OPTIONS.source_info_dict and
       OPTIONS.source_info_dict.get("use_dynamic_partitions") != "true" and
           OPTIONS.target_info_dict.get("use_dynamic_partitions") == "true"):
-    logger.error("Retrofitting dynamic partitions is no longer supported.")
-    raise common.ExternalError(
-        "Both source and target builds must have dynamic partition support")
+    if OPTIONS.target_info_dict.get("dynamic_partition_retrofit") != "true":
+      raise common.ExternalError(
+          "Expect to generate incremental OTA for retrofitting dynamic "
+          "partitions, but dynamic_partition_retrofit is not set in target "
+          "build.")
+    logger.info("Implicitly generating retrofit incremental OTA.")
+    OPTIONS.retrofit_dynamic_partitions = True
+
+  # Skip postinstall for retrofitting dynamic partitions.
+  if OPTIONS.retrofit_dynamic_partitions:
+    OPTIONS.skip_postinstall = True
 
   ab_update = OPTIONS.info_dict.get("ab_update") == "true"
   allow_non_ab = OPTIONS.info_dict.get("allow_non_ab") == "true"

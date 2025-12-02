@@ -1153,6 +1153,12 @@ def AddImagesToTargetFiles(filename):
       banner("super_empty")
       AddSuperEmpty(output_zip)
 
+  if OPTIONS.info_dict.get("build_super_partition") == "true":
+    if OPTIONS.info_dict.get(
+            "build_retrofit_dynamic_partitions_ota_package") == "true":
+      banner("super split images")
+      AddSuperSplit(output_zip)
+
   banner("radio")
   ab_partitions_txt = os.path.join(OPTIONS.input_tmp, "META",
                                    "ab_partitions.txt")
