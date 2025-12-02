@@ -4100,6 +4100,13 @@ $(INSTALLED_FILES_FILE_SYSTEMOTHER) : $(INTERNAL_SYSTEMOTHERIMAGE_FILES) $(FILES
 $(eval $(call declare-0p-target,$(INSTALLED_FILES_FILE_SYSTEMOTHER)))
 $(eval $(call declare-0p-target,$(INSTALLED_FILES_JSON_SYSTEMOTHER)))
 
+# Determines partition size for system_other.img.
+ifeq ($(PRODUCT_RETROFIT_DYNAMIC_PARTITIONS),true)
+ifneq ($(filter system,$(BOARD_SUPER_PARTITION_BLOCK_DEVICES)),)
+INTERNAL_SYSTEM_OTHER_PARTITION_SIZE := $(BOARD_SUPER_PARTITION_SYSTEM_DEVICE_SIZE)
+endif
+endif
+
 ifndef INTERNAL_SYSTEM_OTHER_PARTITION_SIZE
 INTERNAL_SYSTEM_OTHER_PARTITION_SIZE:= $(BOARD_SYSTEMIMAGE_PARTITION_SIZE)
 endif
@@ -6471,11 +6478,15 @@ endef
 define dump-dynamic-partitions-info
   $(if $(filter true,$(PRODUCT_USE_DYNAMIC_PARTITIONS)), \
     echo "use_dynamic_partitions=true" >> $(1))
+  $(if $(filter true,$(PRODUCT_RETROFIT_DYNAMIC_PARTITIONS)), \
+    echo "dynamic_partition_retrofit=true" >> $(1))
   echo "lpmake=$(notdir $(LPMAKE))" >> $(1)
   $(if $(filter true,$(PRODUCT_BUILD_SUPER_PARTITION)), $(if $(BOARD_SUPER_PARTITION_SIZE), \
     echo "build_super_partition=true" >> $(1)))
   $(if $(BUILDING_SUPER_EMPTY_IMAGE), \
     echo "build_super_empty_partition=true" >> $(1))
+  $(if $(filter true,$(BOARD_BUILD_RETROFIT_DYNAMIC_PARTITIONS_OTA_PACKAGE)), \
+    echo "build_retrofit_dynamic_partitions_ota_package=true" >> $(1))
   echo "super_metadata_device=$(BOARD_SUPER_PARTITION_METADATA_DEVICE)" >> $(1)
   $(if $(BOARD_SUPER_PARTITION_BLOCK_DEVICES), \
     echo "super_block_devices=$(BOARD_SUPER_PARTITION_BLOCK_DEVICES)" >> $(1))
@@ -7353,6 +7364,27 @@ $(call declare-container-license-deps,$(INTERNAL_OTA_PACKAGE_TARGET),$(BUILT_TAR
 .PHONY: otapackage
 otapackage: $(INTERNAL_OTA_PACKAGE_TARGET)
 
+ifeq ($(BOARD_BUILD_RETROFIT_DYNAMIC_PARTITIONS_OTA_PACKAGE),true)
+name := $(product_name)-ota-retrofit
+
+INTERNAL_OTA_RETROFIT_DYNAMIC_PARTITIONS_PACKAGE_TARGET := $(PRODUCT_OUT)/$(name).zip
+$(INTERNAL_OTA_RETROFIT_DYNAMIC_PARTITIONS_PACKAGE_TARGET): KEY_CERT_PAIR := $(DEFAULT_KEY_CERT_PAIR)
+$(INTERNAL_OTA_RETROFIT_DYNAMIC_PARTITIONS_PACKAGE_TARGET): \
+    $(BUILT_TARGET_FILES_PACKAGE) \
+    $(OTA_FROM_TARGET_FILES) \
+    $(INTERNAL_OTATOOLS_FILES)
+	@echo "Package OTA (retrofit dynamic partitions): $@"
+	$(call build-ota-package-target,$@,-k $(KEY_CERT_PAIR) --retrofit_dynamic_partitions)
+
+$(call declare-1p-container,$(INTERNAL_OTA_RETROFIT_DYNAMIC_PARTITIONS_PACKAGE_TARGET),)
+$(call declare-container-license-deps,$(INTERNAL_OTA_RETROFIT_DYNAMIC_PARTITIONS_PACKAGE_TARGET),$(BUILT_TARGET_FILES_PACKAGE) $(OTA_FROM_TARGET_FILES) $(INTERNAL_OTATOOLS_FILES),$(PRODUCT_OUT)/:/)
+
+.PHONY: otardppackage
+
+otapackage otardppackage: $(INTERNAL_OTA_RETROFIT_DYNAMIC_PARTITIONS_PACKAGE_TARGET)
+
+endif # BOARD_BUILD_RETROFIT_DYNAMIC_PARTITIONS_OTA_PACKAGE
+
 ifneq ($(BOARD_PARTIAL_OTA_UPDATE_PARTITIONS_LIST),)
 name := $(product_name)-partial-ota
 
@@ -7663,6 +7695,8 @@ ifeq (true,$(PRODUCT_BUILD_SUPER_PARTITION))
 # BOARD_SUPER_PARTITION_SIZE must be defined to build super image.
 ifneq ($(BOARD_SUPER_PARTITION_SIZE),)
 
+ifneq (true,$(PRODUCT_RETROFIT_DYNAMIC_PARTITIONS))
+
 # For real devices and for dist builds, build super image from target files to an intermediate directory.
 INTERNAL_SUPERIMAGE_DIST_TARGET := $(call intermediates-dir-for,PACKAGING,super.img)/super.img
 $(INTERNAL_SUPERIMAGE_DIST_TARGET): extracted_input_target_files := $(patsubst %.zip,%,$(BUILT_TARGET_FILES_PACKAGE))
@@ -7680,6 +7714,7 @@ endif
 .PHONY: superimage_dist
 superimage_dist: $(INTERNAL_SUPERIMAGE_DIST_TARGET)
 
+endif # PRODUCT_RETROFIT_DYNAMIC_PARTITIONS != "true"
 endif # BOARD_SUPER_PARTITION_SIZE != ""
 endif # PRODUCT_BUILD_SUPER_PARTITION == "true"
 
@@ -7688,6 +7723,7 @@ endif # PRODUCT_BUILD_SUPER_PARTITION == "true"
 
 ifeq (true,$(PRODUCT_BUILD_SUPER_PARTITION))
 ifneq ($(BOARD_SUPER_PARTITION_SIZE),)
+ifneq (true,$(PRODUCT_RETROFIT_DYNAMIC_PARTITIONS))
 
 # Build super.img by using $(INSTALLED_*IMAGE_TARGET) to $(1)
 # $(1): built image path
@@ -7744,6 +7780,7 @@ superimage-nodeps supernod: | $(LPMAKE) $(BUILD_SUPER_IMAGE)
 	$(call build-superimage-target,$(INSTALLED_SUPERIMAGE_TARGET),\
 	  $(call intermediates-dir-for,PACKAGING,superimage-nodeps)/misc_info.txt)
 
+endif # PRODUCT_RETROFIT_DYNAMIC_PARTITIONS != "true"
 endif # BOARD_SUPER_PARTITION_SIZE != ""
 endif # PRODUCT_BUILD_SUPER_PARTITION == "true"
 
