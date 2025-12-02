@@ -77,6 +77,7 @@ def BuildSuperImageFromDict(info_dict, output, force_non_sparse=False):
 
   ab_update = info_dict.get("ab_update") == "true"
   virtual_ab = info_dict.get("virtual_ab") == "true"
+  virtual_ab_retrofit = info_dict.get("virtual_ab_retrofit") == "true"
   retrofit = info_dict.get("dynamic_partition_retrofit") == "true"
   block_devices = shlex.split(info_dict.get("super_block_devices", "").strip())
   groups = shlex.split(info_dict.get("super_partition_groups", "").strip())
@@ -90,7 +91,7 @@ def BuildSuperImageFromDict(info_dict, output, force_non_sparse=False):
 
   if ab_update and retrofit:
     cmd.append("--auto-slot-suffixing")
-  if virtual_ab:
+  if virtual_ab and not virtual_ab_retrofit:
     cmd.append("--virtual-ab")
 
   for device in block_devices:
