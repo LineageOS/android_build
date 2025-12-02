@@ -1353,7 +1353,8 @@ def MergeDynamicPartitionInfoDicts(framework_dict, vendor_dict):
   else:
     merged_dict["vabc_cow_version"] = min(vendor_dict["vabc_cow_version"], framework_dict["vabc_cow_version"])
   # Various other flags should be copied from the vendor dict, if defined.
-  for key in ("virtual_ab", "lpmake", "super_metadata_device", "super_partition_error_limit",
+  for key in ("virtual_ab", "virtual_ab_retrofit", "lpmake",
+              "super_metadata_device", "super_partition_error_limit",
               "super_partition_size"):
     if key in vendor_dict.keys():
       merged_dict[key] = vendor_dict[key]

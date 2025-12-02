@@ -483,7 +483,7 @@ def GetTargetFilesZipForSecondaryImages(input_file, skip_postinstall=False):
       content = f.read()
     # Remove virtual_ab flag from secondary payload so that OTA client
     # don't use snapshots for secondary update
-    delete_keys = ['virtual_ab']
+    delete_keys = ['virtual_ab', "virtual_ab_retrofit"]
     return UpdatesInfoForSpecialUpdates(
         content, lambda p: p not in SECONDARY_PAYLOAD_SKIPPED_IMAGES,
         delete_keys)

@@ -6414,6 +6414,8 @@ define dump-dynamic-partitions-info
 # e.g. "none", "gz", "brotli"
   $(if $(PRODUCT_VIRTUAL_AB_COMPRESSION_METHOD), \
     echo "virtual_ab_compression_method=$(PRODUCT_VIRTUAL_AB_COMPRESSION_METHOD)" >> $(1))
+  $(if $(filter true,$(PRODUCT_VIRTUAL_AB_OTA_RETROFIT)), \
+    echo "virtual_ab_retrofit=true" >> $(1))
   $(if $(PRODUCT_VIRTUAL_AB_COW_VERSION), \
     echo "virtual_ab_cow_version=$(PRODUCT_VIRTUAL_AB_COW_VERSION)" >> $(1))
   $(if $(PRODUCT_VIRTUAL_AB_COMPRESSION_FACTOR), \

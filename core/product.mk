@@ -374,6 +374,9 @@ _product_single_value_vars += PRODUCT_VIRTUAL_AB_OTA
 # If set, device uses virtual A/B Compression.
 _product_single_value_vars += PRODUCT_VIRTUAL_AB_COMPRESSION
 
+# If set, device retrofits virtual A/B.
+_product_single_value_vars += PRODUCT_VIRTUAL_AB_OTA_RETROFIT
+
 # If set, forcefully generate a non-A/B update package.
 # Note: A device configuration should inherit from virtual_ab_ota_plus_non_ab.mk
 # instead of setting this variable directly.
