@@ -39,6 +39,7 @@ OPTIONS.wipe_user_data = False
 OPTIONS.downgrade = False
 OPTIONS.key_passwords = {}
 OPTIONS.incremental_source = None
+OPTIONS.retrofit_dynamic_partitions = False
 OPTIONS.output_metadata_path = None
 OPTIONS.boot_variable_file = None
 
@@ -299,6 +300,9 @@ def GetPackageMetadata(target_info, source_info=None):
   if OPTIONS.wipe_user_data:
     metadata_proto.wipe = True
 
+  if OPTIONS.retrofit_dynamic_partitions:
+    metadata_proto.retrofit_dynamic_partitions = True
+
   is_incremental = source_info is not None
   if is_incremental:
     UpdateDeviceState(metadata_proto.precondition, source_info,
@@ -332,6 +336,8 @@ def BuildLegacyOtaMetadata(metadata_proto):
     metadata_dict['ota-type'] = 'BLOCK'
   if metadata_proto.wipe:
     metadata_dict['ota-wipe'] = 'yes'
+  if metadata_proto.retrofit_dynamic_partitions:
+    metadata_dict['ota-retrofit-dynamic-partitions'] = 'yes'
   if metadata_proto.downgrade:
     metadata_dict['ota-downgrade'] = 'yes'
 

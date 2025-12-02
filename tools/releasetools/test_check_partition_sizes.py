@@ -54,6 +54,16 @@ class CheckPartitionSizesTest(test_utils.ReleaseToolsTestCase):
     with self.assertRaises(RuntimeError):
       CheckPartitionSizes(self.info_dict)
 
+  def test_retrofit_dap(self):
+    self.info_dict.update(common.LoadDictionaryFromLines("""
+        dynamic_partition_retrofit=true
+        super_block_devices=system vendor
+        super_system_device_size=75
+        super_vendor_device_size=25
+        super_partition_size=100
+        """.split("\n")))
+    CheckPartitionSizes(self.info_dict)
+
   def test_ab_partition_too_big(self):
     self.info_dict.update(common.LoadDictionaryFromLines("""
         system_image_size=100
@@ -71,6 +81,17 @@ class CheckPartitionSizesTest(test_utils.ReleaseToolsTestCase):
   def test_no_image(self):
     del self.info_dict["system_image_size"]
     with self.assertRaises(KeyError):
+      CheckPartitionSizes(self.info_dict)
+
+  def test_block_devices_not_match(self):
+    self.info_dict.update(common.LoadDictionaryFromLines("""
+        dynamic_partition_retrofit=true
+        super_block_devices=system vendor
+        super_system_device_size=80
+        super_vendor_device_size=25
+        super_partition_size=100
+        """.split("\n")))
+    with self.assertRaises(RuntimeError):
       CheckPartitionSizes(self.info_dict)
 
   def test_vab(self):

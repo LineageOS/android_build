@@ -66,6 +66,7 @@ OPTIONS.put_super = None
 OPTIONS.put_bootloader = None
 OPTIONS.dynamic_partition_list = None
 OPTIONS.super_device_list = None
+OPTIONS.retrofit_dap = None
 OPTIONS.build_super = None
 OPTIONS.sparse_userimages = None
 OPTIONS.use_fastboot_info = True
@@ -87,6 +88,7 @@ def LoadOptions(input_file):
                                             '').strip().split()
   OPTIONS.super_device_list = info.get('super_block_devices',
                                        '').strip().split()
+  OPTIONS.retrofit_dap = info.get('dynamic_partition_retrofit') == 'true'
   OPTIONS.build_super = info.get('build_super_partition') == 'true'
   OPTIONS.sparse_userimages = bool(info.get('extfs_sparse_flag'))
 
@@ -125,7 +127,7 @@ def EntriesForUserImages(input_file):
   dynamic_images = [p + '.img' for p in OPTIONS.dynamic_partition_list]
 
   # Filter out system_other for launch DAP devices because it is in super image.
-  if 'system' in OPTIONS.dynamic_partition_list:
+  if not OPTIONS.retrofit_dap and 'system' in OPTIONS.dynamic_partition_list:
     dynamic_images.append('system_other.img')
 
   entries = [
@@ -167,6 +169,24 @@ def EntriesForUserImages(input_file):
     image = os.path.basename(entry)
     if entry is not None:
       entries.append('{}:{}'.format(entry, image))
+  return entries
+
+
+def EntriesForSplitSuperImages(input_file):
+  """Returns the entries for split super images.
+
+  This is only done for retrofit dynamic partition devices.
+
+  Args:
+    input_file: Path to the input target_files zip file.
+  """
+  with zipfile.ZipFile(input_file) as input_zip:
+    namelist = input_zip.namelist()
+  entries = []
+  for device in OPTIONS.super_device_list:
+    image = 'OTA/super_{}.img'.format(device)
+    assert image in namelist, 'Failed to find {}'.format(image)
+    entries.append('{}:{}'.format(image, os.path.basename(image)))
   return entries
 
 
@@ -218,9 +238,14 @@ def ImgFromTargetFiles(input_file, output_file):
   # Entries to be copied into the output file.
   entries = EntriesForUserImages(input_file)
 
+  # Only for devices that retrofit dynamic partitions there're split super
+  # images available in the target_files.zip.
   rebuild_super = False
   if OPTIONS.build_super and OPTIONS.put_super:
-    rebuild_super = True
+    if OPTIONS.retrofit_dap:
+      entries += EntriesForSplitSuperImages(input_file)
+    else:
+      rebuild_super = True
 
   # Any additional entries provided by caller.
   entries += OPTIONS.additional_entries
