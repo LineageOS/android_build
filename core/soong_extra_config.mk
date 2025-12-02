@@ -64,6 +64,10 @@ ifdef PRODUCT_USE_DYNAMIC_PARTITIONS
 $(call add_json_bool, UseDynamicPartitions, $(filter true,$(PRODUCT_USE_DYNAMIC_PARTITIONS)))
 endif
 
+ifdef PRODUCT_RETROFIT_DYNAMIC_PARTITIONS
+$(call add_json_bool, RetrofitDynamicPartitions, $(filter true,$(PRODUCT_RETROFIT_DYNAMIC_PARTITIONS)))
+endif
+
 $(call add_json_bool, DontUseVabcOta, $(filter true,$(BOARD_DONT_USE_VABC_OTA)))
 
 $(call add_json_bool, NoBionicPageSizeMacro, $(filter true,$(PRODUCT_NO_BIONIC_PAGE_SIZE_MACRO)))
