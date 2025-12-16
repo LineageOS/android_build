@@ -1146,6 +1146,8 @@ def main(argv):
       OPTIONS.extracted_input = a
     elif o == "--skip_postinstall":
       OPTIONS.skip_postinstall = True
+    elif o == "--retrofit_dynamic_partitions":
+      raise ValueError("Retrofit dynamic partitions is no longer supported")
     elif o == "--skip_compatibility_check":
       OPTIONS.skip_compatibility_check = True
     elif o == "--output_metadata_path":
