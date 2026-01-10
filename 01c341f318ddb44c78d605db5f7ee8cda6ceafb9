@@ -16,6 +16,24 @@
       "message": "In android-16.0.0_r3 and r4, lpmake has been modified to fail the build \nwhen the `--auto-slot-suffixing` flag is passed.\n\nSee \nhttps://android.googlesource.com/platform/system/extras/+/7e8973118080d5452ca22a5452880f1b03a457d1%5E%21/\n\nYou would need to revert that commit, which would mean tracking your own\n fork of android_system_extras again for lineage-23.1/23.2, in order to \ncorrectly handle ab_update and retrofit being true.\n\nTested with local revert, and compile once again completes with \nflashable super_empty.img against lineage-23.1 build tree (using \njabashque\u0027s patches for retrofitting dynamic partitions on \nenchilada/fajita).",
       "revId": "01c341f318ddb44c78d605db5f7ee8cda6ceafb9",
       "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5c9924ce_4b64a529",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 16185
+      },
+      "writtenOn": "2026-01-10T06:13:21Z",
+      "side": 1,
+      "message": "See update https://review.lineageos.org/q/topic:%2216-qpr1-restore-retrofit%22 and https://review.lineageos.org/q/topic:%2216-qpr2-restore-retrofit%22\n\nthanks!",
+      "parentUuid": "0a0b1b4b_3492a8bb",
+      "revId": "01c341f318ddb44c78d605db5f7ee8cda6ceafb9",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
     }
   ],
   "submitRequirementResults": []
