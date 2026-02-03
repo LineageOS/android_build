@@ -71,10 +71,13 @@ ifneq ($(filter-out false,$(USE_RBE)),)
   RBE_WRAPPER := $(rbe_dir)/rewrapper
   RBE_CXX := --labels=type=compile,lang=cpp,compiler=clang --env_var_allowlist=PWD --exec_strategy=$(cxx_rbe_exec_strategy) --platform=$(cxx_platform) --compare=$(cxx_compare)
 
-  # Append rewrapper to existing *_WRAPPER variables so it's possible to
-  # use both ccache and rewrapper.
-  CC_WRAPPER := $(strip $(CC_WRAPPER) $(RBE_WRAPPER) $(RBE_CXX))
-  CXX_WRAPPER := $(strip $(CXX_WRAPPER) $(RBE_WRAPPER) $(RBE_CXX))
+  # When both USE_RBE and USE_CCACHE are enabled, use ccache for C/C++ instead of RBE.
+  ifeq ($(filter-out false,$(USE_CCACHE)),)
+    CC_WRAPPER := $(strip $(CC_WRAPPER) $(RBE_WRAPPER) $(RBE_CXX))
+    CXX_WRAPPER := $(strip $(CXX_WRAPPER) $(RBE_WRAPPER) $(RBE_CXX))
+  else
+    $(warning RBE: USE_CCACHE is enabled; prioritizing ccache for C/C++ to ensure cache hits.)
+  endif
 
   ifdef RBE_JAVAC
     JAVAC_WRAPPER := $(strip $(JAVAC_WRAPPER) $(RBE_WRAPPER) --labels=type=compile,lang=java,compiler=javac --exec_strategy=$(javac_exec_strategy) --platform=$(java_r8_d8_platform))
