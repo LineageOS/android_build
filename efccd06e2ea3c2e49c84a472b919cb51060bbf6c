@@ -33,6 +33,24 @@
       "message": "I don\u0027t think we are going to fix something that upstream broke:\nhttps://review.lineageos.org/c/LineageOS/android_build/+/456613",
       "revId": "efccd06e2ea3c2e49c84a472b919cb51060bbf6c",
       "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fce22470_650be214",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 35565
+      },
+      "writtenOn": "2026-02-23T14:13:19Z",
+      "side": 1,
+      "message": "I didn’t notice about it.\nThank you",
+      "parentUuid": "ca884da7_f304e7cf",
+      "revId": "efccd06e2ea3c2e49c84a472b919cb51060bbf6c",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
     }
   ]
 }
