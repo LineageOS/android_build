@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cbacea0e_0be30c88",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 35565
+      },
+      "writtenOn": "2026-02-23T11:58:31Z",
+      "side": 1,
+      "message": "Sorry for the mention. Could you please review this commit?\nI think invalid date errors will occur in many environments when Ubuntu 26.04 is released.",
+      "revId": "efccd06e2ea3c2e49c84a472b919cb51060bbf6c",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
+    }
+  ]
+}
