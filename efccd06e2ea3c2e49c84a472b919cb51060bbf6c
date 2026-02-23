@@ -16,6 +16,23 @@
       "message": "Sorry for the mention. Could you please review this commit?\nI think invalid date errors will occur in many environments when Ubuntu 26.04 is released.",
       "revId": "efccd06e2ea3c2e49c84a472b919cb51060bbf6c",
       "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ca884da7_f304e7cf",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 4550
+      },
+      "writtenOn": "2026-02-23T14:10:39Z",
+      "side": 1,
+      "message": "I don\u0027t think we are going to fix something that upstream broke:\nhttps://review.lineageos.org/c/LineageOS/android_build/+/456613",
+      "revId": "efccd06e2ea3c2e49c84a472b919cb51060bbf6c",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
     }
   ]
 }
