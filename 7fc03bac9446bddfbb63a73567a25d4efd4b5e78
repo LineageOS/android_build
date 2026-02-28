@@ -51,6 +51,23 @@
       "parentUuid": "20944af4_6d77e32c",
       "revId": "7fc03bac9446bddfbb63a73567a25d4efd4b5e78",
       "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ba88f6ed_9094a70e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 17656
+      },
+      "writtenOn": "2026-02-28T18:55:09Z",
+      "side": 1,
+      "message": "The policy is NOT to uplift the version string, after Google has stopped\n to provide official ASB patches for the affected Android version. I \nrecommend to abandon this patch.",
+      "revId": "7fc03bac9446bddfbb63a73567a25d4efd4b5e78",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
     }
   ]
 }
