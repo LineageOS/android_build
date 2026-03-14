@@ -4060,7 +4060,7 @@ class DynamicPartitionsDifference(object):
     ZipWrite(output_zip, op_list_path, "dynamic_partitions_op_list")
 
     script.Comment('Update dynamic partition metadata')
-    if self._have_super_empty:
+    if self._have_super_empty and "unsparse_super_empty.img" in output_zip.namelist():
       script.AppendExtra('assert(update_dynamic_partitions('
                         'package_extract_file("dynamic_partitions_op_list"), '
                         'package_extract_file("unsparse_super_empty.img")));')
