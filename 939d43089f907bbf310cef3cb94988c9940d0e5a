@@ -34,6 +34,23 @@
       "parentUuid": "d677fde3_a11ede9d",
       "revId": "939d43089f907bbf310cef3cb94988c9940d0e5a",
       "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "91695570_be83d4d2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 16185
+      },
+      "writtenOn": "2026-03-24T20:56:46Z",
+      "side": 1,
+      "message": "just guard the set in AOSP repo w/ ifndef LINEAGE_BUILD pls",
+      "revId": "939d43089f907bbf310cef3cb94988c9940d0e5a",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
     }
   ]
 }
