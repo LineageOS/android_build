@@ -81,11 +81,7 @@ endif
 BOARD_BLUETOOTH_BDROID_BUILDCFG_INCLUDE_DIR :=
 
 # GSI specific System Properties
-ifneq (,$(filter userdebug eng,$(TARGET_BUILD_VARIANT)))
 TARGET_SYSTEM_EXT_PROP := build/make/target/board/gsi_system_ext.prop
-else
-TARGET_SYSTEM_EXT_PROP := build/make/target/board/gsi_system_ext_user.prop
-endif
 
 # Set this to create /cache mount point for non-A/B devices that mounts /cache.
 # The partition size doesn't matter, just to make build pass.
