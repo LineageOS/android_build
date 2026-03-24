@@ -81,7 +81,7 @@ endif
 BOARD_BLUETOOTH_BDROID_BUILDCFG_INCLUDE_DIR :=
 
 # GSI specific System Properties
-ifneq (,$(filter userdebug eng,$(TARGET_BUILD_VARIANT)))
+ifneq (,$(filter eng,$(TARGET_BUILD_VARIANT)))
 TARGET_SYSTEM_EXT_PROP := build/make/target/board/gsi_system_ext.prop
 else
 TARGET_SYSTEM_EXT_PROP := build/make/target/board/gsi_system_ext_user.prop
