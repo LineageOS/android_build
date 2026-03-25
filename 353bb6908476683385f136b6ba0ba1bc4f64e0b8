@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3eb5ae59_42a50d57",
+        "filename": "target/board/gsi_system_ext_user.prop",
+        "patchSetId": 2
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 36600
+      },
+      "writtenOn": "2026-03-25T17:02:34Z",
+      "side": 0,
+      "message": "I deleted this file since it\u0027s unused, but please let me know if keeping it in the source tree would be better.",
+      "revId": "353bb6908476683385f136b6ba0ba1bc4f64e0b8",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
+    }
+  ]
+}
