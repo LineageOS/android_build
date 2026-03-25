@@ -87,6 +87,24 @@
       "parentUuid": "84e87b02_a7848f15",
       "revId": "939d43089f907bbf310cef3cb94988c9940d0e5a",
       "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "be0935e1_5ec59630",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 36600
+      },
+      "writtenOn": "2026-03-25T04:45:31Z",
+      "side": 1,
+      "message": "Few more options:\n- Set BUILD_BROKEN_DUP_SYSPROP to true : More of a hack tbh\n- Switch to vendor/product in common.mk : Should work since the prio for sys props is system \u003c system_ext \u003c vendor \u003c odm \u003c oem \u003c product.",
+      "parentUuid": "1c07ce3a_d59fe31d",
+      "revId": "939d43089f907bbf310cef3cb94988c9940d0e5a",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
     }
   ]
 }
