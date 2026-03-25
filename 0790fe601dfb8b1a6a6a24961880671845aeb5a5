@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e2295979_838c3d72",
+        "filename": "target/board/BoardConfigGsiCommon.mk",
+        "patchSetId": 2
+      },
+      "lineNbr": 83,
+      "author": {
+        "id": 11883
+      },
+      "writtenOn": "2026-03-25T17:05:21Z",
+      "side": 1,
+      "message": "No need to comment why in the makefile, that\u0027s what the commit message is.\nDrop it",
+      "revId": "0790fe601dfb8b1a6a6a24961880671845aeb5a5",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
+    }
+  ]
+}
