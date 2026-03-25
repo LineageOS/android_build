@@ -69,6 +69,24 @@
       "parentUuid": "91695570_be83d4d2",
       "revId": "939d43089f907bbf310cef3cb94988c9940d0e5a",
       "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1c07ce3a_d59fe31d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 36600
+      },
+      "writtenOn": "2026-03-25T04:21:36Z",
+      "side": 1,
+      "message": "By sdk I mean emulator (avd/cvd) builds.",
+      "parentUuid": "84e87b02_a7848f15",
+      "revId": "939d43089f907bbf310cef3cb94988c9940d0e5a",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
     }
   ]
 }
