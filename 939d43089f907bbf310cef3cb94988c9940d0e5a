@@ -51,6 +51,24 @@
       "message": "just guard the set in AOSP repo w/ ifndef LINEAGE_BUILD pls",
       "revId": "939d43089f907bbf310cef3cb94988c9940d0e5a",
       "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "84e87b02_a7848f15",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 36600
+      },
+      "writtenOn": "2026-03-25T04:16:28Z",
+      "side": 1,
+      "message": "There\u0027s another challenge here btw. There\u0027s some code in the Car repos that throw exceptions if we\u0027re in an eng/userdebug build with ro.debuggable set to false.\n One example is packages/apps/Car/SystemUI/src/com/android/systemui/car/hvac/HvacController.java:l407. It\u0027s just a simple logging branch in this case that throws because CarPropertyValue.isPropertyIdSimulationPropId() can\u0027t handle non-debuggable builds.\n\nRemoving the conflicting ro.adb.secure assignment fixes sdk_phone, but sdk_car still requires either patching some debug-only branches or making an exception for unsecured adb in sdk builds.\n\nI\u0027ll keep patches for both approaches ready but please let me know your opinion on these.",
+      "parentUuid": "91695570_be83d4d2",
+      "revId": "939d43089f907bbf310cef3cb94988c9940d0e5a",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
     }
   ]
 }
