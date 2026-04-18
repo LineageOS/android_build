@@ -16,6 +16,23 @@
       "message": "V+1 pls.",
       "revId": "5d8219679631bea1df4037e0ea5faa9341f13cce",
       "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c0bfd628_2a10ab8f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 16185
+      },
+      "writtenOn": "2026-04-18T05:48:38Z",
+      "side": 1,
+      "message": "/shrug",
+      "revId": "5d8219679631bea1df4037e0ea5faa9341f13cce",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
     }
   ]
 }
