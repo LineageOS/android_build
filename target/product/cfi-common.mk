@@ -41,3 +41,11 @@ PRODUCT_CFI_INCLUDE_PATHS :=  \
     system/keymaster \
     system/nfc \
     system/security \
+
+PRODUCT_CFI_INCLUDE_PATHS += \
+    frameworks/base \
+    system/core \
+    system/netd \
+    packages/modules \
+    external/libcxx \
+    external/libcxxabi
