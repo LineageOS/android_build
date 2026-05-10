@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a7790510_09769ce8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 29415
+      },
+      "writtenOn": "2026-05-10T23:53:29Z",
+      "side": 1,
+      "message": "Please don\u0027t touch commit message to inject weird characters.",
+      "revId": "dcbf79970a96d658f5103b524536bbc6ceba8862",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
+    }
+  ]
+}
