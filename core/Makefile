@@ -2354,7 +2354,7 @@ $(if $(BOARD_AVB_ENABLE), \
     $(if $(BOARD_AVB_SYSTEM_DLKM_KEY_PATH),\
       $(hide) echo "avb_system_dlkm_key_path=$(BOARD_AVB_SYSTEM_DLKM_KEY_PATH)" >> $(1)$(newline) \
       $(hide) echo "avb_system_dlkm_algorithm=$(BOARD_AVB_SYSTEM_DLKM_ALGORITHM)" >> $(1)$(newline) \
-      $(hide) echo "avb_system_dlkm_rollback_index_location=$(BOARD_SYSTEM_SYSTEM_DLKM_ROLLBACK_INDEX_LOCATION)" >> $(1)$(newline))) \
+      $(hide) echo "avb_system_dlkm_rollback_index_location=$(BOARD_AVB_SYSTEM_DLKM_ROLLBACK_INDEX_LOCATION)" >> $(1)$(newline))) \
 )
 $(if $(filter true,$(BOARD_USES_RECOVERY_AS_BOOT)),\
     $(hide) echo "recovery_as_boot=true" >> $(1))
