@@ -62,6 +62,9 @@ ifdef TARGET_RECOVERY_UI_LIB
   $(call soong_config_set_string_list, recovery, target_recovery_ui_lib, $(TARGET_RECOVERY_UI_LIB))
 endif
 
+# For hardware/lineage/compat
+$(call soong_config_set,ANDROID,target_max_page_size_supported,$(TARGET_MAX_PAGE_SIZE_SUPPORTED))
+
 # For Sanitizers
 $(call soong_config_set_bool,ANDROID,ASAN_ENABLED,$(if $(filter address,$(SANITIZE_TARGET)),true,false))
 $(call soong_config_set_bool,ANDROID,HWASAN_ENABLED,$(if $(filter hwaddress,$(SANITIZE_TARGET)),true,false))
