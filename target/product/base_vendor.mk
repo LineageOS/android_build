@@ -76,7 +76,6 @@ PRODUCT_PACKAGES += \
     selinux_policy_odm \
     shell_and_utilities_vendor \
     odm-build.prop \
-    vendor_tracing_descriptors \
 
 # libhealthloop BPF filter. This is in base_vendor.mk because libhealthloop must
 # be a static library and because the Android build system ignores 'required'
