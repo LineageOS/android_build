@@ -244,10 +244,6 @@ function _wrap_build()
       echo "${color_info}Partial compilation was disabled due to SOONG_USE_PARTIAL_COMPILE=false"
       echo "See http://go/soong-partial-compile"
     fi
-    if [[ ${SOONG_INCREMENTAL_ANALYSIS#true} = ${SOONG_INCREMENTAL_ANALYSIS} ]]; then
-      echo "${color_info}Try enabling incremental analysis for faster builds after changing Android.bp files."
-      echo "See http://go/soong-incremental-analysis"
-    fi
     echo -n "${color_reset}"
 
     echo
