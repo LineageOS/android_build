@@ -16,6 +16,24 @@
       "message": "probably okay to drop?\neverything we will support has it?\nI think?",
       "revId": "d12f2af46262f03c4ef29961617693bda167b4e8",
       "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "971c717e_0357aed5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 16185
+      },
+      "writtenOn": "2026-06-24T04:04:41Z",
+      "side": 1,
+      "message": "opening",
+      "parentUuid": "d615e6b3_64d60430",
+      "revId": "d12f2af46262f03c4ef29961617693bda167b4e8",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
     }
   ]
 }
