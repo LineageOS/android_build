@@ -16,6 +16,23 @@
       "message": "move to floral/sunfish/redbull and drop here",
       "revId": "c909221627b046c18332c6548425c6a9f54f630e",
       "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d7a9fd61_78f6fd97",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 16185
+      },
+      "writtenOn": "2026-06-26T04:35:26Z",
+      "side": 1,
+      "message": "https://review.lineageos.org/c/LineageOS/android_device_google_coral/+/492177 \u0026 https://review.lineageos.org/c/LineageOS/android_device_google_coral/+/492177",
+      "revId": "c909221627b046c18332c6548425c6a9f54f630e",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
     }
   ]
 }
