@@ -176,6 +176,10 @@ ifneq (,$(findstring x86_64,$(UNAME)))
   HOST_ARCH := x86_64
   HOST_2ND_ARCH := x86
   HOST_IS_64_BIT := true
+else ifneq (,$(findstring aarch64,$(UNAME)))
+  HOST_ARCH := arm64
+  HOST_2ND_ARCH :=
+  HOST_IS_64_BIT := true
 else
 ifneq (,$(findstring i686,$(UNAME))$(findstring x86,$(UNAME)))
 $(error Building on a 32-bit x86 host is not supported: $(UNAME)!)
@@ -245,7 +249,7 @@ endif
 endif
 
 # We don't want to move all the prebuilt host tools to a $(HOST_OS)-x86_64 dir.
-HOST_PREBUILT_ARCH := x86
+HOST_PREBUILT_ARCH := $(if $(filter aarch64,$(shell uname -m)),arm64,x86)
 # This is the standard way to name a directory containing prebuilt host
 # objects. E.g., prebuilt/$(HOST_PREBUILT_TAG)/cc
 # This must match the logic in get_host_prebuilt_prefix in envsetup.sh
