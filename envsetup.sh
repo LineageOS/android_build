@@ -137,8 +137,13 @@ function _get_build_var_cached()
 function get_host_prebuilt_prefix
 {
   local un=$(uname)
+  local arch=$(uname -m)
   if [[ $un == "Linux" ]] ; then
-    echo linux-x86
+    if [[ $arch == "aarch64" ]] ; then
+      echo linux-arm64
+    else
+      echo linux-x86
+   fi
   elif [[ $un == "Darwin" ]] ; then
     echo darwin-x86
   else
