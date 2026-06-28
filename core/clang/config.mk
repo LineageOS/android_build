@@ -1,6 +1,6 @@
 ## Clang configurations.
 
-LLVM_READOBJ := $(LLVM_PREBUILTS_BASE)/$(BUILD_OS)-x86/$(LLVM_PREBUILTS_VERSION)/bin/llvm-readobj
+LLVM_READOBJ := $(LLVM_PREBUILTS_BASE)/$(HOST_PREBUILT_TAG)/$(LLVM_PREBUILTS_VERSION)/bin/llvm-readobj
 
 LLVM_RTLIB_PATH := $(wildcard $(LLVM_PREBUILTS_BASE)/linux-x86/$(LLVM_PREBUILTS_VERSION)/lib/clang/*)/lib/linux/
 
