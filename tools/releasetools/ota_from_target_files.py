@@ -1553,7 +1553,7 @@ def main(argv):
                        " detected. Please only pass in this flag if you want a"
                        " SPL downgrade. Target SPL: {} Source SPL: {}"
                        .format(target_spl, source_spl))
-  if OPTIONS.disable_ublk:
+  if OPTIONS.disable_ublk and OPTIONS.info_dict.get("use_dynamic_partitions") == "true":
     logger.info("Disabling UBLK as requested")
     args[0] = ModifyTargetFilesDynamicPartitionInfo(
         args[0], "disable_ublk", "true")
