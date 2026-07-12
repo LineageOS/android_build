@@ -1554,9 +1554,14 @@ def main(argv):
                        " SPL downgrade. Target SPL: {} Source SPL: {}"
                        .format(target_spl, source_spl))
   if OPTIONS.disable_ublk:
-    logger.info("Disabling UBLK as requested")
-    args[0] = ModifyTargetFilesDynamicPartitionInfo(
-        args[0], "disable_ublk", "true")
+    if common.DoesInputFileContain(args[0], DYNAMIC_PARTITION_INFO):
+      logger.info("Disabling UBLK as requested")
+      args[0] = ModifyTargetFilesDynamicPartitionInfo(
+          args[0], "disable_ublk", "true")
+    else:
+      logger.info(
+          "Skipping UBLK disable flag because target files has no dynamic "
+          "partition metadata")
 
   if generate_ab:
     GenerateAbOtaPackage(
