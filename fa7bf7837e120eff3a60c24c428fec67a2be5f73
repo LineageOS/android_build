@@ -16,6 +16,23 @@
       "message": "Verified on OnePlus 6T (fajita, Legacy A/B device)",
       "revId": "fa7bf7837e120eff3a60c24c428fec67a2be5f73",
       "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "88bbf600_b2276e82",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 34519
+      },
+      "writtenOn": "2026-07-13T03:57:28Z",
+      "side": 1,
+      "message": "Attributions could be corrected as a commit for the same was done by another dev in a similar implementation\nRef: https://github.com/VoltageOS-staging/build/commit/973ab6d167da2c6645e6ad031ea9ac6065b48f0f",
+      "revId": "fa7bf7837e120eff3a60c24c428fec67a2be5f73",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
     }
   ]
 }
