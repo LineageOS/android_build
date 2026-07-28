@@ -34,6 +34,24 @@
       "parentUuid": "6507029e_5f414086",
       "revId": "adb142aca64a3235d72c50943356a42f9f429c44",
       "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "95ab365c_52caeb22",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 4550
+      },
+      "writtenOn": "2026-07-28T14:36:20Z",
+      "side": 1,
+      "message": "use_dynamic_partitions check is not equivalent to current check?",
+      "parentUuid": "21a390df_04643cc2",
+      "revId": "adb142aca64a3235d72c50943356a42f9f429c44",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
     }
   ]
 }
