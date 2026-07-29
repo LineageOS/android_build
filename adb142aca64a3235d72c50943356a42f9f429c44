@@ -70,6 +70,24 @@
       "parentUuid": "95ab365c_52caeb22",
       "revId": "adb142aca64a3235d72c50943356a42f9f429c44",
       "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8de2b8d3_a11b1821",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 33857
+      },
+      "writtenOn": "2026-07-29T07:40:39Z",
+      "side": 1,
+      "message": "Yes,\nReleasetools now auto-enables disable_ublk when ro.virtual_ab.ublk.enabled\u003dtrue is not present, and when disable_ublk is set, ota_from_target_files.py calls ModifyTargetFilesDynamicPartitionInfo(), which assumes META/dynamic_partitions_info.txt exists, which is not provided by static AB devices.",
+      "parentUuid": "01aaff77_017a55d7",
+      "revId": "adb142aca64a3235d72c50943356a42f9f429c44",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
     }
   ]
 }
