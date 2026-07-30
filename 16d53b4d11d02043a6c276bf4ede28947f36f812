@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "54b08a9d_2e0873c5",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 4550
+      },
+      "writtenOn": "2026-07-30T12:21:06Z",
+      "side": 1,
+      "message": "Reference is the same as Change-Id",
+      "revId": "16d53b4d11d02043a6c276bf4ede28947f36f812",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
+    }
+  ]
+}
