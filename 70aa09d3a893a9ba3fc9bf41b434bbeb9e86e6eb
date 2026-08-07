@@ -16,6 +16,24 @@
       "message": "I don\u0027t understand the commit msg.",
       "revId": "70aa09d3a893a9ba3fc9bf41b434bbeb9e86e6eb",
       "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a74188cd_c6735c13",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 16185
+      },
+      "writtenOn": "2026-08-07T15:33:42Z",
+      "side": 1,
+      "message": "reword makes sense, I think. this wasn\u0027t usable on A/B before, I hit that on Messi. Nice to have this.",
+      "parentUuid": "c94e44e5_6042d32e",
+      "revId": "70aa09d3a893a9ba3fc9bf41b434bbeb9e86e6eb",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
     }
   ]
 }
