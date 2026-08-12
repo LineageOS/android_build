@@ -466,6 +466,10 @@ class BuildInfo(object):
     return self._fingerprint
 
   @property
+  def is_vab(self):
+    return self.info_dict.get("virtual_ab") == "true"
+
+  @property
   def is_vabc(self):
     return self.info_dict.get("virtual_ab_compression") == "true"
 
