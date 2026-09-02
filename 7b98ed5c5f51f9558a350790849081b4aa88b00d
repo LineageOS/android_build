@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "40789b6b_9accf268",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 37901
+      },
+      "writtenOn": "2026-09-02T19:41:38Z",
+      "side": 1,
+      "message": "ro.bootimage.build.fingerprint",
+      "revId": "7b98ed5c5f51f9558a350790849081b4aa88b00d",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
+    }
+  ]
+}
