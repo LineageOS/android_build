@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "60bbc37e_1a12f1dd",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 16185
+      },
+      "writtenOn": "2026-09-10T04:55:11Z",
+      "side": 1,
+      "message": "this is correct, but not sure it\u0027s the most effective combo to enable both - but this is useful when RBE is remote, and ccache is local.",
+      "revId": "009bfc86650540503ac94219bab81329b426f3a1",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c414804d_be896f24",
+        "filename": "core/rbe.mk",
+        "patchSetId": 2
+      },
+      "lineNbr": 89,
+      "author": {
+        "id": 16185
+      },
+      "writtenOn": "2026-09-10T04:55:11Z",
+      "side": 1,
+      "message": "not sure if we want to keep this warning? bit annoying.",
+      "revId": "009bfc86650540503ac94219bab81329b426f3a1",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
+    }
+  ]
+}
