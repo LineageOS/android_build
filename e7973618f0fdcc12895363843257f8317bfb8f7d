@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "484b7691_3dfe155e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 4550
+      },
+      "writtenOn": "2026-09-11T15:22:46Z",
+      "side": 1,
+      "message": "Drop because it\u0027s only needed for the previous commit that will be dropped",
+      "revId": "e7973618f0fdcc12895363843257f8317bfb8f7d",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
+    }
+  ]
+}
