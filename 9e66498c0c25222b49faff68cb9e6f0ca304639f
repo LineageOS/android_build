@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5b5a9745_beb72f01",
+        "filename": "tools/releasetools/ota_from_target_files.py",
+        "patchSetId": 14
+      },
+      "lineNbr": 1559,
+      "author": {
+        "id": 4550
+      },
+      "writtenOn": "2026-09-11T16:10:00Z",
+      "side": 1,
+      "message": "No need to touch indentation, this is broken",
+      "range": {
+        "startLine": 1557,
+        "startChar": 0,
+        "endLine": 1559,
+        "endChar": 42
+      },
+      "revId": "9e66498c0c25222b49faff68cb9e6f0ca304639f",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
+    }
+  ]
+}
