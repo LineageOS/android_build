@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b22c746c_a0b53ab5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 4550
+      },
+      "writtenOn": "2026-09-11T15:20:56Z",
+      "side": 1,
+      "message": "Used in BoardConfigReservedSize.mk",
+      "revId": "0919e6e7a0bea08af7f1d3061c24fdbf7c41dd96",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
+    }
+  ]
+}
