@@ -33,6 +33,23 @@
       "message": "mainline and Tegra",
       "revId": "ec7a5b552ebbd5b4dd8b8afe06cecb1f5276b278",
       "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "47303928_78cb218f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 32245
+      },
+      "writtenOn": "2026-09-11T15:31:35Z",
+      "side": 1,
+      "message": "still used by msm89xx mainline, and it works",
+      "revId": "ec7a5b552ebbd5b4dd8b8afe06cecb1f5276b278",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
     }
   ]
 }
