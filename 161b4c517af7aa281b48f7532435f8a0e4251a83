@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e2c74519_544c1829",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 4550
+      },
+      "writtenOn": "2026-09-11T15:22:23Z",
+      "side": 1,
+      "message": "Let\u0027s just drop this. All devices should be able to migrate now.",
+      "revId": "161b4c517af7aa281b48f7532435f8a0e4251a83",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
+    }
+  ]
+}
