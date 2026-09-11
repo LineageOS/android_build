@@ -106,6 +106,24 @@
       "parentUuid": "8de2b8d3_a11b1821",
       "revId": "adb142aca64a3235d72c50943356a42f9f429c44",
       "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "530d0efe_6909c8d2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 4550
+      },
+      "writtenOn": "2026-09-11T15:25:10Z",
+      "side": 1,
+      "message": "I think you should just switch to use_dynamic_partitions",
+      "parentUuid": "10321862_6326ea37",
+      "revId": "adb142aca64a3235d72c50943356a42f9f429c44",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
     }
   ]
 }
