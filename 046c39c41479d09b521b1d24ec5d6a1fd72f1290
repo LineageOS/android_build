@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "642f19ce_70b682a4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 4550
+      },
+      "writtenOn": "2026-09-11T15:19:02Z",
+      "side": 1,
+      "message": "This is merged in recovery, might not be used by current devices but it\u0027s a small change",
+      "revId": "046c39c41479d09b521b1d24ec5d6a1fd72f1290",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
+    }
+  ]
+}
