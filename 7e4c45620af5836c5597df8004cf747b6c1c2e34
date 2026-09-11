@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c02120f8_283bff01",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 16185
+      },
+      "writtenOn": "2026-09-11T15:09:48Z",
+      "side": 1,
+      "message": "works on pyrite, where otherwise we would be called \"ingot\"",
+      "revId": "7e4c45620af5836c5597df8004cf747b6c1c2e34",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
+    }
+  ]
+}
