@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "61a096fc_db8799c9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 29242
+      },
+      "writtenOn": "2026-09-16T00:12:42Z",
+      "side": 1,
+      "message": "TODO:\nSTRIP/GUARD apps when decided.",
+      "revId": "e0bcf25104af04e5acce17906a6fee71120cfd54",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
+    }
+  ]
+}
