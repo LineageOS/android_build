@@ -23,7 +23,12 @@
 $(call inherit-product, $(SRC_TARGET_DIR)/product/handheld_system.mk)
 $(call inherit-product, $(SRC_TARGET_DIR)/product/handheld_system_ext.mk)
 $(call inherit-product, $(SRC_TARGET_DIR)/product/handheld_vendor.mk)
+
+ifneq ($(PRODUCT_IS_GAMING_HANDHELD),true)
 $(call inherit-product, $(SRC_TARGET_DIR)/product/handheld_product.mk)
+else
+$(call inherit-product, $(SRC_TARGET_DIR)/product/gaming_handheld_product.mk)
+endif
 
 PRODUCT_BRAND := generic
 PRODUCT_DEVICE := generic
