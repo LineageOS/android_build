@@ -16,6 +16,23 @@
       "message": "Meh, then I guess we would need another flag to guard Contacts, since well, nicole..",
       "revId": "4c3c64f82e34e07eaade4e2b36874b590f3b14e6",
       "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e23d477d_9572c868",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 4550
+      },
+      "writtenOn": "2026-09-18T14:04:15Z",
+      "side": 1,
+      "message": "I don\u0027t really get the point excluding these apps",
+      "revId": "4c3c64f82e34e07eaade4e2b36874b590f3b14e6",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
     }
   ]
 }
