@@ -69,6 +69,24 @@
       "message": "Camera was historically built on all devices (Aperture) because USB camera is also a thing",
       "revId": "6763cf8a14f208858bf0dff75faa4d9d52a3a005",
       "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e9402ae7_43d997a6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 13648
+      },
+      "writtenOn": "2026-09-22T09:23:26Z",
+      "side": 1,
+      "message": "Then we should blame the one that invented PRODUCT_NO_CAMERA in the first place. Anyway, I think that at least this change is proper for two reasons:\n- File being modified was already touched before and this can be squashed in the future.\n- We can still decide not to exclude anything later on and it\u0027s still fine.",
+      "parentUuid": "fc53d819_edb2cc0d",
+      "revId": "6763cf8a14f208858bf0dff75faa4d9d52a3a005",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
     }
   ]
 }
