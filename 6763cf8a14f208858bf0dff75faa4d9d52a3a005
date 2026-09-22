@@ -16,6 +16,24 @@
       "message": "Mike, this is a no-brainer even if we decide not to exclude anything. For Camera app however, it already makes sense because we control Aperture.",
       "revId": "6763cf8a14f208858bf0dff75faa4d9d52a3a005",
       "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fc40e0d1_f1e6b796",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 13648
+      },
+      "writtenOn": "2026-09-22T08:47:26Z",
+      "side": 1,
+      "message": "The camera situation is quite obvious, we must be able to exclude Aperture, and if we do so we don\u0027t want Camera2.",
+      "parentUuid": "d5e37c11_75767595",
+      "revId": "6763cf8a14f208858bf0dff75faa4d9d52a3a005",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
     }
   ]
 }
