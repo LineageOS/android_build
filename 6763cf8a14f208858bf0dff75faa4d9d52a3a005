@@ -34,6 +34,24 @@
       "parentUuid": "d5e37c11_75767595",
       "revId": "6763cf8a14f208858bf0dff75faa4d9d52a3a005",
       "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "42580988_fccff291",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 13648
+      },
+      "writtenOn": "2026-09-22T09:17:07Z",
+      "side": 1,
+      "message": "https://github.com/search?q\u003dorg%3ALineageOS+PRODUCT_NO_CAMERA\u0026type\u003dcode",
+      "parentUuid": "fc40e0d1_f1e6b796",
+      "revId": "6763cf8a14f208858bf0dff75faa4d9d52a3a005",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
     }
   ]
 }
