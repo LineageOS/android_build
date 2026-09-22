@@ -52,6 +52,23 @@
       "parentUuid": "fc40e0d1_f1e6b796",
       "revId": "6763cf8a14f208858bf0dff75faa4d9d52a3a005",
       "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fc53d819_edb2cc0d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 4550
+      },
+      "writtenOn": "2026-09-22T09:18:17Z",
+      "side": 1,
+      "message": "Camera was historically built on all devices (Aperture) because USB camera is also a thing",
+      "revId": "6763cf8a14f208858bf0dff75faa4d9d52a3a005",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
     }
   ]
 }
