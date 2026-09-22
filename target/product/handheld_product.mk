@@ -24,8 +24,11 @@ $(call inherit-product, $(SRC_TARGET_DIR)/product/media_product.mk)
 PRODUCT_PACKAGES += \
     Browser2 \
     Calendar \
+<<<<<<< PATCH SET (feaa5dc378efd73cef1bdf4d7363b8ababeaf5dd build: Move Contacts to telephony_product.mk)
+=======
     Camera2 \
     Contacts \
+>>>>>>> BASE      (e7cc87a995b25ae412aefa493d2b9c2b0157f29d releasetools: skip disable_ublk on non-dynamic devices)
     DeskClock \
     Gallery2 \
     Music \
