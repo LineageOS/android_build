@@ -22,7 +22,9 @@ $(call inherit-product, $(SRC_TARGET_DIR)/product/media_product.mk)
 
 # /product packages
 PRODUCT_PACKAGES += \
-    Contacts \
+    Browser2 \
+    Calendar \
+    Camera2 \
     DeskClock \
     preinstalled-packages-platform-handheld-product.xml \
     QuickSearchBox \
