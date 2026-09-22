@@ -22,7 +22,13 @@ $(call inherit-product, $(SRC_TARGET_DIR)/product/media_product.mk)
 
 # /product packages
 PRODUCT_PACKAGES += \
+<<<<<<< PATCH SET (e4c8dd957421e2a9193da29e05be00fabc2c5e91 build: Move Contacts to telephony_product.mk)
+    Browser2 \
+    Calendar \
+    Camera2 \
+=======
     Contacts \
+>>>>>>> BASE      (87669d578cca00c64c22f3b4ba6cf4791902bf3b build: Exclude already overrided AOSP apps from LineageOS bu)
     DeskClock \
     preinstalled-packages-platform-handheld-product.xml \
     QuickSearchBox \
