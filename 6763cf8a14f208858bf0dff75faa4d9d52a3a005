@@ -123,6 +123,24 @@
       "parentUuid": "62eaf43a_2b1af248",
       "revId": "6763cf8a14f208858bf0dff75faa4d9d52a3a005",
       "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d6359519_9ca7d3dd",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 16185
+      },
+      "writtenOn": "2026-09-22T21:22:57Z",
+      "side": 1,
+      "message": "? This actively works fine on nx_tab on 22.2 where I targeted this.\n\n```\nnolenjohnson@ODS-PROD:~/lineage-22/device$ grep -r PRODUCT_NO_CAMERA\nnintendo/nx/lineage.mk:PRODUCT_NO_CAMERA :\u003d true\n```\n\n```\nnx_tab /system_ext # find -name *Camera2*\nnx_tab /system_ext # cd ../product\nnx_tab /product # find -name *Camera2*\nnx_tab /product #\n```\n\nIf this flag that I only use on 22.2 broke sometime between then and now, no reason to believe I\u0027d catch it.",
+      "parentUuid": "acee5e19_ab74fb7f",
+      "revId": "6763cf8a14f208858bf0dff75faa4d9d52a3a005",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
     }
   ]
 }
