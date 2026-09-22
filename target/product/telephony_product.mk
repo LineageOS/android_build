@@ -19,6 +19,7 @@
 
 # /product packages
 PRODUCT_PACKAGES += \
+    Contacts \
     Dialer \
     ImsServiceEntitlement \
     preinstalled-packages-platform-telephony-product.xml

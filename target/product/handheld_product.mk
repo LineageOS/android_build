@@ -24,7 +24,6 @@ $(call inherit-product, $(SRC_TARGET_DIR)/product/media_product.mk)
 PRODUCT_PACKAGES += \
     Browser2 \
     Calendar \
-    Contacts \
     DeskClock \
     Gallery2 \
     Music \
