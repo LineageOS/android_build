@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "85d01628_ff771b58",
+        "filename": "target/product/handheld_product.mk",
+        "patchSetId": 3
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 13648
+      },
+      "writtenOn": "2026-09-22T08:10:43Z",
+      "side": 0,
+      "message": "My humble suggestion, move all the apps in here that have a override in LineageOS (e.g. Camera2 -\u003e Aperture) inside the block below `ifeq ($(LINEAGE_BUILD),)`. That would be the first starting point if we ever want to exclude any of our apps without caring about AOSP apps.",
+      "range": {
+        "startLine": 25,
+        "startChar": 0,
+        "endLine": 31,
+        "endChar": 11
+      },
+      "revId": "e7cc87a995b25ae412aefa493d2b9c2b0157f29d",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
+    }
+  ]
+}
