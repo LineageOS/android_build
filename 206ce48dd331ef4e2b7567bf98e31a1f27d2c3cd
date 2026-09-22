@@ -16,6 +16,23 @@
       "message": "Sorry to hijack your original change.",
       "revId": "206ce48dd331ef4e2b7567bf98e31a1f27d2c3cd",
       "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3c38597f_7a429d0b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 13648
+      },
+      "writtenOn": "2026-09-22T08:27:21Z",
+      "side": 1,
+      "message": "This can be squashed into https://github.com/LineageOS/android_build/commit/06d018bb81df5021d5628c38a07043ed6ccf2e5b in the future.",
+      "revId": "206ce48dd331ef4e2b7567bf98e31a1f27d2c3cd",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
     }
   ]
 }
