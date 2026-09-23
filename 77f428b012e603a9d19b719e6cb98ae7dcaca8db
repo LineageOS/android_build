@@ -34,6 +34,24 @@
       "parentUuid": "a27a0062_09c132b4",
       "revId": "77f428b012e603a9d19b719e6cb98ae7dcaca8db",
       "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "824d0033_1c330770",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 4550
+      },
+      "writtenOn": "2026-09-23T09:17:51Z",
+      "side": 1,
+      "message": "Contacts are not just for network calls",
+      "parentUuid": "93a7942d_36e1d6a4",
+      "revId": "77f428b012e603a9d19b719e6cb98ae7dcaca8db",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
     }
   ]
 }
