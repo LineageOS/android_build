@@ -16,6 +16,24 @@
       "message": "FYI you killed Gallery2 here that was built on purpose, which removed the editor from all devices.",
       "revId": "09f1513f0026da163b25ac395c3fda1e05bad680",
       "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "27abfed7_3e3c83dc",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 16185
+      },
+      "writtenOn": "2026-09-27T16:44:20Z",
+      "side": 1,
+      "message": "https://review.lineageos.org/q/I2161f319994756acee74de0c1bcddd29ee44af8e",
+      "parentUuid": "d727dbb7_7b842873",
+      "revId": "09f1513f0026da163b25ac395c3fda1e05bad680",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
     }
   ],
   "submitRequirementResults": [
