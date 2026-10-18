@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4ae89647_42ea64d8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 29415
+      },
+      "writtenOn": "2026-10-18T18:19:45Z",
+      "side": 1,
+      "message": "This along with WITHOUT_RESERVED_SIZE lets fastboot assemble super itself without rebooting into fastbootd to flash individual dynamic partitions.",
+      "revId": "90d006387398ae6899145e6531a304500cfa0f70",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
+    }
+  ]
+}
