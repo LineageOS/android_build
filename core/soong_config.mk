@@ -93,6 +93,14 @@ $(call add_json_str,  HostSecondaryArch,                 $(HOST_2ND_ARCH))
 $(call add_json_bool, HostStaticBinaries,                $(BUILD_HOST_static))
 $(call add_json_bool, HostMusl,                          $(USE_HOST_MUSL))
 
+ifeq ($(HOST_CROSS_ARCH),$(HOST_ARCH))
+ifneq (,$(filter $(HOST_CROSS_OS),$(HOST_OS) $(HOST_OS)_musl))
+HOST_CROSS_OS :=
+HOST_CROSS_ARCH :=
+HOST_CROSS_2ND_ARCH :=
+endif
+endif
+
 $(call add_json_str,  CrossHost,                         $(HOST_CROSS_OS))
 $(call add_json_str,  CrossHostArch,                     $(HOST_CROSS_ARCH))
 $(call add_json_str,  CrossHostSecondaryArch,            $(HOST_CROSS_2ND_ARCH))
