@@ -2550,11 +2550,13 @@ resource_dir := bootable/recovery/tools/recovery_l10n/res/
 resource_dir_deps := $(sort $(shell find $(resource_dir) -name *.xml -not -name .*))
 image_generator_jar := $(HOST_OUT_JAVA_LIBRARIES)/RecoveryImageGenerator.jar
 zopflipng := $(HOST_OUT_EXECUTABLES)/zopflipng
+image_generator_fontconfig := $(if $(filter linux-arm64,$(HOST_PREBUILT_TAG)),bootable/recovery/tools/image_generator/fontconfig.properties)
 $(RECOVERY_INSTALLING_TEXT_FILE): PRIVATE_SOURCE_FONTS := $(recovery_noto-fonts_dep) $(recovery_roboto-fonts_dep)
 $(RECOVERY_INSTALLING_TEXT_FILE): PRIVATE_RECOVERY_FONT_FILES_DIR := $(call intermediates-dir-for,ETC,recovery_font_files)
 $(RECOVERY_INSTALLING_TEXT_FILE): PRIVATE_RESOURCE_DIR := $(resource_dir)
 $(RECOVERY_INSTALLING_TEXT_FILE): PRIVATE_IMAGE_GENERATOR_JAR := $(image_generator_jar)
 $(RECOVERY_INSTALLING_TEXT_FILE): PRIVATE_ZOPFLIPNG := $(zopflipng)
+$(RECOVERY_INSTALLING_TEXT_FILE): PRIVATE_IMAGE_GENERATOR_FONTCONFIG := $(image_generator_fontconfig)
 $(RECOVERY_INSTALLING_TEXT_FILE): PRIVATE_RECOVERY_IMAGE_WIDTH := $(recovery_image_width)
 $(RECOVERY_INSTALLING_TEXT_FILE): PRIVATE_RECOVERY_BACKGROUND_TEXT_LIST := \
   recovery_installing \
@@ -2563,7 +2565,7 @@ $(RECOVERY_INSTALLING_TEXT_FILE): PRIVATE_RECOVERY_BACKGROUND_TEXT_LIST := \
   recovery_error \
   recovery_no_command
 $(RECOVERY_INSTALLING_TEXT_FILE): .KATI_IMPLICIT_OUTPUTS := $(filter-out $(RECOVERY_INSTALLING_TEXT_FILE),$(generated_recovery_text_files))
-$(RECOVERY_INSTALLING_TEXT_FILE): $(image_generator_jar) $(resource_dir_deps) $(recovery_noto-fonts_dep) $(recovery_roboto-fonts_dep) $(zopflipng)
+$(RECOVERY_INSTALLING_TEXT_FILE): $(image_generator_jar) $(resource_dir_deps) $(recovery_noto-fonts_dep) $(recovery_roboto-fonts_dep) $(zopflipng) $(image_generator_fontconfig)
 	# Prepares the font directory.
 	@rm -rf $(PRIVATE_RECOVERY_FONT_FILES_DIR)
 	@mkdir -p $(PRIVATE_RECOVERY_FONT_FILES_DIR)
@@ -2573,7 +2575,7 @@ $(RECOVERY_INSTALLING_TEXT_FILE): $(image_generator_jar) $(resource_dir_deps) $(
 	$(foreach text_name,$(PRIVATE_RECOVERY_BACKGROUND_TEXT_LIST), \
 	  $(eval output_file := $(dir $@)/$(patsubst recovery_%,%_text.png,$(text_name))) \
 	  $(eval center_alignment := $(if $(filter $(text_name),$(PRIVATE_RECOVERY_BACKGROUND_TEXT_LIST)), --center_alignment)) \
-	  java -jar $(PRIVATE_IMAGE_GENERATOR_JAR) \
+	  java $(if $(PRIVATE_IMAGE_GENERATOR_FONTCONFIG),-Dsun.awt.fontconfig=$(PRIVATE_IMAGE_GENERATOR_FONTCONFIG)) -jar $(PRIVATE_IMAGE_GENERATOR_JAR) \
 	    --image_width $(PRIVATE_RECOVERY_IMAGE_WIDTH) \
 	    --text_name $(text_name) \
 	    --font_dir $(PRIVATE_RECOVERY_FONT_FILES_DIR) \
